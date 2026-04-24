@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unit Converters — SnakeConverter</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/app.css" />
+  <style>
+    .unit-cat-nav { display:flex; gap:.4rem; overflow-x:auto; padding-bottom:.4rem; margin-bottom:1.5rem; scrollbar-width:thin; }
+    .unit-cat-btn { flex-shrink:0; display:flex; align-items:center; gap:.4rem; padding:.4rem .85rem;
+      border-radius:.6rem; border:1px solid var(--border-subtle); background:rgba(255,255,255,.04);
+      color:var(--text-muted); font-size:.78rem; font-weight:600; cursor:pointer; white-space:nowrap;
+      transition:all .18s; }
+    .unit-cat-btn.active { background:rgba(99,102,241,.18); border-color:rgba(99,102,241,.5); color:#a5b4fc; }
+    .unit-input-row { display:flex; gap:.6rem; align-items:stretch; margin-bottom:1.2rem; }
+    .unit-input-row input { flex:1; }
+    .unit-input-row select { flex:0 0 auto; min-width:140px; background:rgba(255,255,255,.06);
+      border:1px solid var(--border-subtle); border-radius:.6rem; padding:.55rem .7rem;
+      color:var(--text-primary); font-size:.83rem; outline:none; }
+    .unit-results { display:grid; grid-template-columns:repeat(auto-fill, minmax(210px,1fr)); gap:.55rem; }
+    .unit-result-item { background:rgba(255,255,255,.04); border:1px solid var(--border-subtle);
+      border-radius:.75rem; padding:.7rem .9rem; display:flex; flex-direction:column; gap:.15rem;
+      transition:background .15s; cursor:pointer; }
+    .unit-result-item:hover { background:rgba(255,255,255,.07); }
+    .unit-result-item.is-from { border-color:rgba(99,102,241,.5); background:rgba(99,102,241,.1); }
+    .unit-result-label { font-size:.68rem; color:var(--text-muted); font-weight:600; text-transform:uppercase;
+      letter-spacing:.06em; display:flex; justify-content:space-between; }
+    .unit-result-sym { color:var(--text-dim); font-weight:500; }
+    .unit-result-val { font-size:1rem; font-weight:700; color:var(--text-primary); word-break:break-all; }
+    .copied-flash { position:fixed; bottom:1.5rem; left:50%; transform:translateX(-50%);
+      background:rgba(16,185,129,.9); color:#fff; padding:.4rem 1.2rem; border-radius:999px;
+      font-size:.78rem; font-weight:700; pointer-events:none; opacity:0; transition:opacity .2s;
+      z-index:999; }
+    .copied-flash.show { opacity:1; }
+  </style>
+</head>
+<body>
+<div class="app-wrap">
+  <div class="main-card">
+
+    <!-- ── Header ──────────────────────────── -->
+    <header style="text-align:center;margin-bottom:1.5rem;position:relative;">
+      <div class="lang-switcher">
+        <button type="button" data-lang-btn="en" class="lang-btn lang-active">EN</button>
+        <button type="button" data-lang-btn="tr" class="lang-btn">TR</button>
+      </div>
+
+      <a href="index.html" class="hub-back-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        SnakeConverter
+      </a>
+
+      <div style="display:inline-flex;align-items:center;gap:.4rem;background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.3);border-radius:999px;padding:.2rem .85rem;font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#a5b4fc;margin-bottom:.9rem;">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><circle cx="5" cy="5" r="5"/></svg>
+        <span>Instant · Accurate · Private</span>
+      </div>
+
+      <h1 class="site-title" style="background:linear-gradient(135deg,#fff 0%,#a5b4fc 40%,#818cf8 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Unit Converter</h1>
+      <p class="site-sub">10 categories · 90+ units — type in any field to convert</p>
+    </header>
+
+    <!-- ── Category Nav ─────────────────────── -->
+    <nav class="unit-cat-nav" id="catNav"></nav>
+
+    <!-- ── Input Row ────────────────────────── -->
+    <div class="unit-input-row">
+      <input type="number" id="unitInput" class="input-field" placeholder="Enter value…" value="1" />
+      <select id="unitFrom"></select>
+    </div>
+
+    <!-- ── Results ──────────────────────────── -->
+    <div class="unit-results" id="unitResults"></div>
+
+    <!-- ── Copy toast ───────────────────────── -->
+    <div class="copied-flash" id="copiedFlash">Copied!</div>
+
+    <div style="margin-top:2.5rem;text-align:center;font-size:.72rem;color:var(--text-dim);">
+      © 2026 SnakeConverter &nbsp;·&nbsp; All conversions happen in your browser
+    </div>
+
+  </div><!-- /main-card -->
+</div><!-- /app-wrap -->
+
+<script src="js/i18n.js"></script>
+<script src="js/units.js"></script>
+<script>
+(function () {
+  const { CATS, convertAll } = window.SnakeUnits;
+  const catNav     = document.getElementById("catNav");
+  const unitInput  = document.getElementById("unitInput");
+  const unitFrom   = document.getElementById("unitFrom");
+  const unitResults= document.getElementById("unitResults");
+  const copiedFlash= document.getElementById("copiedFlash");
+
+  let currentCat = Object.keys(CATS)[0];
+
+  /* ── Build category nav ── */
+  Object.entries(CATS).forEach(([id, cat]) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "unit-cat-btn" + (id === currentCat ? " active" : "");
+    btn.textContent = cat.icon + " " + cat.label;
+    btn.dataset.cat = id;
+    btn.addEventListener("click", () => selectCat(id));
+    catNav.appendChild(btn);
+  });
+
+  function selectCat(id) {
+    currentCat = id;
+    catNav.querySelectorAll(".unit-cat-btn").forEach(b => b.classList.toggle("active", b.dataset.cat === id));
+    buildFromSelect();
+    render();
+  }
+
+  function buildFromSelect() {
+    const cat = CATS[currentCat];
+    unitFrom.innerHTML = cat.units.map(u =>
+      `<option value="${u.id}">${u.label} (${u.sym})</option>`
+    ).join("");
+  }
+
+  function render() {
+    const val = parseFloat(unitInput.value);
+    const fromId = unitFrom.value;
+    const results = convertAll(currentCat, val, fromId);
+    unitResults.innerHTML = results.map(u => `
+      <div class="unit-result-item${u.isFrom ? " is-from" : ""}" data-val="${u.result}" title="Click to copy">
+        <div class="unit-result-label">
+          <span>${u.label}</span>
+          <span class="unit-result-sym">${u.sym}</span>
+        </div>
+        <div class="unit-result-val">${isNaN(val) ? "—" : u.result}</div>
+      </div>
+    `).join("");
+
+    unitResults.querySelectorAll(".unit-result-item").forEach(item => {
+      item.addEventListener("click", () => copyVal(item.dataset.val));
+    });
+  }
+
+  function copyVal(val) {
+    navigator.clipboard.writeText(val).catch(() => {});
+    copiedFlash.classList.add("show");
+    setTimeout(() => copiedFlash.classList.remove("show"), 1600);
+  }
+
+  unitInput.addEventListener("input", render);
+  unitFrom.addEventListener("change", render);
+
+  /* ── Jump to hash category ── */
+  const hash = location.hash.replace("#", "");
+  if (CATS[hash]) selectCat(hash);
+  else { buildFromSelect(); render(); }
+})();
+</script>
+</body>
+</html>

@@ -80,10 +80,14 @@ const JS_FILES = [
   "js/snake-mascot.js",
   "js/app.js",
   "js/tools.js",
+  "js/units.js",
+  "js/calc-tools.js",
+  "js/dev-tools.js",
+  "js/color-tools.js",
 ];
 
 /* Extra HTML files to copy to dist (besides index.html) */
-const EXTRA_HTML = ["pdf.html", "tools.html"];
+const EXTRA_HTML = ["pdf.html", "tools.html", "units.html", "calc.html", "dev.html", "color.html"];
 
 /* ── Helpers ─────────────────────────────────────────── */
 const SRC  = __dirname;

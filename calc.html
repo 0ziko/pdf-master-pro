@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculators — SnakeConverter</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/app.css" />
+  <style>
+    .calc-form { display:flex; flex-direction:column; gap:.8rem; }
+    .calc-row  { display:flex; gap:.6rem; }
+    .calc-row > * { flex:1; }
+    .calc-label{ font-size:.72rem; font-weight:700; color:var(--text-muted); margin-bottom:.25rem; display:block; text-transform:uppercase; letter-spacing:.07em; }
+    .calc-select { width:100%; background:rgba(255,255,255,.06); border:1px solid var(--border-subtle);
+      border-radius:.6rem; padding:.55rem .7rem; color:var(--text-primary); font-size:.83rem; outline:none; }
+    .result-box { background:rgba(99,102,241,.08); border:1px solid rgba(99,102,241,.25);
+      border-radius:1rem; padding:1rem 1.2rem; margin-top:.8rem; display:grid;
+      grid-template-columns:1fr 1fr; gap:.6rem; }
+    .result-box.single { grid-template-columns:1fr; }
+    .result-item { display:flex; flex-direction:column; gap:.15rem; }
+    .result-item-label { font-size:.68rem; color:var(--text-muted); font-weight:600; text-transform:uppercase; letter-spacing:.07em; }
+    .result-item-val   { font-size:1.15rem; font-weight:800; color:#a5b4fc; }
+    .sleep-list { display:flex; flex-direction:column; gap:.5rem; margin-top:.8rem; }
+    .sleep-row  { background:rgba(255,255,255,.04); border:1px solid var(--border-subtle); border-radius:.75rem;
+      padding:.65rem 1rem; display:flex; justify-content:space-between; align-items:center; }
+    .sleep-row.best { border-color:rgba(99,102,241,.5); background:rgba(99,102,241,.1); }
+    .sleep-time { font-size:1.2rem; font-weight:800; color:#a5b4fc; }
+    .sleep-info { font-size:.75rem; color:var(--text-muted); }
+    .amortization-table { width:100%; border-collapse:collapse; margin-top:.8rem; font-size:.75rem; }
+    .amortization-table th { padding:.35rem .5rem; text-align:left; color:var(--text-muted); font-weight:700;
+      border-bottom:1px solid var(--border-subtle); text-transform:uppercase; letter-spacing:.06em; font-size:.67rem; }
+    .amortization-table td { padding:.35rem .5rem; color:var(--text-primary); border-bottom:1px solid rgba(255,255,255,.04); }
+    .amortization-table tr:last-child td { border-bottom:none; }
+    .fuel-unit-toggle { display:flex; gap:.3rem; margin-bottom:.4rem; }
+    .fuel-unit-btn { padding:.3rem .7rem; border-radius:.5rem; border:1px solid var(--border-subtle);
+      background:transparent; color:var(--text-muted); font-size:.72rem; font-weight:700; cursor:pointer; }
+    .fuel-unit-btn.active { background:rgba(99,102,241,.2); border-color:rgba(99,102,241,.5); color:#a5b4fc; }
+  </style>
+</head>
+<body>
+<div class="app-wrap">
+  <div class="main-card">
+
+    <!-- ── Header ──────────────────────────── -->
+    <header style="text-align:center;margin-bottom:1.5rem;position:relative;">
+      <div class="lang-switcher">
+        <button type="button" data-lang-btn="en" class="lang-btn lang-active">EN</button>
+        <button type="button" data-lang-btn="tr" class="lang-btn">TR</button>
+      </div>
+
+      <a href="index.html" class="hub-back-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        SnakeConverter
+      </a>
+
+      <div style="display:inline-flex;align-items:center;gap:.4rem;background:rgba(5,150,105,.12);border:1px solid rgba(5,150,105,.3);border-radius:999px;padding:.2rem .85rem;font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#6ee7b7;margin-bottom:.9rem;">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><circle cx="5" cy="5" r="5"/></svg>
+        <span>Finance · Health · Everyday Life</span>
+      </div>
+
+      <h1 class="site-title" style="background:linear-gradient(135deg,#fff 0%,#6ee7b7 40%,#059669 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Calculators</h1>
+      <p class="site-sub">Finance, health &amp; everyday calculators — all client-side</p>
+    </header>
+
+    <!-- ── Tab nav ───────────────────────────── -->
+    <nav class="tab-nav tools-tab-nav">
+      <button type="button" data-tab="discount" class="tab-btn tab-active"><span>Discount</span></button>
+      <button type="button" data-tab="vat"      class="tab-btn"><span>VAT / Tax</span></button>
+      <button type="button" data-tab="tip"      class="tab-btn"><span>Tip</span></button>
+      <button type="button" data-tab="compound" class="tab-btn"><span>Compound</span></button>
+      <button type="button" data-tab="loan"     class="tab-btn"><span>Loan</span></button>
+      <button type="button" data-tab="fuel"     class="tab-btn"><span>Fuel Cost</span></button>
+      <button type="button" data-tab="bmr"      class="tab-btn"><span>BMR / TDEE</span></button>
+      <button type="button" data-tab="ideal"    class="tab-btn"><span>Ideal Weight</span></button>
+      <button type="button" data-tab="water"    class="tab-btn"><span>Water</span></button>
+      <button type="button" data-tab="sleep"    class="tab-btn"><span>Sleep</span></button>
+      <button type="button" data-tab="due"      class="tab-btn"><span>Due Date</span></button>
+    </nav>
+
+    <!-- ── Panels ───────────────────────────── -->
+
+    <!-- Discount -->
+    <div data-panel="discount" class="calc-form">
+      <div><label class="calc-label">Original Price</label><input type="number" id="d-orig" class="input-field" placeholder="e.g. 199.99" /></div>
+      <div><label class="calc-label">Discount (%)</label><input type="number" id="d-pct"  class="input-field" placeholder="e.g. 20" min="0" max="100" /></div>
+      <button type="button" onclick="doDiscount()" class="btn-primary">Calculate</button>
+      <div id="d-result" class="result-box" style="display:none"></div>
+    </div>
+
+    <!-- VAT -->
+    <div data-panel="vat" class="calc-form" style="display:none">
+      <div class="calc-row">
+        <div><label class="calc-label">Amount</label><input type="number" id="vat-amount" class="input-field" placeholder="e.g. 100" /></div>
+        <div><label class="calc-label">VAT Rate (%)</label><input type="number" id="vat-rate" class="input-field" placeholder="e.g. 18" /></div>
+      </div>
+      <div><label class="calc-label">Mode</label>
+        <select id="vat-mode" class="calc-select">
+          <option value="add">Add VAT to price (net → gross)</option>
+          <option value="extract">Extract VAT from price (gross → net)</option>
+        </select>
+      </div>
+      <button type="button" onclick="doVAT()" class="btn-primary">Calculate</button>
+      <div id="vat-result" class="result-box" style="display:none"></div>
+    </div>
+
+    <!-- Tip -->
+    <div data-panel="tip" class="calc-form" style="display:none">
+      <div><label class="calc-label">Bill Amount</label><input type="number" id="tip-bill" class="input-field" placeholder="e.g. 85.50" /></div>
+      <div class="calc-row">
+        <div><label class="calc-label">Tip (%)</label><input type="number" id="tip-pct" class="input-field" placeholder="e.g. 15" value="15" /></div>
+        <div><label class="calc-label">Split Between</label><input type="number" id="tip-ppl" class="input-field" placeholder="e.g. 4" value="1" min="1" /></div>
+      </div>
+      <button type="button" onclick="doTip()" class="btn-primary">Calculate</button>
+      <div id="tip-result" class="result-box" style="display:none"></div>
+    </div>
+
+    <!-- Compound Interest -->
+    <div data-panel="compound" class="calc-form" style="display:none">
+      <div><label class="calc-label">Principal Amount</label><input type="number" id="ci-principal" class="input-field" placeholder="e.g. 10000" /></div>
+      <div class="calc-row">
+        <div><label class="calc-label">Annual Rate (%)</label><input type="number" id="ci-rate" class="input-field" placeholder="e.g. 8" /></div>
+        <div><label class="calc-label">Years</label><input type="number" id="ci-years" class="input-field" placeholder="e.g. 10" /></div>
+      </div>
+      <div><label class="calc-label">Compounding Frequency</label>
+        <select id="ci-freq" class="calc-select">
+          <option value="1">Annually</option>
+          <option value="2">Semi-annually</option>
+          <option value="4">Quarterly</option>
+          <option value="12" selected>Monthly</option>
+          <option value="365">Daily</option>
+        </select>
+      </div>
+      <button type="button" onclick="doCompound()" class="btn-primary">Calculate</button>
+      <div id="ci-result" class="result-box" style="display:none"></div>
+    </div>
+
+    <!-- Loan / EMI -->
+    <div data-panel="loan" class="calc-form" style="display:none">
+      <div><label class="calc-label">Loan Amount</label><input type="number" id="loan-amount" class="input-field" placeholder="e.g. 50000" /></div>
+      <div class="calc-row">
+        <div><label class="calc-label">Annual Interest Rate (%)</label><input type="number" id="loan-rate" class="input-field" placeholder="e.g. 7.5" /></div>
+        <div><label class="calc-label">Loan Term (months)</label><input type="number" id="loan-months" class="input-field" placeholder="e.g. 60" /></div>
+      </div>
+      <button type="button" onclick="doLoan()" class="btn-primary">Calculate</button>
+      <div id="loan-result" class="result-box" style="display:none"></div>
+    </div>
+
+    <!-- Fuel Cost -->
+    <div data-panel="fuel" class="calc-form" style="display:none">
+      <div>
+        <label class="calc-label">Efficiency Unit</label>
+        <div class="fuel-unit-toggle">
+          <button type="button" class="fuel-unit-btn active" data-unit="l100">L/100km</button>
+          <button type="button" class="fuel-unit-btn" data-unit="kml">km/L</button>
+          <button type="button" class="fuel-unit-btn" data-unit="mpg">MPG</button>
+        </div>
+      </div>
+      <div><label class="calc-label">Distance (km)</label><input type="number" id="fuel-dist" class="input-field" placeholder="e.g. 500" /></div>
+      <div class="calc-row">
+        <div><label class="calc-label">Fuel Efficiency</label><input type="number" id="fuel-eff" class="input-field" placeholder="e.g. 7.5" /></div>
+        <div><label class="calc-label">Price per Liter</label><input type="number" id="fuel-price" class="input-field" placeholder="e.g. 1.85" /></div>
+      </div>
+      <button type="button" onclick="doFuel()" class="btn-primary">Calculate</button>
+      <div id="fuel-result" class="result-box" style="display:none"></div>
+    </div>
+
+    <!-- BMR / TDEE -->
+    <div data-panel="bmr" class="calc-form" style="display:none">
+      <div class="calc-row">
+        <div><label class="calc-label">Weight (kg)</label><input type="number" id="bmr-w" class="input-field" placeholder="e.g. 70" /></div>
+        <div><label class="calc-label">Height (cm)</label><input type="number" id="bmr-h" class="input-field" placeholder="e.g. 175" /></div>
+      </div>
+      <div class="calc-row">
+        <div><label class="calc-label">Age</label><input type="number" id="bmr-age" class="input-field" placeholder="e.g. 30" /></div>
+        <div><label class="calc-label">Sex</label>
+          <select id="bmr-sex" class="calc-select"><option value="m">Male</option><option value="f">Female</option></select>
+        </div>
+      </div>
+      <div><label class="calc-label">Activity Level</label>
+        <select id="bmr-activity" class="calc-select">
+          <option value="sedentary">Sedentary (little/no exercise)</option>
+          <option value="light">Light (1-3 days/week)</option>
+          <option value="moderate" selected>Moderate (3-5 days/week)</option>
+          <option value="active">Active (6-7 days/week)</option>
+          <option value="veryActive">Very Active (hard exercise daily)</option>
+        </select>
+      </div>
+      <button type="button" onclick="doBMR()" class="btn-primary">Calculate</button>
+      <div id="bmr-result" class="result-box" style="display:none"></div>
+    </div>
+
+    <!-- Ideal Weight -->
+    <div data-panel="ideal" class="calc-form" style="display:none">
+      <div><label class="calc-label">Height (cm)</label><input type="number" id="iw-h" class="input-field" placeholder="e.g. 170" /></div>
+      <div><label class="calc-label">Sex</label>
+        <select id="iw-sex" class="calc-select"><option value="m">Male</option><option value="f">Female</option></select>
+      </div>
+      <button type="button" onclick="doIdealWeight()" class="btn-primary">Calculate</button>
+      <div id="iw-result" class="result-box" style="display:none"></div>
+    </div>
+
+    <!-- Water -->
+    <div data-panel="water" class="calc-form" style="display:none">
+      <div><label class="calc-label">Body Weight (kg)</label><input type="number" id="water-w" class="input-field" placeholder="e.g. 70" /></div>
+      <div><label class="calc-label">Daily Exercise (minutes)</label><input type="number" id="water-act" class="input-field" placeholder="e.g. 30" value="0" min="0" /></div>
+      <button type="button" onclick="doWater()" class="btn-primary">Calculate</button>
+      <div id="water-result" class="result-box" style="display:none"></div>
+    </div>
+
+    <!-- Sleep Cycles -->
+    <div data-panel="sleep" class="calc-form" style="display:none">
+      <div><label class="calc-label">Bedtime</label><input type="time" id="sleep-time" class="input-field" value="23:00" /></div>
+      <button type="button" onclick="doSleep()" class="btn-primary">Show Wake Times</button>
+      <p style="font-size:.72rem;color:var(--text-muted);margin-top:.3rem;">Each sleep cycle is ~90 min. Waking between cycles feels most refreshing.</p>
+      <div id="sleep-result" class="sleep-list" style="display:none"></div>
+    </div>
+
+    <!-- Pregnancy Due Date -->
+    <div data-panel="due" class="calc-form" style="display:none">
+      <div><label class="calc-label">First Day of Last Menstrual Period (LMP)</label><input type="date" id="due-lmp" class="input-field" /></div>
+      <button type="button" onclick="doDue()" class="btn-primary">Calculate Due Date</button>
+      <p style="font-size:.72rem;color:var(--text-muted);margin-top:.3rem;">Based on Naegele's Rule (LMP + 280 days). Consult your doctor for accurate dating.</p>
+      <div id="due-result" class="result-box" style="display:none"></div>
+    </div>
+
+    <div style="margin-top:2.5rem;text-align:center;font-size:.72rem;color:var(--text-dim);">
+      © 2026 SnakeConverter &nbsp;·&nbsp; For reference only — not medical or financial advice
+    </div>
+
+  </div><!-- /main-card -->
+</div><!-- /app-wrap -->
+
+<script src="js/i18n.js"></script>
+<script src="js/calc-tools.js"></script>
+<script>
+/* ── Tab switching ── */
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("tab-active"));
+    document.querySelectorAll("[data-panel]").forEach(p => p.style.display = "none");
+    btn.classList.add("tab-active");
+    document.querySelector(`[data-panel="${btn.dataset.tab}"]`).style.display = "";
+    const hash = btn.dataset.tab;
+    history.replaceState(null, "", "#" + hash);
+  });
+});
+
+/* ── Fuel unit toggle ── */
+let fuelUnit = "l100";
+document.querySelectorAll(".fuel-unit-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    fuelUnit = btn.dataset.unit;
+    document.querySelectorAll(".fuel-unit-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+  });
+});
+
+/* ── Hash routing ── */
+const hash = location.hash.replace("#","");
+if (hash) {
+  const btn = document.querySelector(`[data-tab="${hash}"]`);
+  if (btn) btn.click();
+}
+
+/* ── Helpers ── */
+const { calcDiscount, calcVAT, calcTip, calcCompound, calcLoan,
+        calcBMR, calcIdealWeight, calcWater, calcSleep, calcDueDate, calcFuel } = window.CalcTools;
+
+function showResult(id, html) {
+  const el = document.getElementById(id);
+  el.innerHTML = html; el.style.display = "";
+}
+
+function ri(label, val, prefix) {
+  return `<div class="result-item"><div class="result-item-label">${label}</div><div class="result-item-val">${prefix||""}${val}</div></div>`;
+}
+
+function errMsg(id) {
+  document.getElementById(id).innerHTML = `<div style="color:#f87171;font-size:.8rem;">Please fill all fields correctly.</div>`;
+  document.getElementById(id).style.display = "";
+}
+
+/* ── Calculator handlers ── */
+function doDiscount() {
+  const r = calcDiscount(document.getElementById("d-orig").value, document.getElementById("d-pct").value);
+  if (!r) return errMsg("d-result");
+  showResult("d-result", ri("Original","$"+r.original) + ri("You Save","$"+r.saved) + ri("Final Price","$"+r.final) + ri("Discount",r.pct+"%"));
+}
+
+function doVAT() {
+  const r = calcVAT(document.getElementById("vat-amount").value, document.getElementById("vat-rate").value, document.getElementById("vat-mode").value);
+  if (!r) return errMsg("vat-result");
+  if (r.net !== undefined) showResult("vat-result", ri("Net (excl. VAT)","$"+r.net) + ri("VAT ("+r.rate+"%)","$"+r.tax) + ri("Gross (incl. VAT)","$"+r.gross));
+  else showResult("vat-result", ri("Gross (incl. VAT)","$"+r.gross) + ri("VAT ("+r.rate+"%)","$"+r.tax) + ri("Net (excl. VAT)","$"+r.net));
+}
+
+function doTip() {
+  const r = calcTip(document.getElementById("tip-bill").value, document.getElementById("tip-pct").value, document.getElementById("tip-ppl").value);
+  if (!r) return errMsg("tip-result");
+  showResult("tip-result", ri("Tip Amount","$"+r.tip) + ri("Total Bill","$"+r.total) + ri("Per Person ("+r.people+")","$"+r.perPerson) + ri("Tip %",r.tipPct+"%"));
+}
+
+function doCompound() {
+  const r = calcCompound(document.getElementById("ci-principal").value, document.getElementById("ci-rate").value, document.getElementById("ci-years").value, document.getElementById("ci-freq").value);
+  if (!r) return errMsg("ci-result");
+  showResult("ci-result", ri("Principal","$"+r.principal) + ri("Interest Earned","$"+r.interest) + ri("Final Amount","$"+r.finalAmount) + ri("Rate / Period",r.rate+"%"));
+}
+
+function doLoan() {
+  const r = calcLoan(document.getElementById("loan-amount").value, document.getElementById("loan-rate").value, document.getElementById("loan-months").value);
+  if (!r) return errMsg("loan-result");
+  showResult("loan-result", ri("Monthly EMI","$"+r.emi) + ri("Total Payment","$"+r.totalPay) + ri("Total Interest","$"+r.interest) + ri("Principal","$"+r.principal));
+}
+
+function doFuel() {
+  const r = calcFuel(document.getElementById("fuel-dist").value, document.getElementById("fuel-eff").value, document.getElementById("fuel-price").value, fuelUnit);
+  if (!r) return errMsg("fuel-result");
+  showResult("fuel-result", ri("Distance",r.distance+" km") + ri("Fuel Needed",r.liters+" L") + ri("Total Cost","$"+r.cost));
+}
+
+function doBMR() {
+  const r = calcBMR(document.getElementById("bmr-w").value, document.getElementById("bmr-h").value, document.getElementById("bmr-age").value, document.getElementById("bmr-sex").value, document.getElementById("bmr-activity").value);
+  if (!r) return errMsg("bmr-result");
+  showResult("bmr-result", ri("BMR",r.bmr+" kcal/day") + ri("TDEE (maintain)",r.tdee+" kcal") + ri("Lose Weight (−500)",r.lose+" kcal") + ri("Gain Weight (+500)",r.gain+" kcal"));
+}
+
+function doIdealWeight() {
+  const r = calcIdealWeight(document.getElementById("iw-h").value, document.getElementById("iw-sex").value);
+  if (!r) return errMsg("iw-result");
+  showResult("iw-result", ri("Ideal Weight",r.ideal+" kg") + ri("Healthy Range",r.min+"–"+r.max+" kg"));
+}
+
+function doWater() {
+  const r = calcWater(document.getElementById("water-w").value, document.getElementById("water-act").value);
+  if (!r) return errMsg("water-result");
+  showResult("water-result", ri("Daily Intake",r.ml+" mL") + ri("Liters",r.liters+" L") + ri("Cups (240 mL)",r.cups) + ri("Glasses (250 mL)",r.glasses));
+}
+
+function doSleep() {
+  const r = calcSleep(document.getElementById("sleep-time").value);
+  if (!r) return;
+  const el = document.getElementById("sleep-result");
+  el.innerHTML = r.map((row, i) =>
+    `<div class="sleep-row${i===1?" best":""}">
+      <div><div class="sleep-time">${row.time}</div><div class="sleep-info">${row.cycles} cycles · ${row.hours} hours</div></div>
+      ${i===1?'<span style="font-size:.72rem;color:#a5b4fc;font-weight:700;">⭐ Recommended</span>':""}
+    </div>`
+  ).join("");
+  el.style.display = "";
+}
+
+function doDue() {
+  const r = calcDueDate(document.getElementById("due-lmp").value);
+  if (!r) return errMsg("due-result");
+  showResult("due-result", ri("Due Date",r.dueDate) + ri("Days Remaining",r.daysLeft+" days") + ri("Weeks Pregnant",r.weeksPregn+" wk") + ri("Trimester",r.trimester));
+}
+</script>
+</body>
+</html>

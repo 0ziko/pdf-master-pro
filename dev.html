@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Developer Tools — SnakeConverter</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/app.css" />
+  <style>
+    .dev-textarea { width:100%; min-height:160px; resize:vertical; background:rgba(0,0,0,.25);
+      border:1px solid var(--border-subtle); border-radius:.75rem; padding:.75rem .9rem;
+      color:var(--text-primary); font-size:.82rem; font-family:monospace; outline:none;
+      transition:border-color .2s; line-height:1.6; }
+    .dev-textarea:focus { border-color:var(--border-glow); }
+    .dev-output { background:rgba(0,0,0,.3); border:1px solid var(--border-subtle); border-radius:.75rem;
+      padding:.75rem .9rem; font-family:monospace; font-size:.8rem; color:#86efac;
+      min-height:80px; word-break:break-all; white-space:pre-wrap; line-height:1.6;
+      position:relative; }
+    .hash-row { display:flex; flex-direction:column; gap:.5rem; }
+    .hash-item { background:rgba(0,0,0,.25); border:1px solid var(--border-subtle); border-radius:.7rem;
+      padding:.55rem .8rem; display:flex; gap:.7rem; align-items:flex-start; }
+    .hash-algo { font-size:.65rem; font-weight:800; text-transform:uppercase; letter-spacing:.1em;
+      color:var(--text-muted); min-width:60px; padding-top:.1rem; }
+    .hash-val  { font-family:monospace; font-size:.77rem; color:#86efac; word-break:break-all; flex:1; }
+    .copy-inline { font-size:.65rem; color:var(--text-dim); cursor:pointer; padding:.1rem .3rem;
+      border-radius:.3rem; border:1px solid var(--border-subtle); flex-shrink:0; white-space:nowrap;
+      background:transparent; transition:all .15s; }
+    .copy-inline:hover { color:var(--text-muted); border-color:var(--text-dim); }
+    .uuid-list { display:flex; flex-direction:column; gap:.4rem; }
+    .uuid-item { background:rgba(0,0,0,.25); border:1px solid var(--border-subtle); border-radius:.6rem;
+      padding:.45rem .75rem; font-family:monospace; font-size:.82rem; color:#86efac;
+      display:flex; justify-content:space-between; align-items:center; }
+    .regex-match { background:rgba(251,191,36,.2); color:#fbbf24; border-radius:.2rem; }
+    .regex-match-list { margin-top:.6rem; display:flex; flex-direction:column; gap:.3rem; }
+    .regex-match-item { font-size:.77rem; font-family:monospace; color:var(--text-muted);
+      background:rgba(0,0,0,.2); border-radius:.5rem; padding:.35rem .6rem; }
+    .regex-flags { display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:.5rem; }
+    .flag-btn { padding:.25rem .6rem; border:1px solid var(--border-subtle); border-radius:.4rem;
+      font-size:.72rem; font-weight:700; font-family:monospace; background:transparent;
+      color:var(--text-muted); cursor:pointer; transition:all .15s; }
+    .flag-btn.active { background:rgba(251,191,36,.2); border-color:#fbbf24; color:#fbbf24; }
+    .md-preview { background:rgba(255,255,255,.03); border:1px solid var(--border-subtle); border-radius:.75rem;
+      padding:1rem 1.2rem; min-height:120px; color:var(--text-primary); font-size:.88rem; line-height:1.7; }
+    .md-preview h1,.md-preview h2,.md-preview h3,.md-preview h4 { font-weight:800; margin:.5em 0 .3em;color:#fff; }
+    .md-preview h1{font-size:1.5em}.md-preview h2{font-size:1.3em}.md-preview h3{font-size:1.1em}
+    .md-preview blockquote { border-left:3px solid #818cf8; padding-left:.8rem; color:var(--text-muted); }
+    .md-preview code { background:rgba(0,0,0,.4); border-radius:.25rem; padding:.1rem .3rem; font-family:monospace; font-size:.85em; color:#86efac; }
+    .md-preview a { color:#818cf8; text-decoration:underline; }
+    .md-preview ul { padding-left:1.2em; }
+    .md-preview hr { border:none; border-top:1px solid var(--border-subtle); margin:1em 0; }
+    .md-preview p { margin:.3em 0; }
+    .base-inputs { display:grid; grid-template-columns:1fr 1fr; gap:.5rem; margin-bottom:.5rem; }
+    .base-field { display:flex; flex-direction:column; gap:.2rem; }
+    .base-label { font-size:.65rem; font-weight:800; text-transform:uppercase; letter-spacing:.08em; color:var(--text-muted); }
+    .tab-row-btns { display:flex; gap:.4rem; margin-bottom:.6rem; flex-wrap:wrap; }
+    .tab-row-btn { padding:.3rem .7rem; border:1px solid var(--border-subtle); border-radius:.5rem;
+      font-size:.72rem; font-weight:700; background:transparent; color:var(--text-muted); cursor:pointer; transition:all .15s; }
+    .tab-row-btn.active { background:rgba(139,92,246,.2); border-color:#8b5cf6; color:#c4b5fd; }
+  </style>
+</head>
+<body>
+<div class="app-wrap">
+  <div class="main-card">
+
+    <!-- ── Header ──────────────────────────── -->
+    <header style="text-align:center;margin-bottom:1.5rem;position:relative;">
+      <div class="lang-switcher">
+        <button type="button" data-lang-btn="en" class="lang-btn lang-active">EN</button>
+        <button type="button" data-lang-btn="tr" class="lang-btn">TR</button>
+      </div>
+
+      <a href="index.html" class="hub-back-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        SnakeConverter
+      </a>
+
+      <div style="display:inline-flex;align-items:center;gap:.4rem;background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.3);border-radius:999px;padding:.2rem .85rem;font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#c4b5fd;margin-bottom:.9rem;">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><circle cx="5" cy="5" r="5"/></svg>
+        <span>No Server · No Tracking · Open Source</span>
+      </div>
+
+      <h1 class="site-title" style="background:linear-gradient(135deg,#fff 0%,#c4b5fd 40%,#8b5cf6 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Developer Tools</h1>
+      <p class="site-sub">JSON · Hash · UUID · Regex · Base convert · Markdown & more</p>
+    </header>
+
+    <!-- ── Tab nav ───────────────────────────── -->
+    <nav class="tab-nav tools-tab-nav">
+      <button type="button" data-tab="json"   class="tab-btn tab-active"><span>JSON</span></button>
+      <button type="button" data-tab="hash"   class="tab-btn"><span>Hash</span></button>
+      <button type="button" data-tab="uuid"   class="tab-btn"><span>UUID</span></button>
+      <button type="button" data-tab="regex"  class="tab-btn"><span>Regex</span></button>
+      <button type="button" data-tab="url"    class="tab-btn"><span>URL</span></button>
+      <button type="button" data-tab="html"   class="tab-btn"><span>HTML</span></button>
+      <button type="button" data-tab="base"   class="tab-btn"><span>Base</span></button>
+      <button type="button" data-tab="roman"  class="tab-btn"><span>Roman</span></button>
+      <button type="button" data-tab="lorem"  class="tab-btn"><span>Lorem</span></button>
+      <button type="button" data-tab="md"     class="tab-btn"><span>Markdown</span></button>
+    </nav>
+
+    <!-- ── JSON Formatter ── -->
+    <div data-panel="json">
+      <div class="tab-row-btns">
+        <button type="button" class="tab-row-btn active" onclick="jsonDo('format')">Format</button>
+        <button type="button" class="tab-row-btn" onclick="jsonDo('minify')">Minify</button>
+      </div>
+      <textarea id="json-in" class="dev-textarea" placeholder='{"hello":"world"}'></textarea>
+      <div style="display:flex;gap:.5rem;margin:.5rem 0;">
+        <button type="button" onclick="jsonRun()" class="btn-primary" style="flex:1">Convert</button>
+        <button type="button" onclick="copyEl('json-out')" class="btn-secondary" style="flex:0 0 auto">Copy</button>
+      </div>
+      <div id="json-out" class="dev-output" style="min-height:160px"></div>
+    </div>
+
+    <!-- ── Hash Generator ── -->
+    <div data-panel="hash" style="display:none">
+      <textarea id="hash-in" class="dev-textarea" placeholder="Enter text to hash…" oninput="hashRun()"></textarea>
+      <div id="hash-out" class="hash-row" style="margin-top:.6rem"></div>
+    </div>
+
+    <!-- ── UUID Generator ── -->
+    <div data-panel="uuid" style="display:none">
+      <div style="display:flex;gap:.5rem;align-items:center;margin-bottom:.8rem;">
+        <label style="font-size:.8rem;color:var(--text-muted);">Count</label>
+        <input type="number" id="uuid-count" value="5" min="1" max="50" style="width:70px;" class="input-field" />
+        <button type="button" onclick="uuidRun()" class="btn-primary" style="flex:1">Generate UUIDs</button>
+      </div>
+      <div id="uuid-out" class="uuid-list"></div>
+    </div>
+
+    <!-- ── Regex Tester ── -->
+    <div data-panel="regex" style="display:none">
+      <input type="text" id="regex-pattern" class="input-field" placeholder="Pattern (without /…/)" oninput="regexRun()" style="margin-bottom:.5rem;font-family:monospace;" />
+      <div class="regex-flags">
+        <button type="button" class="flag-btn active" data-flag="g">g global</button>
+        <button type="button" class="flag-btn active" data-flag="i">i ignore-case</button>
+        <button type="button" class="flag-btn" data-flag="m">m multiline</button>
+        <button type="button" class="flag-btn" data-flag="s">s dot-all</button>
+      </div>
+      <textarea id="regex-test" class="dev-textarea" placeholder="Test string…" oninput="regexRun()"></textarea>
+      <div id="regex-preview" class="dev-output" style="margin-top:.5rem;min-height:50px;color:var(--text-primary)"></div>
+      <div id="regex-matches" class="regex-match-list"></div>
+    </div>
+
+    <!-- ── URL Encode/Decode ── -->
+    <div data-panel="url" style="display:none">
+      <div class="tab-row-btns">
+        <button type="button" class="tab-row-btn active" data-mode="encode" onclick="urlMode('encode')">Encode</button>
+        <button type="button" class="tab-row-btn" data-mode="decode" onclick="urlMode('decode')">Decode</button>
+      </div>
+      <textarea id="url-in" class="dev-textarea" placeholder="Enter text…" oninput="urlRun()"></textarea>
+      <div style="display:flex;justify-content:flex-end;margin:.4rem 0;">
+        <button type="button" onclick="copyEl('url-out')" class="btn-secondary">Copy</button>
+      </div>
+      <div id="url-out" class="dev-output"></div>
+    </div>
+
+    <!-- ── HTML Entities ── -->
+    <div data-panel="html" style="display:none">
+      <div class="tab-row-btns">
+        <button type="button" class="tab-row-btn active" data-mode="encode" onclick="htmlMode('encode')">Encode</button>
+        <button type="button" class="tab-row-btn" data-mode="decode" onclick="htmlMode('decode')">Decode</button>
+      </div>
+      <textarea id="html-in" class="dev-textarea" placeholder="Enter HTML…" oninput="htmlRun()"></textarea>
+      <div style="display:flex;justify-content:flex-end;margin:.4rem 0;">
+        <button type="button" onclick="copyEl('html-out')" class="btn-secondary">Copy</button>
+      </div>
+      <div id="html-out" class="dev-output"></div>
+    </div>
+
+    <!-- ── Number Base Converter ── -->
+    <div data-panel="base" style="display:none">
+      <div class="base-inputs">
+        <div class="base-field">
+          <span class="base-label">Decimal</span>
+          <input type="text" id="b-dec" class="input-field" style="font-family:monospace" oninput="baseFrom('dec')" placeholder="0" />
+        </div>
+        <div class="base-field">
+          <span class="base-label">Binary</span>
+          <input type="text" id="b-bin" class="input-field" style="font-family:monospace" oninput="baseFrom('bin')" placeholder="0" />
+        </div>
+        <div class="base-field">
+          <span class="base-label">Octal</span>
+          <input type="text" id="b-oct" class="input-field" style="font-family:monospace" oninput="baseFrom('oct')" placeholder="0" />
+        </div>
+        <div class="base-field">
+          <span class="base-label">Hexadecimal</span>
+          <input type="text" id="b-hex" class="input-field" style="font-family:monospace" oninput="baseFrom('hex')" placeholder="0" />
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Roman Numerals ── -->
+    <div data-panel="roman" style="display:none">
+      <div class="tab-row-btns">
+        <button type="button" class="tab-row-btn active" data-mode="toRoman" onclick="romanMode('toRoman')">Number → Roman</button>
+        <button type="button" class="tab-row-btn" data-mode="fromRoman" onclick="romanMode('fromRoman')">Roman → Number</button>
+      </div>
+      <input type="text" id="roman-in" class="input-field" placeholder="e.g. 2024 or XIV" oninput="romanRun()" style="margin-bottom:.5rem" />
+      <div id="roman-out" class="dev-output" style="font-size:1.4rem;font-weight:800;text-align:center;min-height:60px;display:flex;align-items:center;justify-content:center;"></div>
+    </div>
+
+    <!-- ── Lorem Ipsum ── -->
+    <div data-panel="lorem" style="display:none">
+      <div style="display:flex;gap:.5rem;align-items:flex-end;margin-bottom:.6rem;flex-wrap:wrap;">
+        <div>
+          <label style="font-size:.7rem;color:var(--text-muted);font-weight:700;text-transform:uppercase;display:block;margin-bottom:.2rem;">Paragraphs</label>
+          <input type="number" id="lorem-paras" value="3" min="1" max="20" class="input-field" style="width:80px" />
+        </div>
+        <div>
+          <label style="font-size:.7rem;color:var(--text-muted);font-weight:700;text-transform:uppercase;display:block;margin-bottom:.2rem;">Sentences</label>
+          <input type="number" id="lorem-sents" value="5" min="1" max="20" class="input-field" style="width:80px" />
+        </div>
+        <button type="button" onclick="loremRun()" class="btn-primary" style="flex:1">Generate</button>
+        <button type="button" onclick="copyEl('lorem-out')" class="btn-secondary">Copy</button>
+      </div>
+      <div id="lorem-out" class="dev-output" style="min-height:160px;color:var(--text-muted);white-space:pre-wrap"></div>
+    </div>
+
+    <!-- ── Markdown Preview ── -->
+    <div data-panel="md" style="display:none">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
+        <div>
+          <div style="font-size:.68rem;color:var(--text-muted);font-weight:700;text-transform:uppercase;margin-bottom:.3rem;">Markdown</div>
+          <textarea id="md-in" class="dev-textarea" style="min-height:260px" oninput="mdRun()" placeholder="# Hello\n\nWrite **markdown** here…"></textarea>
+        </div>
+        <div>
+          <div style="font-size:.68rem;color:var(--text-muted);font-weight:700;text-transform:uppercase;margin-bottom:.3rem;">Preview</div>
+          <div id="md-out" class="md-preview" style="min-height:260px"></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:2.5rem;text-align:center;font-size:.72rem;color:var(--text-dim);">
+      © 2026 SnakeConverter &nbsp;·&nbsp; All processing happens in your browser
+    </div>
+
+  </div><!-- /main-card -->
+</div><!-- /app-wrap -->
+
+<script src="js/i18n.js"></script>
+<script src="js/dev-tools.js"></script>
+<script>
+/* ── Tab switching ── */
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("tab-active"));
+    document.querySelectorAll("[data-panel]").forEach(p => p.style.display = "none");
+    btn.classList.add("tab-active");
+    document.querySelector(`[data-panel="${btn.dataset.tab}"]`).style.display = "";
+    history.replaceState(null,"","#"+btn.dataset.tab);
+  });
+});
+
+/* ── Hash routing ── */
+const hash = location.hash.replace("#","");
+if (hash) { const b = document.querySelector(`[data-tab="${hash}"]`); if(b) b.click(); }
+
+const DT = window.DevTools;
+
+/* ── Copy helper ── */
+function copyEl(id) {
+  const el = document.getElementById(id);
+  const text = el.textContent || el.value || "";
+  navigator.clipboard.writeText(text).catch(()=>{});
+}
+
+/* ── JSON ── */
+let jsonAction = "format";
+function jsonDo(mode) {
+  jsonAction = mode;
+  document.querySelectorAll(".tab-row-btn").forEach(b => b.classList.toggle("active", b.textContent.toLowerCase() === mode));
+}
+function jsonRun() {
+  const out = document.getElementById("json-out");
+  try {
+    out.textContent = jsonAction === "minify" ? DT.jsonMinify(document.getElementById("json-in").value) : DT.jsonFormat(document.getElementById("json-in").value);
+    out.style.color = "#86efac";
+  } catch (e) {
+    out.textContent = "Error: " + e.message;
+    out.style.color = "#f87171";
+  }
+}
+
+/* ── Hash ── */
+async function hashRun() {
+  const text = document.getElementById("hash-in").value;
+  const out  = document.getElementById("hash-out");
+  const algos = [
+    { label: "SHA-1",   algo: "SHA-1"   },
+    { label: "SHA-256", algo: "SHA-256" },
+    { label: "SHA-384", algo: "SHA-384" },
+    { label: "SHA-512", algo: "SHA-512" },
+  ];
+  const results = await Promise.all(algos.map(a => DT.hashText(text, a.algo)));
+  out.innerHTML = algos.map((a, i) => `
+    <div class="hash-item">
+      <span class="hash-algo">${a.label}</span>
+      <span class="hash-val">${results[i]}</span>
+      <button class="copy-inline" onclick="navigator.clipboard.writeText('${results[i]}')">Copy</button>
+    </div>
+  `).join("");
+}
+
+/* ── UUID ── */
+function uuidRun() {
+  const n = Math.min(50, parseInt(document.getElementById("uuid-count").value) || 1);
+  const out = document.getElementById("uuid-out");
+  out.innerHTML = Array.from({length:n}, () => {
+    const id = DT.uuidV4();
+    return `<div class="uuid-item"><span>${id}</span><button class="copy-inline" onclick="navigator.clipboard.writeText('${id}')">Copy</button></div>`;
+  }).join("");
+}
+uuidRun();
+
+/* ── Regex ── */
+const flagBtns = {};
+document.querySelectorAll(".flag-btn").forEach(btn => {
+  flagBtns[btn.dataset.flag] = btn.classList.contains("active");
+  btn.addEventListener("click", () => {
+    btn.classList.toggle("active");
+    flagBtns[btn.dataset.flag] = btn.classList.contains("active");
+    regexRun();
+  });
+});
+
+function regexRun() {
+  const pattern = document.getElementById("regex-pattern").value;
+  const test    = document.getElementById("regex-test").value;
+  const preview = document.getElementById("regex-preview");
+  const matchList = document.getElementById("regex-matches");
+  if (!pattern) { preview.textContent = test; matchList.innerHTML = ""; return; }
+  const flags = Object.entries(flagBtns).filter(([,v])=>v).map(([k])=>k).join("");
+  try {
+    const matches = DT.regexTest(pattern, flags, test);
+    /* highlight in preview */
+    const re = new RegExp(pattern, flags.replace("g","") + "g");
+    preview.innerHTML = test.replace(re, m => `<mark class="regex-match">${m}</mark>`);
+    matchList.innerHTML = matches.length === 0
+      ? '<div class="regex-match-item" style="color:#f87171">No matches</div>'
+      : matches.map((m,i)=>`<div class="regex-match-item"><span style="color:#fbbf24">#${i+1}</span> at ${m.index}: <strong>${m.match}</strong>${m.groups.length?" groups: "+m.groups.join(", "):""}</div>`).join("");
+  } catch (e) {
+    preview.textContent = "Pattern error: " + e.message;
+    preview.style.color = "#f87171";
+  }
+}
+
+/* ── URL ── */
+let urlAction = "encode";
+function urlMode(mode) { urlAction = mode; document.querySelectorAll("[data-mode]").forEach(b=>b.classList.toggle("active", b.dataset.mode===mode)); urlRun(); }
+function urlRun() {
+  const v = document.getElementById("url-in").value;
+  const out = document.getElementById("url-out");
+  try { out.textContent = urlAction === "encode" ? DT.urlEncode(v) : DT.urlDecode(v); out.style.color="#86efac"; }
+  catch(e){ out.textContent = "Error: "+e.message; out.style.color="#f87171"; }
+}
+
+/* ── HTML ── */
+let htmlAction = "encode";
+function htmlMode(mode) { htmlAction = mode; htmlRun(); }
+function htmlRun() {
+  const v = document.getElementById("html-in").value;
+  document.getElementById("html-out").textContent = htmlAction === "encode" ? DT.htmlEncode(v) : DT.htmlDecode(v);
+}
+
+/* ── Base ── */
+const baseMap = { dec:10, bin:2, oct:8, hex:16 };
+let baseChanging = false;
+function baseFrom(from) {
+  if (baseChanging) return; baseChanging = true;
+  const val = document.getElementById("b-"+from).value.trim();
+  const r = DT.baseConvert(val, baseMap[from]);
+  if (r) { Object.keys(baseMap).forEach(k => { if(k!==from) document.getElementById("b-"+k).value = r[k]; }); }
+  else { Object.keys(baseMap).forEach(k => { if(k!==from) document.getElementById("b-"+k).value = ""; }); }
+  baseChanging = false;
+}
+
+/* ── Roman ── */
+let romanAction = "toRoman";
+function romanMode(mode) { romanAction = mode; document.querySelectorAll("[data-mode]").forEach(b=>b.classList.toggle("active",b.dataset.mode===mode)); romanRun(); }
+function romanRun() {
+  const v = document.getElementById("roman-in").value;
+  const out = document.getElementById("roman-out");
+  if (romanAction === "toRoman") out.textContent = DT.toRoman(v) || "—";
+  else { const n = DT.fromRoman(v); out.textContent = isNaN(n) ? "—" : n; }
+}
+
+/* ── Lorem ── */
+function loremRun() {
+  document.getElementById("lorem-out").textContent = DT.loremIpsum(
+    parseInt(document.getElementById("lorem-paras").value)||3,
+    parseInt(document.getElementById("lorem-sents").value)||5
+  );
+}
+loremRun();
+
+/* ── Markdown ── */
+function mdRun() {
+  document.getElementById("md-out").innerHTML = DT.mdToHtml(document.getElementById("md-in").value);
+}
+document.getElementById("md-in").value = "# Welcome\n\nThis is a **markdown** preview.\n\n- Item one\n- Item two\n\n> A blockquote\n\n`inline code`";
+mdRun();
+</script>
+</body>
+</html>
