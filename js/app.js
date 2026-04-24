@@ -171,8 +171,32 @@
     mergeFiles.forEach((f, i) => {
       const row = document.createElement("div");
       row.className = "file-chip";
-      row.innerHTML = `<span class="file-chip-num">${i + 1}</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${f.name}</span>`;
+      row.dataset.index = i;
+      row.innerHTML = `
+        <span class="file-chip-num">${i + 1}</span>
+        <span class="file-chip-name" title="${f.name}">${f.name}</span>
+        <input
+          type="password"
+          class="file-chip-pass"
+          data-merge-pass="${i}"
+          autocomplete="off"
+          placeholder="🔒 şifre (opsiyonel)"
+        />
+        <button type="button" class="file-chip-del" data-del="${i}" title="Kaldır">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>`;
       mergeList.appendChild(row);
+    });
+
+    mergeList.querySelectorAll("[data-del]").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const idx = parseInt(btn.dataset.del, 10);
+        mergeFiles.splice(idx, 1);
+        renderMergeList();
+      });
     });
   }
 
@@ -191,10 +215,12 @@
     if (mergeFiles.length < 2) return alert("En az iki PDF gerekli.");
     const enc = readEncryptOptions();
     if (enc.encrypt && !enc.password) return alert("Şifreleme açıkken şifre gerekli.");
-    const srcPassword = document.getElementById("mergeSrcPass")?.value || "";
+    const srcPasswords = Array.from(
+      mergeList.querySelectorAll("[data-merge-pass]")
+    ).map((inp) => inp.value || "");
     setBusy(mergeBtn, true);
     try {
-      const bytes = await Merge.mergePdfFiles(mergeFiles, { ...enc, srcPassword });
+      const bytes = await Merge.mergePdfFiles(mergeFiles, { ...enc, srcPasswords });
       U.downloadBlob(bytes, "birlesik.pdf");
     } catch (e) {
       console.error(e); alert(e.message || String(e));
