@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Utility Tools — SnakeConverter</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
+  <link rel="stylesheet" href="css/app.css" />
+</head>
+<body>
+<div class="app-wrap">
+  <div class="main-card">
+
+    <!-- ── Header ──────────────────────────── -->
+    <header style="text-align:center;margin-bottom:1.5rem;position:relative;">
+      <div class="lang-switcher">
+        <button type="button" data-lang-btn="en" class="lang-btn lang-active">EN</button>
+        <button type="button" data-lang-btn="tr" class="lang-btn">TR</button>
+      </div>
+
+      <a href="index.html" class="hub-back-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        SnakeConverter
+      </a>
+
+      <div style="display:inline-flex;align-items:center;gap:.4rem;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.3);border-radius:999px;padding:.2rem .85rem;font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#6ee7b7;margin-bottom:.9rem;">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><circle cx="5" cy="5" r="5"/></svg>
+        <span>Browser based · No server</span>
+      </div>
+
+      <h1 class="site-title" style="background:linear-gradient(135deg,#fff 0%,#6ee7b7 40%,#34d399 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Utility Tools</h1>
+      <p class="site-sub">Text · Calculator · Generator — all in your browser</p>
+    </header>
+
+    <!-- ── Snake mascot ─────────────────────── -->
+    <div class="snake-stage" style="margin-bottom:1rem;">
+      <div class="snake-chomp-wrap">
+        <canvas id="snakeCanvas"></canvas>
+        <span id="snakeChomp" class="snake-chomp"></span>
+      </div>
+      <p id="snakeCaption" class="snake-caption">Pick a tool and let's go! 🐍</p>
+    </div>
+
+    <!-- ── Tab nav (scrollable) ─────────────── -->
+    <nav class="tab-nav tools-tab-nav">
+      <button type="button" data-tab="words"   class="tab-btn tab-active">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="12" y2="17"/></svg>
+        <span>Words</span>
+      </button>
+      <button type="button" data-tab="age"     class="tab-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        <span>Age</span>
+      </button>
+      <button type="button" data-tab="bmi"     class="tab-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+        <span>BMI</span>
+      </button>
+      <button type="button" data-tab="percent" class="tab-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
+        <span>%</span>
+      </button>
+      <button type="button" data-tab="case"    class="tab-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+        <span>Case</span>
+      </button>
+      <button type="button" data-tab="random"  class="tab-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+        <span>Random</span>
+      </button>
+      <button type="button" data-tab="pass"    class="tab-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        <span>Password</span>
+      </button>
+      <button type="button" data-tab="qr"      class="tab-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        <span>QR</span>
+      </button>
+      <button type="button" data-tab="base64"  class="tab-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        <span>Base64</span>
+      </button>
+      <button type="button" data-tab="unix"    class="tab-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>Timestamp</span>
+      </button>
+    </nav>
+
+    <!-- ════════ PANELS ════════ -->
+
+    <!-- 1. Word Counter -->
+    <div data-panel="words" class="panel is-visible">
+      <div class="space-y">
+        <textarea id="wc-input" class="tool-textarea" placeholder="Paste or type your text here…" rows="7" oninput="ToolsApp.wordCount()"></textarea>
+        <div class="stat-grid" id="wc-stats">
+          <div class="stat-card"><span class="stat-val" id="wc-words">0</span><span class="stat-lbl">Words</span></div>
+          <div class="stat-card"><span class="stat-val" id="wc-chars">0</span><span class="stat-lbl">Characters</span></div>
+          <div class="stat-card"><span class="stat-val" id="wc-nospace">0</span><span class="stat-lbl">No spaces</span></div>
+          <div class="stat-card"><span class="stat-val" id="wc-sent">0</span><span class="stat-lbl">Sentences</span></div>
+          <div class="stat-card"><span class="stat-val" id="wc-para">0</span><span class="stat-lbl">Paragraphs</span></div>
+          <div class="stat-card"><span class="stat-val" id="wc-read">0 min</span><span class="stat-lbl">Read time</span></div>
+        </div>
+        <button type="button" class="btn-ghost" onclick="document.getElementById('wc-input').value='';ToolsApp.wordCount();">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/></svg>
+          Clear
+        </button>
+      </div>
+    </div>
+
+    <!-- 2. Age Calculator -->
+    <div data-panel="age" class="panel">
+      <div class="space-y">
+        <div>
+          <label class="field-label">Date of Birth</label>
+          <input type="date" id="age-input" class="field" max="" />
+        </div>
+        <button type="button" class="btn-primary" onclick="ToolsApp.calcAge()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          <span>Calculate Age</span>
+        </button>
+        <div id="age-result" class="tool-result" style="display:none;">
+          <div class="stat-grid" id="age-grid"></div>
+          <div class="result-card" id="age-extra" style="margin-top:.75rem;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. BMI -->
+    <div data-panel="bmi" class="panel">
+      <div class="space-y">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
+          <div>
+            <label class="field-label">Height (cm)</label>
+            <input type="number" id="bmi-h" class="field" placeholder="175" min="50" max="300" />
+          </div>
+          <div>
+            <label class="field-label">Weight (kg)</label>
+            <input type="number" id="bmi-w" class="field" placeholder="70" min="1" max="500" />
+          </div>
+        </div>
+        <button type="button" class="btn-primary" onclick="ToolsApp.calcBMI()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+          <span>Calculate BMI</span>
+        </button>
+        <div id="bmi-result" class="tool-result" style="display:none;">
+          <div style="text-align:center;margin-bottom:.75rem;">
+            <div id="bmi-val" style="font-size:3rem;font-weight:900;line-height:1;"></div>
+            <div id="bmi-cat" style="font-size:1.1rem;font-weight:700;margin-top:.25rem;"></div>
+          </div>
+          <!-- BMI gauge bar -->
+          <div class="bmi-bar-wrap">
+            <div class="bmi-bar-track">
+              <div class="bmi-bar-seg" style="background:#60a5fa;width:22%;" title="Underweight <18.5"></div>
+              <div class="bmi-bar-seg" style="background:#4ade80;width:20%;" title="Normal 18.5-24.9"></div>
+              <div class="bmi-bar-seg" style="background:#fbbf24;width:16%;" title="Overweight 25-29.9"></div>
+              <div class="bmi-bar-seg" style="background:#f87171;width:42%;" title="Obese 30+"></div>
+            </div>
+            <div id="bmi-needle" class="bmi-needle" style="left:0%;"></div>
+            <div class="bmi-bar-labels">
+              <span>10</span><span>18.5</span><span>25</span><span>30</span><span>45</span>
+            </div>
+          </div>
+          <p id="bmi-range" class="notice" style="text-align:center;margin-top:.5rem;"></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Percentage Calculator -->
+    <div data-panel="percent" class="panel">
+      <div class="space-y">
+        <!-- Mode tabs -->
+        <div class="radio-group" style="justify-content:center;">
+          <div class="radio-pill"><input type="radio" name="pctMode" id="pm1" value="of" checked /><label for="pm1"><span>X% of Y</span></label></div>
+          <div class="radio-pill"><input type="radio" name="pctMode" id="pm2" value="is" /><label for="pm2"><span>X is % of Y?</span></label></div>
+          <div class="radio-pill"><input type="radio" name="pctMode" id="pm3" value="change" /><label for="pm3"><span>% Change</span></label></div>
+        </div>
+        <div id="pct-of-row">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
+            <div><label class="field-label">Percentage (%)</label><input type="number" id="pct-a1" class="field" placeholder="25" /></div>
+            <div><label class="field-label">Of what number?</label><input type="number" id="pct-a2" class="field" placeholder="200" /></div>
+          </div>
+        </div>
+        <div id="pct-is-row" style="display:none;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
+            <div><label class="field-label">Part (X)</label><input type="number" id="pct-b1" class="field" placeholder="50" /></div>
+            <div><label class="field-label">Whole (Y)</label><input type="number" id="pct-b2" class="field" placeholder="200" /></div>
+          </div>
+        </div>
+        <div id="pct-change-row" style="display:none;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
+            <div><label class="field-label">From</label><input type="number" id="pct-c1" class="field" placeholder="100" /></div>
+            <div><label class="field-label">To</label><input type="number" id="pct-c2" class="field" placeholder="150" /></div>
+          </div>
+        </div>
+        <button type="button" class="btn-primary" onclick="ToolsApp.calcPct()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
+          <span>Calculate</span>
+        </button>
+        <div id="pct-result" class="tool-result" style="display:none;text-align:center;">
+          <div id="pct-answer" style="font-size:2.5rem;font-weight:900;color:#4ade80;line-height:1.1;"></div>
+          <div id="pct-explain" style="color:var(--text-muted);font-size:.85rem;margin-top:.35rem;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Text Case Converter -->
+    <div data-panel="case" class="panel">
+      <div class="space-y">
+        <textarea id="case-input" class="tool-textarea" placeholder="Enter text to convert…" rows="5"></textarea>
+        <div class="case-buttons">
+          <button class="btn-case" onclick="ToolsApp.doCase('upper')">UPPER</button>
+          <button class="btn-case" onclick="ToolsApp.doCase('lower')">lower</button>
+          <button class="btn-case" onclick="ToolsApp.doCase('title')">Title</button>
+          <button class="btn-case" onclick="ToolsApp.doCase('sentence')">Sentence</button>
+          <button class="btn-case" onclick="ToolsApp.doCase('camel')">camelCase</button>
+          <button class="btn-case" onclick="ToolsApp.doCase('pascal')">PascalCase</button>
+          <button class="btn-case" onclick="ToolsApp.doCase('snake')">snake_case</button>
+          <button class="btn-case" onclick="ToolsApp.doCase('kebab')">kebab-case</button>
+          <button class="btn-case" onclick="ToolsApp.doCase('reverse')">esreveR</button>
+          <button class="btn-case" onclick="ToolsApp.doCase('alternating')">aLtErNaTiNg</button>
+        </div>
+        <div id="case-result" class="tool-result" style="display:none;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem;">
+            <span id="case-mode-label" style="font-size:.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;"></span>
+            <button class="copy-btn" onclick="ToolsApp.copy('case-output')">Copy</button>
+          </div>
+          <textarea id="case-output" class="tool-textarea" rows="4" readonly style="cursor:text;background:rgba(0,0,0,.2);"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Random Number Generator -->
+    <div data-panel="random" class="panel">
+      <div class="space-y">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;">
+          <div><label class="field-label">Min</label><input type="number" id="rng-min" class="field" value="1" /></div>
+          <div><label class="field-label">Max</label><input type="number" id="rng-max" class="field" value="100" /></div>
+          <div><label class="field-label">Count</label><input type="number" id="rng-count" class="field" value="5" min="1" max="1000" /></div>
+        </div>
+        <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+          <label class="check-label"><input type="checkbox" id="rng-unique" /> No duplicates</label>
+          <label class="check-label"><input type="checkbox" id="rng-sort" checked /> Sort result</label>
+        </div>
+        <button type="button" class="btn-primary" onclick="ToolsApp.genRandom()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
+          <span>Generate</span>
+        </button>
+        <div id="rng-result" class="tool-result" style="display:none;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem;">
+            <span id="rng-label" style="font-size:.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;"></span>
+            <button class="copy-btn" onclick="ToolsApp.copy('rng-output')">Copy</button>
+          </div>
+          <div id="rng-output" class="rng-chips"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. Password Generator -->
+    <div data-panel="pass" class="panel">
+      <div class="space-y">
+        <div>
+          <label class="field-label">Length: <span id="pass-len-val">16</span></label>
+          <input type="range" id="pass-len" class="range-input" min="4" max="64" value="16" oninput="document.getElementById('pass-len-val').textContent=this.value;ToolsApp.genPass();" />
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem .75rem;">
+          <label class="check-label"><input type="checkbox" id="pass-upper" checked onchange="ToolsApp.genPass()"> Uppercase A-Z</label>
+          <label class="check-label"><input type="checkbox" id="pass-lower" checked onchange="ToolsApp.genPass()"> Lowercase a-z</label>
+          <label class="check-label"><input type="checkbox" id="pass-nums"  checked onchange="ToolsApp.genPass()"> Numbers 0-9</label>
+          <label class="check-label"><input type="checkbox" id="pass-syms"  onchange="ToolsApp.genPass()"> Symbols !@#…</label>
+          <label class="check-label"><input type="checkbox" id="pass-noamb" onchange="ToolsApp.genPass()"> No ambiguous (0,O,I,l)</label>
+        </div>
+
+        <div class="pass-display-wrap">
+          <div id="pass-output" class="pass-display" onclick="ToolsApp.copy('pass-output-txt')"></div>
+          <button class="copy-btn" onclick="ToolsApp.copy('pass-output-txt')" style="flex-shrink:0;">Copy</button>
+          <input type="text" id="pass-output-txt" style="position:absolute;opacity:0;pointer-events:none;" readonly />
+        </div>
+
+        <!-- Strength bar -->
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:.3rem;">
+            <span style="font-size:.75rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.08em;">Strength</span>
+            <span id="pass-strength-label" style="font-size:.75rem;font-weight:700;"></span>
+          </div>
+          <div class="strength-track"><div id="pass-strength-bar" class="strength-bar"></div></div>
+        </div>
+
+        <button type="button" class="btn-primary" onclick="ToolsApp.genPass()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          <span>Regenerate</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 8. QR Code Generator -->
+    <div data-panel="qr" class="panel">
+      <div class="space-y">
+        <div>
+          <label class="field-label">Text or URL</label>
+          <textarea id="qr-input" class="tool-textarea" rows="3" placeholder="https://example.com or any text…"></textarea>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
+          <div>
+            <label class="field-label">Size (px)</label>
+            <select id="qr-size" class="field">
+              <option value="128">128</option>
+              <option value="256" selected>256</option>
+              <option value="512">512</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-label">Error correction</label>
+            <select id="qr-ecl" class="field">
+              <option value="L">L — Low</option>
+              <option value="M" selected>M — Medium</option>
+              <option value="Q">Q — Quartile</option>
+              <option value="H">H — High</option>
+            </select>
+          </div>
+        </div>
+        <button type="button" class="btn-primary" onclick="ToolsApp.genQR()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          <span>Generate QR</span>
+        </button>
+        <div id="qr-result" class="tool-result" style="display:none;text-align:center;">
+          <canvas id="qr-canvas" style="border-radius:.75rem;max-width:100%;"></canvas>
+          <button type="button" class="btn-ghost" style="margin-top:.75rem;" onclick="ToolsApp.downloadQR()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download PNG
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9. Base64 Converter -->
+    <div data-panel="base64" class="panel">
+      <div class="space-y">
+        <div class="radio-group" style="justify-content:center;">
+          <div class="radio-pill"><input type="radio" name="b64mode" id="b64enc" value="encode" checked /><label for="b64enc"><span>Encode → Base64</span></label></div>
+          <div class="radio-pill"><input type="radio" name="b64mode" id="b64dec" value="decode" /><label for="b64dec"><span>Decode → Text</span></label></div>
+        </div>
+        <div>
+          <label class="field-label" id="b64-in-label">Input text</label>
+          <textarea id="b64-input" class="tool-textarea" rows="5" placeholder="Text to encode…"></textarea>
+        </div>
+        <button type="button" class="btn-primary" onclick="ToolsApp.doBase64()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          <span id="b64-btn-lbl">Encode</span>
+        </button>
+        <div id="b64-result" class="tool-result" style="display:none;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.4rem;">
+            <label class="field-label" style="margin:0;" id="b64-out-label">Base64 output</label>
+            <button class="copy-btn" onclick="ToolsApp.copy('b64-output')">Copy</button>
+          </div>
+          <textarea id="b64-output" class="tool-textarea" rows="5" readonly style="cursor:text;background:rgba(0,0,0,.2);"></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10. Unix Timestamp -->
+    <div data-panel="unix" class="panel">
+      <div class="space-y">
+        <!-- Live clock -->
+        <div class="result-card" style="text-align:center;">
+          <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:.3rem;">Current Unix Timestamp</div>
+          <div id="unix-now" style="font-size:2.2rem;font-weight:900;font-variant-numeric:tabular-nums;color:#4ade80;"></div>
+          <button class="copy-btn" style="margin-top:.4rem;" onclick="ToolsApp.copy('unix-now')">Copy</button>
+        </div>
+
+        <!-- Date → Unix -->
+        <div>
+          <label class="field-label">Date / Time → Unix</label>
+          <div style="display:flex;gap:.5rem;">
+            <input type="datetime-local" id="unix-date-in" class="field" style="flex:1;" />
+            <button type="button" class="btn-primary" style="flex-shrink:0;padding:.55rem 1rem;" onclick="ToolsApp.dateToUnix()">→</button>
+          </div>
+          <div id="unix-from-date" class="tool-result" style="display:none;margin-top:.5rem;text-align:center;">
+            <span id="unix-from-date-val" style="font-size:1.8rem;font-weight:900;color:#a78bfa;"></span>
+            <button class="copy-btn" style="margin-left:.5rem;" onclick="ToolsApp.copy('unix-from-date-val')">Copy</button>
+          </div>
+        </div>
+
+        <!-- Unix → Date -->
+        <div>
+          <label class="field-label">Unix → Human Date</label>
+          <div style="display:flex;gap:.5rem;">
+            <input type="number" id="unix-ts-in" class="field" style="flex:1;" placeholder="1716000000" />
+            <button type="button" class="btn-primary" style="flex-shrink:0;padding:.55rem 1rem;" onclick="ToolsApp.unixToDate()">→</button>
+          </div>
+          <div id="unix-from-ts" class="tool-result" style="display:none;margin-top:.5rem;">
+            <div id="unix-from-ts-grid"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main-card -->
+</div><!-- /app-wrap -->
+
+<!-- ── Scripts ──────────────────────────────── -->
+<script src="js/snake-mascot.js"></script>
+<script src="js/tools.js"></script>
+<script>
+/* ── Percentage mode switcher ── */
+document.querySelectorAll('input[name="pctMode"]').forEach(r => {
+  r.addEventListener("change", () => {
+    document.getElementById("pct-of-row").style.display     = r.value === "of"     ? "" : "none";
+    document.getElementById("pct-is-row").style.display     = r.value === "is"     ? "" : "none";
+    document.getElementById("pct-change-row").style.display = r.value === "change" ? "" : "none";
+    document.getElementById("pct-result").style.display     = "none";
+  });
+});
+
+/* ── Base64 mode switcher ── */
+document.querySelectorAll('input[name="b64mode"]').forEach(r => {
+  r.addEventListener("change", () => {
+    const enc = r.value === "encode";
+    document.getElementById("b64-in-label").textContent = enc ? "Input text" : "Base64 input";
+    document.getElementById("b64-btn-lbl").textContent   = enc ? "Encode" : "Decode";
+    document.getElementById("b64-input").placeholder     = enc ? "Text to encode…" : "Base64 string to decode…";
+    document.getElementById("b64-result").style.display  = "none";
+  });
+});
+
+/* ── Tabs ── */
+const tabs   = [...document.querySelectorAll("[data-tab]")];
+const panels = [...document.querySelectorAll("[data-panel]")];
+tabs.forEach(tab => {
+  tab.addEventListener("click", () => {
+    const id = tab.dataset.tab;
+    tabs.forEach(t => t.classList.toggle("tab-active", t === tab));
+    panels.forEach(p => p.classList.toggle("is-visible", p.dataset.panel === id));
+  });
+});
+
+/* ── Age: cap max date to today ── */
+document.getElementById("age-input").max = new Date().toISOString().split("T")[0];
+
+/* ── Init snake ── */
+const snake = new SnakeMascot("snakeCanvas");
+
+/* ── Live Unix clock ── */
+function tickClock() {
+  const el = document.getElementById("unix-now");
+  if (el) el.textContent = Math.floor(Date.now() / 1000);
+}
+tickClock();
+setInterval(tickClock, 1000);
+
+/* ── ToolsApp namespace ─────────────────────── */
+const ToolsApp = (() => {
+  const T = window.SnakeTools;
+
+  function celebrate() {
+    if (snake && snake._s === "idle") snake._go("snack-happy");
+  }
+
+  function showErr(msg) { alert(msg); }
+
+  function copy(elId) {
+    const el = document.getElementById(elId);
+    if (!el) return;
+    const text = el.value !== undefined ? el.value : el.textContent;
+    navigator.clipboard.writeText(text.trim()).then(() => celebrate()).catch(() => {});
+  }
+
+  /* 1. Word Count */
+  function wordCount() {
+    const r = T.analyzeText(document.getElementById("wc-input").value);
+    document.getElementById("wc-words").textContent  = r.words.toLocaleString();
+    document.getElementById("wc-chars").textContent  = r.chars.toLocaleString();
+    document.getElementById("wc-nospace").textContent= r.charsNoSpc.toLocaleString();
+    document.getElementById("wc-sent").textContent   = r.sentences.toLocaleString();
+    document.getElementById("wc-para").textContent   = r.paragraphs.toLocaleString();
+    document.getElementById("wc-read").textContent   = r.readingMins + " min";
+  }
+
+  /* 2. Age */
+  function calcAge() {
+    const v = document.getElementById("age-input").value;
+    if (!v) return showErr("Please select a date.");
+    const r = T.calcAge(v);
+    if (!r) return showErr("Invalid date.");
+    celebrate();
+    const grid = document.getElementById("age-grid");
+    grid.innerHTML = `
+      <div class="stat-card"><span class="stat-val">${r.years}</span><span class="stat-lbl">Years</span></div>
+      <div class="stat-card"><span class="stat-val">${r.months}</span><span class="stat-lbl">Months</span></div>
+      <div class="stat-card"><span class="stat-val">${r.days}</span><span class="stat-lbl">Days</span></div>
+      <div class="stat-card"><span class="stat-val">${r.totalDays.toLocaleString()}</span><span class="stat-lbl">Total days</span></div>
+      <div class="stat-card"><span class="stat-val">${r.totalWeeks.toLocaleString()}</span><span class="stat-lbl">Total weeks</span></div>
+      <div class="stat-card"><span class="stat-val">${r.totalHours.toLocaleString()}</span><span class="stat-lbl">Total hours</span></div>`;
+    document.getElementById("age-extra").innerHTML =
+      `🎂 Born on a <strong>${r.bornOn}</strong> &nbsp;·&nbsp; Next birthday in <strong>${r.daysToNext} days</strong>`;
+    document.getElementById("age-result").style.display = "";
+  }
+
+  /* 3. BMI */
+  function calcBMI() {
+    const h = parseFloat(document.getElementById("bmi-h").value);
+    const wt = parseFloat(document.getElementById("bmi-w").value);
+    if (!h || !wt || h <= 0 || wt <= 0) return showErr("Enter valid height and weight.");
+    const r = T.calcBMI(h, wt);
+    celebrate();
+    document.getElementById("bmi-val").style.color = r.color;
+    document.getElementById("bmi-val").textContent  = r.bmi;
+    document.getElementById("bmi-cat").style.color  = r.color;
+    document.getElementById("bmi-cat").textContent  = r.cat;
+    document.getElementById("bmi-needle").style.left = r.pct + "%";
+    document.getElementById("bmi-range").textContent =
+      `Healthy weight for your height: ${r.minNormal} – ${r.maxNormal} kg`;
+    document.getElementById("bmi-result").style.display = "";
+  }
+
+  /* 4. Percentage */
+  function calcPct() {
+    const mode = document.querySelector('input[name="pctMode"]:checked').value;
+    let answer, explain;
+    try {
+      if (mode === "of") {
+        const a = parseFloat(document.getElementById("pct-a1").value);
+        const b = parseFloat(document.getElementById("pct-a2").value);
+        if (isNaN(a)||isNaN(b)) throw new Error("Enter both values.");
+        const res = T.pctOf(a, b);
+        answer  = +res.toFixed(6) + "";
+        explain = `${a}% of ${b} = ${answer}`;
+      } else if (mode === "is") {
+        const a = parseFloat(document.getElementById("pct-b1").value);
+        const b = parseFloat(document.getElementById("pct-b2").value);
+        if (isNaN(a)||isNaN(b)||b===0) throw new Error("Enter valid values (Y ≠ 0).");
+        const res = T.isWhatPct(a, b);
+        answer  = +res.toFixed(6) + "%";
+        explain = `${a} is ${answer} of ${b}`;
+      } else {
+        const a = parseFloat(document.getElementById("pct-c1").value);
+        const b = parseFloat(document.getElementById("pct-c2").value);
+        if (isNaN(a)||isNaN(b)||a===0) throw new Error("Enter valid values (From ≠ 0).");
+        const r = T.pctChange(a, b);
+        answer  = r.sign + (+r.value.toFixed(6)) + "%";
+        explain = `${a} → ${b} is a ${answer} change`;
+      }
+      document.getElementById("pct-answer").textContent  = answer;
+      document.getElementById("pct-explain").textContent = explain;
+      document.getElementById("pct-result").style.display = "";
+      celebrate();
+    } catch(e) { showErr(e.message); }
+  }
+
+  /* 5. Text Case */
+  const CASE_LABELS = {
+    upper:"UPPERCASE", lower:"lowercase", title:"Title Case",
+    sentence:"Sentence case", camel:"camelCase", pascal:"PascalCase",
+    snake:"snake_case", kebab:"kebab-case", reverse:"Reversed",
+    alternating:"AlTeRnAtInG"
+  };
+  function doCase(mode) {
+    const input = document.getElementById("case-input").value;
+    if (!input.trim()) return showErr("Enter text first.");
+    const out = T.convertCase(input, mode);
+    document.getElementById("case-output").value = out;
+    document.getElementById("case-mode-label").textContent = CASE_LABELS[mode] || mode;
+    document.getElementById("case-result").style.display = "";
+    celebrate();
+  }
+
+  /* 6. Random Number */
+  function genRandom() {
+    try {
+      const min    = parseInt(document.getElementById("rng-min").value);
+      const max    = parseInt(document.getElementById("rng-max").value);
+      const count  = parseInt(document.getElementById("rng-count").value);
+      const unique = document.getElementById("rng-unique").checked;
+      const sorted = document.getElementById("rng-sort").checked;
+      const nums = T.randomNums(min, max, count, unique, sorted);
+      const chips = document.getElementById("rng-output");
+      chips.innerHTML = nums.map(n => `<span class="rng-chip">${n}</span>`).join("");
+      document.getElementById("rng-label").textContent = `${nums.length} number${nums.length!==1?"s":""}  ·  range [${min}, ${max}]`;
+      /* store plain text for copy */
+      chips.dataset.text = nums.join(", ");
+      document.getElementById("rng-result").style.display = "";
+      celebrate();
+    } catch(e) { showErr(e.message); }
+  }
+
+  /* 7. Password */
+  function genPass() {
+    const len  = parseInt(document.getElementById("pass-len").value);
+    const opts = {
+      upper:   document.getElementById("pass-upper").checked,
+      lower:   document.getElementById("pass-lower").checked,
+      nums:    document.getElementById("pass-nums").checked,
+      syms:    document.getElementById("pass-syms").checked,
+      noAmbig: document.getElementById("pass-noamb").checked,
+    };
+    const pwd = T.generatePwd(len, opts);
+    const str = T.pwdStrength(pwd);
+    document.getElementById("pass-output").textContent        = pwd;
+    document.getElementById("pass-output-txt").value          = pwd;
+    document.getElementById("pass-strength-bar").style.width  = str.pct + "%";
+    document.getElementById("pass-strength-bar").style.background = str.color;
+    document.getElementById("pass-strength-label").textContent= str.label;
+    document.getElementById("pass-strength-label").style.color= str.color;
+  }
+
+  /* 8. QR Code */
+  async function genQR() {
+    try {
+      const text = document.getElementById("qr-input").value;
+      const size = parseInt(document.getElementById("qr-size").value);
+      const ecl  = document.getElementById("qr-ecl").value;
+      await T.renderQR("qr-canvas", text, { size, ecl });
+      document.getElementById("qr-result").style.display = "";
+      celebrate();
+    } catch(e) { showErr(e.message); }
+  }
+
+  function downloadQR() {
+    const canvas = document.getElementById("qr-canvas");
+    if (!canvas) return;
+    const a = document.createElement("a");
+    a.href     = canvas.toDataURL("image/png");
+    a.download = "qrcode.png";
+    a.click();
+  }
+
+  /* 9. Base64 */
+  function doBase64() {
+    const mode = document.querySelector('input[name="b64mode"]:checked').value;
+    const input = document.getElementById("b64-input").value;
+    if (!input.trim()) return showErr("Enter input text.");
+    try {
+      const out = mode === "encode" ? T.b64encode(input) : T.b64decode(input);
+      document.getElementById("b64-output").value = out;
+      document.getElementById("b64-out-label").textContent = mode === "encode" ? "Base64 output" : "Decoded text";
+      document.getElementById("b64-result").style.display = "";
+      celebrate();
+    } catch(e) { showErr(e.message); }
+  }
+
+  /* 10. Unix */
+  function dateToUnix() {
+    try {
+      const v = document.getElementById("unix-date-in").value;
+      if (!v) throw new Error("Pick a date and time.");
+      const ts = T.dateToUnix(v);
+      document.getElementById("unix-from-date-val").textContent = ts;
+      document.getElementById("unix-from-date").style.display = "";
+      celebrate();
+    } catch(e) { showErr(e.message); }
+  }
+
+  function unixToDate() {
+    try {
+      const v = document.getElementById("unix-ts-in").value;
+      if (!v) throw new Error("Enter a Unix timestamp.");
+      const r = T.unixToDate(v);
+      document.getElementById("unix-from-ts-grid").innerHTML = `
+        <div class="stat-card" style="grid-column:1/-1;"><span class="stat-val" style="font-size:1rem;">${r.local}</span><span class="stat-lbl">Local time</span></div>
+        <div class="stat-card" style="grid-column:1/-1;"><span class="stat-val" style="font-size:.9rem;">${r.utc}</span><span class="stat-lbl">UTC</span></div>
+        <div class="stat-card" style="grid-column:1/-1;"><span class="stat-val" style="font-size:.85rem;">${r.iso}</span><span class="stat-lbl">ISO 8601</span></div>`;
+      document.getElementById("unix-from-ts").style.display = "";
+      celebrate();
+    } catch(e) { showErr(e.message); }
+  }
+
+  /* copy overload for rng chips */
+  const _copy = copy;
+  function copyRng() {
+    const el = document.getElementById("rng-output");
+    const text = el.dataset.text || "";
+    navigator.clipboard.writeText(text).then(() => celebrate()).catch(() => {});
+  }
+
+  return { wordCount, calcAge, calcBMI, calcPct, doCase, genRandom, genPass, genQR, downloadQR, doBase64, dateToUnix, unixToDate, copy, copyRng };
+})();
+
+/* Initial password */
+ToolsApp.genPass();
+</script>
+</body>
+</html>

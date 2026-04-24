@@ -1,291 +1,237 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SnakeConverter</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://unpkg.com/pdf-lib-plus-encrypt@1.1.0/dist/pdf-lib-plus-encrypt.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-    <script>
-      if (typeof pdfjsLib !== "undefined") {
-        pdfjsLib.GlobalWorkerOptions.workerSrc =
-          "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
-      }
-    </script>
-    <link rel="stylesheet" href="css/app.css" />
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SnakeConverter — All Tools</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/app.css" />
+  <style>
+    /* Landing-specific overrides */
+    .hub-hero { text-align:center; padding-bottom:0; margin-bottom:0; }
+    .hub-search-wrap { max-width:420px; margin:.8rem auto 0; position:relative; }
+    .hub-search { width:100%; background:rgba(255,255,255,.06); border:1px solid var(--border-subtle);
+      border-radius:999px; padding:.55rem 1rem .55rem 2.4rem; color:var(--text-primary);
+      font-size:.85rem; outline:none; transition:border-color .2s; }
+    .hub-search:focus { border-color:var(--border-glow); }
+    .hub-search-icon { position:absolute; left:.85rem; top:50%; transform:translateY(-50%);
+      color:var(--text-muted); pointer-events:none; }
+    .hub-section { margin-top:2rem; }
+    .hub-section-title { font-size:.68rem; font-weight:800; letter-spacing:.14em;
+      text-transform:uppercase; color:var(--text-muted); margin-bottom:.85rem;
+      display:flex; align-items:center; gap:.5rem; }
+    .hub-section-title::after { content:''; flex:1; height:1px; background:var(--border-subtle); }
+    .hub-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:.6rem; }
+    .tool-card { display:flex; flex-direction:column; gap:.35rem;
+      background:rgba(255,255,255,.04); border:1px solid var(--border-subtle);
+      border-radius:1rem; padding:.85rem 1rem; cursor:pointer; text-decoration:none;
+      transition:transform .18s, box-shadow .18s, border-color .18s, background .18s; }
+    .tool-card:hover { transform:translateY(-3px);
+      box-shadow:0 8px 28px -8px rgba(0,0,0,.45); background:rgba(255,255,255,.07); }
+    .tool-card-icon { width:32px; height:32px; border-radius:.6rem;
+      display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .tool-card-icon svg { width:17px; height:17px; }
+    .tool-card-name { font-size:.82rem; font-weight:700; color:var(--text-primary); }
+    .tool-card-desc { font-size:.72rem; color:var(--text-muted); line-height:1.4; }
+    .tool-card-arrow { font-size:.75rem; color:var(--text-dim); margin-top:auto; align-self:flex-end; }
+    .tool-card:hover .tool-card-arrow { color:var(--text-muted); }
+    /* accent colours per category */
+    .acc-pdf  { border-left:3px solid #7c3aed; } .acc-pdf  .tool-card-icon { background:rgba(124,58,237,.18); color:#a78bfa; }
+    .acc-text { border-left:3px solid #2563eb; } .acc-text .tool-card-icon { background:rgba(37,99,235,.18); color:#93c5fd; }
+    .acc-calc { border-left:3px solid #059669; } .acc-calc .tool-card-icon { background:rgba(5,150,105,.18); color:#6ee7b7; }
+    .acc-gen  { border-left:3px solid #d97706; } .acc-gen  .tool-card-icon { background:rgba(217,119,6,.18); color:#fcd34d; }
+    /* hide cards that don't match search */
+    .tool-card.hidden { display:none; }
+  </style>
+</head>
+<body>
+<div class="app-wrap">
+  <div class="main-card">
 
-  <body>
-    <div class="app-wrap">
-      <div class="main-card">
-
-        <!-- ── Header ───────────────────────────────── -->
-        <header style="text-align:center;margin-bottom:2rem;position:relative;">
-
-          <!-- Language switcher -->
-          <div class="lang-switcher">
-            <button type="button" data-lang-btn="en" class="lang-btn lang-active">EN</button>
-            <button type="button" data-lang-btn="tr" class="lang-btn">TR</button>
-          </div>
-
-          <div style="display:inline-flex;align-items:center;gap:.4rem;background:rgba(124,58,237,.15);border:1px solid rgba(139,92,246,.3);border-radius:999px;padding:.2rem .85rem;font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#c4b5fd;margin-bottom:.9rem;">
-            <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><circle cx="5" cy="5" r="5"/></svg>
-            <span data-i18n="badge">Browser based · No server</span>
-          </div>
-
-          <h1 class="site-title">SnakeConverter</h1>
-          <p class="site-sub" data-i18n="subtitle">Excel · Image · Merge · Split · Encrypt — zero upload</p>
-        </header>
-
-        <!-- ── Snake mascot ────────────────────────── -->
-        <div class="snake-stage">
-          <div class="snake-chomp-wrap">
-            <canvas id="snakeCanvas"></canvas>
-            <span id="snakeChomp" class="snake-chomp"></span>
-          </div>
-          <p id="snakeCaption" class="snake-caption"></p>
+    <!-- ── Hero ────────────────────────────────── -->
+    <header class="hub-hero">
+      <div class="snake-stage" style="margin-bottom:.5rem;">
+        <div class="snake-chomp-wrap">
+          <canvas id="snakeCanvas"></canvas>
+          <span id="snakeChomp" class="snake-chomp"></span>
         </div>
+        <p id="snakeCaption" class="snake-caption">Pick a tool and let's go! 🐍</p>
+      </div>
 
-        <!-- ── Tab nav ──────────────────────────────── -->
-        <nav class="tab-nav">
-          <button type="button" data-tab="excel" class="tab-btn tab-active">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
-            <span data-i18n="tab.excel">Excel → PDF</span>
-          </button>
-          <button type="button" data-tab="image" class="tab-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-            <span data-i18n="tab.image">Image → PDF</span>
-          </button>
-          <button type="button" data-tab="merge" class="tab-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-3"/><path d="M15 3H9l-1 3h8l-1-3z"/></svg>
-            <span data-i18n="tab.merge">Merge</span>
-          </button>
-          <button type="button" data-tab="split" class="tab-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="22"/><polyline points="7 7 12 2 17 7"/><polyline points="7 17 12 22 17 17"/></svg>
-            <span data-i18n="tab.split">Split</span>
-          </button>
-          <button type="button" data-tab="encrypt" class="tab-btn">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-            <span data-i18n="tab.encrypt">Encrypt</span>
-          </button>
-        </nav>
+      <h1 class="site-title">SnakeConverter</h1>
+      <p class="site-sub">Your all-in-one browser toolkit — zero uploads, zero servers</p>
 
-        <!-- ── Encrypt banner ───────────────────────── -->
-        <div id="encryptBanner" class="encrypt-banner">
-          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;">
-            <div style="display:flex;align-items:flex-start;gap:.6rem;flex:1;">
-              <div id="encryptDot" class="encrypt-status-dot" style="margin-top:3px;"></div>
-              <div>
-                <div id="encryptTitle" class="encrypt-title">
-                  <span id="encryptLabel" data-i18n="encrypt.off">Encryption off</span>
-                </div>
-                <div class="encrypt-desc" data-i18n="encrypt.desc" style="margin-top:.2rem;">
-                  When on, all output PDFs are locked with your password.
-                </div>
-              </div>
-            </div>
-            <div class="toggle-track" id="toggleTrack" style="cursor:pointer;">
-              <div class="toggle-thumb"></div>
-            </div>
-            <input type="checkbox" id="globalEncrypt" style="position:absolute;opacity:0;width:0;height:0;pointer-events:none;" />
-          </div>
-          <div class="encrypt-pass-wrap" id="passWrap">
-            <input
-              type="password"
-              id="globalPassword"
-              autocomplete="new-password"
-              data-i18n-ph="encrypt.ph"
-              placeholder="Set opening password…"
-              class="field"
-              style="text-align:center;margin-top:.75rem;"
-            />
-            <p id="passwordAsciiNote" class="notice-warn" data-i18n="encrypt.ascii" style="margin-top:.5rem;display:none;">
-              ⚠ PDF passwords only support ASCII characters.
-            </p>
-          </div>
-        </div>
+      <!-- Search -->
+      <div class="hub-search-wrap">
+        <svg class="hub-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" class="hub-search" placeholder="Search tools…" oninput="filterTools(this.value)" />
+      </div>
+    </header>
 
-        <!-- ════════════════════════════════════ PANELS -->
+    <!-- ── PDF Tools ──────────────────────────── -->
+    <section class="hub-section">
+      <div class="hub-section-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        PDF Tools
+      </div>
+      <div class="hub-cards">
+        <a href="pdf.html#excel" class="tool-card acc-pdf" data-name="excel pdf convert spreadsheet">
+          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/></svg></div>
+          <div class="tool-card-name">Excel → PDF</div>
+          <div class="tool-card-desc">Convert .xlsx, .xls, .csv to PDF with full Unicode support</div>
+          <span class="tool-card-arrow">Open →</span>
+        </a>
+        <a href="pdf.html#image" class="tool-card acc-pdf" data-name="image photo picture png jpg pdf convert">
+          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+          <div class="tool-card-name">Image → PDF</div>
+          <div class="tool-card-desc">Wrap PNG, JPEG, WebP, GIF or BMP into a PDF page</div>
+          <span class="tool-card-arrow">Open →</span>
+        </a>
+        <a href="pdf.html#merge" class="tool-card acc-pdf" data-name="merge combine join pdf">
+          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-3"/><path d="M15 3H9l-1 3h8l-1-3z"/></svg></div>
+          <div class="tool-card-name">Merge PDFs</div>
+          <div class="tool-card-desc">Combine multiple PDFs into one — supports password-protected files</div>
+          <span class="tool-card-arrow">Open →</span>
+        </a>
+        <a href="pdf.html#split" class="tool-card acc-pdf" data-name="split extract pages pdf zip">
+          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="22"/><polyline points="7 7 12 2 17 7"/><polyline points="7 17 12 22 17 17"/></svg></div>
+          <div class="tool-card-name">Split PDF</div>
+          <div class="tool-card-desc">Extract each page or custom ranges — output as ZIP</div>
+          <span class="tool-card-arrow">Open →</span>
+        </a>
+        <a href="pdf.html#encrypt" class="tool-card acc-pdf" data-name="encrypt lock password secure pdf">
+          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+          <div class="tool-card-name">Encrypt PDF</div>
+          <div class="tool-card-desc">Lock a PDF with a password or remove existing encryption</div>
+          <span class="tool-card-arrow">Open →</span>
+        </a>
+      </div>
+    </section>
 
-        <!-- Excel → PDF -->
-        <div data-panel="excel" class="panel is-visible" style="--gap:1rem;">
-          <div class="space-y">
-            <div id="excelDrop" class="dropzone">
-              <input type="file" id="excelInput" accept=".xlsx,.xls,.csv" class="hidden" />
-              <div class="drop-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
-              </div>
-              <p class="drop-title" data-i18n="excel.drop.title">Drag Excel or CSV file</p>
-              <p class="drop-sub" data-i18n="excel.drop.sub">or click · .xlsx · .xls · .csv</p>
-              <div id="excelStatus" class="drop-selected" style="display:none;">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                <span id="excelStatusText"></span>
-              </div>
-            </div>
-            <button type="button" id="excelRun" class="btn-primary" data-i18n-key="excel.btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              <span data-i18n="excel.btn">Download PDF</span>
-            </button>
-          </div>
-        </div>
+    <!-- ── Text Tools ─────────────────────────── -->
+    <section class="hub-section">
+      <div class="hub-section-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
+        Text Tools
+      </div>
+      <div class="hub-cards">
+        <a href="tools.html#words" class="tool-card acc-text" data-name="word count character sentence paragraph reading">
+          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="12" y2="17"/></svg></div>
+          <div class="tool-card-name">Word Counter</div>
+          <div class="tool-card-desc">Words, characters, sentences, paragraphs, reading time</div>
+          <span class="tool-card-arrow">Open →</span>
+        </a>
+        <a href="tools.html#case" class="tool-card acc-text" data-name="uppercase lowercase title camel snake kebab case convert">
+          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg></div>
+          <div class="tool-card-name">Text Case</div>
+          <div class="tool-card-desc">UPPER, lower, Title, camelCase, snake_case, kebab-case &amp; more</div>
+          <span class="tool-card-arrow">Open →</span>
+        </a>
+        <a href="tools.html#base64" class="tool-card acc-text" data-name="base64 encode decode convert">
+          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+          <div class="tool-card-name">Base64</div>
+          <div class="tool-card-desc">Encode text to Base64 or decode Base64 back to text</div>
+          <span class="tool-card-arrow">Open →</span>
+        </a>
+      </div>
+    </section>
 
-        <!-- Image → PDF -->
-        <div data-panel="image" class="panel" style="--gap:1rem;">
-          <div class="space-y">
-            <div id="imageDrop" class="dropzone">
-              <input type="file" id="imageInput" accept="image/*" class="hidden" />
-              <div class="drop-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-              </div>
-              <p class="drop-title" data-i18n="image.drop.title">Drag image file</p>
-              <p class="drop-sub" data-i18n="image.drop.sub">PNG · JPEG · WebP · GIF · BMP</p>
-              <div id="imageStatus" class="drop-selected" style="display:none;">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                <span id="imageStatusText"></span>
-              </div>
-            </div>
-            <div class="radio-group">
-              <div class="radio-pill">
-                <input type="radio" name="imageFitR" id="imageFitA4" value="a4" checked />
-                <label for="imageFitA4">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/></svg>
-                  <span data-i18n="image.fit.a4">Fit to A4</span>
-                </label>
-              </div>
-              <div class="radio-pill">
-                <input type="radio" name="imageFitR" id="imageFitOrig" value="original" />
-                <label for="imageFitOrig">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
-                  <span data-i18n="image.fit.orig">Original size</span>
-                </label>
-              </div>
-            </div>
-            <input type="hidden" id="imageFit" value="a4" />
-            <button type="button" id="imageRun" class="btn-primary" data-i18n-key="image.btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              <span data-i18n="image.btn">Download PDF</span>
-            </button>
-          </div>
-        </div>
+    <!-- ── Calculators ────────────────────────── -->
+    <section class="hub-section">
+      <div class="hub-section-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>
+        Calculators
+      </div>
+      <div class="hub-cards">
+        <a href="tools.html#age" class="tool-card acc-calc" data-name="age birthday calculator years months days">
+          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+          <div class="tool-card-name">Age Calculator</div>
+          <div class="tool-card-desc">Exact age in years, months, days — plus next birthday countdown</div>
+          <span class="tool-card-arrow">Open →</span>
+        </a>
+        <a href="tools.html#bmi" class="tool-card acc-calc" data-name="bmi body mass index weight height calculator">
+          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
+          <div class="tool-card-name">BMI Calculator</div>
+          <div class="tool-card-desc">Body Mass Index with visual gauge and healthy weight range</div>
+          <span class="tool-card-arrow">Open →</span>
+        </a>
+        <a href="tools.html#percent" class="tool-card acc-calc" data-name="percentage percent calculator change">
+          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg></div>
+          <div class="tool-card-name">Percentage</div>
+          <div class="tool-card-desc">X% of Y · X is what % of Y? · Percentage change</div>
+          <span class="tool-card-arrow">Open →</span>
+        </a>
+        <a href="tools.html#unix" class="tool-card acc-calc" data-name="unix timestamp date time converter epoch">
+          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div class="tool-card-name">Unix Timestamp</div>
+          <div class="tool-card-desc">Live epoch clock · Date ↔ Unix conversion</div>
+          <span class="tool-card-arrow">Open →</span>
+        </a>
+      </div>
+    </section>
 
-        <!-- Merge -->
-        <div data-panel="merge" class="panel" style="--gap:1rem;">
-          <div class="space-y">
-            <div id="mergeDrop" class="dropzone">
-              <input type="file" id="mergeInput" accept=".pdf,application/pdf" multiple class="hidden" />
-              <div class="drop-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-3"/><path d="M15 3H9l-1 3h8l-1-3z"/></svg>
-              </div>
-              <p class="drop-title" data-i18n="merge.drop.title">Drag PDF files</p>
-              <p class="drop-sub" data-i18n="merge.drop.sub">Multiple selection — order preserved</p>
-            </div>
-            <div id="mergeList" style="display:flex;flex-direction:column;gap:.4rem;min-height:1.5rem;">
-              <p class="notice" style="text-align:center;" data-i18n="merge.empty">No PDFs added yet.</p>
-            </div>
-            <button type="button" id="mergeClear" class="btn-ghost">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
-              <span data-i18n="merge.clear">Clear list</span>
-            </button>
-            <button type="button" id="mergeRun" class="btn-primary" data-i18n-key="merge.btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              <span data-i18n="merge.btn">Download Merged PDF</span>
-            </button>
-          </div>
-        </div>
+    <!-- ── Generators ─────────────────────────── -->
+    <section class="hub-section">
+      <div class="hub-section-title">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/></svg>
+        Generators
+      </div>
+      <div class="hub-cards">
+        <a href="tools.html#random" class="tool-card acc-gen" data-name="random number generator dice">
+          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg></div>
+          <div class="tool-card-name">Random Number</div>
+          <div class="tool-card-desc">Generate random integers with range, count, and uniqueness options</div>
+          <span class="tool-card-arrow">Open →</span>
+        </a>
+        <a href="tools.html#pass" class="tool-card acc-gen" data-name="password generator secure strong">
+          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+          <div class="tool-card-name">Password Generator</div>
+          <div class="tool-card-desc">Cryptographically secure passwords with strength indicator</div>
+          <span class="tool-card-arrow">Open →</span>
+        </a>
+        <a href="tools.html#qr" class="tool-card acc-gen" data-name="qr code generator url link">
+          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div>
+          <div class="tool-card-name">QR Code</div>
+          <div class="tool-card-desc">Generate downloadable QR codes for any text or URL</div>
+          <span class="tool-card-arrow">Open →</span>
+        </a>
+      </div>
+    </section>
 
-        <!-- Split -->
-        <div data-panel="split" class="panel" style="--gap:1rem;">
-          <div class="space-y">
-            <div class="src-pass-row">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-              <input type="password" id="splitSrcPass" autocomplete="off" data-i18n-ph="split.src.ph" placeholder="PDF opening password (leave blank if not encrypted)" />
-            </div>
-            <div id="splitDrop" class="dropzone">
-              <input type="file" id="splitInput" accept=".pdf" class="hidden" />
-              <div class="drop-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="2" x2="12" y2="22"/><polyline points="7 7 12 2 17 7"/><polyline points="7 17 12 22 17 17"/></svg>
-              </div>
-              <p class="drop-title" data-i18n="split.drop.title">Drag PDF to split</p>
-              <p class="drop-sub" data-i18n="split.drop.sub">Output downloaded as ZIP</p>
-              <div id="splitStatus" class="drop-selected" style="display:none;">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                <span id="splitStatusText"></span>
-              </div>
-            </div>
-            <div>
-              <label class="field-label" for="splitMode" data-i18n="split.mode.label">Split mode</label>
-              <select id="splitMode" class="field">
-                <option value="each" data-i18n="split.mode.each">Each page as separate PDF (ZIP)</option>
-                <option value="ranges" data-i18n="split.mode.ranges">By page ranges (ZIP)</option>
-              </select>
-            </div>
-            <div id="splitRangesRow" style="display:none;">
-              <label class="field-label" for="splitRanges" data-i18n="split.ranges.label">Ranges</label>
-              <input type="text" id="splitRanges" data-i18n-ph="split.ranges.ph" placeholder="e.g. 1-3,5,8-10" class="field" />
-              <p class="notice" style="margin-top:.4rem;" data-i18n="split.ranges.note">Page numbers start at 1. Separate with commas.</p>
-            </div>
-            <button type="button" id="splitRun" class="btn-primary" data-i18n-key="split.btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              <span data-i18n="split.btn">Download ZIP</span>
-            </button>
-          </div>
-        </div>
+    <div style="margin-top:2.5rem;text-align:center;font-size:.72rem;color:var(--text-dim);">
+      © 2026 SnakeConverter &nbsp;·&nbsp; All processing happens in your browser
+    </div>
 
-        <!-- Encrypt -->
-        <div data-panel="encrypt" class="panel" style="--gap:1rem;">
-          <div class="space-y">
-            <div class="src-pass-row">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-              <input type="password" id="encSrcPass" autocomplete="off" data-i18n-ph="enc.src.ph" placeholder="Current password if already encrypted (leave blank if not)" />
-            </div>
-            <div id="encDrop" class="dropzone">
-              <input type="file" id="encInput" accept=".pdf" class="hidden" />
-              <div class="drop-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-              </div>
-              <p class="drop-title" data-i18n="enc.drop.title">Drag PDF to encrypt</p>
-              <p class="drop-sub" data-i18n="enc.drop.sub">Enable encryption toggle above and set a password</p>
-              <div id="encStatus" class="drop-selected" style="display:none;">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                <span id="encStatusText"></span>
-              </div>
-            </div>
-            <button type="button" id="encRun" class="btn-primary" data-i18n-key="enc.btn">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-              <span data-i18n="enc.btn">Download Encrypted PDF</span>
-            </button>
-          </div>
-        </div>
+  </div><!-- /main-card -->
+</div><!-- /app-wrap -->
 
-      </div><!-- /main-card -->
-    </div><!-- /app-wrap -->
+<script src="js/snake-mascot.js"></script>
+<script>
+  const snake = new SnakeMascot("snakeCanvas");
 
-    <!-- ── Scripts ──────────────────────────────────── -->
-    <script>
-      document.getElementById("imageFitA4").addEventListener("change", function () {
-        document.getElementById("imageFit").value = "a4";
-      });
-      document.getElementById("imageFitOrig").addEventListener("change", function () {
-        document.getElementById("imageFit").value = "original";
-      });
-    </script>
-    <script src="js/config.js"></script>
-    <script src="js/i18n.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/font-loader.js"></script>
-    <script src="js/pdf-encrypt.js"></script>
-    <script src="js/pdf-decrypt.js"></script>
-    <script src="js/excel-to-pdf.js"></script>
-    <script src="js/image-to-pdf.js"></script>
-    <script src="js/pdf-merge.js"></script>
-    <script src="js/pdf-split.js"></script>
-    <script src="js/pdf-reencrypt.js"></script>
-    <script src="js/snake-mascot.js"></script>
-    <script src="js/app.js"></script>
-  </body>
+  /* Hover → excited, click → snack */
+  document.querySelectorAll(".tool-card").forEach(card => {
+    card.addEventListener("mouseenter", () => snake.onFileSelect());
+  });
+
+  /* Highlight + jump-to-tab via hash */
+  document.querySelectorAll("a[href*='#']").forEach(a => {
+    a.addEventListener("click", () => snake.onFileSelect());
+  });
+
+  /* Search / filter */
+  function filterTools(query) {
+    const q = query.toLowerCase().trim();
+    document.querySelectorAll(".tool-card").forEach(card => {
+      const name = (card.dataset.name || "") + " " + card.querySelector(".tool-card-name").textContent;
+      card.classList.toggle("hidden", q.length > 0 && !name.toLowerCase().includes(q));
+    });
+    /* hide empty sections */
+    document.querySelectorAll(".hub-section").forEach(sec => {
+      const visible = sec.querySelectorAll(".tool-card:not(.hidden)").length > 0;
+      sec.style.display = visible ? "" : "none";
+    });
+  }
+</script>
+</body>
 </html>

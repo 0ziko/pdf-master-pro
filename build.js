@@ -64,7 +64,7 @@ const OBFUSCATOR_OPTIONS = {
   unicodeEscapeSequence:            false,  /* true makes files 3× larger */
 };
 
-/* JS files to obfuscate (order matters for debugging; all end up minified) */
+/* JS files to obfuscate */
 const JS_FILES = [
   "js/config.js",
   "js/i18n.js",
@@ -79,7 +79,11 @@ const JS_FILES = [
   "js/pdf-reencrypt.js",
   "js/snake-mascot.js",
   "js/app.js",
+  "js/tools.js",
 ];
+
+/* Extra HTML files to copy to dist (besides index.html) */
+const EXTRA_HTML = ["pdf.html", "tools.html"];
 
 /* ── Helpers ─────────────────────────────────────────── */
 const SRC  = __dirname;
@@ -120,6 +124,16 @@ async function build() {
   const copyright = `<!--\n  © ${year} SnakeConverter. All rights reserved.\n  Unauthorized copying or redistribution of this software is prohibited.\n-->\n`;
   if (!html.startsWith("<!--")) html = copyright + html;
   fs.writeFileSync(path.join(DIST, "index.html"), html, "utf8");
+
+  /* 3b. Copy extra HTML files */
+  for (const f of EXTRA_HTML) {
+    let html = fs.readFileSync(path.join(SRC, f), "utf8");
+    const year = new Date().getFullYear();
+    const copyright = `<!--\n  © ${year} SnakeConverter. All rights reserved.\n-->\n`;
+    if (!html.startsWith("<!--")) html = copyright + html;
+    fs.writeFileSync(path.join(DIST, f), html, "utf8");
+    banner(`Copied ${f}`);
+  }
 
   /* 4. Obfuscate JS files */
   banner("Obfuscating JavaScript…");

@@ -710,3 +710,250 @@ body::before {
 @media (min-width: 640px) {
   .main-card { padding: 3rem 2.75rem; }
 }
+
+/* ═══════════════════════════════════════════════════════════
+   SHARED: Hub back-link
+═══════════════════════════════════════════════════════════ */
+.hub-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 0.3rem 0.65rem;
+  border-radius: 0.6rem;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.04);
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: color 0.18s, background 0.18s, border-color 0.18s;
+}
+.hub-back-link:hover {
+  color: var(--text-primary);
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.15);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TOOLS PAGE: Scrollable tab nav
+═══════════════════════════════════════════════════════════ */
+.tools-tab-nav {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 0.1rem;
+}
+.tools-tab-nav::-webkit-scrollbar { display: none; }
+.tools-tab-nav .tab-btn {
+  flex-shrink: 0;
+  scroll-snap-align: start;
+  min-width: max-content;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TOOLS PAGE: Shared components
+═══════════════════════════════════════════════════════════ */
+
+/* Large textarea for tools */
+.tool-textarea {
+  width: 100%;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.9rem;
+  padding: 0.75rem 1rem;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  font-family: inherit;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s;
+  min-height: 80px;
+}
+.tool-textarea:focus { border-color: var(--border-glow); }
+
+/* Result card */
+.tool-result {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border-subtle);
+  border-radius: 1rem;
+  padding: 1rem;
+}
+.result-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border-subtle);
+  border-radius: 1rem;
+  padding: 0.9rem 1rem;
+}
+
+/* Stat grid (word counter, age, etc.) */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 0.5rem;
+}
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  text-align: center;
+}
+.stat-val {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+.stat-lbl {
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+/* Copy button */
+.copy-btn {
+  background: rgba(124,58,237,0.2);
+  border: 1px solid rgba(139,92,246,0.3);
+  border-radius: 0.5rem;
+  color: #c4b5fd;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.18s;
+}
+.copy-btn:hover { background: rgba(124,58,237,0.35); }
+
+/* Checkbox label */
+.check-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.check-label input { accent-color: var(--accent); cursor: pointer; }
+
+/* Case converter buttons */
+.case-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.btn-case {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.6rem;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.35rem 0.75rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.btn-case:hover {
+  background: rgba(124,58,237,0.2);
+  border-color: rgba(139,92,246,0.4);
+  color: #c4b5fd;
+}
+
+/* Random number chips */
+.rng-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.rng-chip {
+  background: rgba(124,58,237,0.18);
+  border: 1px solid rgba(139,92,246,0.25);
+  border-radius: 0.5rem;
+  color: #c4b5fd;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Password display */
+.pass-display-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.9rem;
+  padding: 0.65rem 0.9rem;
+  position: relative;
+}
+.pass-display {
+  flex: 1;
+  font-family: "Courier New", monospace;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #4ade80;
+  word-break: break-all;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+}
+
+/* Password strength bar */
+.strength-track {
+  background: rgba(255,255,255,0.08);
+  border-radius: 999px;
+  height: 6px;
+  overflow: hidden;
+}
+.strength-bar {
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.3s, background 0.3s;
+}
+
+/* Range input */
+.range-input {
+  width: 100%;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+/* BMI gauge */
+.bmi-bar-wrap { position: relative; margin: 0.25rem 0 1.5rem; }
+.bmi-bar-track {
+  display: flex;
+  border-radius: 999px;
+  overflow: hidden;
+  height: 10px;
+}
+.bmi-bar-seg { height: 100%; }
+.bmi-needle {
+  position: absolute;
+  top: -4px;
+  width: 4px;
+  height: 18px;
+  background: white;
+  border-radius: 999px;
+  box-shadow: 0 0 6px rgba(255,255,255,0.6);
+  transform: translateX(-50%);
+  transition: left 0.4s ease;
+}
+.bmi-bar-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.3rem;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+}

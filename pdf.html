@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PDF Tools — SnakeConverter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://unpkg.com/pdf-lib-plus-encrypt@1.1.0/dist/pdf-lib-plus-encrypt.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+      if (typeof pdfjsLib !== "undefined") {
+        pdfjsLib.GlobalWorkerOptions.workerSrc =
+          "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+      }
+    </script>
+    <link rel="stylesheet" href="css/app.css" />
+  </head>
+
+  <body>
+    <div class="app-wrap">
+      <div class="main-card">
+
+        <!-- ── Header ───────────────────────────────── -->
+        <header style="text-align:center;margin-bottom:2rem;position:relative;">
+
+          <!-- Back to hub -->
+          <a href="index.html" class="hub-back-link">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+            SnakeConverter
+          </a>
+
+          <!-- Language switcher -->
+          <div class="lang-switcher">
+            <button type="button" data-lang-btn="en" class="lang-btn lang-active">EN</button>
+            <button type="button" data-lang-btn="tr" class="lang-btn">TR</button>
+          </div>
+
+          <div style="display:inline-flex;align-items:center;gap:.4rem;background:rgba(124,58,237,.15);border:1px solid rgba(139,92,246,.3);border-radius:999px;padding:.2rem .85rem;font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#c4b5fd;margin-bottom:.9rem;">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><circle cx="5" cy="5" r="5"/></svg>
+            <span data-i18n="badge">Browser based · No server</span>
+          </div>
+
+          <h1 class="site-title">SnakeConverter</h1>
+          <p class="site-sub" data-i18n="subtitle">Excel · Image · Merge · Split · Encrypt — zero upload</p>
+        </header>
+
+        <!-- ── Snake mascot ────────────────────────── -->
+        <div class="snake-stage">
+          <div class="snake-chomp-wrap">
+            <canvas id="snakeCanvas"></canvas>
+            <span id="snakeChomp" class="snake-chomp"></span>
+          </div>
+          <p id="snakeCaption" class="snake-caption"></p>
+        </div>
+
+        <!-- ── Tab nav ──────────────────────────────── -->
+        <nav class="tab-nav">
+          <button type="button" data-tab="excel" class="tab-btn tab-active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+            <span data-i18n="tab.excel">Excel → PDF</span>
+          </button>
+          <button type="button" data-tab="image" class="tab-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <span data-i18n="tab.image">Image → PDF</span>
+          </button>
+          <button type="button" data-tab="merge" class="tab-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-3"/><path d="M15 3H9l-1 3h8l-1-3z"/></svg>
+            <span data-i18n="tab.merge">Merge</span>
+          </button>
+          <button type="button" data-tab="split" class="tab-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="22"/><polyline points="7 7 12 2 17 7"/><polyline points="7 17 12 22 17 17"/></svg>
+            <span data-i18n="tab.split">Split</span>
+          </button>
+          <button type="button" data-tab="encrypt" class="tab-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            <span data-i18n="tab.encrypt">Encrypt</span>
+          </button>
+        </nav>
+
+        <!-- ── Encrypt banner ───────────────────────── -->
+        <div id="encryptBanner" class="encrypt-banner">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;">
+            <div style="display:flex;align-items:flex-start;gap:.6rem;flex:1;">
+              <div id="encryptDot" class="encrypt-status-dot" style="margin-top:3px;"></div>
+              <div>
+                <div id="encryptTitle" class="encrypt-title">
+                  <span id="encryptLabel" data-i18n="encrypt.off">Encryption off</span>
+                </div>
+                <div class="encrypt-desc" data-i18n="encrypt.desc" style="margin-top:.2rem;">
+                  When on, all output PDFs are locked with your password.
+                </div>
+              </div>
+            </div>
+            <div class="toggle-track" id="toggleTrack" style="cursor:pointer;">
+              <div class="toggle-thumb"></div>
+            </div>
+            <input type="checkbox" id="globalEncrypt" style="position:absolute;opacity:0;width:0;height:0;pointer-events:none;" />
+          </div>
+          <div class="encrypt-pass-wrap" id="passWrap">
+            <input
+              type="password"
+              id="globalPassword"
+              autocomplete="new-password"
+              data-i18n-ph="encrypt.ph"
+              placeholder="Set opening password…"
+              class="field"
+              style="text-align:center;margin-top:.75rem;"
+            />
+            <p id="passwordAsciiNote" class="notice-warn" data-i18n="encrypt.ascii" style="margin-top:.5rem;display:none;">
+              ⚠ PDF passwords only support ASCII characters.
+            </p>
+          </div>
+        </div>
+
+        <!-- ════════════════════════════════════ PANELS -->
+
+        <!-- Excel → PDF -->
+        <div data-panel="excel" class="panel is-visible" style="--gap:1rem;">
+          <div class="space-y">
+            <div id="excelDrop" class="dropzone">
+              <input type="file" id="excelInput" accept=".xlsx,.xls,.csv" class="hidden" />
+              <div class="drop-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+              </div>
+              <p class="drop-title" data-i18n="excel.drop.title">Drag Excel or CSV file</p>
+              <p class="drop-sub" data-i18n="excel.drop.sub">or click · .xlsx · .xls · .csv</p>
+              <div id="excelStatus" class="drop-selected" style="display:none;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span id="excelStatusText"></span>
+              </div>
+            </div>
+            <button type="button" id="excelRun" class="btn-primary" data-i18n-key="excel.btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span data-i18n="excel.btn">Download PDF</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Image → PDF -->
+        <div data-panel="image" class="panel" style="--gap:1rem;">
+          <div class="space-y">
+            <div id="imageDrop" class="dropzone">
+              <input type="file" id="imageInput" accept="image/*" class="hidden" />
+              <div class="drop-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              </div>
+              <p class="drop-title" data-i18n="image.drop.title">Drag image file</p>
+              <p class="drop-sub" data-i18n="image.drop.sub">PNG · JPEG · WebP · GIF · BMP</p>
+              <div id="imageStatus" class="drop-selected" style="display:none;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span id="imageStatusText"></span>
+              </div>
+            </div>
+            <div class="radio-group">
+              <div class="radio-pill">
+                <input type="radio" name="imageFitR" id="imageFitA4" value="a4" checked />
+                <label for="imageFitA4">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/></svg>
+                  <span data-i18n="image.fit.a4">Fit to A4</span>
+                </label>
+              </div>
+              <div class="radio-pill">
+                <input type="radio" name="imageFitR" id="imageFitOrig" value="original" />
+                <label for="imageFitOrig">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+                  <span data-i18n="image.fit.orig">Original size</span>
+                </label>
+              </div>
+            </div>
+            <input type="hidden" id="imageFit" value="a4" />
+            <button type="button" id="imageRun" class="btn-primary" data-i18n-key="image.btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span data-i18n="image.btn">Download PDF</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Merge -->
+        <div data-panel="merge" class="panel" style="--gap:1rem;">
+          <div class="space-y">
+            <div id="mergeDrop" class="dropzone">
+              <input type="file" id="mergeInput" accept=".pdf,application/pdf" multiple class="hidden" />
+              <div class="drop-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-3"/><path d="M15 3H9l-1 3h8l-1-3z"/></svg>
+              </div>
+              <p class="drop-title" data-i18n="merge.drop.title">Drag PDF files</p>
+              <p class="drop-sub" data-i18n="merge.drop.sub">Multiple selection — order preserved</p>
+            </div>
+            <div id="mergeList" style="display:flex;flex-direction:column;gap:.4rem;min-height:1.5rem;">
+              <p class="notice" style="text-align:center;" data-i18n="merge.empty">No PDFs added yet.</p>
+            </div>
+            <button type="button" id="mergeClear" class="btn-ghost">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+              <span data-i18n="merge.clear">Clear list</span>
+            </button>
+            <button type="button" id="mergeRun" class="btn-primary" data-i18n-key="merge.btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span data-i18n="merge.btn">Download Merged PDF</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Split -->
+        <div data-panel="split" class="panel" style="--gap:1rem;">
+          <div class="space-y">
+            <div class="src-pass-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              <input type="password" id="splitSrcPass" autocomplete="off" data-i18n-ph="split.src.ph" placeholder="PDF opening password (leave blank if not encrypted)" />
+            </div>
+            <div id="splitDrop" class="dropzone">
+              <input type="file" id="splitInput" accept=".pdf" class="hidden" />
+              <div class="drop-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="2" x2="12" y2="22"/><polyline points="7 7 12 2 17 7"/><polyline points="7 17 12 22 17 17"/></svg>
+              </div>
+              <p class="drop-title" data-i18n="split.drop.title">Drag PDF to split</p>
+              <p class="drop-sub" data-i18n="split.drop.sub">Output downloaded as ZIP</p>
+              <div id="splitStatus" class="drop-selected" style="display:none;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span id="splitStatusText"></span>
+              </div>
+            </div>
+            <div>
+              <label class="field-label" for="splitMode" data-i18n="split.mode.label">Split mode</label>
+              <select id="splitMode" class="field">
+                <option value="each" data-i18n="split.mode.each">Each page as separate PDF (ZIP)</option>
+                <option value="ranges" data-i18n="split.mode.ranges">By page ranges (ZIP)</option>
+              </select>
+            </div>
+            <div id="splitRangesRow" style="display:none;">
+              <label class="field-label" for="splitRanges" data-i18n="split.ranges.label">Ranges</label>
+              <input type="text" id="splitRanges" data-i18n-ph="split.ranges.ph" placeholder="e.g. 1-3,5,8-10" class="field" />
+              <p class="notice" style="margin-top:.4rem;" data-i18n="split.ranges.note">Page numbers start at 1. Separate with commas.</p>
+            </div>
+            <button type="button" id="splitRun" class="btn-primary" data-i18n-key="split.btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span data-i18n="split.btn">Download ZIP</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Encrypt -->
+        <div data-panel="encrypt" class="panel" style="--gap:1rem;">
+          <div class="space-y">
+            <div class="src-pass-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              <input type="password" id="encSrcPass" autocomplete="off" data-i18n-ph="enc.src.ph" placeholder="Current password if already encrypted (leave blank if not)" />
+            </div>
+            <div id="encDrop" class="dropzone">
+              <input type="file" id="encInput" accept=".pdf" class="hidden" />
+              <div class="drop-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              </div>
+              <p class="drop-title" data-i18n="enc.drop.title">Drag PDF to encrypt</p>
+              <p class="drop-sub" data-i18n="enc.drop.sub">Enable encryption toggle above and set a password</p>
+              <div id="encStatus" class="drop-selected" style="display:none;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span id="encStatusText"></span>
+              </div>
+            </div>
+            <button type="button" id="encRun" class="btn-primary" data-i18n-key="enc.btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              <span data-i18n="enc.btn">Download Encrypted PDF</span>
+            </button>
+          </div>
+        </div>
+
+      </div><!-- /main-card -->
+    </div><!-- /app-wrap -->
+
+    <!-- ── Scripts ──────────────────────────────────── -->
+    <script>
+      document.getElementById("imageFitA4").addEventListener("change", function () {
+        document.getElementById("imageFit").value = "a4";
+      });
+      document.getElementById("imageFitOrig").addEventListener("change", function () {
+        document.getElementById("imageFit").value = "original";
+      });
+    </script>
+    <script src="js/config.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/font-loader.js"></script>
+    <script src="js/pdf-encrypt.js"></script>
+    <script src="js/pdf-decrypt.js"></script>
+    <script src="js/excel-to-pdf.js"></script>
+    <script src="js/image-to-pdf.js"></script>
+    <script src="js/pdf-merge.js"></script>
+    <script src="js/pdf-split.js"></script>
+    <script src="js/pdf-reencrypt.js"></script>
+    <script src="js/snake-mascot.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>
