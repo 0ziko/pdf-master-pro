@@ -18,6 +18,16 @@
       snake = new window.SnakeMascot("snakeCanvas");
       window.snakeMascot = snake;
       _setCaption("idle");
+
+      /* Listen to state broadcasts from the mascot */
+      document.getElementById("snakeCanvas")?.addEventListener("snakestate", (e) => {
+        _setCaption(e.detail);
+        if (e.detail === "idle" || e.detail === "snack-happy") {
+          /* let happy caption linger then revert to idle */
+          if (e.detail === "snack-happy")
+            setTimeout(() => { if (snake && snake._s === "idle") _setCaption("idle"); }, 3000);
+        }
+      });
     }
   });
 
@@ -54,7 +64,8 @@
   async function withSnake(btn, fn) {
     setBusy(btn, true);
     if (snake) {
-      _setCaption("eating");
+      /* captions are driven by snakestate events from snake-mascot.js;
+         we only need to set "digesting" while fn() runs */
       try {
         const result = await snake.processStart(async () => {
           _setCaption("digesting");
@@ -63,7 +74,7 @@
           return r;
         });
         _setCaption("happy");
-        setTimeout(() => _setCaption("idle"), 6000);
+        setTimeout(() => _setCaption("idle"), 6500);
         return result;
       } catch (e) {
         _setCaption("idle");
@@ -206,7 +217,7 @@
     if (!dotEl) return;
     dotEl.style.display = "inline-flex";
     if (textEl) textEl.textContent = name;
-    /* trigger a snack animation for every file that lands on the page */
+    /* snackFile() will dispatch "snakestate" events that update the caption */
     if (snake) snake.snackFile();
   }
 
