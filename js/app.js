@@ -2,33 +2,14 @@
 (function () {
   const U = window.PdfMasterUtils;
   const Excel = window.PdfMasterExcel;
-  const Image = window.PdfMasterImage;
+  const Img = window.PdfMasterImage;
   const Merge = window.PdfMasterMerge;
   const Split = window.PdfMasterSplit;
   const Reencrypt = window.PdfMasterReencrypt;
 
-  const tabs = Array.from(document.querySelectorAll("[data-tab]"));
+  /* ── Tabs ─────────────────────────────────────────────── */
+  const tabs   = Array.from(document.querySelectorAll("[data-tab]"));
   const panels = Array.from(document.querySelectorAll("[data-panel]"));
-
-  const encryptCheck = document.getElementById("globalEncrypt");
-  const passInput = document.getElementById("globalPassword");
-  const passNote = document.getElementById("passwordAsciiNote");
-
-  function readEncryptOptions() {
-    const encrypt = !!(encryptCheck && encryptCheck.checked);
-    const password = (passInput && passInput.value) || "";
-    if (passNote) {
-      const warn = encrypt && password && U.passwordNeedsAsciiNote(password);
-      passNote.classList.toggle("hidden", !warn);
-    }
-    return { encrypt, password };
-  }
-
-  function setBusy(btn, busy, labelBusy, labelIdle) {
-    if (!btn) return;
-    btn.disabled = !!busy;
-    btn.textContent = busy ? labelBusy : labelIdle;
-  }
 
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
@@ -40,8 +21,65 @@
     });
   });
 
+  /* ── Encrypt banner ───────────────────────────────────── */
+  const encryptCheck  = document.getElementById("globalEncrypt");
+  const passInput     = document.getElementById("globalPassword");
+  const passNote      = document.getElementById("passwordAsciiNote");
+  const passWrap      = document.getElementById("passWrap");
+  const encryptBanner = document.getElementById("encryptBanner");
+  const encryptLabel  = document.getElementById("encryptLabel");
+
+  function syncEncryptUI() {
+    const on = encryptCheck && encryptCheck.checked;
+
+    if (encryptBanner) encryptBanner.classList.toggle("is-active", !!on);
+    if (encryptLabel)  encryptLabel.textContent = on ? "Şifreleme açık" : "Şifreleme kapalı";
+    if (passWrap)      passWrap.classList.toggle("open", !!on);
+
+    const pw = passInput ? passInput.value : "";
+    if (passNote) {
+      passNote.style.display =
+        on && pw && U.passwordNeedsAsciiNote(pw) ? "block" : "none";
+    }
+  }
+
+  encryptCheck?.addEventListener("change", syncEncryptUI);
+  passInput?.addEventListener("input", syncEncryptUI);
+  syncEncryptUI();
+
+  function readEncryptOptions() {
+    return {
+      encrypt:  !!(encryptCheck && encryptCheck.checked),
+      password: (passInput && passInput.value) || "",
+    };
+  }
+
+  /* ── Helpers ──────────────────────────────────────────── */
+  function showStatus(dotEl, textEl, name) {
+    if (!dotEl) return;
+    dotEl.style.display = "inline-flex";
+    if (textEl) textEl.textContent = name;
+  }
+
+  function setBusy(btn, busy) {
+    if (!btn) return;
+    const idle = btn.dataset.labelIdle || btn.textContent;
+    btn.disabled = !!busy;
+    if (busy) {
+      btn.innerHTML = `<svg style="width:17px;height:17px;animation:spin .8s linear infinite;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> İşleniyor…`;
+    } else {
+      btn.dataset.labelIdle = idle;
+      btn.textContent = idle;
+    }
+  }
+
+  /* spinner keyframe */
+  const style = document.createElement("style");
+  style.textContent = "@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}";
+  document.head.appendChild(style);
+
   function wireDropzone(zoneId, inputId, onFiles) {
-    const zone = document.getElementById(zoneId);
+    const zone  = document.getElementById(zoneId);
     const input = document.getElementById(inputId);
     if (!zone || !input) return;
 
@@ -49,273 +87,167 @@
     input.addEventListener("change", () => {
       if (input.files && input.files.length) onFiles(input.files);
     });
-    ["dragenter", "dragover"].forEach((ev) => {
-      zone.addEventListener(ev, (e) => {
-        e.preventDefault();
-        zone.classList.add("dragover");
-      });
-    });
-    ["dragleave", "drop"].forEach((ev) => {
-      zone.addEventListener(ev, (e) => {
-        e.preventDefault();
-        zone.classList.remove("dragover");
-      });
-    });
+    ["dragenter", "dragover"].forEach((ev) =>
+      zone.addEventListener(ev, (e) => { e.preventDefault(); zone.classList.add("dragover"); })
+    );
+    ["dragleave", "drop"].forEach((ev) =>
+      zone.addEventListener(ev, (e) => { e.preventDefault(); zone.classList.remove("dragover"); })
+    );
     zone.addEventListener("drop", (e) => {
       const fl = e.dataTransfer && e.dataTransfer.files;
       if (fl && fl.length) onFiles(fl);
     });
   }
 
-  /** --- Excel --- */
-  const excelStatus = document.getElementById("excelStatus");
-  const excelBtn = document.getElementById("excelRun");
+  /* ── Excel ────────────────────────────────────────────── */
   let excelFile = null;
-
-  function renderExcelStatus(name) {
-    if (!excelStatus) return;
-    excelStatus.textContent = name ? `Seçili: ${name}` : "Henüz dosya yok.";
-  }
+  const excelStatusEl   = document.getElementById("excelStatus");
+  const excelStatusText = document.getElementById("excelStatusText");
+  const excelBtn        = document.getElementById("excelRun");
 
   wireDropzone("excelDrop", "excelInput", (files) => {
     excelFile = files[0];
-    renderExcelStatus(excelFile.name);
+    showStatus(excelStatusEl, excelStatusText, excelFile.name);
   });
 
-  if (excelBtn) {
-    excelBtn.addEventListener("click", async () => {
-      if (!excelFile) {
-        alert("Önce bir Excel dosyası seç.");
-        return;
-      }
-      const enc = readEncryptOptions();
-      if (enc.encrypt && !enc.password) {
-        alert("Şifreleme açıkken şifre gerekli.");
-        return;
-      }
-      setBusy(excelBtn, true, "İşleniyor…", excelBtn.dataset.labelIdle || "PDF indir");
-      try {
-        const bytes = await Excel.excelFileToPdfBytes(excelFile, {
-          encrypt: enc.encrypt,
-          password: enc.password,
-          landscape: true,
-        });
-        U.downloadBlob(bytes, U.baseName(excelFile.name) + ".pdf");
-      } catch (e) {
-        console.error(e);
-        alert(e.message || String(e));
-      } finally {
-        setBusy(
-          excelBtn,
-          false,
-          "",
-          excelBtn.dataset.labelIdle || "PDF indir"
-        );
-      }
-    });
-  }
+  excelBtn?.addEventListener("click", async () => {
+    if (!excelFile) return alert("Önce bir Excel dosyası seç.");
+    const enc = readEncryptOptions();
+    if (enc.encrypt && !enc.password) return alert("Şifreleme açıkken şifre gerekli.");
+    setBusy(excelBtn, true);
+    try {
+      const bytes = await Excel.excelFileToPdfBytes(excelFile, { ...enc, landscape: true });
+      U.downloadBlob(bytes, U.baseName(excelFile.name) + ".pdf");
+    } catch (e) {
+      console.error(e); alert(e.message || String(e));
+    } finally { setBusy(excelBtn, false); }
+  });
 
-  /** --- Image --- */
-  const imageStatus = document.getElementById("imageStatus");
-  const imageBtn = document.getElementById("imageRun");
-  const imageFit = document.getElementById("imageFit");
+  /* ── Image ────────────────────────────────────────────── */
   let imageFile = null;
+  const imageStatusEl   = document.getElementById("imageStatus");
+  const imageStatusText = document.getElementById("imageStatusText");
+  const imageBtn        = document.getElementById("imageRun");
+  const imageFitInput   = document.getElementById("imageFit");
 
   wireDropzone("imageDrop", "imageInput", (files) => {
     imageFile = files[0];
-    if (imageStatus) imageStatus.textContent = imageFile ? imageFile.name : "";
+    showStatus(imageStatusEl, imageStatusText, imageFile.name);
   });
 
-  if (imageBtn) {
-    imageBtn.addEventListener("click", async () => {
-      if (!imageFile) {
-        alert("Bir görsel seç.");
-        return;
-      }
-      const enc = readEncryptOptions();
-      if (enc.encrypt && !enc.password) {
-        alert("Şifreleme açıkken şifre gerekli.");
-        return;
-      }
-      setBusy(imageBtn, true, "İşleniyor…", imageBtn.dataset.labelIdle || "PDF indir");
-      try {
-        const fit =
-          imageFit && imageFit.value === "original" ? "original" : "a4";
-        const bytes = await Image.imageFileToPdfBytes(imageFile, {
-          encrypt: enc.encrypt,
-          password: enc.password,
-          fit,
-        });
-        U.downloadBlob(bytes, U.baseName(imageFile.name) + ".pdf");
-      } catch (e) {
-        console.error(e);
-        alert(e.message || String(e));
-      } finally {
-        setBusy(
-          imageBtn,
-          false,
-          "",
-          imageBtn.dataset.labelIdle || "PDF indir"
-        );
-      }
-    });
-  }
+  imageBtn?.addEventListener("click", async () => {
+    if (!imageFile) return alert("Bir görsel seç.");
+    const enc = readEncryptOptions();
+    if (enc.encrypt && !enc.password) return alert("Şifreleme açıkken şifre gerekli.");
+    setBusy(imageBtn, true);
+    try {
+      const fit = imageFitInput && imageFitInput.value === "original" ? "original" : "a4";
+      const bytes = await Img.imageFileToPdfBytes(imageFile, { ...enc, fit });
+      U.downloadBlob(bytes, U.baseName(imageFile.name) + ".pdf");
+    } catch (e) {
+      console.error(e); alert(e.message || String(e));
+    } finally { setBusy(imageBtn, false); }
+  });
 
-  /** --- Merge --- */
-  const mergeList = document.getElementById("mergeList");
-  const mergeBtn = document.getElementById("mergeRun");
+  /* ── Merge ────────────────────────────────────────────── */
   let mergeFiles = [];
+  const mergeList = document.getElementById("mergeList");
+  const mergeBtn  = document.getElementById("mergeRun");
 
   function renderMergeList() {
     if (!mergeList) return;
     mergeList.innerHTML = "";
     if (!mergeFiles.length) {
-      mergeList.textContent = "PDF dosyalarını ekleyin (sıra korunur).";
+      mergeList.innerHTML = `<p class="notice" style="text-align:center;">Eklenecek PDF yok.</p>`;
       return;
     }
     mergeFiles.forEach((f, i) => {
       const row = document.createElement("div");
-      row.className =
-        "file-chip rounded-xl px-3 py-2 text-sm flex justify-between gap-2";
-      row.innerHTML = `<span class="truncate">${i + 1}. ${f.name}</span>`;
+      row.className = "file-chip";
+      row.innerHTML = `<span class="file-chip-num">${i + 1}</span><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${f.name}</span>`;
       mergeList.appendChild(row);
     });
   }
 
   wireDropzone("mergeDrop", "mergeInput", (files) => {
-    const pdfs = Array.from(files).filter((f) =>
-      /\.pdf$/i.test(f.name)
+    mergeFiles = mergeFiles.concat(
+      Array.from(files).filter((f) => /\.pdf$/i.test(f.name))
     );
-    mergeFiles = mergeFiles.concat(pdfs);
     renderMergeList();
   });
 
   document.getElementById("mergeClear")?.addEventListener("click", () => {
-    mergeFiles = [];
-    renderMergeList();
+    mergeFiles = []; renderMergeList();
   });
 
-  if (mergeBtn) {
-    mergeBtn.addEventListener("click", async () => {
-      if (mergeFiles.length < 2) {
-        alert("Birleştirmek için en az iki PDF gerekli.");
-        return;
-      }
-      const enc = readEncryptOptions();
-      if (enc.encrypt && !enc.password) {
-        alert("Şifreleme açıkken şifre gerekli.");
-        return;
-      }
-      setBusy(mergeBtn, true, "Birleştiriliyor…", mergeBtn.dataset.labelIdle || "İndir");
-      try {
-        const bytes = await Merge.mergePdfFiles(mergeFiles, enc);
-        U.downloadBlob(bytes, "birlesik.pdf");
-      } catch (e) {
-        console.error(e);
-        alert(e.message || String(e));
-      } finally {
-        setBusy(
-          mergeBtn,
-          false,
-          "",
-          mergeBtn.dataset.labelIdle || "İndir"
-        );
-      }
-    });
-  }
+  mergeBtn?.addEventListener("click", async () => {
+    if (mergeFiles.length < 2) return alert("En az iki PDF gerekli.");
+    const enc = readEncryptOptions();
+    if (enc.encrypt && !enc.password) return alert("Şifreleme açıkken şifre gerekli.");
+    setBusy(mergeBtn, true);
+    try {
+      const bytes = await Merge.mergePdfFiles(mergeFiles, enc);
+      U.downloadBlob(bytes, "birlesik.pdf");
+    } catch (e) {
+      console.error(e); alert(e.message || String(e));
+    } finally { setBusy(mergeBtn, false); }
+  });
 
-  /** --- Split --- */
-  const splitStatus = document.getElementById("splitStatus");
-  const splitBtn = document.getElementById("splitRun");
-  const splitMode = document.getElementById("splitMode");
-  const splitRanges = document.getElementById("splitRanges");
+  /* ── Split ────────────────────────────────────────────── */
   let splitFile = null;
+  const splitStatusEl   = document.getElementById("splitStatus");
+  const splitStatusText = document.getElementById("splitStatusText");
+  const splitBtn        = document.getElementById("splitRun");
+  const splitMode       = document.getElementById("splitMode");
+  const splitRanges     = document.getElementById("splitRanges");
+  const splitRangesRow  = document.getElementById("splitRangesRow");
+
+  splitMode?.addEventListener("change", () => {
+    if (splitRangesRow)
+      splitRangesRow.style.display = splitMode.value === "ranges" ? "block" : "none";
+  });
 
   wireDropzone("splitDrop", "splitInput", (files) => {
     splitFile = files[0];
-    if (splitStatus) splitStatus.textContent = splitFile ? splitFile.name : "";
+    showStatus(splitStatusEl, splitStatusText, splitFile.name);
   });
 
-  function toggleRangesField() {
-    const rangesRow = document.getElementById("splitRangesRow");
-    if (!rangesRow || !splitMode) return;
-    rangesRow.classList.toggle("hidden", splitMode.value !== "ranges");
-  }
-  splitMode?.addEventListener("change", toggleRangesField);
-  toggleRangesField();
+  splitBtn?.addEventListener("click", async () => {
+    if (!splitFile) return alert("Bir PDF seç.");
+    const mode = splitMode?.value === "ranges" ? "ranges" : "each";
+    const rangesText = splitRanges?.value || "";
+    if (mode === "ranges" && !rangesText.trim()) return alert("Aralık yaz — örn: 1-3,5");
+    setBusy(splitBtn, true);
+    try {
+      const blob = await Split.splitPdf(splitFile, mode, rangesText);
+      U.downloadBlob(blob, U.baseName(splitFile.name) + "-ayrilmis.zip");
+    } catch (e) {
+      console.error(e); alert(e.message || String(e));
+    } finally { setBusy(splitBtn, false); }
+  });
 
-  if (splitBtn) {
-    splitBtn.addEventListener("click", async () => {
-      if (!splitFile) {
-        alert("Bir PDF seç.");
-        return;
-      }
-      setBusy(splitBtn, true, "Ayırılıyor…", splitBtn.dataset.labelIdle || "ZIP indir");
-      try {
-        const mode = splitMode && splitMode.value === "ranges" ? "ranges" : "each";
-        const rangesText = splitRanges ? splitRanges.value : "";
-        if (mode === "ranges" && !rangesText.trim()) {
-          alert("Aralık modunda örn. 1-3,5 yazın.");
-          setBusy(splitBtn, false, "", splitBtn.dataset.labelIdle || "ZIP indir");
-          return;
-        }
-        const blob = await Split.splitPdf(splitFile, mode, rangesText);
-        U.downloadBlob(blob, U.baseName(splitFile.name) + "-ayrilmis.zip");
-      } catch (e) {
-        console.error(e);
-        alert(e.message || String(e));
-      } finally {
-        setBusy(
-          splitBtn,
-          false,
-          "",
-          splitBtn.dataset.labelIdle || "ZIP indir"
-        );
-      }
-    });
-  }
-
-  /** --- Encrypt only --- */
-  const encStatus = document.getElementById("encStatus");
-  const encBtn = document.getElementById("encRun");
+  /* ── Encrypt only ─────────────────────────────────────── */
   let encFile = null;
+  const encStatusEl   = document.getElementById("encStatus");
+  const encStatusText = document.getElementById("encStatusText");
+  const encBtn        = document.getElementById("encRun");
 
   wireDropzone("encDrop", "encInput", (files) => {
     encFile = files[0];
-    if (encStatus) encStatus.textContent = encFile ? encFile.name : "";
+    showStatus(encStatusEl, encStatusText, encFile.name);
   });
 
-  if (encBtn) {
-    encBtn.addEventListener("click", async () => {
-      if (!encFile) {
-        alert("PDF seç.");
-        return;
-      }
-      const enc = readEncryptOptions();
-      if (!enc.encrypt || !enc.password) {
-        alert("Bu sekmede çıktı şifreli olmalı: üstteki şifrelemeyi aç ve şifre yaz.");
-        return;
-      }
-      setBusy(encBtn, true, "Şifreleniyor…", encBtn.dataset.labelIdle || "İndir");
-      try {
-        const bytes = await Reencrypt.reencryptPdfFile(encFile, enc);
-        U.downloadBlob(bytes, U.baseName(encFile.name) + "-kilitli.pdf");
-      } catch (e) {
-        console.error(e);
-        alert(e.message || String(e));
-      } finally {
-        setBusy(encBtn, false, "", encBtn.dataset.labelIdle || "İndir");
-      }
-    });
-  }
-
-  /** idle labels on buttons */
-  document.querySelectorAll("[data-label-idle]").forEach((btn) => {
-    btn.dataset.labelIdle =
-      btn.getAttribute("data-label-idle") || btn.textContent;
+  encBtn?.addEventListener("click", async () => {
+    if (!encFile) return alert("Bir PDF seç.");
+    const enc = readEncryptOptions();
+    if (!enc.encrypt || !enc.password)
+      return alert("Üstteki şifreleme anahtarını aç ve şifre yaz.");
+    setBusy(encBtn, true);
+    try {
+      const bytes = await Reencrypt.reencryptPdfFile(encFile, enc);
+      U.downloadBlob(bytes, U.baseName(encFile.name) + "-kilitli.pdf");
+    } catch (e) {
+      console.error(e); alert(e.message || String(e));
+    } finally { setBusy(encBtn, false); }
   });
-
-  encryptCheck?.addEventListener("change", readEncryptOptions);
-  passInput?.addEventListener("input", readEncryptOptions);
-  readEncryptOptions();
 })();

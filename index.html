@@ -3,262 +3,241 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PDF Master Pro | Ozan Edition</title>
+    <title>PDF Master Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <!-- pdf-lib 1.17 şifrelemez; bu çatal `encrypt()` sunar (global: PDFLib) -->
     <script src="https://unpkg.com/pdf-lib-plus-encrypt@1.1.0/dist/pdf-lib-plus-encrypt.min.js"></script>
     <link rel="stylesheet" href="css/app.css" />
   </head>
-  <body class="min-h-screen flex flex-col items-center p-4 md:p-8">
-    <div class="main-card w-full max-w-3xl rounded-[2rem] p-6 md:p-10 shadow-2xl">
-      <header class="text-center mb-8">
-        <h1
-          class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400 uppercase"
-        >
-          PDF Master Pro
-        </h1>
-        <p class="text-slate-500 mt-2 text-sm font-medium">
-          Excel / Görsel → PDF · Birleştir · Ayır · Şifrele · Türkçe tablo
-        </p>
-      </header>
 
-      <nav
-        class="flex flex-wrap gap-2 mb-8 border-b border-white/5 pb-4 justify-center"
-      >
-        <button
-          type="button"
-          data-tab="excel"
-          class="tab-btn tab-active px-3 py-2 rounded-xl text-xs md:text-sm font-semibold transition-colors"
-        >
-          Excel → PDF
-        </button>
-        <button
-          type="button"
-          data-tab="image"
-          class="tab-btn px-3 py-2 rounded-xl text-xs md:text-sm font-semibold transition-colors"
-        >
-          Görsel → PDF
-        </button>
-        <button
-          type="button"
-          data-tab="merge"
-          class="tab-btn px-3 py-2 rounded-xl text-xs md:text-sm font-semibold transition-colors"
-        >
-          PDF birleştir
-        </button>
-        <button
-          type="button"
-          data-tab="split"
-          class="tab-btn px-3 py-2 rounded-xl text-xs md:text-sm font-semibold transition-colors"
-        >
-          PDF ayır
-        </button>
-        <button
-          type="button"
-          data-tab="encrypt"
-          class="tab-btn px-3 py-2 rounded-xl text-xs md:text-sm font-semibold transition-colors"
-        >
-          PDF şifrele
-        </button>
-      </nav>
+  <body>
+    <div class="app-wrap">
+      <div class="main-card">
 
-      <section
-        class="bg-white/5 rounded-2xl p-4 md:p-5 mb-6 space-y-3 border border-white/5"
-      >
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <div>
-            <p class="font-bold text-sm">PDF şifreleme (çıktı)</p>
-            <p class="notice">
-              Şifre, Excel/Görsel/Birleştir ve “PDF şifrele” çıktılarına uygulanır.
-              Ayırma ZIP şifresiz kalır (iç PDF’ler açık).
+        <!-- ── Header ─────────────────────────────── -->
+        <header style="text-align:center; margin-bottom:2rem;">
+          <div style="display:inline-flex;align-items:center;gap:.4rem;background:rgba(124,58,237,.15);border:1px solid rgba(139,92,246,.3);border-radius:999px;padding:.2rem .85rem;font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#c4b5fd;margin-bottom:.9rem;">
+            <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><circle cx="5" cy="5" r="5"/></svg>
+            Tarayıcı tabanlı · Sunucu yok
+          </div>
+          <h1 class="site-title">PDF Master Pro</h1>
+          <p class="site-sub">Excel · Görsel · Birleştir · Ayır · Şifrele — sıfır yükleme</p>
+        </header>
+
+        <!-- ── Tab nav ────────────────────────────── -->
+        <nav class="tab-nav">
+          <button type="button" data-tab="excel" class="tab-btn tab-active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+            Excel → PDF
+          </button>
+          <button type="button" data-tab="image" class="tab-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            Görsel → PDF
+          </button>
+          <button type="button" data-tab="merge" class="tab-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-3"/><path d="M15 3H9l-1 3h8l-1-3z"/></svg>
+            Birleştir
+          </button>
+          <button type="button" data-tab="split" class="tab-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="22"/><polyline points="7 7 12 2 17 7"/><polyline points="7 17 12 22 17 17"/></svg>
+            Ayır
+          </button>
+          <button type="button" data-tab="encrypt" class="tab-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            Şifrele
+          </button>
+        </nav>
+
+        <!-- ── Encrypt banner ─────────────────────── -->
+        <div id="encryptBanner" class="encrypt-banner">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;">
+            <div style="display:flex;align-items:flex-start;gap:.6rem;flex:1;">
+              <div id="encryptDot" class="encrypt-status-dot" style="margin-top:3px;"></div>
+              <div>
+                <div id="encryptTitle" class="encrypt-title">
+                  <span id="encryptLabel">Şifreleme kapalı</span>
+                </div>
+                <div class="encrypt-desc" style="margin-top:.2rem;">
+                  Açık olduğunda tüm çıktı PDF'leri belirlediğin şifreyle kilitlenir.
+                </div>
+              </div>
+            </div>
+            <label style="display:flex;align-items:center;gap:0;cursor:pointer;flex-shrink:0;">
+              <input type="checkbox" id="globalEncrypt" class="sr-only" style="position:absolute;opacity:0;pointer-events:none;" />
+              <div class="toggle-track" id="toggleTrack" onclick="document.getElementById('globalEncrypt').click()">
+                <div class="toggle-thumb"></div>
+              </div>
+            </label>
+          </div>
+          <div class="encrypt-pass-wrap" id="passWrap">
+            <input
+              type="password"
+              id="globalPassword"
+              autocomplete="new-password"
+              placeholder="Açılış şifresini belirle…"
+              class="field"
+              style="text-align:center;"
+            />
+            <p id="passwordAsciiNote" class="notice-warn" style="margin-top:.5rem;display:none;">
+              ⚠ PDF şifresi yalnızca ASCII karakterleri (İngilizce harf/rakam) destekler.
+              Türkçe karakter hata verebilir.
             </p>
           </div>
-          <label class="relative inline-flex items-center cursor-pointer shrink-0">
-            <input type="checkbox" id="globalEncrypt" class="sr-only peer" />
-            <div
-              class="w-11 h-6 bg-slate-700 rounded-full peer peer-checked:bg-indigo-500 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full"
-            ></div>
-          </label>
         </div>
-        <input
-          type="password"
-          id="globalPassword"
-          autocomplete="new-password"
-          placeholder="Açılış şifresi (ASCII önerilir)…"
-          class="w-full rounded-2xl px-4 py-3 text-center text-sm"
-        />
-        <p id="passwordAsciiNote" class="notice text-amber-200/90 hidden">
-          Şifrede PDF 1.7 öncesi motor için Unicode karakterler (ör. Türkçe harf)
-          hata verebilir; İngilizce harf/rakam kullanman daha güvenli.
-        </p>
-      </section>
 
-      <!-- Excel -->
-      <div data-panel="excel" class="panel is-visible space-y-4">
-        <div
-          id="excelDrop"
-          class="dropzone rounded-3xl p-10 text-center cursor-pointer"
-        >
-          <input
-            type="file"
-            id="excelInput"
-            accept=".xlsx,.xls,.csv"
-            class="hidden"
-          />
-          <p class="text-lg font-bold">Excel / CSV sürükle</p>
-          <p class="text-slate-500 text-sm mt-1">İlk sayfa tablo olarak PDF’e</p>
-          <p id="excelStatus" class="text-indigo-300 text-sm mt-4 font-medium">
-            Henüz dosya yok.
-          </p>
-        </div>
-        <button
-          type="button"
-          id="excelRun"
-          data-label-idle="PDF indir"
-          class="btn-primary w-full py-4 rounded-2xl font-bold text-white uppercase tracking-wide text-sm"
-        >
-          PDF indir
-        </button>
-      </div>
+        <!-- ══════════════════════════════════════════ PANELS -->
 
-      <!-- Image -->
-      <div data-panel="image" class="panel space-y-4">
-        <div
-          id="imageDrop"
-          class="dropzone rounded-3xl p-10 text-center cursor-pointer"
-        >
-          <input type="file" id="imageInput" accept="image/*" class="hidden" />
-          <p class="text-lg font-bold">Görsel sürükle</p>
-          <p class="text-slate-500 text-sm mt-1">PNG, JPEG, WebP, GIF…</p>
-          <p id="imageStatus" class="text-indigo-300 text-sm mt-4 font-medium"></p>
+        <!-- Excel → PDF -->
+        <div data-panel="excel" class="panel is-visible" style="--gap:1rem;" >
+          <div class="space-y">
+            <div id="excelDrop" class="dropzone">
+              <input type="file" id="excelInput" accept=".xlsx,.xls,.csv" class="hidden" />
+              <div class="drop-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/></svg>
+              </div>
+              <p class="drop-title">Excel veya CSV dosyası sürükle</p>
+              <p class="drop-sub">ya da tıkla · .xlsx · .xls · .csv</p>
+              <div id="excelStatus" class="drop-selected" style="display:none;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span id="excelStatusText"></span>
+              </div>
+            </div>
+            <button type="button" id="excelRun" class="btn-primary" data-label-idle="PDF İndir">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              PDF İndir
+            </button>
+          </div>
         </div>
-        <div class="flex flex-wrap gap-4 items-center justify-center text-sm">
-          <label class="flex items-center gap-2 cursor-pointer">
-            <input type="radio" name="imageFit" id="imageFitA4" value="a4" checked />
-            <span>A4 içine sığdır</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer">
-            <input type="radio" name="imageFit" id="imageFitOrig" value="original" />
-            <span>Orijinal boyut (piksel = nokta)</span>
-          </label>
-        </div>
-        <input type="hidden" id="imageFit" value="a4" />
-        <button
-          type="button"
-          id="imageRun"
-          data-label-idle="PDF indir"
-          class="btn-primary w-full py-4 rounded-2xl font-bold text-white uppercase tracking-wide text-sm"
-        >
-          PDF indir
-        </button>
-      </div>
 
-      <!-- Merge -->
-      <div data-panel="merge" class="panel space-y-4">
-        <div
-          id="mergeDrop"
-          class="dropzone rounded-3xl p-8 text-center cursor-pointer"
-        >
-          <input
-            type="file"
-            id="mergeInput"
-            accept=".pdf,application/pdf"
-            multiple
-            class="hidden"
-          />
-          <p class="text-lg font-bold">PDF’leri ekle</p>
-          <p class="text-slate-500 text-sm mt-1">Çoklu seçim — sıra önemli</p>
+        <!-- Görsel → PDF -->
+        <div data-panel="image" class="panel" style="--gap:1rem;">
+          <div class="space-y">
+            <div id="imageDrop" class="dropzone">
+              <input type="file" id="imageInput" accept="image/*" class="hidden" />
+              <div class="drop-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              </div>
+              <p class="drop-title">Görsel sürükle</p>
+              <p class="drop-sub">PNG · JPEG · WebP · GIF · BMP</p>
+              <div id="imageStatus" class="drop-selected" style="display:none;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span id="imageStatusText"></span>
+              </div>
+            </div>
+            <div class="radio-group">
+              <div class="radio-pill">
+                <input type="radio" name="imageFitR" id="imageFitA4" value="a4" checked />
+                <label for="imageFitA4">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/></svg>
+                  A4'e sığdır
+                </label>
+              </div>
+              <div class="radio-pill">
+                <input type="radio" name="imageFitR" id="imageFitOrig" value="original" />
+                <label for="imageFitOrig">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+                  Orijinal boyut
+                </label>
+              </div>
+            </div>
+            <input type="hidden" id="imageFit" value="a4" />
+            <button type="button" id="imageRun" class="btn-primary" data-label-idle="PDF İndir">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              PDF İndir
+            </button>
+          </div>
         </div>
-        <div id="mergeList" class="space-y-2 text-sm text-slate-400 min-h-[3rem]">
-          PDF dosyalarını ekleyin (sıra korunur).
-        </div>
-        <button
-          type="button"
-          id="mergeClear"
-          class="w-full py-2 rounded-xl border border-slate-700 text-slate-300 text-sm hover:bg-white/5"
-        >
-          Listeyi temizle
-        </button>
-        <button
-          type="button"
-          id="mergeRun"
-          data-label-idle="Birleşik PDF indir"
-          class="btn-primary w-full py-4 rounded-2xl font-bold text-white uppercase tracking-wide text-sm"
-        >
-          Birleşik PDF indir
-        </button>
-      </div>
 
-      <!-- Split -->
-      <div data-panel="split" class="panel space-y-4">
-        <div
-          id="splitDrop"
-          class="dropzone rounded-3xl p-10 text-center cursor-pointer"
-        >
-          <input type="file" id="splitInput" accept=".pdf" class="hidden" />
-          <p class="text-lg font-bold">PDF sürükle</p>
-          <p id="splitStatus" class="text-indigo-300 text-sm mt-4 font-medium"></p>
+        <!-- Birleştir -->
+        <div data-panel="merge" class="panel" style="--gap:1rem;">
+          <div class="space-y">
+            <div id="mergeDrop" class="dropzone">
+              <input type="file" id="mergeInput" accept=".pdf,application/pdf" multiple class="hidden" />
+              <div class="drop-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-3"/><path d="M15 3H9l-1 3h8l-1-3z"/></svg>
+              </div>
+              <p class="drop-title">PDF dosyalarını sürükle</p>
+              <p class="drop-sub">Çoklu seçim desteklenir — sıra korunur</p>
+            </div>
+            <div id="mergeList" style="display:flex;flex-direction:column;gap:.4rem;min-height:1.5rem;">
+              <p class="notice" style="text-align:center;">Eklenecek PDF yok.</p>
+            </div>
+            <button type="button" id="mergeClear" class="btn-ghost">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+              Listeyi temizle
+            </button>
+            <button type="button" id="mergeRun" class="btn-primary" data-label-idle="Birleşik PDF İndir">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Birleşik PDF İndir
+            </button>
+          </div>
         </div>
-        <div>
-          <label class="block text-sm font-semibold mb-2">Ayırma modu</label>
-          <select
-            id="splitMode"
-            class="w-full rounded-2xl px-4 py-3 text-sm"
-          >
-            <option value="each">Her sayfa ayrı PDF (ZIP)</option>
-            <option value="ranges">Aralıklara göre (ZIP)</option>
-          </select>
-        </div>
-        <div id="splitRangesRow" class="hidden">
-          <label class="block text-sm font-semibold mb-2">Sayfa aralıkları</label>
-          <input
-            type="text"
-            id="splitRanges"
-            placeholder="Örn: 1-3,5,7-7"
-            class="w-full rounded-2xl px-4 py-3 text-sm"
-          />
-          <p class="notice mt-2">Sayfa numaraları 1’den başlar; virgülle ayır.</p>
-        </div>
-        <button
-          type="button"
-          id="splitRun"
-          data-label-idle="ZIP indir"
-          class="btn-primary w-full py-4 rounded-2xl font-bold text-white uppercase tracking-wide text-sm"
-        >
-          ZIP indir
-        </button>
-      </div>
 
-      <!-- Encrypt -->
-      <div data-panel="encrypt" class="panel space-y-4">
-        <div
-          id="encDrop"
-          class="dropzone rounded-3xl p-10 text-center cursor-pointer"
-        >
-          <input type="file" id="encInput" accept=".pdf" class="hidden" />
-          <p class="text-lg font-bold">Şifrelenecek PDF</p>
-          <p id="encStatus" class="text-indigo-300 text-sm mt-4 font-medium"></p>
+        <!-- Ayır -->
+        <div data-panel="split" class="panel" style="--gap:1rem;">
+          <div class="space-y">
+            <div id="splitDrop" class="dropzone">
+              <input type="file" id="splitInput" accept=".pdf" class="hidden" />
+              <div class="drop-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="2" x2="12" y2="22"/><polyline points="7 7 12 2 17 7"/><polyline points="7 17 12 22 17 17"/></svg>
+              </div>
+              <p class="drop-title">Ayırılacak PDF sürükle</p>
+              <p class="drop-sub">Çıktı ZIP olarak indirilir</p>
+              <div id="splitStatus" class="drop-selected" style="display:none;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span id="splitStatusText"></span>
+              </div>
+            </div>
+            <div>
+              <label class="field-label" for="splitMode">Ayırma modu</label>
+              <select id="splitMode" class="field">
+                <option value="each">Her sayfa ayrı PDF (ZIP)</option>
+                <option value="ranges">Sayfa aralıkları (ZIP)</option>
+              </select>
+            </div>
+            <div id="splitRangesRow" style="display:none;">
+              <label class="field-label" for="splitRanges">Aralıklar</label>
+              <input type="text" id="splitRanges" placeholder="Örn: 1-3,5,8-10" class="field" />
+              <p class="notice" style="margin-top:.4rem;">Sayfa numaraları 1'den başlar. Virgülle ayır.</p>
+            </div>
+            <button type="button" id="splitRun" class="btn-primary" data-label-idle="ZIP İndir">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              ZIP İndir
+            </button>
+          </div>
         </div>
-        <p class="notice">
-          Üstteki “PDF şifreleme” anahtarını açıp şifre yaz; çıktı
-          <code class="text-indigo-300">-kilitli.pdf</code> olarak iner.
-        </p>
-        <button
-          type="button"
-          id="encRun"
-          data-label-idle="Şifreli PDF indir"
-          class="btn-primary w-full py-4 rounded-2xl font-bold text-white uppercase tracking-wide text-sm"
-        >
-          Şifreli PDF indir
-        </button>
-      </div>
-    </div>
 
+        <!-- Şifrele -->
+        <div data-panel="encrypt" class="panel" style="--gap:1rem;">
+          <div class="space-y">
+            <div id="encDrop" class="dropzone">
+              <input type="file" id="encInput" accept=".pdf" class="hidden" />
+              <div class="drop-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              </div>
+              <p class="drop-title">Şifrelenecek PDF sürükle</p>
+              <p class="drop-sub">Üstteki şifreleme anahtarını açıp şifre belirle</p>
+              <div id="encStatus" class="drop-selected" style="display:none;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span id="encStatusText"></span>
+              </div>
+            </div>
+            <button type="button" id="encRun" class="btn-primary" data-label-idle="Şifreli PDF İndir">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              Şifreli PDF İndir
+            </button>
+          </div>
+        </div>
+
+      </div><!-- /main-card -->
+    </div><!-- /app-wrap -->
+
+    <!-- ── Scripts ─────────────────────────────────────────── -->
     <script>
+      /* Image fit radio sync */
       document.getElementById("imageFitA4").addEventListener("change", function () {
         document.getElementById("imageFit").value = "a4";
       });
