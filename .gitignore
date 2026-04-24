@@ -5,3 +5,7 @@ Thumbs.db
 .env.*
 .idea/
 .vscode/
+
+# Build output — deploy dist/, never commit it
+dist/
+node_modules/
