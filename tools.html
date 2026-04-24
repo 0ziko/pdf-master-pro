@@ -42,53 +42,31 @@
       <p id="snakeCaption" class="snake-caption">Pick a tool and let's go! 🐍</p>
     </div>
 
-    <!-- ── Tab nav (scrollable) ─────────────── -->
-    <nav class="tab-nav tools-tab-nav">
-      <button type="button" data-tab="words"   class="tab-btn tab-active">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="12" y2="17"/></svg>
-        <span>Words</span>
-      </button>
-      <button type="button" data-tab="age"     class="tab-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-        <span>Age</span>
-      </button>
-      <button type="button" data-tab="bmi"     class="tab-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-        <span>BMI</span>
-      </button>
-      <button type="button" data-tab="percent" class="tab-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>
-        <span>%</span>
-      </button>
-      <button type="button" data-tab="case"    class="tab-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
-        <span>Case</span>
-      </button>
-      <button type="button" data-tab="random"  class="tab-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg>
-        <span>Random</span>
-      </button>
-      <button type="button" data-tab="pass"    class="tab-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-        <span>Password</span>
-      </button>
-      <button type="button" data-tab="qr"      class="tab-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-        <span>QR</span>
-      </button>
-      <button type="button" data-tab="base64"  class="tab-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-        <span>Base64</span>
-      </button>
-      <button type="button" data-tab="unix"    class="tab-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        <span>Timestamp</span>
-      </button>
+    <!-- ── Jump Nav (all tools, wrapping) ─────── -->
+    <nav class="jump-nav">
+      <a href="#words"   class="jump-link">📄 Word Counter</a>
+      <a href="#age"     class="jump-link">🎂 Age</a>
+      <a href="#bmi"     class="jump-link">❤️ BMI</a>
+      <a href="#percent" class="jump-link">% Percentage</a>
+      <a href="#case"    class="jump-link">Aa Text Case</a>
+      <a href="#random"  class="jump-link">🎲 Random</a>
+      <a href="#pass"    class="jump-link">🔐 Password</a>
+      <a href="#qr"      class="jump-link">📱 QR Code</a>
+      <a href="#base64"  class="jump-link">&lt;/&gt; Base64</a>
+      <a href="#unix"    class="jump-link">⏱ Timestamp</a>
     </nav>
 
-    <!-- ════════ PANELS ════════ -->
+    <!-- ════════ SECTIONS ════════ -->
 
     <!-- 1. Word Counter -->
+    <section id="words" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">📄</span>
+        <div>
+          <div class="tps-title">Word Counter</div>
+          <div class="tps-desc">Count words, characters, sentences, paragraphs, and estimated reading time</div>
+        </div>
+      </div>
     <div data-panel="words" class="panel is-visible">
       <div class="space-y">
         <textarea id="wc-input" class="tool-textarea" placeholder="Paste or type your text here…" rows="7" oninput="ToolsApp.wordCount()"></textarea>
@@ -106,9 +84,15 @@
         </button>
       </div>
     </div>
+    </section>
 
     <!-- 2. Age Calculator -->
-    <div data-panel="age" class="panel">
+    <section id="age" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">🎂</span>
+        <div><div class="tps-title">Age Calculator</div><div class="tps-desc">Exact age in years, months, days — plus next birthday countdown</div></div>
+      </div>
+    <div data-panel="age" class="panel is-visible">
       <div class="space-y">
         <div>
           <label class="field-label">Date of Birth</label>
@@ -124,9 +108,15 @@
         </div>
       </div>
     </div>
+    </section>
 
     <!-- 3. BMI -->
-    <div data-panel="bmi" class="panel">
+    <section id="bmi" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">❤️</span>
+        <div><div class="tps-title">BMI Calculator</div><div class="tps-desc">Body Mass Index with visual gauge and healthy weight range</div></div>
+      </div>
+    <div data-panel="bmi" class="panel is-visible">
       <div class="space-y">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
           <div>
@@ -164,9 +154,15 @@
         </div>
       </div>
     </div>
+    </section>
 
     <!-- 4. Percentage Calculator -->
-    <div data-panel="percent" class="panel">
+    <section id="percent" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">%</span>
+        <div><div class="tps-title">Percentage Calculator</div><div class="tps-desc">X% of Y · X is what % of Y? · Percentage change between two values</div></div>
+      </div>
+    <div data-panel="percent" class="panel is-visible">
       <div class="space-y">
         <!-- Mode tabs -->
         <div class="radio-group" style="justify-content:center;">
@@ -202,9 +198,15 @@
         </div>
       </div>
     </div>
+    </section>
 
     <!-- 5. Text Case Converter -->
-    <div data-panel="case" class="panel">
+    <section id="case" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">Aa</span>
+        <div><div class="tps-title">Text Case Converter</div><div class="tps-desc">UPPER, lower, Title, Sentence, camelCase, PascalCase, snake_case, kebab-case &amp; more</div></div>
+      </div>
+    <div data-panel="case" class="panel is-visible">
       <div class="space-y">
         <textarea id="case-input" class="tool-textarea" placeholder="Enter text to convert…" rows="5"></textarea>
         <div class="case-buttons">
@@ -228,9 +230,15 @@
         </div>
       </div>
     </div>
+    </section>
 
     <!-- 6. Random Number Generator -->
-    <div data-panel="random" class="panel">
+    <section id="random" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">🎲</span>
+        <div><div class="tps-title">Random Number Generator</div><div class="tps-desc">Generate random integers with range, count, and uniqueness options</div></div>
+      </div>
+    <div data-panel="random" class="panel is-visible">
       <div class="space-y">
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;">
           <div><label class="field-label">Min</label><input type="number" id="rng-min" class="field" value="1" /></div>
@@ -254,9 +262,15 @@
         </div>
       </div>
     </div>
+    </section>
 
     <!-- 7. Password Generator -->
-    <div data-panel="pass" class="panel">
+    <section id="pass" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">🔐</span>
+        <div><div class="tps-title">Password Generator</div><div class="tps-desc">Cryptographically secure passwords with length slider, character options, and strength indicator</div></div>
+      </div>
+    <div data-panel="pass" class="panel is-visible">
       <div class="space-y">
         <div>
           <label class="field-label">Length: <span id="pass-len-val">16</span></label>
@@ -291,9 +305,15 @@
         </button>
       </div>
     </div>
+    </section>
 
     <!-- 8. QR Code Generator -->
-    <div data-panel="qr" class="panel">
+    <section id="qr" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">📱</span>
+        <div><div class="tps-title">QR Code Generator</div><div class="tps-desc">Generate and download QR codes for any text or URL — adjustable size and error correction</div></div>
+      </div>
+    <div data-panel="qr" class="panel is-visible">
       <div class="space-y">
         <div>
           <label class="field-label">Text or URL</label>
@@ -331,9 +351,15 @@
         </div>
       </div>
     </div>
+    </section>
 
     <!-- 9. Base64 Converter -->
-    <div data-panel="base64" class="panel">
+    <section id="base64" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">&lt;/&gt;</span>
+        <div><div class="tps-title">Base64 Converter</div><div class="tps-desc">Encode text to Base64 or decode a Base64 string back to plain text</div></div>
+      </div>
+    <div data-panel="base64" class="panel is-visible">
       <div class="space-y">
         <div class="radio-group" style="justify-content:center;">
           <div class="radio-pill"><input type="radio" name="b64mode" id="b64enc" value="encode" checked /><label for="b64enc"><span>Encode → Base64</span></label></div>
@@ -357,8 +383,16 @@
       </div>
     </div>
 
+    </div>
+    </section>
+
     <!-- 10. Unix Timestamp -->
-    <div data-panel="unix" class="panel">
+    <section id="unix" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">⏱</span>
+        <div><div class="tps-title">Unix Timestamp</div><div class="tps-desc">Live epoch clock · Date ↔ Unix conversion · ISO 8601 output</div></div>
+      </div>
+    <div data-panel="unix" class="panel is-visible">
       <div class="space-y">
         <!-- Live clock -->
         <div class="result-card" style="text-align:center;">
@@ -393,6 +427,11 @@
         </div>
       </div>
     </div>
+    </section>
+
+    <div style="margin-top:2.5rem;text-align:center;font-size:.72rem;color:var(--text-dim);">
+      © 2026 SnakeConverter · All processing happens in your browser
+    </div>
 
   </div><!-- /main-card -->
 </div><!-- /app-wrap -->
@@ -422,7 +461,13 @@ document.querySelectorAll('input[name="b64mode"]').forEach(r => {
   });
 });
 
-/* ── Tabs ── */
+/* ── Hash routing (smooth scroll to section) ── */
+(function() {
+  const h = location.hash.replace("#","");
+  if (h) requestAnimationFrame(() => { const el=document.getElementById(h); if(el) el.scrollIntoView({behavior:"smooth",block:"start"}); });
+})();
+
+/* ── Legacy tab switcher (no-op, kept for safety) ── */
 const tabs   = [...document.querySelectorAll("[data-tab]")];
 const panels = [...document.querySelectorAll("[data-panel]")];
 tabs.forEach(tab => {

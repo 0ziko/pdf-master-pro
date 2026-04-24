@@ -7,204 +7,223 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="css/app.css" />
   <style>
-    .color-swatch { width:80px; height:80px; border-radius:.85rem; border:2px solid rgba(255,255,255,.12);
-      flex-shrink:0; transition:background .2s; cursor:pointer; }
-    .color-row { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:.5rem; margin-top:.8rem; }
-    .color-item { display:flex; flex-direction:column; gap:.2rem; background:rgba(255,255,255,.04);
-      border:1px solid var(--border-subtle); border-radius:.75rem; padding:.65rem .8rem; }
-    .color-label { font-size:.67rem; font-weight:800; text-transform:uppercase; letter-spacing:.07em; color:var(--text-muted); }
-    .color-val   { font-family:monospace; font-size:.85rem; color:var(--text-primary); font-weight:700; }
-    .color-copy  { font-size:.65rem; color:var(--text-dim); cursor:pointer; align-self:flex-end; margin-top:auto;
-      padding:.1rem .35rem; border:1px solid var(--border-subtle); border-radius:.3rem; background:transparent; transition:all .15s; }
+    .color-item { display:flex; flex-direction:column; gap:.18rem; background:rgba(255,255,255,.04);
+      border:1px solid var(--border-subtle); border-radius:.7rem; padding:.6rem .8rem; }
+    .color-label { font-size:.65rem; font-weight:800; text-transform:uppercase; letter-spacing:.07em; color:var(--text-muted); }
+    .color-val   { font-family:monospace; font-size:.84rem; color:var(--text-primary); font-weight:700; }
+    .color-copy  { font-size:.63rem; color:var(--text-dim); cursor:pointer; align-self:flex-start; margin-top:auto;
+      padding:.08rem .32rem; border:1px solid var(--border-subtle); border-radius:.3rem; background:transparent; transition:all .14s; }
     .color-copy:hover { color:var(--text-muted); }
-    .contrast-block { border-radius:1rem; padding:1.2rem 1.4rem; margin-top:.8rem; }
-    .wcag-tag { display:inline-flex; align-items:center; gap:.3rem; padding:.2rem .6rem; border-radius:999px;
-      font-size:.7rem; font-weight:800; margin:.2rem; }
+    .color-swatch-bar { height:60px; border-radius:.75rem; border:1px solid rgba(255,255,255,.12); margin:.6rem 0; transition:background .2s; }
+    .color-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(145px,1fr)); gap:.45rem; margin-top:.6rem; }
+    .conv-input-row { display:flex; gap:.5rem; align-items:center; margin-bottom:.6rem; }
+    .color-picker-native { width:52px; height:38px; padding:2px; border:1px solid var(--border-subtle); border-radius:.5rem; cursor:pointer; background:transparent; flex-shrink:0; }
+    .from-toggle { display:flex; gap:.3rem; flex-wrap:wrap; margin-bottom:.5rem; }
+    .from-btn { padding:.26rem .65rem; border:1px solid var(--border-subtle); border-radius:.45rem;
+      font-size:.71rem; font-weight:700; background:transparent; color:var(--text-muted); cursor:pointer; transition:all .14s; }
+    .from-btn.active { background:rgba(217,119,6,.2); border-color:#d97706; color:#fcd34d; }
+    .wcag-tag { display:inline-flex; align-items:center; gap:.3rem; padding:.2rem .55rem; border-radius:999px; font-size:.68rem; font-weight:800; margin:.2rem .15rem .2rem 0; }
     .wcag-pass { background:rgba(16,185,129,.2); color:#6ee7b7; }
     .wcag-fail { background:rgba(248,113,113,.15); color:#f87171; }
-    .shade-grid { display:flex; flex-wrap:wrap; gap:.35rem; margin-top:.8rem; }
-    .shade-cell { display:flex; flex-direction:column; align-items:center; gap:.25rem; }
-    .shade-swatch { width:48px; height:48px; border-radius:.5rem; border:1px solid rgba(255,255,255,.1); cursor:pointer; transition:transform .15s; }
-    .shade-swatch:hover { transform:scale(1.12); }
-    .shade-label { font-size:.6rem; font-family:monospace; color:var(--text-muted); }
-    .grad-preview { height:80px; border-radius:.85rem; margin-top:.6rem; transition:all .3s; }
-    .grad-css  { background:rgba(0,0,0,.3); border:1px solid var(--border-subtle); border-radius:.6rem;
-      padding:.5rem .75rem; font-family:monospace; font-size:.78rem; color:#86efac; word-break:break-all; margin-top:.5rem; }
-    .color-input-wrap { display:flex; gap:.6rem; align-items:center; margin-bottom:.6rem; }
-    .color-picker-native { width:56px; height:40px; padding:2px; border:1px solid var(--border-subtle); border-radius:.5rem; cursor:pointer; background:transparent; }
-    .tab-row-btns { display:flex; gap:.4rem; margin-bottom:.6rem; flex-wrap:wrap; }
-    .tab-row-btn { padding:.3rem .7rem; border:1px solid var(--border-subtle); border-radius:.5rem;
-      font-size:.72rem; font-weight:700; background:transparent; color:var(--text-muted); cursor:pointer; transition:all .15s; }
-    .tab-row-btn.active { background:rgba(217,119,6,.2); border-color:#d97706; color:#fcd34d; }
+    .contrast-preview { border-radius:.85rem; padding:1.1rem 1.3rem; transition:background .2s,color .2s; margin:.6rem 0; }
+    .contrast-ratio-badge { font-size:2.2rem; font-weight:900; display:block; }
+    .contrast-grid { display:grid; grid-template-columns:1fr 1fr; gap:.5rem; margin-bottom:.6rem; }
+    .shade-grid { display:flex; flex-wrap:wrap; gap:.35rem; margin-top:.7rem; }
+    .shade-cell { display:flex; flex-direction:column; align-items:center; gap:.22rem; }
+    .shade-swatch { width:44px; height:44px; border-radius:.5rem; border:1px solid rgba(255,255,255,.1); cursor:pointer; transition:transform .14s; }
+    .shade-swatch:hover { transform:scale(1.14); }
+    .shade-lbl { font-size:.59rem; font-family:monospace; color:var(--text-muted); }
+    .grad-preview { height:80px; border-radius:.85rem; margin:.5rem 0; }
+    .grad-css { background:rgba(0,0,0,.3); border:1px solid var(--border-subtle); border-radius:.6rem;
+      padding:.5rem .75rem; font-family:monospace; font-size:.78rem; color:#86efac; word-break:break-all; flex:1; }
+    .range-row { display:flex; gap:.5rem; align-items:center; }
+    .angle-val { font-size:.9rem; font-weight:700; color:#a5b4fc; min-width:38px; }
   </style>
 </head>
 <body>
 <div class="app-wrap">
   <div class="main-card">
 
-    <!-- ── Header ──────────────────────────── -->
+    <!-- ── Header ── -->
     <header style="text-align:center;margin-bottom:1.5rem;position:relative;">
       <div class="lang-switcher">
         <button type="button" data-lang-btn="en" class="lang-btn lang-active">EN</button>
         <button type="button" data-lang-btn="tr" class="lang-btn">TR</button>
       </div>
-
       <a href="index.html" class="hub-back-link">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
         SnakeConverter
       </a>
-
       <div style="display:inline-flex;align-items:center;gap:.4rem;background:rgba(217,119,6,.12);border:1px solid rgba(217,119,6,.3);border-radius:999px;padding:.2rem .85rem;font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#fcd34d;margin-bottom:.9rem;">
         <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><circle cx="5" cy="5" r="5"/></svg>
-        <span>HEX · RGB · HSL · CMYK · WCAG</span>
+        HEX · RGB · HSL · CMYK · WCAG
       </div>
-
       <h1 class="site-title" style="background:linear-gradient(135deg,#fbbf24,#f472b6,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Color Tools</h1>
-      <p class="site-sub">Convert, contrast-check, generate shades &amp; gradients</p>
+      <p class="site-sub">Convert colors · Check contrast · Generate shades &amp; gradients</p>
     </header>
 
-    <!-- ── Tab nav ───────────────────────────── -->
-    <nav class="tab-nav tools-tab-nav">
-      <button type="button" data-tab="convert"  class="tab-btn tab-active"><span>Convert</span></button>
-      <button type="button" data-tab="contrast" class="tab-btn"><span>Contrast</span></button>
-      <button type="button" data-tab="shades"   class="tab-btn"><span>Shades</span></button>
-      <button type="button" data-tab="gradient" class="tab-btn"><span>Gradient</span></button>
+    <!-- ── Jump Nav ── -->
+    <nav class="jump-nav">
+      <a href="#convert"  class="jump-link">🎨 Color Converter</a>
+      <a href="#contrast" class="jump-link">👁️ Contrast Checker</a>
+      <a href="#shades"   class="jump-link">🌈 Shade Generator</a>
+      <a href="#gradient" class="jump-link">✨ Gradient Builder</a>
     </nav>
 
-    <!-- ── Color Convert ── -->
-    <div data-panel="convert">
-      <div class="tab-row-btns">
-        <button type="button" class="tab-row-btn active" data-from="hex"  onclick="convMode('hex')">HEX</button>
-        <button type="button" class="tab-row-btn" data-from="rgb"  onclick="convMode('rgb')">RGB</button>
-        <button type="button" class="tab-row-btn" data-from="hsl"  onclick="convMode('hsl')">HSL</button>
-        <button type="button" class="tab-row-btn" data-from="cmyk" onclick="convMode('cmyk')">CMYK</button>
+    <!-- ── Color Converter ── -->
+    <section id="convert" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">🎨</span>
+        <div>
+          <div class="tps-title">Color Converter</div>
+          <div class="tps-desc">HEX ↔ RGB ↔ HSL ↔ CMYK — pick a color or type any format below</div>
+        </div>
       </div>
-      <div class="color-input-wrap">
+      <div class="from-toggle">
+        <button class="from-btn active" data-from="hex"  onclick="convMode('hex',this)">HEX</button>
+        <button class="from-btn"        data-from="rgb"  onclick="convMode('rgb',this)">RGB</button>
+        <button class="from-btn"        data-from="hsl"  onclick="convMode('hsl',this)">HSL</button>
+        <button class="from-btn"        data-from="cmyk" onclick="convMode('cmyk',this)">CMYK</button>
+      </div>
+      <div class="conv-input-row">
         <input type="color" id="conv-picker" class="color-picker-native" value="#6366f1" oninput="convPickerChanged()" />
-        <input type="text"  id="conv-in" class="input-field" placeholder="#6366f1" oninput="convRun()" style="flex:1;font-family:monospace" value="#6366f1" />
+        <input type="text"  id="conv-in" class="input-field" value="#6366f1" placeholder="#6366f1" oninput="convRun()" style="flex:1;font-family:monospace" />
         <button type="button" onclick="convRun()" class="btn-primary">Convert</button>
       </div>
-      <div id="conv-swatch" class="color-swatch" style="background:#6366f1;margin-bottom:.8rem;width:100%;height:64px;border-radius:.85rem;"></div>
-      <div id="conv-out" class="color-row"></div>
-    </div>
+      <div id="conv-swatch" class="color-swatch-bar" style="background:#6366f1"></div>
+      <div id="conv-out" class="color-grid"></div>
+    </section>
 
     <!-- ── Contrast Checker ── -->
-    <div data-panel="contrast" style="display:none">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.6rem;">
+    <section id="contrast" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">👁️</span>
         <div>
-          <label style="font-size:.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;display:block;margin-bottom:.3rem;">Foreground</label>
-          <div class="color-input-wrap" style="margin-bottom:0">
+          <div class="tps-title">Color Contrast Checker</div>
+          <div class="tps-desc">WCAG 2.1 AA/AAA compliance check for any foreground/background color pair</div>
+        </div>
+      </div>
+      <div class="contrast-grid">
+        <div>
+          <label style="font-size:.68rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;display:block;margin-bottom:.3rem;">Foreground</label>
+          <div class="conv-input-row" style="margin-bottom:0">
             <input type="color" id="fg-picker" class="color-picker-native" value="#ffffff" oninput="document.getElementById('fg-in').value=this.value;contrastRun()" />
             <input type="text" id="fg-in" class="input-field" value="#ffffff" style="font-family:monospace" oninput="document.getElementById('fg-picker').value=this.value;contrastRun()" />
           </div>
         </div>
         <div>
-          <label style="font-size:.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;display:block;margin-bottom:.3rem;">Background</label>
-          <div class="color-input-wrap" style="margin-bottom:0">
+          <label style="font-size:.68rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;display:block;margin-bottom:.3rem;">Background</label>
+          <div class="conv-input-row" style="margin-bottom:0">
             <input type="color" id="bg-picker" class="color-picker-native" value="#1e1b4b" oninput="document.getElementById('bg-in').value=this.value;contrastRun()" />
             <input type="text" id="bg-in" class="input-field" value="#1e1b4b" style="font-family:monospace" oninput="document.getElementById('bg-picker').value=this.value;contrastRun()" />
           </div>
         </div>
       </div>
-      <div id="contrast-preview" class="contrast-block" style="background:#1e1b4b;color:#fff">
-        <p style="font-size:1.1rem;font-weight:700;margin:0 0 .3rem;">The quick brown fox jumps over the lazy dog</p>
-        <p style="font-size:.8rem;margin:0">Small text sample for WCAG evaluation</p>
+      <div id="contrast-preview" class="contrast-preview" style="background:#1e1b4b;color:#fff">
+        <p style="font-size:1.1rem;font-weight:700;margin:0 0 .3rem">The quick brown fox jumps over the lazy dog</p>
+        <p style="font-size:.8rem;margin:0">Small text — WCAG AA requires ≥ 4.5:1 for small text</p>
       </div>
-      <div id="contrast-out" style="margin-top:.7rem"></div>
-    </div>
+      <div id="contrast-out"></div>
+    </section>
 
     <!-- ── Shade Generator ── -->
-    <div data-panel="shades" style="display:none">
-      <div class="color-input-wrap">
+    <section id="shades" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">🌈</span>
+        <div>
+          <div class="tps-title">Color Shade Generator</div>
+          <div class="tps-desc">Generate a full lightness scale from any color — click any swatch to copy its HEX</div>
+        </div>
+      </div>
+      <div class="conv-input-row">
         <input type="color" id="shade-picker" class="color-picker-native" value="#6366f1" oninput="document.getElementById('shade-in').value=this.value;shadesRun()" />
         <input type="text" id="shade-in" class="input-field" value="#6366f1" style="flex:1;font-family:monospace" oninput="shadesRun()" />
-        <select id="shade-steps" class="calc-select" style="width:100px;background:rgba(255,255,255,.06);border:1px solid var(--border-subtle);border-radius:.6rem;padding:.55rem .7rem;color:var(--text-primary);font-size:.83rem;outline:none;" onchange="shadesRun()">
+        <select id="shade-steps" style="background:rgba(255,255,255,.06);border:1px solid var(--border-subtle);border-radius:.6rem;padding:.5rem .65rem;color:var(--text-primary);font-size:.8rem;outline:none;" onchange="shadesRun()">
           <option value="10" selected>10 steps</option>
           <option value="20">20 steps</option>
           <option value="5">5 steps</option>
         </select>
       </div>
       <div id="shades-out" class="shade-grid"></div>
-    </div>
+    </section>
 
     <!-- ── Gradient Builder ── -->
-    <div data-panel="gradient" style="display:none">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.6rem;">
+    <section id="gradient" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">✨</span>
         <div>
-          <label style="font-size:.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;display:block;margin-bottom:.3rem;">Color 1</label>
-          <div class="color-input-wrap" style="margin-bottom:0">
+          <div class="tps-title">CSS Gradient Builder</div>
+          <div class="tps-desc">Build linear or radial gradients — copy the CSS ready to paste</div>
+        </div>
+      </div>
+      <div class="contrast-grid" style="margin-bottom:.6rem">
+        <div>
+          <label style="font-size:.68rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;display:block;margin-bottom:.3rem;">Color 1</label>
+          <div class="conv-input-row" style="margin-bottom:0">
             <input type="color" id="g1-picker" class="color-picker-native" value="#6366f1" oninput="document.getElementById('g1-in').value=this.value;gradRun()" />
             <input type="text" id="g1-in" class="input-field" value="#6366f1" style="font-family:monospace" oninput="gradRun()" />
           </div>
         </div>
         <div>
-          <label style="font-size:.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;display:block;margin-bottom:.3rem;">Color 2</label>
-          <div class="color-input-wrap" style="margin-bottom:0">
+          <label style="font-size:.68rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;display:block;margin-bottom:.3rem;">Color 2</label>
+          <div class="conv-input-row" style="margin-bottom:0">
             <input type="color" id="g2-picker" class="color-picker-native" value="#ec4899" oninput="document.getElementById('g2-in').value=this.value;gradRun()" />
             <input type="text" id="g2-in" class="input-field" value="#ec4899" style="font-family:monospace" oninput="gradRun()" />
           </div>
         </div>
       </div>
-      <div style="display:flex;gap:.6rem;align-items:center;margin-bottom:.6rem;">
+      <div style="display:flex;gap:.7rem;align-items:center;margin-bottom:.5rem;flex-wrap:wrap;">
         <div style="flex:1">
-          <label style="font-size:.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;display:block;margin-bottom:.3rem;">Angle</label>
-          <input type="range" id="grad-angle" min="0" max="360" value="135" oninput="document.getElementById('grad-angle-val').textContent=this.value+'°';gradRun()" class="range-input" style="width:100%" />
+          <label style="font-size:.68rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;display:block;margin-bottom:.3rem;">Angle</label>
+          <div class="range-row">
+            <input type="range" id="grad-angle" min="0" max="360" value="135" class="range-input" style="flex:1" oninput="document.getElementById('grad-angle-val').textContent=this.value+'°';gradRun()" />
+            <span id="grad-angle-val" class="angle-val">135°</span>
+          </div>
         </div>
-        <span id="grad-angle-val" style="font-size:.9rem;font-weight:700;color:#a5b4fc;min-width:40px">135°</span>
         <div>
-          <label style="font-size:.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;display:block;margin-bottom:.3rem;">Type</label>
-          <select id="grad-type" class="calc-select" style="background:rgba(255,255,255,.06);border:1px solid var(--border-subtle);border-radius:.6rem;padding:.45rem .6rem;color:var(--text-primary);font-size:.8rem;outline:none;" onchange="gradRun()">
+          <label style="font-size:.68rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;display:block;margin-bottom:.3rem;">Type</label>
+          <select id="grad-type" style="background:rgba(255,255,255,.06);border:1px solid var(--border-subtle);border-radius:.6rem;padding:.48rem .6rem;color:var(--text-primary);font-size:.8rem;outline:none;" onchange="gradRun()">
             <option value="linear">Linear</option>
             <option value="radial">Radial</option>
           </select>
         </div>
       </div>
       <div id="grad-preview" class="grad-preview"></div>
-      <div style="display:flex;align-items:center;gap:.5rem;margin-top:.5rem;">
-        <div id="grad-css" class="grad-css" style="flex:1"></div>
-        <button type="button" onclick="copyEl('grad-css')" class="btn-secondary">Copy</button>
+      <div style="display:flex;gap:.5rem;align-items:center;">
+        <div id="grad-css" class="grad-css"></div>
+        <button type="button" onclick="navigator.clipboard.writeText(document.getElementById('grad-css').textContent)" class="btn-secondary">Copy</button>
       </div>
-    </div>
+    </section>
 
     <div style="margin-top:2.5rem;text-align:center;font-size:.72rem;color:var(--text-dim);">
-      © 2026 SnakeConverter &nbsp;·&nbsp; All processing happens in your browser
+      © 2026 SnakeConverter · All processing happens in your browser
     </div>
 
-  </div><!-- /main-card -->
-</div><!-- /app-wrap -->
+  </div>
+</div>
 
 <script src="js/i18n.js"></script>
 <script src="js/color-tools.js"></script>
 <script>
-/* ── Tab switching ── */
-document.querySelectorAll(".tab-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("tab-active"));
-    document.querySelectorAll("[data-panel]").forEach(p => p.style.display = "none");
-    btn.classList.add("tab-active");
-    document.querySelector(`[data-panel="${btn.dataset.tab}"]`).style.display = "";
-    history.replaceState(null,"","#"+btn.dataset.tab);
-  });
-});
-const hash = location.hash.replace("#","");
-if (hash) { const b = document.querySelector(`[data-tab="${hash}"]`); if(b) b.click(); }
-
 const CT = window.ColorTools;
 
-function copyEl(id) { navigator.clipboard.writeText(document.getElementById(id).textContent||document.getElementById(id).value||"").catch(()=>{}); }
+/* ── Hash routing ── */
+const _hash = location.hash.replace("#","");
+if (_hash) requestAnimationFrame(() => { const el=document.getElementById(_hash); if(el) el.scrollIntoView({behavior:"smooth",block:"start"}); });
 
-/* ── Convert ── */
+/* ── Color Converter ── */
 let convFrom = "hex";
-function convMode(from) {
+function convMode(from, btn) {
   convFrom = from;
-  document.querySelectorAll("[data-from]").forEach(b => b.classList.toggle("active", b.dataset.from === from));
+  btn.closest(".from-toggle").querySelectorAll(".from-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
   const map = { hex:"e.g. #6366f1", rgb:"e.g. 99, 102, 241", hsl:"e.g. 239, 84%, 67%", cmyk:"e.g. 59, 58, 0, 5" };
   document.getElementById("conv-in").placeholder = map[from];
   convRun();
 }
 function convPickerChanged() {
   convFrom = "hex";
-  document.querySelectorAll("[data-from]").forEach(b => b.classList.toggle("active", b.dataset.from === "hex"));
+  document.querySelectorAll(".from-btn").forEach(b => b.classList.toggle("active", b.dataset.from==="hex"));
   document.getElementById("conv-in").value = document.getElementById("conv-picker").value;
   convRun();
 }
@@ -212,7 +231,7 @@ function convRun() {
   const r = CT.convertColor(document.getElementById("conv-in").value, convFrom);
   if (!r) return;
   document.getElementById("conv-swatch").style.background = r.hex;
-  try { document.getElementById("conv-picker").value = r.hex; } catch(e) {}
+  try { document.getElementById("conv-picker").value = r.hex; } catch(e){}
   const items = [
     { label:"HEX",  val: r.hex },
     { label:"RGB",  val: `rgb(${r.rgb.r}, ${r.rgb.g}, ${r.rgb.b})` },
@@ -224,8 +243,7 @@ function convRun() {
       <div class="color-label">${i.label}</div>
       <div class="color-val">${i.val}</div>
       <button class="color-copy" onclick="navigator.clipboard.writeText('${i.val}')">Copy</button>
-    </div>
-  `).join("");
+    </div>`).join("");
 }
 convRun();
 
@@ -233,18 +251,18 @@ convRun();
 function contrastRun() {
   const fg = document.getElementById("fg-in").value;
   const bg = document.getElementById("bg-in").value;
-  const preview = document.getElementById("contrast-preview");
-  preview.style.background = bg; preview.style.color = fg;
+  const prev = document.getElementById("contrast-preview");
+  prev.style.background = bg; prev.style.color = fg;
   const r = CT.contrastRatio(fg, bg);
   if (!r) return;
   const badge = (pass, label) => `<span class="wcag-tag ${pass?"wcag-pass":"wcag-fail"}">${pass?"✓":"✗"} ${label}</span>`;
+  const color = r.ratio>=4.5?"#6ee7b7":r.ratio>=3?"#fbbf24":"#f87171";
   document.getElementById("contrast-out").innerHTML = `
     <div style="background:rgba(255,255,255,.04);border:1px solid var(--border-subtle);border-radius:.85rem;padding:.9rem 1rem;">
-      <div style="font-size:2rem;font-weight:900;color:${r.ratio>=4.5?"#6ee7b7":r.ratio>=3?"#fbbf24":"#f87171"}">${r.ratio}:1</div>
-      <div style="font-size:.75rem;color:var(--text-muted);margin:.3rem 0 .6rem">Contrast Ratio</div>
-      ${badge(r.aaSmall,"AA Small")} ${badge(r.aaLarge,"AA Large")} ${badge(r.aaaSmal,"AAA Small")} ${badge(r.aaaLarge,"AAA Large")}
-    </div>
-  `;
+      <span class="contrast-ratio-badge" style="color:${color}">${r.ratio}:1</span>
+      <div style="font-size:.72rem;color:var(--text-muted);margin:.25rem 0 .6rem">Contrast Ratio</div>
+      ${badge(r.aaSmall,"AA Normal")} ${badge(r.aaLarge,"AA Large")} ${badge(r.aaaSmal,"AAA Normal")} ${badge(r.aaaLarge,"AAA Large")}
+    </div>`;
 }
 contrastRun();
 
@@ -256,20 +274,19 @@ function shadesRun() {
   document.getElementById("shades-out").innerHTML = shades.map(s => `
     <div class="shade-cell">
       <div class="shade-swatch" style="background:${s.hex}" title="${s.hex}" onclick="navigator.clipboard.writeText('${s.hex}')"></div>
-      <div class="shade-label">${s.hex}</div>
-      <div class="shade-label" style="color:var(--text-dim)">L:${s.l}%</div>
-    </div>
-  `).join("");
+      <div class="shade-lbl">${s.hex}</div>
+      <div class="shade-lbl" style="color:var(--text-dim)">L ${s.l}%</div>
+    </div>`).join("");
 }
 shadesRun();
 
 /* ── Gradient ── */
 function gradRun() {
-  const c1 = document.getElementById("g1-in").value;
-  const c2 = document.getElementById("g2-in").value;
-  const angle = document.getElementById("grad-angle").value;
-  const type  = document.getElementById("grad-type").value;
-  const css = CT.gradientCSS(c1, c2, angle, type);
+  const c1  = document.getElementById("g1-in").value;
+  const c2  = document.getElementById("g2-in").value;
+  const ang = document.getElementById("grad-angle").value;
+  const typ = document.getElementById("grad-type").value;
+  const css = CT.gradientCSS(c1, c2, ang, typ);
   document.getElementById("grad-preview").style.background = css;
   document.getElementById("grad-css").textContent = `background: ${css};`;
 }

@@ -930,6 +930,67 @@ body::before {
   cursor: pointer;
 }
 
+/* ── Jump Navigation (replaces scrollable tab bars) ─────── */
+.jump-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin-bottom: 1.5rem;
+}
+.jump-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: .32rem .75rem;
+  border-radius: .6rem;
+  border: 1px solid var(--border-subtle);
+  background: rgba(255,255,255,.04);
+  color: var(--text-muted);
+  font-size: .74rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background .16s, color .16s, border-color .16s;
+  white-space: nowrap;
+}
+.jump-link:hover {
+  background: rgba(255,255,255,.09);
+  color: var(--text-primary);
+  border-color: var(--border-glow);
+}
+
+/* ── Tool Page Section Cards ─────────────────────────── */
+.tool-page-section {
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--border-subtle);
+  border-radius: 1.2rem;
+  padding: 1.3rem 1.5rem;
+  scroll-margin-top: 1rem;
+}
+.tool-page-section + .tool-page-section { margin-top: 1rem; }
+
+/* Section header with icon + title + desc */
+.tps-header {
+  display: flex;
+  align-items: flex-start;
+  gap: .75rem;
+  margin-bottom: 1rem;
+  padding-bottom: .85rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.tps-icon { font-size: 1.4rem; line-height: 1; flex-shrink: 0; margin-top: .1rem; }
+.tps-title { font-size: .92rem; font-weight: 800; color: var(--text-primary); }
+.tps-desc  { font-size: .72rem; color: var(--text-muted); margin-top: .18rem; line-height: 1.4; }
+.tps-badge {
+  display: inline-flex; align-items: center; gap: .25rem; margin-left: auto; flex-shrink: 0;
+  padding: .15rem .5rem; border-radius: .4rem; font-size: .63rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .07em;
+  background: rgba(99,102,241,.15); color: #a5b4fc; border: 1px solid rgba(99,102,241,.25);
+}
+
+/* Two-column tool grid for wider pages */
+.tools-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 680px) { .tools-2col { grid-template-columns: 1fr; } }
+
 /* BMI gauge */
 .bmi-bar-wrap { position: relative; margin: 0.25rem 0 1.5rem; }
 .bmi-bar-track {
