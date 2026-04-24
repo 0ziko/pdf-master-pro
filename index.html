@@ -7,292 +7,383 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="css/app.css" />
   <style>
-    /* Landing-specific overrides */
-    .hub-hero { text-align:center; padding-bottom:0; margin-bottom:0; }
-    .hub-search-wrap { max-width:420px; margin:.8rem auto 0; position:relative; }
-    .hub-search { width:100%; background:rgba(255,255,255,.06); border:1px solid var(--border-subtle);
-      border-radius:999px; padding:.55rem 1rem .55rem 2.4rem; color:var(--text-primary);
-      font-size:.85rem; outline:none; transition:border-color .2s; }
-    .hub-search:focus { border-color:var(--border-glow); }
-    .hub-search-icon { position:absolute; left:.85rem; top:50%; transform:translateY(-50%);
-      color:var(--text-muted); pointer-events:none; }
-    .hub-section { margin-top:2rem; }
-    .hub-section-title { font-size:.68rem; font-weight:800; letter-spacing:.14em;
-      text-transform:uppercase; color:var(--text-muted); margin-bottom:.85rem;
-      display:flex; align-items:center; gap:.5rem; }
-    .hub-section-title::after { content:''; flex:1; height:1px; background:var(--border-subtle); }
-    .hub-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:.6rem; }
-    .tool-card { display:flex; flex-direction:column; gap:.35rem;
-      background:rgba(255,255,255,.04); border:1px solid var(--border-subtle);
-      border-radius:1rem; padding:.85rem 1rem; cursor:pointer; text-decoration:none;
-      transition:transform .18s, box-shadow .18s, border-color .18s, background .18s; }
-    .tool-card:hover { transform:translateY(-3px);
-      box-shadow:0 8px 28px -8px rgba(0,0,0,.45); background:rgba(255,255,255,.07); }
-    .tool-card-icon { width:32px; height:32px; border-radius:.6rem;
-      display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-    .tool-card-icon svg { width:17px; height:17px; }
-    .tool-card-name { font-size:.82rem; font-weight:700; color:var(--text-primary); }
-    .tool-card-desc { font-size:.72rem; color:var(--text-muted); line-height:1.4; }
-    .tool-card-arrow { font-size:.75rem; color:var(--text-dim); margin-top:auto; align-self:flex-end; }
-    .tool-card:hover .tool-card-arrow { color:var(--text-muted); }
-    /* accent colours per category */
-    .acc-pdf   { border-left:3px solid #7c3aed; } .acc-pdf   .tool-card-icon { background:rgba(124,58,237,.18); color:#a78bfa; }
-    .acc-text  { border-left:3px solid #2563eb; } .acc-text  .tool-card-icon { background:rgba(37,99,235,.18); color:#93c5fd; }
-    .acc-calc  { border-left:3px solid #059669; } .acc-calc  .tool-card-icon { background:rgba(5,150,105,.18); color:#6ee7b7; }
-    .acc-gen   { border-left:3px solid #d97706; } .acc-gen   .tool-card-icon { background:rgba(217,119,6,.18); color:#fcd34d; }
-    .acc-unit  { border-left:3px solid #6366f1; } .acc-unit  .tool-card-icon { background:rgba(99,102,241,.18); color:#a5b4fc; font-size:1.1rem; }
-    .acc-dev   { border-left:3px solid #8b5cf6; } .acc-dev   .tool-card-icon { background:rgba(139,92,246,.18); color:#c4b5fd; }
-    .acc-color { border-left:3px solid #ec4899; } .acc-color .tool-card-icon { background:rgba(236,72,153,.12); font-size:1.1rem; }
-    /* hide cards that don't match search */
-    .tool-card.hidden { display:none; }
+    /* ── Reset main card to full-width directory feel ── */
+    .main-card { max-width: 960px; padding: 0; background: var(--card-bg); }
+
+    /* ── Compact hero ── */
+    .hero {
+      text-align: center;
+      padding: 2rem 2rem 1.4rem;
+      border-bottom: 1px solid var(--border-subtle);
+      position: relative;
+    }
+    .hero .snake-stage { margin-bottom: .5rem; }
+    .hero .site-title  { margin: .2rem 0 .1rem; font-size: 1.9rem; }
+    .hero .site-sub    { margin-bottom: .8rem; font-size: .8rem; }
+
+    /* Search */
+    .search-wrap { max-width: 380px; margin: 0 auto; position: relative; }
+    .search-icon { position: absolute; left: .85rem; top: 50%; transform: translateY(-50%);
+      color: var(--text-muted); pointer-events: none; }
+    .search-input { width: 100%; background: rgba(255,255,255,.06);
+      border: 1px solid var(--border-subtle); border-radius: 999px;
+      padding: .52rem 1rem .52rem 2.4rem; color: var(--text-primary);
+      font-size: .83rem; outline: none; transition: border-color .2s; }
+    .search-input:focus { border-color: var(--border-glow); }
+
+    /* ── Directory grid ── */
+    .dir-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      border-top: 1px solid var(--border-subtle);
+    }
+    @media (max-width: 820px) { .dir-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 540px) { .dir-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    /* ── Directory column ── */
+    .dir-col {
+      border-right: 1px solid var(--border-subtle);
+      padding: 1.2rem 1rem 1.5rem;
+    }
+    .dir-col:last-child { border-right: none; }
+
+    /* Category header */
+    .dir-cat {
+      display: flex; align-items: center; gap: .4rem;
+      font-size: .68rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .1em; margin-bottom: .9rem; padding-bottom: .5rem;
+      border-bottom: 2px solid currentColor;
+    }
+    .dir-cat-icon { font-size: 1rem; }
+
+    /* Accent colors per category */
+    .cat-pdf   { color: #a78bfa; border-color: #7c3aed; }
+    .cat-units { color: #a5b4fc; border-color: #6366f1; }
+    .cat-text  { color: #93c5fd; border-color: #2563eb; }
+    .cat-dev   { color: #c4b5fd; border-color: #8b5cf6; }
+    .cat-calc  { color: #6ee7b7; border-color: #059669; }
+    .cat-color { color: #fcd34d; border-color: #d97706; }
+
+    /* Tool item links */
+    .dir-item {
+      display: flex; align-items: flex-start; gap: .45rem;
+      padding: .32rem .25rem; border-radius: .4rem;
+      color: var(--text-muted); text-decoration: none;
+      font-size: .8rem; line-height: 1.3; transition: all .15s;
+      cursor: pointer;
+    }
+    .dir-item:hover {
+      color: var(--text-primary);
+      background: rgba(255,255,255,.06);
+      padding-left: .5rem;
+    }
+    .dir-item.hidden { display: none; }
+    .dir-item-icon { font-size: .95rem; flex-shrink: 0; margin-top: .05rem; }
+    .dir-item-text { display: flex; flex-direction: column; }
+    .dir-item-name { font-weight: 700; font-size: .79rem; color: var(--text-primary); }
+    .dir-item-desc { font-size: .68rem; color: var(--text-dim); line-height: 1.3; }
+
+    /* "View all" link at bottom of column */
+    .dir-view-all {
+      display: inline-flex; align-items: center; gap: .25rem;
+      font-size: .68rem; font-weight: 700; text-decoration: none;
+      margin-top: .8rem; color: var(--text-dim); transition: color .15s;
+    }
+    .dir-view-all:hover { color: var(--text-muted); }
+
+    /* Hide entire column when search empty */
+    .dir-col.hidden { display: none; }
+
+    /* Footer */
+    .dir-footer {
+      text-align: center; font-size: .7rem; color: var(--text-dim);
+      padding: .9rem; border-top: 1px solid var(--border-subtle);
+    }
+
+    /* Lang switcher position inside hero */
+    .lang-switcher { position: absolute; top: 1rem; right: 1.2rem; }
   </style>
 </head>
 <body>
 <div class="app-wrap">
   <div class="main-card">
 
-    <!-- ── Hero ────────────────────────────────── -->
-    <header class="hub-hero" style="position:relative;">
+    <!-- ══ Hero ══════════════════════════════════════ -->
+    <div class="hero">
       <div class="lang-switcher">
         <button type="button" data-lang-btn="en" class="lang-btn lang-active">EN</button>
         <button type="button" data-lang-btn="tr" class="lang-btn">TR</button>
       </div>
 
-      <div class="snake-stage" style="margin-bottom:.5rem;">
+      <div class="snake-stage" style="margin-bottom:.4rem;">
         <div class="snake-chomp-wrap">
           <canvas id="snakeCanvas"></canvas>
           <span id="snakeChomp" class="snake-chomp"></span>
         </div>
-        <p id="snakeCaption" class="snake-caption">Pick a tool and let's go! 🐍</p>
+        <p id="snakeCaption" class="snake-caption" style="margin-bottom:.2rem;">Pick a tool and let's go! 🐍</p>
       </div>
 
       <h1 class="site-title">SnakeConverter</h1>
-      <p class="site-sub">Your all-in-one browser toolkit — zero uploads, zero servers</p>
+      <p class="site-sub">50+ free browser tools — zero uploads, zero servers</p>
 
-      <!-- Search -->
-      <div class="hub-search-wrap">
-        <svg class="hub-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" class="hub-search" placeholder="Search tools…" oninput="filterTools(this.value)" />
+      <div class="search-wrap">
+        <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" class="search-input" placeholder="Search tools…" oninput="filterDir(this.value)" />
       </div>
-    </header>
+    </div>
 
-    <!-- ── PDF Tools ──────────────────────────── -->
-    <section class="hub-section">
-      <div class="hub-section-title">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        PDF Tools
-      </div>
-      <div class="hub-cards">
-        <a href="pdf.html#excel" class="tool-card acc-pdf" data-name="excel pdf convert spreadsheet">
-          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/></svg></div>
-          <div class="tool-card-name">Excel → PDF</div>
-          <div class="tool-card-desc">Convert .xlsx, .xls, .csv to PDF with full Unicode support</div>
-          <span class="tool-card-arrow">Open →</span>
-        </a>
-        <a href="pdf.html#image" class="tool-card acc-pdf" data-name="image photo picture png jpg pdf convert">
-          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
-          <div class="tool-card-name">Image → PDF</div>
-          <div class="tool-card-desc">Wrap PNG, JPEG, WebP, GIF or BMP into a PDF page</div>
-          <span class="tool-card-arrow">Open →</span>
-        </a>
-        <a href="pdf.html#merge" class="tool-card acc-pdf" data-name="merge combine join pdf">
-          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-3"/><path d="M15 3H9l-1 3h8l-1-3z"/></svg></div>
-          <div class="tool-card-name">Merge PDFs</div>
-          <div class="tool-card-desc">Combine multiple PDFs into one — supports password-protected files</div>
-          <span class="tool-card-arrow">Open →</span>
-        </a>
-        <a href="pdf.html#split" class="tool-card acc-pdf" data-name="split extract pages pdf zip">
-          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="22"/><polyline points="7 7 12 2 17 7"/><polyline points="7 17 12 22 17 17"/></svg></div>
-          <div class="tool-card-name">Split PDF</div>
-          <div class="tool-card-desc">Extract each page or custom ranges — output as ZIP</div>
-          <span class="tool-card-arrow">Open →</span>
-        </a>
-        <a href="pdf.html#encrypt" class="tool-card acc-pdf" data-name="encrypt lock password secure pdf">
-          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
-          <div class="tool-card-name">Encrypt PDF</div>
-          <div class="tool-card-desc">Lock a PDF with a password or remove existing encryption</div>
-          <span class="tool-card-arrow">Open →</span>
-        </a>
-      </div>
-    </section>
+    <!-- ══ Directory ══════════════════════════════════ -->
+    <div class="dir-grid" id="dirGrid">
 
-    <!-- ── Text Tools ─────────────────────────── -->
-    <section class="hub-section">
-      <div class="hub-section-title">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>
-        Text Tools
+      <!-- ── PDF Tools ── -->
+      <div class="dir-col" data-col="pdf">
+        <div class="dir-cat cat-pdf">
+          <span class="dir-cat-icon">📄</span> PDF Tools
+        </div>
+        <a href="pdf.html#excel"   class="dir-item" data-search="excel spreadsheet xls csv convert pdf">
+          <span class="dir-item-icon">📊</span>
+          <span class="dir-item-text"><span class="dir-item-name">Excel → PDF</span><span class="dir-item-desc">xlsx, xls, csv with full Unicode</span></span>
+        </a>
+        <a href="pdf.html#image"   class="dir-item" data-search="image photo jpg png webp bmp convert pdf">
+          <span class="dir-item-icon">🖼️</span>
+          <span class="dir-item-text"><span class="dir-item-name">Image → PDF</span><span class="dir-item-desc">PNG, JPEG, WebP, GIF, BMP</span></span>
+        </a>
+        <a href="pdf.html#merge"   class="dir-item" data-search="merge combine join pdf multiple files">
+          <span class="dir-item-icon">🔗</span>
+          <span class="dir-item-text"><span class="dir-item-name">Merge PDFs</span><span class="dir-item-desc">Combine multiple PDFs into one</span></span>
+        </a>
+        <a href="pdf.html#split"   class="dir-item" data-search="split extract pages pdf zip">
+          <span class="dir-item-icon">✂️</span>
+          <span class="dir-item-text"><span class="dir-item-name">Split PDF</span><span class="dir-item-desc">Extract pages or custom ranges</span></span>
+        </a>
+        <a href="pdf.html#encrypt" class="dir-item" data-search="encrypt lock password protect pdf">
+          <span class="dir-item-icon">🔒</span>
+          <span class="dir-item-text"><span class="dir-item-name">Encrypt / Decrypt</span><span class="dir-item-desc">Password-protect or unlock PDFs</span></span>
+        </a>
+        <a href="pdf.html" class="dir-view-all">All PDF tools →</a>
       </div>
-      <div class="hub-cards">
-        <a href="tools.html#words" class="tool-card acc-text" data-name="word count character sentence paragraph reading">
-          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="12" y2="17"/></svg></div>
-          <div class="tool-card-name">Word Counter</div>
-          <div class="tool-card-desc">Words, characters, sentences, paragraphs, reading time</div>
-          <span class="tool-card-arrow">Open →</span>
-        </a>
-        <a href="tools.html#case" class="tool-card acc-text" data-name="uppercase lowercase title camel snake kebab case convert">
-          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg></div>
-          <div class="tool-card-name">Text Case</div>
-          <div class="tool-card-desc">UPPER, lower, Title, camelCase, snake_case, kebab-case &amp; more</div>
-          <span class="tool-card-arrow">Open →</span>
-        </a>
-        <a href="tools.html#base64" class="tool-card acc-text" data-name="base64 encode decode convert">
-          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
-          <div class="tool-card-name">Base64</div>
-          <div class="tool-card-desc">Encode text to Base64 or decode Base64 back to text</div>
-          <span class="tool-card-arrow">Open →</span>
-        </a>
-      </div>
-    </section>
 
-    <!-- ── Calculators ────────────────────────── -->
-    <section class="hub-section">
-      <div class="hub-section-title">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>
-        Calculators
+      <!-- ── Unit Converters ── -->
+      <div class="dir-col" data-col="units">
+        <div class="dir-cat cat-units">
+          <span class="dir-cat-icon">📏</span> Unit Converters
+        </div>
+        <a href="units.html#length"      class="dir-item" data-search="length distance km miles feet inches meter">
+          <span class="dir-item-icon">📏</span>
+          <span class="dir-item-text"><span class="dir-item-name">Length</span><span class="dir-item-desc">km, m, cm, miles, ft, in</span></span>
+        </a>
+        <a href="units.html#weight"      class="dir-item" data-search="weight mass kg lbs pounds grams ounces">
+          <span class="dir-item-icon">⚖️</span>
+          <span class="dir-item-text"><span class="dir-item-name">Weight / Mass</span><span class="dir-item-desc">kg, g, lbs, oz, stones</span></span>
+        </a>
+        <a href="units.html#temperature" class="dir-item" data-search="temperature celsius fahrenheit kelvin">
+          <span class="dir-item-icon">🌡️</span>
+          <span class="dir-item-text"><span class="dir-item-name">Temperature</span><span class="dir-item-desc">°C, °F, K, °R</span></span>
+        </a>
+        <a href="units.html#area"        class="dir-item" data-search="area square meter feet acres hectare">
+          <span class="dir-item-icon">📐</span>
+          <span class="dir-item-text"><span class="dir-item-name">Area</span><span class="dir-item-desc">m², km², ft², acres, hectares</span></span>
+        </a>
+        <a href="units.html#volume"      class="dir-item" data-search="volume liter gallon cup fluid ounce">
+          <span class="dir-item-icon">🧪</span>
+          <span class="dir-item-text"><span class="dir-item-name">Volume</span><span class="dir-item-desc">L, mL, gallons, cups, fl oz</span></span>
+        </a>
+        <a href="units.html#speed"       class="dir-item" data-search="speed km/h mph knot mach velocity">
+          <span class="dir-item-icon">💨</span>
+          <span class="dir-item-text"><span class="dir-item-name">Speed</span><span class="dir-item-desc">km/h, mph, m/s, knots, Mach</span></span>
+        </a>
+        <a href="units.html#data"        class="dir-item" data-search="data storage byte kilobyte megabyte gigabyte">
+          <span class="dir-item-icon">💾</span>
+          <span class="dir-item-text"><span class="dir-item-name">Data Storage</span><span class="dir-item-desc">B, KB, MB, GB, TB, PB</span></span>
+        </a>
+        <a href="units.html#time"        class="dir-item" data-search="time duration seconds minutes hours days">
+          <span class="dir-item-icon">⏱️</span>
+          <span class="dir-item-text"><span class="dir-item-name">Time Duration</span><span class="dir-item-desc">ms, s, min, h, days, weeks, yr</span></span>
+        </a>
+        <a href="units.html#energy"      class="dir-item" data-search="energy joule calorie kwh btu">
+          <span class="dir-item-icon">⚡</span>
+          <span class="dir-item-text"><span class="dir-item-name">Energy</span><span class="dir-item-desc">J, kJ, cal, kcal, kWh, BTU</span></span>
+        </a>
+        <a href="units.html#pressure"    class="dir-item" data-search="pressure pascal bar psi atm mmhg">
+          <span class="dir-item-icon">🔵</span>
+          <span class="dir-item-text"><span class="dir-item-name">Pressure</span><span class="dir-item-desc">Pa, bar, psi, atm, mmHg</span></span>
+        </a>
+        <a href="units.html#fuel"        class="dir-item" data-search="fuel efficiency mpg l/100km km/l">
+          <span class="dir-item-icon">⛽</span>
+          <span class="dir-item-text"><span class="dir-item-name">Fuel Efficiency</span><span class="dir-item-desc">L/100km, km/L, MPG</span></span>
+        </a>
+        <a href="units.html" class="dir-view-all">All unit converters →</a>
       </div>
-      <div class="hub-cards">
-        <a href="tools.html#age" class="tool-card acc-calc" data-name="age birthday calculator years months days">
-          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
-          <div class="tool-card-name">Age Calculator</div>
-          <div class="tool-card-desc">Exact age in years, months, days — plus next birthday countdown</div>
-          <span class="tool-card-arrow">Open →</span>
-        </a>
-        <a href="tools.html#bmi" class="tool-card acc-calc" data-name="bmi body mass index weight height calculator">
-          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
-          <div class="tool-card-name">BMI Calculator</div>
-          <div class="tool-card-desc">Body Mass Index with visual gauge and healthy weight range</div>
-          <span class="tool-card-arrow">Open →</span>
-        </a>
-        <a href="tools.html#percent" class="tool-card acc-calc" data-name="percentage percent calculator change">
-          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg></div>
-          <div class="tool-card-name">Percentage</div>
-          <div class="tool-card-desc">X% of Y · X is what % of Y? · Percentage change</div>
-          <span class="tool-card-arrow">Open →</span>
-        </a>
-        <a href="tools.html#unix" class="tool-card acc-calc" data-name="unix timestamp date time converter epoch">
-          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
-          <div class="tool-card-name">Unix Timestamp</div>
-          <div class="tool-card-desc">Live epoch clock · Date ↔ Unix conversion</div>
-          <span class="tool-card-arrow">Open →</span>
-        </a>
-      </div>
-    </section>
 
-    <!-- ── Generators ─────────────────────────── -->
-    <section class="hub-section">
-      <div class="hub-section-title">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/></svg>
-        Generators
-      </div>
-      <div class="hub-cards">
-        <a href="tools.html#random" class="tool-card acc-gen" data-name="random number generator dice">
-          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/><line x1="4" y1="4" x2="9" y2="9"/></svg></div>
-          <div class="tool-card-name">Random Number</div>
-          <div class="tool-card-desc">Generate random integers with range, count, and uniqueness options</div>
-          <span class="tool-card-arrow">Open →</span>
+      <!-- ── Text & Utility Tools ── -->
+      <div class="dir-col" data-col="text">
+        <div class="dir-cat cat-text">
+          <span class="dir-cat-icon">✍️</span> Text &amp; Utility
+        </div>
+        <a href="tools.html#words"   class="dir-item" data-search="word count character sentence paragraph reading time">
+          <span class="dir-item-icon">📊</span>
+          <span class="dir-item-text"><span class="dir-item-name">Word Counter</span><span class="dir-item-desc">Words, chars, sentences, read time</span></span>
         </a>
-        <a href="tools.html#pass" class="tool-card acc-gen" data-name="password generator secure strong">
-          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
-          <div class="tool-card-name">Password Generator</div>
-          <div class="tool-card-desc">Cryptographically secure passwords with strength indicator</div>
-          <span class="tool-card-arrow">Open →</span>
+        <a href="tools.html#case"    class="dir-item" data-search="uppercase lowercase title camel snake kebab case">
+          <span class="dir-item-icon">Aa</span>
+          <span class="dir-item-text"><span class="dir-item-name">Text Case</span><span class="dir-item-desc">UPPER, lower, Title, camelCase…</span></span>
         </a>
-        <a href="tools.html#qr" class="tool-card acc-gen" data-name="qr code generator url link">
-          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div>
-          <div class="tool-card-name">QR Code</div>
-          <div class="tool-card-desc">Generate downloadable QR codes for any text or URL</div>
-          <span class="tool-card-arrow">Open →</span>
+        <a href="tools.html#base64"  class="dir-item" data-search="base64 encode decode convert text">
+          <span class="dir-item-icon">&lt;/&gt;</span>
+          <span class="dir-item-text"><span class="dir-item-name">Base64</span><span class="dir-item-desc">Encode or decode Base64 strings</span></span>
         </a>
-        <a href="dev.html#lorem" class="tool-card acc-gen" data-name="lorem ipsum placeholder text generator">
-          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg></div>
-          <div class="tool-card-name">Lorem Ipsum</div>
-          <div class="tool-card-desc">Generate placeholder text — choose paragraphs and sentences</div>
-          <span class="tool-card-arrow">Open →</span>
+        <a href="tools.html#age"     class="dir-item" data-search="age birthday calculator years months days">
+          <span class="dir-item-icon">🎂</span>
+          <span class="dir-item-text"><span class="dir-item-name">Age Calculator</span><span class="dir-item-desc">Exact age + birthday countdown</span></span>
         </a>
-        <a href="dev.html#uuid" class="tool-card acc-gen" data-name="uuid guid generator unique id">
-          <div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 010 14.14M4.93 4.93a10 10 0 000 14.14"/></svg></div>
-          <div class="tool-card-name">UUID Generator</div>
-          <div class="tool-card-desc">Generate multiple v4 UUIDs for use in apps and databases</div>
-          <span class="tool-card-arrow">Open →</span>
+        <a href="tools.html#bmi"     class="dir-item" data-search="bmi body mass index weight height">
+          <span class="dir-item-icon">❤️</span>
+          <span class="dir-item-text"><span class="dir-item-name">BMI Calculator</span><span class="dir-item-desc">Body Mass Index with visual gauge</span></span>
         </a>
+        <a href="tools.html#percent" class="dir-item" data-search="percentage percent calculator change">
+          <span class="dir-item-icon">%</span>
+          <span class="dir-item-text"><span class="dir-item-name">Percentage</span><span class="dir-item-desc">X% of Y · What % · % Change</span></span>
+        </a>
+        <a href="tools.html#random"  class="dir-item" data-search="random number generator dice">
+          <span class="dir-item-icon">🎲</span>
+          <span class="dir-item-text"><span class="dir-item-name">Random Number</span><span class="dir-item-desc">Range, count, unique options</span></span>
+        </a>
+        <a href="tools.html#pass"    class="dir-item" data-search="password generator secure strong">
+          <span class="dir-item-icon">🔐</span>
+          <span class="dir-item-text"><span class="dir-item-name">Password Generator</span><span class="dir-item-desc">Secure passwords + strength meter</span></span>
+        </a>
+        <a href="tools.html#qr"      class="dir-item" data-search="qr code generator url link">
+          <span class="dir-item-icon">📱</span>
+          <span class="dir-item-text"><span class="dir-item-name">QR Code</span><span class="dir-item-desc">Generate downloadable QR codes</span></span>
+        </a>
+        <a href="tools.html#unix"    class="dir-item" data-search="unix timestamp date time converter epoch">
+          <span class="dir-item-icon">⏱</span>
+          <span class="dir-item-text"><span class="dir-item-name">Unix Timestamp</span><span class="dir-item-desc">Live epoch clock · Date conversion</span></span>
+        </a>
+        <a href="tools.html" class="dir-view-all">All utility tools →</a>
       </div>
-    </section>
 
-    <!-- ── Unit Converters ────────────────────── -->
-    <section class="hub-section" style="--acc:#6366f1;">
-      <div class="hub-section-title">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 3H5a2 2 0 00-2 2v3"/><path d="M21 8V5a2 2 0 00-2-2h-3"/><path d="M3 16v3a2 2 0 002 2h3"/><path d="M16 21h3a2 2 0 002-2v-3"/></svg>
-        Unit Converters
+      <!-- ── Developer Tools ── -->
+      <div class="dir-col" data-col="dev">
+        <div class="dir-cat cat-dev">
+          <span class="dir-cat-icon">💻</span> Developer
+        </div>
+        <a href="dev.html#json"  class="dir-item" data-search="json formatter validator minify beautify">
+          <span class="dir-item-icon">{ }</span>
+          <span class="dir-item-text"><span class="dir-item-name">JSON Formatter</span><span class="dir-item-desc">Format, validate, or minify JSON</span></span>
+        </a>
+        <a href="dev.html#hash"  class="dir-item" data-search="sha hash sha256 sha512 sha1 generator">
+          <span class="dir-item-icon">🔒</span>
+          <span class="dir-item-text"><span class="dir-item-name">Hash Generator</span><span class="dir-item-desc">SHA-1, SHA-256, SHA-384, SHA-512</span></span>
+        </a>
+        <a href="dev.html#uuid"  class="dir-item" data-search="uuid guid generator unique id">
+          <span class="dir-item-icon">🔑</span>
+          <span class="dir-item-text"><span class="dir-item-name">UUID Generator</span><span class="dir-item-desc">Cryptographically secure v4 UUIDs</span></span>
+        </a>
+        <a href="dev.html#regex" class="dir-item" data-search="regex tester pattern match flags">
+          <span class="dir-item-icon">🔍</span>
+          <span class="dir-item-text"><span class="dir-item-name">Regex Tester</span><span class="dir-item-desc">Live pattern matching + highlighting</span></span>
+        </a>
+        <a href="dev.html#url"   class="dir-item" data-search="url encode decode percent encoding">
+          <span class="dir-item-icon">🔗</span>
+          <span class="dir-item-text"><span class="dir-item-name">URL Encode / Decode</span><span class="dir-item-desc">Percent-encode or decode URLs</span></span>
+        </a>
+        <a href="dev.html#html"  class="dir-item" data-search="html entity encode decode escape">
+          <span class="dir-item-icon">&lt;/&gt;</span>
+          <span class="dir-item-text"><span class="dir-item-name">HTML Entities</span><span class="dir-item-desc">Escape/unescape HTML characters</span></span>
+        </a>
+        <a href="dev.html#base"  class="dir-item" data-search="binary octal decimal hexadecimal base converter">
+          <span class="dir-item-icon">01</span>
+          <span class="dir-item-text"><span class="dir-item-name">Base Converter</span><span class="dir-item-desc">Binary ↔ Octal ↔ Decimal ↔ Hex</span></span>
+        </a>
+        <a href="dev.html#roman" class="dir-item" data-search="roman numeral converter number">
+          <span class="dir-item-icon">Ⅻ</span>
+          <span class="dir-item-text"><span class="dir-item-name">Roman Numerals</span><span class="dir-item-desc">Numbers 1–3999 ↔ Roman notation</span></span>
+        </a>
+        <a href="dev.html#lorem" class="dir-item" data-search="lorem ipsum placeholder text generator">
+          <span class="dir-item-icon">✍️</span>
+          <span class="dir-item-text"><span class="dir-item-name">Lorem Ipsum</span><span class="dir-item-desc">Placeholder text generator</span></span>
+        </a>
+        <a href="dev.html#md"    class="dir-item" data-search="markdown preview html render">
+          <span class="dir-item-icon">📝</span>
+          <span class="dir-item-text"><span class="dir-item-name">Markdown Preview</span><span class="dir-item-desc">Live side-by-side MD rendering</span></span>
+        </a>
+        <a href="dev.html" class="dir-view-all">All dev tools →</a>
       </div>
-      <div class="hub-cards">
-        <a href="units.html#length"      class="tool-card acc-unit" data-name="length distance km miles feet inches meter centimeter converter"><div class="tool-card-icon">📏</div><div class="tool-card-name">Length</div><div class="tool-card-desc">km, m, cm, mm, miles, yards, feet, inches & more</div><span class="tool-card-arrow">Open →</span></a>
-        <a href="units.html#weight"      class="tool-card acc-unit" data-name="weight mass kg lbs pounds grams ounces converter"><div class="tool-card-icon">⚖️</div><div class="tool-card-name">Weight / Mass</div><div class="tool-card-desc">kg, g, mg, pounds, ounces, stones, metric tons</div><span class="tool-card-arrow">Open →</span></a>
-        <a href="units.html#temperature" class="tool-card acc-unit" data-name="temperature celsius fahrenheit kelvin converter"><div class="tool-card-icon">🌡️</div><div class="tool-card-name">Temperature</div><div class="tool-card-desc">Celsius ↔ Fahrenheit ↔ Kelvin ↔ Rankine</div><span class="tool-card-arrow">Open →</span></a>
-        <a href="units.html#area"        class="tool-card acc-unit" data-name="area square meter feet acres hectare converter"><div class="tool-card-icon">📐</div><div class="tool-card-name">Area</div><div class="tool-card-desc">m², km², ft², acres, hectares, square miles</div><span class="tool-card-arrow">Open →</span></a>
-        <a href="units.html#volume"      class="tool-card acc-unit" data-name="volume liter gallon cup fluid ounce pint converter"><div class="tool-card-icon">🧪</div><div class="tool-card-name">Volume</div><div class="tool-card-desc">liters, mL, gallons, cups, fl oz, tablespoons</div><span class="tool-card-arrow">Open →</span></a>
-        <a href="units.html#speed"       class="tool-card acc-unit" data-name="speed velocity km/h mph knot mach converter"><div class="tool-card-icon">💨</div><div class="tool-card-name">Speed</div><div class="tool-card-desc">km/h, mph, m/s, knots, Mach, speed of light</div><span class="tool-card-arrow">Open →</span></a>
-        <a href="units.html#data"        class="tool-card acc-unit" data-name="data storage byte kilobyte megabyte gigabyte converter"><div class="tool-card-icon">💾</div><div class="tool-card-name">Data Storage</div><div class="tool-card-desc">bit, byte, KB, MB, GB, TB, PB — binary and SI</div><span class="tool-card-arrow">Open →</span></a>
-        <a href="units.html#time"        class="tool-card acc-unit" data-name="time duration seconds minutes hours days weeks converter"><div class="tool-card-icon">⏱️</div><div class="tool-card-name">Time</div><div class="tool-card-desc">ns, ms, s, min, hours, days, weeks, months, years</div><span class="tool-card-arrow">Open →</span></a>
-        <a href="units.html#energy"      class="tool-card acc-unit" data-name="energy joule calorie kwh btu converter"><div class="tool-card-icon">⚡</div><div class="tool-card-name">Energy</div><div class="tool-card-desc">Joules, kJ, calories, kcal, kWh, BTU</div><span class="tool-card-arrow">Open →</span></a>
-        <a href="units.html#pressure"    class="tool-card acc-unit" data-name="pressure pascal bar psi atm mmhg converter"><div class="tool-card-icon">🔵</div><div class="tool-card-name">Pressure</div><div class="tool-card-desc">Pa, kPa, bar, psi, atm, Torr, mmHg, inHg</div><span class="tool-card-arrow">Open →</span></a>
-        <a href="units.html#fuel"        class="tool-card acc-unit" data-name="fuel efficiency mpg l/100km km/l converter"><div class="tool-card-icon">⛽</div><div class="tool-card-name">Fuel Efficiency</div><div class="tool-card-desc">L/100km ↔ km/L ↔ MPG (US) ↔ MPG (UK)</div><span class="tool-card-arrow">Open →</span></a>
-      </div>
-    </section>
 
-    <!-- ── Developer Tools ───────────────────── -->
-    <section class="hub-section">
-      <div class="hub-section-title">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-        Developer Tools
-      </div>
-      <div class="hub-cards">
-        <a href="dev.html#json"   class="tool-card acc-dev" data-name="json formatter validator minify beautify"><div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M8 12h8M8 16h4"/></svg></div><div class="tool-card-name">JSON Formatter</div><div class="tool-card-desc">Format & validate or minify JSON instantly</div><span class="tool-card-arrow">Open →</span></a>
-        <a href="dev.html#hash"   class="tool-card acc-dev" data-name="sha hash md5 sha256 sha512 generator"><div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div><div class="tool-card-name">Hash Generator</div><div class="tool-card-desc">SHA-1, SHA-256, SHA-384, SHA-512 via SubtleCrypto</div><span class="tool-card-arrow">Open →</span></a>
-        <a href="dev.html#regex"  class="tool-card acc-dev" data-name="regex tester pattern match flags"><div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div><div class="tool-card-name">Regex Tester</div><div class="tool-card-desc">Test patterns with flags, live match highlighting</div><span class="tool-card-arrow">Open →</span></a>
-        <a href="dev.html#url"    class="tool-card acc-dev" data-name="url encode decode percent encoding"><div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></div><div class="tool-card-name">URL Encode</div><div class="tool-card-desc">Percent-encode or decode URL strings</div><span class="tool-card-arrow">Open →</span></a>
-        <a href="dev.html#html"   class="tool-card acc-dev" data-name="html entity encode decode escape"><div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div><div class="tool-card-name">HTML Entities</div><div class="tool-card-desc">Encode/decode HTML special characters (&amp;, &lt;, &gt;…)</div><span class="tool-card-arrow">Open →</span></a>
-        <a href="dev.html#base"   class="tool-card acc-dev" data-name="binary octal decimal hexadecimal base converter"><div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><div class="tool-card-name">Base Converter</div><div class="tool-card-desc">Binary ↔ Octal ↔ Decimal ↔ Hexadecimal</div><span class="tool-card-arrow">Open →</span></a>
-        <a href="dev.html#roman"  class="tool-card acc-dev" data-name="roman numeral converter number to roman"><div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="3" x2="12" y2="21"/><line x1="6" y1="6" x2="18" y2="6"/><line x1="6" y1="18" x2="18" y2="18"/></svg></div><div class="tool-card-name">Roman Numerals</div><div class="tool-card-desc">Convert numbers to/from Roman numeral notation</div><span class="tool-card-arrow">Open →</span></a>
-        <a href="dev.html#md"     class="tool-card acc-dev" data-name="markdown preview html render md"><div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M9 15l3-3 3 3"/><line x1="12" y1="12" x2="12" y2="18"/></svg></div><div class="tool-card-name">Markdown Preview</div><div class="tool-card-desc">Live side-by-side markdown rendering</div><span class="tool-card-arrow">Open →</span></a>
-      </div>
-    </section>
+      <!-- ── Calculators + Color ── -->
+      <div class="dir-col" data-col="calc">
+        <div class="dir-cat cat-calc">
+          <span class="dir-cat-icon">🧮</span> Calculators
+        </div>
+        <a href="calc.html#discount" class="dir-item" data-search="discount calculator sale price percentage off">
+          <span class="dir-item-icon">🏷️</span>
+          <span class="dir-item-text"><span class="dir-item-name">Discount</span><span class="dir-item-desc">Sale price &amp; savings amount</span></span>
+        </a>
+        <a href="calc.html#vat"      class="dir-item" data-search="vat tax gst calculator">
+          <span class="dir-item-icon">🧾</span>
+          <span class="dir-item-text"><span class="dir-item-name">VAT / Tax</span><span class="dir-item-desc">Add or extract tax from a price</span></span>
+        </a>
+        <a href="calc.html#tip"      class="dir-item" data-search="tip calculator restaurant bill split">
+          <span class="dir-item-icon">🍽️</span>
+          <span class="dir-item-text"><span class="dir-item-name">Tip Calculator</span><span class="dir-item-desc">Tip + total + per-person split</span></span>
+        </a>
+        <a href="calc.html#compound" class="dir-item" data-search="compound interest calculator investment savings">
+          <span class="dir-item-icon">📈</span>
+          <span class="dir-item-text"><span class="dir-item-name">Compound Interest</span><span class="dir-item-desc">Investment growth over time</span></span>
+        </a>
+        <a href="calc.html#loan"     class="dir-item" data-search="loan emi mortgage monthly payment calculator">
+          <span class="dir-item-icon">🏦</span>
+          <span class="dir-item-text"><span class="dir-item-name">Loan / EMI</span><span class="dir-item-desc">Monthly payment &amp; total interest</span></span>
+        </a>
+        <a href="calc.html#fuel"     class="dir-item" data-search="fuel cost trip calculator petrol diesel">
+          <span class="dir-item-icon">⛽</span>
+          <span class="dir-item-text"><span class="dir-item-name">Fuel Cost</span><span class="dir-item-desc">Trip cost by distance + efficiency</span></span>
+        </a>
+        <a href="calc.html#bmr"      class="dir-item" data-search="bmr tdee calorie calculator metabolic rate">
+          <span class="dir-item-icon">🔥</span>
+          <span class="dir-item-text"><span class="dir-item-name">BMR / TDEE</span><span class="dir-item-desc">Daily calorie needs</span></span>
+        </a>
+        <a href="calc.html#water"    class="dir-item" data-search="water intake calculator daily hydration">
+          <span class="dir-item-icon">💧</span>
+          <span class="dir-item-text"><span class="dir-item-name">Water Intake</span><span class="dir-item-desc">Daily hydration recommendation</span></span>
+        </a>
+        <a href="calc.html#sleep"    class="dir-item" data-search="sleep cycle calculator wake time">
+          <span class="dir-item-icon">😴</span>
+          <span class="dir-item-text"><span class="dir-item-name">Sleep Cycles</span><span class="dir-item-desc">Best wake times per 90-min cycles</span></span>
+        </a>
+        <a href="calc.html#due"      class="dir-item" data-search="pregnancy due date calculator lmp">
+          <span class="dir-item-icon">🤰</span>
+          <span class="dir-item-text"><span class="dir-item-name">Pregnancy Due Date</span><span class="dir-item-desc">LMP + 280 days (Naegele's rule)</span></span>
+        </a>
 
-    <!-- ── Finance & Health Calculators ──────── -->
-    <section class="hub-section">
-      <div class="hub-section-title">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2a10 10 0 100 20 10 10 0 000-20z"/><path d="M12 8v4l3 3"/></svg>
-        Finance &amp; Health Calculators
+        <!-- Color tools as sub-section -->
+        <div class="dir-cat cat-color" style="margin-top:1.2rem;">
+          <span class="dir-cat-icon">🎨</span> Color Tools
+        </div>
+        <a href="color.html#convert"  class="dir-item" data-search="hex rgb hsl cmyk color converter">
+          <span class="dir-item-icon">🎨</span>
+          <span class="dir-item-text"><span class="dir-item-name">Color Converter</span><span class="dir-item-desc">HEX ↔ RGB ↔ HSL ↔ CMYK</span></span>
+        </a>
+        <a href="color.html#contrast" class="dir-item" data-search="color contrast checker wcag accessibility">
+          <span class="dir-item-icon">👁️</span>
+          <span class="dir-item-text"><span class="dir-item-name">Contrast Checker</span><span class="dir-item-desc">WCAG AA/AAA compliance</span></span>
+        </a>
+        <a href="color.html#shades"   class="dir-item" data-search="color shades tints palette generator">
+          <span class="dir-item-icon">🌈</span>
+          <span class="dir-item-text"><span class="dir-item-name">Shade Generator</span><span class="dir-item-desc">Full lightness scale from any color</span></span>
+        </a>
+        <a href="color.html#gradient" class="dir-item" data-search="css gradient builder linear radial">
+          <span class="dir-item-icon">✨</span>
+          <span class="dir-item-text"><span class="dir-item-name">Gradient Builder</span><span class="dir-item-desc">Linear/radial CSS gradients</span></span>
+        </a>
+        <a href="calc.html" class="dir-view-all">All calculators →</a>
       </div>
-      <div class="hub-cards">
-        <a href="calc.html#discount" class="tool-card acc-calc" data-name="discount calculator sale price percentage off"><div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg></div><div class="tool-card-name">Discount</div><div class="tool-card-desc">Final price, savings, and discount percentage</div><span class="tool-card-arrow">Open →</span></a>
-        <a href="calc.html#vat"      class="tool-card acc-calc" data-name="vat tax gst calculator add extract"><div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg></div><div class="tool-card-name">VAT / Tax</div><div class="tool-card-desc">Add or extract VAT from a price at any rate</div><span class="tool-card-arrow">Open →</span></a>
-        <a href="calc.html#tip"      class="tool-card acc-calc" data-name="tip calculator restaurant bill split"><div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div><div class="tool-card-name">Tip Calculator</div><div class="tool-card-desc">Tip amount, total, and per-person split</div><span class="tool-card-arrow">Open →</span></a>
-        <a href="calc.html#compound" class="tool-card acc-calc" data-name="compound interest calculator investment savings"><div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div><div class="tool-card-name">Compound Interest</div><div class="tool-card-desc">Final amount and interest earned on investments</div><span class="tool-card-arrow">Open →</span></a>
-        <a href="calc.html#loan"     class="tool-card acc-calc" data-name="loan emi mortgage calculator monthly payment"><div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div><div class="tool-card-name">Loan / EMI</div><div class="tool-card-desc">Monthly EMI, total interest, and total payment</div><span class="tool-card-arrow">Open →</span></a>
-        <a href="calc.html#fuel"     class="tool-card acc-calc" data-name="fuel cost trip calculator petrol diesel price"><div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 22V8l9-6 9 6v14"/><path d="M9 22V12h6v10"/></svg></div><div class="tool-card-name">Fuel Cost</div><div class="tool-card-desc">Trip cost based on distance and fuel efficiency</div><span class="tool-card-arrow">Open →</span></a>
-        <a href="calc.html#bmr"      class="tool-card acc-calc" data-name="bmr tdee calorie calculator basal metabolic rate"><div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div><div class="tool-card-name">BMR / TDEE</div><div class="tool-card-desc">Daily calorie needs at your activity level</div><span class="tool-card-arrow">Open →</span></a>
-        <a href="calc.html#water"    class="tool-card acc-calc" data-name="water intake calculator daily hydration"><div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 11-11.31 0z"/></svg></div><div class="tool-card-name">Water Intake</div><div class="tool-card-desc">Daily water recommendation by weight &amp; activity</div><span class="tool-card-arrow">Open →</span></a>
-        <a href="calc.html#sleep"    class="tool-card acc-calc" data-name="sleep cycle calculator wake time bedtime"><div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg></div><div class="tool-card-name">Sleep Cycles</div><div class="tool-card-desc">Best wake times based on 90-min sleep cycles</div><span class="tool-card-arrow">Open →</span></a>
-        <a href="calc.html#due"      class="tool-card acc-calc" data-name="pregnancy due date calculator lmp naegele"><div class="tool-card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="tool-card-name">Due Date</div><div class="tool-card-desc">Pregnancy due date via Naegele's rule (LMP + 280 days)</div><span class="tool-card-arrow">Open →</span></a>
-      </div>
-    </section>
 
-    <!-- ── Color Tools ────────────────────────── -->
-    <section class="hub-section">
-      <div class="hub-section-title">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="10.5" r="2.5"/><circle cx="8.5" cy="7.5" r="2.5"/><circle cx="6.5" cy="12.5" r="2.5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.45-1.125-.27-.289-.45-.687-.45-1.125a1.64 1.64 0 011.648-1.688h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
-        Color Tools
-      </div>
-      <div class="hub-cards">
-        <a href="color.html#convert"  class="tool-card acc-color" data-name="hex rgb hsl cmyk color converter"><div class="tool-card-icon">🎨</div><div class="tool-card-name">Color Converter</div><div class="tool-card-desc">HEX ↔ RGB ↔ HSL ↔ CMYK with live swatch</div><span class="tool-card-arrow">Open →</span></a>
-        <a href="color.html#contrast" class="tool-card acc-color" data-name="color contrast checker wcag aa aaa accessibility"><div class="tool-card-icon">👁️</div><div class="tool-card-name">Contrast Checker</div><div class="tool-card-desc">WCAG AA/AAA compliance ratio for any two colors</div><span class="tool-card-arrow">Open →</span></a>
-        <a href="color.html#shades"   class="tool-card acc-color" data-name="color shades tints palette generator"><div class="tool-card-icon">🌈</div><div class="tool-card-name">Shade Generator</div><div class="tool-card-desc">Generate a full lightness scale from any color</div><span class="tool-card-arrow">Open →</span></a>
-        <a href="color.html#gradient" class="tool-card acc-color" data-name="css gradient builder linear radial generator"><div class="tool-card-icon">✨</div><div class="tool-card-name">Gradient Builder</div><div class="tool-card-desc">Linear/radial CSS gradients with live preview</div><span class="tool-card-arrow">Open →</span></a>
-      </div>
-    </section>
+    </div><!-- /dir-grid -->
 
-    <div style="margin-top:2.5rem;text-align:center;font-size:.72rem;color:var(--text-dim);">
-      © 2026 SnakeConverter &nbsp;·&nbsp; All processing happens in your browser
+    <div class="dir-footer">
+      © 2026 SnakeConverter &nbsp;·&nbsp; All processing happens in your browser · Zero uploads · Zero servers
     </div>
 
   </div><!-- /main-card -->
@@ -301,31 +392,29 @@
 <script src="js/i18n.js"></script>
 <script src="js/snake-mascot.js"></script>
 <script>
-  const snake = new SnakeMascot("snakeCanvas");
+/* ── Snake mascot ── */
+const snake = new SnakeMascot("snakeCanvas");
+document.querySelectorAll(".dir-item").forEach(item => {
+  item.addEventListener("mouseenter", () => snake.onFileSelect());
+});
 
-  /* Hover → excited, click → snack */
-  document.querySelectorAll(".tool-card").forEach(card => {
-    card.addEventListener("mouseenter", () => snake.onFileSelect());
-  });
+/* ── Search / filter ── */
+function filterDir(query) {
+  const q = query.toLowerCase().trim();
+  let anyVisible = false;
 
-  /* Highlight + jump-to-tab via hash */
-  document.querySelectorAll("a[href*='#']").forEach(a => {
-    a.addEventListener("click", () => snake.onFileSelect());
-  });
-
-  /* Search / filter */
-  function filterTools(query) {
-    const q = query.toLowerCase().trim();
-    document.querySelectorAll(".tool-card").forEach(card => {
-      const name = (card.dataset.name || "") + " " + card.querySelector(".tool-card-name").textContent;
-      card.classList.toggle("hidden", q.length > 0 && !name.toLowerCase().includes(q));
+  document.querySelectorAll(".dir-col").forEach(col => {
+    let colVisible = false;
+    col.querySelectorAll(".dir-item").forEach(item => {
+      const text = (item.dataset.search || "") + " " + item.textContent;
+      const match = !q || text.toLowerCase().includes(q);
+      item.classList.toggle("hidden", !match);
+      if (match) colVisible = true;
     });
-    /* hide empty sections */
-    document.querySelectorAll(".hub-section").forEach(sec => {
-      const visible = sec.querySelectorAll(".tool-card:not(.hidden)").length > 0;
-      sec.style.display = visible ? "" : "none";
-    });
-  }
+    col.classList.toggle("hidden", !colVisible && !!q);
+    if (colVisible) anyVisible = true;
+  });
+}
 </script>
 </body>
 </html>
