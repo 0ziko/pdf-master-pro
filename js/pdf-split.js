@@ -3,13 +3,15 @@
   /**
    * @param {File} file
    * @param {'each' | 'ranges'} mode
-   * @param {string} rangesText — örn: "1-3,5" (1 tabanlı, virgülle)
-   * @returns {Promise<Blob>} zip veya tek pdf için caller karar verir
+   * @param {string} rangesText — örn: "1-3,5"
+   * @param {string} [srcPassword] — şifreli PDF için
+   * @returns {Promise<Blob>}
    */
-  async function splitPdf(file, mode, rangesText) {
+  async function splitPdf(file, mode, rangesText, srcPassword) {
     const { PDFDocument } = w.PDFLib;
-    const bytes = new Uint8Array(await file.arrayBuffer());
-    const src = await PDFDocument.load(bytes);
+    const Decrypt = w.PdfMasterDecrypt;
+
+    const src = await Decrypt.loadPdfDoc(file, srcPassword || "");
     const pageCount = src.getPageCount();
 
     if (mode === "each") {
@@ -45,11 +47,6 @@
     return zip.generateAsync({ type: "blob", compression: "DEFLATE" });
   }
 
-  /**
-   * @param {string} text
-   * @param {number} pageCount
-   * @returns {number[][]} inclusive [start,end] 1-based
-   */
   function _parseRanges(text, pageCount) {
     const out = [];
     const parts = (text || "")
@@ -57,12 +54,10 @@
       .map((s) => s.trim())
       .filter(Boolean);
     for (const part of parts) {
-      let a;
-      let b;
+      let a, b;
       if (part.includes("-")) {
         const [x, y] = part.split("-").map((n) => parseInt(n.trim(), 10));
-        a = x;
-        b = y;
+        a = x; b = y;
       } else {
         a = b = parseInt(part, 10);
       }

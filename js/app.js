@@ -191,9 +191,10 @@
     if (mergeFiles.length < 2) return alert("En az iki PDF gerekli.");
     const enc = readEncryptOptions();
     if (enc.encrypt && !enc.password) return alert("Şifreleme açıkken şifre gerekli.");
+    const srcPassword = document.getElementById("mergeSrcPass")?.value || "";
     setBusy(mergeBtn, true);
     try {
-      const bytes = await Merge.mergePdfFiles(mergeFiles, enc);
+      const bytes = await Merge.mergePdfFiles(mergeFiles, { ...enc, srcPassword });
       U.downloadBlob(bytes, "birlesik.pdf");
     } catch (e) {
       console.error(e); alert(e.message || String(e));
@@ -224,9 +225,10 @@
     const mode = splitMode?.value === "ranges" ? "ranges" : "each";
     const rangesText = splitRanges?.value || "";
     if (mode === "ranges" && !rangesText.trim()) return alert("Aralık yaz — örn: 1-3,5");
+    const srcPassword = document.getElementById("splitSrcPass")?.value || "";
     setBusy(splitBtn, true);
     try {
-      const blob = await Split.splitPdf(splitFile, mode, rangesText);
+      const blob = await Split.splitPdf(splitFile, mode, rangesText, srcPassword);
       U.downloadBlob(blob, U.baseName(splitFile.name) + "-ayrilmis.zip");
     } catch (e) {
       console.error(e); alert(e.message || String(e));
@@ -248,10 +250,11 @@
     if (!encFile) return alert("Bir PDF seç.");
     const enc = readEncryptOptions();
     if (!enc.encrypt || !enc.password)
-      return alert("Üstteki şifreleme anahtarını aç ve şifre yaz.");
+      return alert("Üstteki şifreleme anahtarını aç ve yeni şifre yaz.");
+    const srcPassword = document.getElementById("encSrcPass")?.value || "";
     setBusy(encBtn, true);
     try {
-      const bytes = await Reencrypt.reencryptPdfFile(encFile, enc);
+      const bytes = await Reencrypt.reencryptPdfFile(encFile, { ...enc, srcPassword });
       U.downloadBlob(bytes, U.baseName(encFile.name) + "-kilitli.pdf");
     } catch (e) {
       console.error(e); alert(e.message || String(e));

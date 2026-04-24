@@ -10,6 +10,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://unpkg.com/pdf-lib-plus-encrypt@1.1.0/dist/pdf-lib-plus-encrypt.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+      if (typeof pdfjsLib !== 'undefined') {
+        pdfjsLib.GlobalWorkerOptions.workerSrc =
+          'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      }
+    </script>
     <link rel="stylesheet" href="css/app.css" />
   </head>
 
@@ -152,6 +159,10 @@
         <!-- Birleştir -->
         <div data-panel="merge" class="panel" style="--gap:1rem;">
           <div class="space-y">
+            <div class="src-pass-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              <input type="password" id="mergeSrcPass" autocomplete="off" placeholder="Kaynak PDF'lerin açılış şifresi (şifreli değilse boş bırak)" />
+            </div>
             <div id="mergeDrop" class="dropzone">
               <input type="file" id="mergeInput" accept=".pdf,application/pdf" multiple class="hidden" />
               <div class="drop-icon">
@@ -177,6 +188,10 @@
         <!-- Ayır -->
         <div data-panel="split" class="panel" style="--gap:1rem;">
           <div class="space-y">
+            <div class="src-pass-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              <input type="password" id="splitSrcPass" autocomplete="off" placeholder="PDF'in açılış şifresi (şifreli değilse boş bırak)" />
+            </div>
             <div id="splitDrop" class="dropzone">
               <input type="file" id="splitInput" accept=".pdf" class="hidden" />
               <div class="drop-icon">
@@ -211,6 +226,10 @@
         <!-- Şifrele -->
         <div data-panel="encrypt" class="panel" style="--gap:1rem;">
           <div class="space-y">
+            <div class="src-pass-row">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+              <input type="password" id="encSrcPass" autocomplete="off" placeholder="PDF zaten şifreli ise mevcut şifresi (yoksa boş bırak)" />
+            </div>
             <div id="encDrop" class="dropzone">
               <input type="file" id="encInput" accept=".pdf" class="hidden" />
               <div class="drop-icon">
@@ -247,6 +266,7 @@
     <script src="js/utils.js"></script>
     <script src="js/font-loader.js"></script>
     <script src="js/pdf-encrypt.js"></script>
+    <script src="js/pdf-decrypt.js"></script>
     <script src="js/excel-to-pdf.js"></script>
     <script src="js/image-to-pdf.js"></script>
     <script src="js/pdf-merge.js"></script>

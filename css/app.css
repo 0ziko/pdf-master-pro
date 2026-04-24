@@ -512,6 +512,37 @@ body::before {
   line-height: 1.5;
 }
 
+/* ─── Source password row ────────────────────────────────────── */
+.src-pass-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: rgba(245,158,11,0.06);
+  border: 1px solid rgba(245,158,11,0.18);
+  border-radius: var(--radius-xl);
+  padding: 0.65rem 0.9rem;
+}
+
+.src-pass-row svg {
+  width: 15px;
+  height: 15px;
+  color: #fbbf24;
+  flex-shrink: 0;
+}
+
+.src-pass-row input {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  font-family: inherit;
+  flex: 1;
+  min-width: 0;
+}
+
+.src-pass-row input::placeholder { color: #78716c; }
+
 /* ─── Spacer util ────────────────────────────────────────────── */
 .space-y > * + * { margin-top: var(--gap, 1rem); }
 
