@@ -1,14 +1,67 @@
 /* global document, window */
 (function () {
-  const U       = window.PdfMasterUtils;
-  const Excel   = window.PdfMasterExcel;
-  const Img     = window.PdfMasterImage;
-  const Merge   = window.PdfMasterMerge;
-  const Split   = window.PdfMasterSplit;
-  const Reenc   = window.PdfMasterReencrypt;
+  const U     = window.PdfMasterUtils;
+  const Excel = window.PdfMasterExcel;
+  const Img   = window.PdfMasterImage;
+  const Merge = window.PdfMasterMerge;
+  const Split = window.PdfMasterSplit;
+  const Reenc = window.PdfMasterReencrypt;
 
   function t(key) {
     return window.PdfMasterI18n ? window.PdfMasterI18n.t(key) : key;
+  }
+
+  /* ── Snake mascot ──────────────────────────────────── */
+  let snake = null;
+  window.addEventListener("load", () => {
+    if (window.SnakeMascot) {
+      snake = new window.SnakeMascot("snakeCanvas");
+      window.snakeMascot = snake;
+      _setCaption("idle");
+    }
+  });
+
+  const CAPTIONS = {
+    en: { idle: "Ready to convert!", eating: "Yum yum…", digesting: "Processing…", spitting: "Here you go!", happy: "Done! 🎉" },
+    tr: { idle: "Dönüştürmeye hazır!", eating: "Mm…", digesting: "İşleniyor…", spitting: "Al bakalım!", happy: "Bitti! 🎉" },
+  };
+
+  function _setCaption(state) {
+    const el = document.getElementById("snakeCaption");
+    if (!el) return;
+    const lang = window.PdfMasterI18n ? window.PdfMasterI18n.getLang() : "en";
+    const map = CAPTIONS[lang] || CAPTIONS.en;
+    el.textContent = map[state] || "";
+  }
+
+  /** Wraps a processing fn with snake animation + caption */
+  async function withSnake(btn, fn) {
+    setBusy(btn, true);
+    if (snake) {
+      _setCaption("eating");
+      try {
+        const result = await snake.processStart(async () => {
+          _setCaption("digesting");
+          const r = await fn();
+          _setCaption("spitting");
+          return r;
+        });
+        _setCaption("happy");
+        setTimeout(() => _setCaption("idle"), 4500);
+        return result;
+      } catch (e) {
+        _setCaption("idle");
+        throw e;
+      } finally {
+        setBusy(btn, false);
+      }
+    } else {
+      try {
+        return await fn();
+      } finally {
+        setBusy(btn, false);
+      }
+    }
   }
 
   /* ── Tabs ──────────────────────────────────────────── */
@@ -55,8 +108,10 @@
   passInput?.addEventListener("input", syncEncryptUI);
   syncEncryptUI();
 
-  /* re-sync label text on lang change */
-  document.addEventListener("langchange", syncEncryptUI);
+  document.addEventListener("langchange", () => {
+    syncEncryptUI();
+    _setCaption("idle");
+  });
 
   function readEncryptOptions() {
     return {
@@ -65,7 +120,7 @@
     };
   }
 
-  /* ── setBusy: updates only the <span data-i18n> inside button ── */
+  /* ── setBusy ───────────────────────────────────────── */
   const spinnerSVG = `<svg style="width:17px;height:17px;flex-shrink:0;animation:spin .8s linear infinite;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>`;
 
   const spinStyle = document.createElement("style");
@@ -79,7 +134,6 @@
     if (span) {
       span.textContent = busy ? t("processing") : t(span.getAttribute("data-i18n"));
     }
-    /* show/hide spinner sibling */
     let spinner = btn.querySelector(".btn-spinner");
     if (busy) {
       if (!spinner) {
@@ -93,22 +147,21 @@
     }
   }
 
-  /* re-apply btn text on lang switch */
   function refreshBtnLabels() {
     document.querySelectorAll(".btn-primary[data-i18n-key]").forEach((btn) => {
       const span = btn.querySelector("span[data-i18n]");
       if (span && !btn.disabled) span.textContent = t(span.getAttribute("data-i18n"));
     });
   }
-  /* hook into i18n apply cycle */
-  const _origApply = window.PdfMasterI18n && window.PdfMasterI18n.apply;
+
   if (window.PdfMasterI18n) {
     const origSet = window.PdfMasterI18n.setLang;
     window.PdfMasterI18n.setLang = function (lang) {
       origSet(lang);
       syncEncryptUI();
       refreshBtnLabels();
-      renderMergeList(); /* re-render with translated placeholder */
+      renderMergeList();
+      _setCaption("idle");
     };
   }
 
@@ -137,6 +190,7 @@
     if (!dotEl) return;
     dotEl.style.display = "inline-flex";
     if (textEl) textEl.textContent = name;
+    if (snake) snake.onFileSelect();
   }
 
   /* ── Excel ─────────────────────────────────────────── */
@@ -154,13 +208,12 @@
     if (!excelFile) return alert(t("alert.no-excel"));
     const enc = readEncryptOptions();
     if (enc.encrypt && !enc.password) return alert(t("alert.enc-pass"));
-    setBusy(excelBtn, true);
     try {
-      const bytes = await Excel.excelFileToPdfBytes(excelFile, { ...enc, landscape: true });
-      U.downloadBlob(bytes, U.baseName(excelFile.name) + ".pdf");
-    } catch (e) {
-      console.error(e); alert(e.message || String(e));
-    } finally { setBusy(excelBtn, false); }
+      await withSnake(excelBtn, async () => {
+        const bytes = await Excel.excelFileToPdfBytes(excelFile, { ...enc, landscape: true });
+        U.downloadBlob(bytes, U.baseName(excelFile.name) + ".pdf");
+      });
+    } catch (e) { console.error(e); alert(e.message || String(e)); }
   });
 
   /* ── Image ─────────────────────────────────────────── */
@@ -179,14 +232,13 @@
     if (!imageFile) return alert(t("alert.no-image"));
     const enc = readEncryptOptions();
     if (enc.encrypt && !enc.password) return alert(t("alert.enc-pass"));
-    setBusy(imageBtn, true);
     try {
-      const fit = imageFitInput?.value === "original" ? "original" : "a4";
-      const bytes = await Img.imageFileToPdfBytes(imageFile, { ...enc, fit });
-      U.downloadBlob(bytes, U.baseName(imageFile.name) + ".pdf");
-    } catch (e) {
-      console.error(e); alert(e.message || String(e));
-    } finally { setBusy(imageBtn, false); }
+      await withSnake(imageBtn, async () => {
+        const fit = imageFitInput?.value === "original" ? "original" : "a4";
+        const bytes = await Img.imageFileToPdfBytes(imageFile, { ...enc, fit });
+        U.downloadBlob(bytes, U.baseName(imageFile.name) + ".pdf");
+      });
+    } catch (e) { console.error(e); alert(e.message || String(e)); }
   });
 
   /* ── Merge ─────────────────────────────────────────── */
@@ -236,6 +288,7 @@
       Array.from(files).filter((f) => /\.pdf$/i.test(f.name))
     );
     renderMergeList();
+    if (snake && mergeFiles.length) snake.onFileSelect();
   });
 
   document.getElementById("mergeClear")?.addEventListener("click", () => {
@@ -249,13 +302,12 @@
     const srcPasswords = Array.from(
       mergeList.querySelectorAll("[data-merge-pass]")
     ).map((inp) => inp.value || "");
-    setBusy(mergeBtn, true);
     try {
-      const bytes = await Merge.mergePdfFiles(mergeFiles, { ...enc, srcPasswords });
-      U.downloadBlob(bytes, "merged.pdf");
-    } catch (e) {
-      console.error(e); alert(e.message || String(e));
-    } finally { setBusy(mergeBtn, false); }
+      await withSnake(mergeBtn, async () => {
+        const bytes = await Merge.mergePdfFiles(mergeFiles, { ...enc, srcPasswords });
+        U.downloadBlob(bytes, "merged.pdf");
+      });
+    } catch (e) { console.error(e); alert(e.message || String(e)); }
   });
 
   /* ── Split ─────────────────────────────────────────── */
@@ -283,13 +335,12 @@
     const rangesText = splitRanges?.value || "";
     if (mode === "ranges" && !rangesText.trim()) return alert(t("alert.split-range"));
     const srcPassword = document.getElementById("splitSrcPass")?.value || "";
-    setBusy(splitBtn, true);
     try {
-      const blob = await Split.splitPdf(splitFile, mode, rangesText, srcPassword);
-      U.downloadBlob(blob, U.baseName(splitFile.name) + "-split.zip");
-    } catch (e) {
-      console.error(e); alert(e.message || String(e));
-    } finally { setBusy(splitBtn, false); }
+      await withSnake(splitBtn, async () => {
+        const blob = await Split.splitPdf(splitFile, mode, rangesText, srcPassword);
+        U.downloadBlob(blob, U.baseName(splitFile.name) + "-split.zip");
+      });
+    } catch (e) { console.error(e); alert(e.message || String(e)); }
   });
 
   /* ── Encrypt ───────────────────────────────────────── */
@@ -308,13 +359,12 @@
     const enc = readEncryptOptions();
     if (!enc.encrypt || !enc.password) return alert(t("alert.enc-enable"));
     const srcPassword = document.getElementById("encSrcPass")?.value || "";
-    setBusy(encBtn, true);
     try {
-      const bytes = await Reenc.reencryptPdfFile(encFile, { ...enc, srcPassword });
-      U.downloadBlob(bytes, U.baseName(encFile.name) + "-locked.pdf");
-    } catch (e) {
-      console.error(e); alert(e.message || String(e));
-    } finally { setBusy(encBtn, false); }
+      await withSnake(encBtn, async () => {
+        const bytes = await Reenc.reencryptPdfFile(encFile, { ...enc, srcPassword });
+        U.downloadBlob(bytes, U.baseName(encFile.name) + "-locked.pdf");
+      });
+    } catch (e) { console.error(e); alert(e.message || String(e)); }
   });
 
   renderMergeList();

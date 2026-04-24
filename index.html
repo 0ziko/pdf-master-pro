@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PDF Master Pro</title>
+    <title>SnakeConverter</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -38,9 +38,15 @@
             <span data-i18n="badge">Browser based · No server</span>
           </div>
 
-          <h1 class="site-title">PDF Master Pro</h1>
+          <h1 class="site-title">SnakeConverter</h1>
           <p class="site-sub" data-i18n="subtitle">Excel · Image · Merge · Split · Encrypt — zero upload</p>
         </header>
+
+        <!-- ── Snake mascot ────────────────────────── -->
+        <div class="snake-stage">
+          <canvas id="snakeCanvas"></canvas>
+          <p id="snakeCaption" class="snake-caption"></p>
+        </div>
 
         <!-- ── Tab nav ──────────────────────────────── -->
         <nav class="tab-nav">
@@ -276,6 +282,7 @@
     <script src="js/pdf-merge.js"></script>
     <script src="js/pdf-split.js"></script>
     <script src="js/pdf-reencrypt.js"></script>
+    <script src="js/snake-mascot.js"></script>
     <script src="js/app.js"></script>
   </body>
 </html>
