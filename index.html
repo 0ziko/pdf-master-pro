@@ -34,10 +34,10 @@
     /* ── Directory grid ── */
     .dir-grid {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(6, 1fr);
       border-top: 1px solid var(--border-subtle);
     }
-    @media (max-width: 820px) { .dir-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 900px) { .dir-grid { grid-template-columns: repeat(3, 1fr); } }
     @media (max-width: 540px) { .dir-grid { grid-template-columns: repeat(2, 1fr); } }
 
     /* ── Directory column ── */
@@ -357,8 +357,12 @@
           <span class="dir-item-text"><span class="dir-item-name">Pregnancy Due Date</span><span class="dir-item-desc">LMP + 280 days (Naegele's rule)</span></span>
         </a>
 
-        <!-- Color tools as sub-section -->
-        <div class="dir-cat cat-color" style="margin-top:1.2rem;">
+        <a href="calc.html" class="dir-view-all">All calculators →</a>
+      </div>
+
+      <!-- ── Color Tools ── -->
+      <div class="dir-col" data-col="color">
+        <div class="dir-cat cat-color">
           <span class="dir-cat-icon">🎨</span> Color Tools
         </div>
         <a href="color.html#convert"  class="dir-item" data-search="hex rgb hsl cmyk color converter">
@@ -377,7 +381,7 @@
           <span class="dir-item-icon">✨</span>
           <span class="dir-item-text"><span class="dir-item-name">Gradient Builder</span><span class="dir-item-desc">Linear/radial CSS gradients</span></span>
         </a>
-        <a href="calc.html" class="dir-view-all">All calculators →</a>
+        <a href="color.html" class="dir-view-all">All color tools →</a>
       </div>
 
     </div><!-- /dir-grid -->
