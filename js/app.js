@@ -22,8 +22,24 @@
   });
 
   const CAPTIONS = {
-    en: { idle: "Ready to convert!", eating: "Yum yum…", digesting: "Processing…", spitting: "Here you go!", happy: "Done! 🎉" },
-    tr: { idle: "Dönüştürmeye hazır!", eating: "Mm…", digesting: "İşleniyor…", spitting: "Al bakalım!", happy: "Bitti! 🎉" },
+    en: {
+      idle:          "Drop a file and watch the magic! 🐍",
+      eating:        "CHOMP CHOMP CHOMP… 😋",
+      "snacking":    "CHOMP! Tasty file! 😄",
+      digesting:     "Mmm… crunching your file…",
+      spitting:      "✨ Almost ready…",
+      happy:         "🎉 DONE! Wasn't that fun?",
+      "snack-happy": "Yummy! Drop more to keep going! 😄",
+    },
+    tr: {
+      idle:          "Bir dosya bırak, sihri izle! 🐍",
+      eating:        "ÇIĞNIYORUM ÇIĞNIYORUM… 😋",
+      "snacking":    "ÇIĞN! Lezzetli dosya! 😄",
+      digesting:     "Mmm… dosyan işleniyor…",
+      spitting:      "✨ Neredeyse hazır…",
+      happy:         "🎉 BİTTİ! Eğlenceli değil miydi?",
+      "snack-happy": "Nefis! Daha fazla dosya bırak! 😄",
+    },
   };
 
   function _setCaption(state) {
@@ -47,7 +63,7 @@
           return r;
         });
         _setCaption("happy");
-        setTimeout(() => _setCaption("idle"), 4500);
+        setTimeout(() => _setCaption("idle"), 6000);
         return result;
       } catch (e) {
         _setCaption("idle");
@@ -190,7 +206,8 @@
     if (!dotEl) return;
     dotEl.style.display = "inline-flex";
     if (textEl) textEl.textContent = name;
-    if (snake) snake.onFileSelect();
+    /* trigger a snack animation for every file that lands on the page */
+    if (snake) snake.snackFile();
   }
 
   /* ── Excel ─────────────────────────────────────────── */
@@ -284,11 +301,11 @@
   }
 
   wireDropzone("mergeDrop", "mergeInput", (files) => {
-    mergeFiles = mergeFiles.concat(
-      Array.from(files).filter((f) => /\.pdf$/i.test(f.name))
-    );
+    const added = Array.from(files).filter((f) => /\.pdf$/i.test(f.name));
+    mergeFiles = mergeFiles.concat(added);
     renderMergeList();
-    if (snake && mergeFiles.length) snake.onFileSelect();
+    /* eat once per batch (sequential snacking would overlap) */
+    if (snake && added.length) snake.snackFile();
   });
 
   document.getElementById("mergeClear")?.addEventListener("click", () => {
