@@ -28,13 +28,21 @@
   const passWrap      = document.getElementById("passWrap");
   const encryptBanner = document.getElementById("encryptBanner");
   const encryptLabel  = document.getElementById("encryptLabel");
+  const toggleTrack   = document.getElementById("toggleTrack");
+
+  /* Label tıklaması input'u toggle eder; biz görsel senkronu JS ile yaparız */
+  document.getElementById("toggleTrack")?.addEventListener("click", () => {
+    if (encryptCheck) encryptCheck.checked = !encryptCheck.checked;
+    syncEncryptUI();
+  });
 
   function syncEncryptUI() {
-    const on = encryptCheck && encryptCheck.checked;
+    const on = !!(encryptCheck && encryptCheck.checked);
 
-    if (encryptBanner) encryptBanner.classList.toggle("is-active", !!on);
+    if (toggleTrack)   toggleTrack.classList.toggle("is-on", on);
+    if (encryptBanner) encryptBanner.classList.toggle("is-active", on);
     if (encryptLabel)  encryptLabel.textContent = on ? "Şifreleme açık" : "Şifreleme kapalı";
-    if (passWrap)      passWrap.classList.toggle("open", !!on);
+    if (passWrap)      passWrap.classList.toggle("open", on);
 
     const pw = passInput ? passInput.value : "";
     if (passNote) {
@@ -43,7 +51,6 @@
     }
   }
 
-  encryptCheck?.addEventListener("change", syncEncryptUI);
   passInput?.addEventListener("input", syncEncryptUI);
   syncEncryptUI();
 

@@ -65,12 +65,12 @@
                 </div>
               </div>
             </div>
-            <label style="display:flex;align-items:center;gap:0;cursor:pointer;flex-shrink:0;">
-              <input type="checkbox" id="globalEncrypt" class="sr-only" style="position:absolute;opacity:0;pointer-events:none;" />
-              <div class="toggle-track" id="toggleTrack" onclick="document.getElementById('globalEncrypt').click()">
-                <div class="toggle-thumb"></div>
+            <label for="globalEncrypt" style="cursor:pointer;flex-shrink:0;display:inline-flex;">
+              <div class="toggle-track" id="toggleTrack">
+                <div class="toggle-thumb" id="toggleThumb"></div>
               </div>
             </label>
+            <input type="checkbox" id="globalEncrypt" style="position:absolute;opacity:0;width:0;height:0;pointer-events:none;" />
           </div>
           <div class="encrypt-pass-wrap" id="passWrap">
             <input
