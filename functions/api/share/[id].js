@@ -1,6 +1,6 @@
 /**
  * Cloudflare Pages Function — GET /api/share/:id
- * Streams a stored PDF back to the client.
+ * Streams a stored PDF from KV back to the client.
  */
 
 const CORS = {
@@ -25,22 +25,17 @@ export async function onRequestGet({ params, env }) {
     const id = params.id;
     if (!id) return json({ error: "Missing id." }, 400);
 
-    if (!env.PDF_BUCKET) {
-      return json({ error: "Storage not configured." }, 500);
-    }
+    if (!env.PDF_KV) return json({ error: "Storage not configured." }, 500);
 
-    const obj = await env.PDF_BUCKET.get(id);
-    if (!obj) return json({ error: "File not found." }, 404);
+    const { value, metadata } = await env.PDF_KV.getWithMetadata(id, {
+      type: "arrayBuffer",
+    });
 
-    const expiresAt = parseInt(obj.customMetadata?.expiresAt || "0");
-    if (expiresAt && Date.now() > expiresAt) {
-      await env.PDF_BUCKET.delete(id);
-      return json({ error: "This link has expired." }, 410);
-    }
+    if (!value) return json({ error: "File not found or link has expired." }, 404);
 
-    const fileName = obj.customMetadata?.fileName || "document.pdf";
+    const fileName = metadata?.fileName || "document.pdf";
 
-    return new Response(obj.body, {
+    return new Response(value, {
       headers: {
         ...CORS,
         "Content-Type":        "application/pdf",
