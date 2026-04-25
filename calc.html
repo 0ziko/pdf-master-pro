@@ -88,6 +88,94 @@
     .calc-form { display: flex; flex-direction: column; gap: .75rem; }
     .calc-form .btn-primary { margin-top: .25rem; }
     .err-msg { color: #f87171; font-size: .78rem; margin-top: .4rem; }
+
+    /* ── Calorie Robot ── */
+    .cal-mode-tabs { display:flex; gap:8px; margin-bottom:16px; }
+    .cal-mode-btn {
+      flex:1; padding:9px 16px; border-radius:10px; border:1px solid rgba(130,80,255,.3);
+      background:transparent; color:#9ca3af; font-size:.8rem; font-weight:700; cursor:pointer; transition:all .15s;
+    }
+    .cal-mode-btn.active { background:rgba(130,80,255,.2); color:#c4b5fd; border-color:#8250ff; }
+    .cal-card {
+      background:rgba(255,255,255,.03); border:1px solid rgba(130,80,255,.15);
+      border-radius:14px; padding:16px 18px; margin-bottom:14px;
+    }
+    .cal-card h3 { font-size:.9rem; font-weight:700; color:#e8e4ff; margin-bottom:12px; }
+    .cal-grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+    .cal-grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+    .cal-grid-2 { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+    @media(max-width:600px) { .cal-grid-4,.cal-grid-3,.cal-grid-2 { grid-template-columns:1fr 1fr; } }
+    .cal-field label { display:block; font-size:.68rem; color:#9ca3af; margin-bottom:4px; font-weight:600; text-transform:uppercase; letter-spacing:.05em; }
+    .cal-field input, .cal-field select {
+      width:100%; background:#1a1a2e; border:1px solid rgba(130,80,255,.3);
+      border-radius:8px; padding:7px 10px; color:#e8e4ff; font-size:.82rem; outline:none; transition:border-color .15s;
+    }
+    .cal-field input:focus, .cal-field select:focus { border-color:#8250ff; }
+    .cal-field select option { background:#1a1a2e; color:#e8e4ff; }
+    .cal-btn { padding:8px 18px; border-radius:8px; border:none; cursor:pointer; font-size:.8rem; font-weight:700; transition:all .15s; }
+    .cal-btn-primary { background:linear-gradient(135deg,#8250ff,#6030e0); color:#fff; }
+    .cal-btn-primary:hover { opacity:.88; transform:translateY(-1px); }
+    .cal-btn-sm { padding:5px 12px; border-radius:6px; border:1px solid rgba(130,80,255,.3); background:rgba(130,80,255,.1); color:#c4b5fd; font-size:.72rem; font-weight:700; cursor:pointer; }
+    .cal-btn-danger { background:rgba(248,113,113,.15); border:1px solid rgba(248,113,113,.3); color:#f87171; }
+    .cal-bmr-result { margin-top:12px; display:flex; gap:10px; flex-wrap:wrap; }
+    .cal-bmr-chip {
+      background:rgba(130,80,255,.12); border:1px solid rgba(130,80,255,.25); border-radius:8px;
+      padding:8px 14px; font-size:.78rem;
+    }
+    .cal-bmr-chip strong { display:block; font-size:1.1rem; color:#c4b5fd; font-weight:800; }
+    .cal-meal-section { margin-bottom:14px; }
+    .cal-meal-header {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:8px 12px; background:rgba(130,80,255,.08); border-radius:8px; margin-bottom:8px;
+      font-size:.82rem; font-weight:700; color:#c4b5fd;
+    }
+    .cal-meal-header small { color:#6b7280; font-size:.67rem; font-weight:400; margin-left:6px; }
+    .cal-meal-calories { color:#4ade80; font-weight:800; margin-left:auto; margin-right:10px; font-size:.78rem; }
+    .cal-food-row {
+      display:grid; grid-template-columns:2fr 90px 70px 36px; gap:6px; align-items:center; margin-bottom:6px;
+    }
+    .cal-food-row select, .cal-food-row input {
+      background:#1a1a2e; border:1px solid rgba(130,80,255,.25); border-radius:7px;
+      padding:6px 8px; color:#e8e4ff; font-size:.76rem; outline:none; width:100%;
+    }
+    .cal-food-row select option { background:#1a1a2e; color:#e8e4ff; }
+    .cal-food-cal { font-size:.72rem; color:#4ade80; font-weight:700; text-align:right; padding-right:2px; white-space:nowrap; }
+    .cal-remove-btn { background:none; border:none; color:#f87171; cursor:pointer; font-size:1rem; padding:0; line-height:1; }
+    .cal-exercise-add { display:flex; gap:8px; flex-wrap:wrap; align-items:flex-end; margin-bottom:10px; }
+    .cal-exercise-add select, .cal-exercise-add input {
+      flex:1; min-width:100px; background:#1a1a2e; border:1px solid rgba(130,80,255,.25);
+      border-radius:8px; padding:7px 9px; color:#e8e4ff; font-size:.78rem; outline:none;
+    }
+    .cal-exercise-add select option { background:#1a1a2e; color:#e8e4ff; }
+    .cal-exercise-item {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:7px 12px; background:rgba(255,255,255,.03); border-radius:8px; margin-bottom:6px; font-size:.78rem;
+    }
+    .cal-exercise-kcal { color:#f97316; font-weight:700; }
+    .cal-summary-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+    @media(max-width:600px) { .cal-summary-grid { grid-template-columns:repeat(2,1fr); } .cal-food-row { grid-template-columns:1fr 80px 60px 30px; } }
+    .cal-summary-item { text-align:center; padding:12px; background:rgba(255,255,255,.04); border-radius:10px; }
+    .cal-summary-val { font-size:1.35rem; font-weight:800; color:#c4b5fd; }
+    .cal-summary-label { font-size:.65rem; color:#9ca3af; margin-top:3px; text-transform:uppercase; letter-spacing:.05em; }
+    .cal-summary-item.net .cal-summary-val { color:#4ade80; }
+    .cal-summary-item.net.deficit .cal-summary-val { color:#f87171; }
+    .cal-advice { margin-top:12px; padding:10px 14px; border-radius:10px; font-size:.78rem; line-height:1.5; }
+    .cal-advice.ok { background:rgba(74,222,128,.1); border:1px solid rgba(74,222,128,.2); color:#4ade80; }
+    .cal-advice.warn { background:rgba(251,191,36,.1); border:1px solid rgba(251,191,36,.2); color:#fbbf24; }
+    .cal-advice.over { background:rgba(248,113,113,.1); border:1px solid rgba(248,113,113,.2); color:#f87171; }
+    .sug-output { margin-top:14px; }
+    .sug-section-title { font-size:.75rem; font-weight:700; color:#a78bfa; text-transform:uppercase; letter-spacing:.08em; margin:12px 0 6px; }
+    .sug-food-card {
+      display:flex; align-items:center; gap:10px; padding:10px 12px;
+      background:rgba(255,255,255,.03); border:1px solid rgba(130,80,255,.12); border-radius:10px; margin-bottom:7px;
+      cursor:pointer; transition:all .15s;
+    }
+    .sug-food-card:hover { background:rgba(130,80,255,.1); border-color:rgba(130,80,255,.3); }
+    .sug-food-ico { font-size:1.4rem; width:32px; text-align:center; flex-shrink:0; }
+    .sug-food-name { font-size:.82rem; font-weight:700; color:#e8e4ff; }
+    .sug-food-detail { font-size:.68rem; color:#9ca3af; margin-top:1px; }
+    .sug-food-kcal { margin-left:auto; font-size:.9rem; font-weight:800; color:#4ade80; flex-shrink:0; }
+    .sug-portion-note { font-size:.65rem; color:#6b7280; }
   </style>
 </head>
 <body>
@@ -142,6 +230,7 @@
       <a href="#currency"   class="jump-link">💱 Currency</a>
       <a href="#quadratic"  class="jump-link">🧮 Quadratic</a>
       <a href="#sci-calc"   class="jump-link">🔬 Sci Calc</a>
+      <a href="#calories"   class="jump-link">🔥 Calorie Robot</a>
     </nav>
 
     <!-- ── Discount ── -->
@@ -581,6 +670,211 @@
       <div class="sci-history" id="sci-history"></div>
     </section>
 
+    <!-- 20. Calorie Robot -->
+    <section id="calories" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">🔥</span>
+        <div>
+          <div class="tps-title">Calorie Robot</div>
+          <div class="tps-desc">Track daily meals by hour · BMR · Exercise · Food suggestions by meal type</div>
+        </div>
+      </div>
+
+      <!-- Mode tabs -->
+      <div class="cal-mode-tabs">
+        <button class="cal-mode-btn active" onclick="calSwitchMode('track',this)">📋 Daily Tracker</button>
+        <button class="cal-mode-btn" onclick="calSwitchMode('suggest',this)">💡 Food Suggestions</button>
+      </div>
+
+      <!-- ══ TRACKER MODE ══ -->
+      <div id="cal-track">
+
+        <!-- BMR / Personal Info -->
+        <div class="cal-card">
+          <h3>👤 Personal Info & Calorie Need</h3>
+          <div class="cal-grid-4">
+            <div class="cal-field">
+              <label>Gender</label>
+              <select id="cal-gender">
+                <option value="male">♂ Male</option>
+                <option value="female">♀ Female</option>
+              </select>
+            </div>
+            <div class="cal-field">
+              <label>Age (yrs)</label>
+              <input type="number" id="cal-age" placeholder="30" min="10" max="120">
+            </div>
+            <div class="cal-field">
+              <label>Weight (kg)</label>
+              <input type="number" id="cal-weight" placeholder="70" min="20" max="300">
+            </div>
+            <div class="cal-field">
+              <label>Height (cm)</label>
+              <input type="number" id="cal-height" placeholder="170" min="100" max="250">
+            </div>
+          </div>
+          <div class="cal-grid-2" style="margin-top:10px">
+            <div class="cal-field">
+              <label>Activity Level</label>
+              <select id="cal-activity">
+                <option value="1.2">😴 Sedentary (desk job, no exercise)</option>
+                <option value="1.375">🚶 Light (1–3 days/week)</option>
+                <option value="1.55" selected>🏃 Moderate (3–5 days/week)</option>
+                <option value="1.725">💪 Active (6–7 days/week)</option>
+                <option value="1.9">🏋️ Very Active (athlete / 2x/day)</option>
+              </select>
+            </div>
+            <div class="cal-field" style="display:flex;align-items:flex-end;">
+              <button class="cal-btn cal-btn-primary" style="width:100%" onclick="calCalcBMR()">Calculate My Calorie Need</button>
+            </div>
+          </div>
+          <div id="cal-bmr-result" class="cal-bmr-result" style="display:none"></div>
+        </div>
+
+        <!-- Meals -->
+        <div class="cal-card">
+          <h3>🍽️ Today's Food Log</h3>
+          <!-- Breakfast -->
+          <div class="cal-meal-section">
+            <div class="cal-meal-header">
+              <span>🌅 Breakfast <small>06:00 – 10:00</small></span>
+              <span class="cal-meal-calories" id="kcal-breakfast">0 kcal</span>
+              <button class="cal-btn-sm" onclick="calAddRow('breakfast')">+ Add food</button>
+            </div>
+            <div id="meal-breakfast"></div>
+          </div>
+          <!-- Morning Snack -->
+          <div class="cal-meal-section">
+            <div class="cal-meal-header">
+              <span>☕ Morning Snack <small>10:00 – 12:00</small></span>
+              <span class="cal-meal-calories" id="kcal-msnack">0 kcal</span>
+              <button class="cal-btn-sm" onclick="calAddRow('msnack')">+ Add food</button>
+            </div>
+            <div id="meal-msnack"></div>
+          </div>
+          <!-- Lunch -->
+          <div class="cal-meal-section">
+            <div class="cal-meal-header">
+              <span>☀️ Lunch <small>12:00 – 14:00</small></span>
+              <span class="cal-meal-calories" id="kcal-lunch">0 kcal</span>
+              <button class="cal-btn-sm" onclick="calAddRow('lunch')">+ Add food</button>
+            </div>
+            <div id="meal-lunch"></div>
+          </div>
+          <!-- Afternoon Snack -->
+          <div class="cal-meal-section">
+            <div class="cal-meal-header">
+              <span>🍎 Afternoon Snack <small>15:00 – 17:00</small></span>
+              <span class="cal-meal-calories" id="kcal-asnack">0 kcal</span>
+              <button class="cal-btn-sm" onclick="calAddRow('asnack')">+ Add food</button>
+            </div>
+            <div id="meal-asnack"></div>
+          </div>
+          <!-- Dinner -->
+          <div class="cal-meal-section">
+            <div class="cal-meal-header">
+              <span>🌙 Dinner <small>18:00 – 21:00</small></span>
+              <span class="cal-meal-calories" id="kcal-dinner">0 kcal</span>
+              <button class="cal-btn-sm" onclick="calAddRow('dinner')">+ Add food</button>
+            </div>
+            <div id="meal-dinner"></div>
+          </div>
+          <!-- Late Snack -->
+          <div class="cal-meal-section">
+            <div class="cal-meal-header">
+              <span>🌜 Late Snack <small>21:00 – 23:00</small></span>
+              <span class="cal-meal-calories" id="kcal-lsnack">0 kcal</span>
+              <button class="cal-btn-sm" onclick="calAddRow('lsnack')">+ Add food</button>
+            </div>
+            <div id="meal-lsnack"></div>
+          </div>
+        </div>
+
+        <!-- Exercise -->
+        <div class="cal-card">
+          <h3>🏋️ Exercise Log</h3>
+          <div class="cal-exercise-add">
+            <select id="cal-ex-type" style="flex:2">
+              <option value="walking">🚶 Walking (moderate)</option>
+              <option value="jogging">🏃 Jogging</option>
+              <option value="running">🏃 Running (fast)</option>
+              <option value="cycling">🚴 Cycling</option>
+              <option value="swimming">🏊 Swimming</option>
+              <option value="gym">🏋️ Weight Training</option>
+              <option value="yoga">🧘 Yoga / Stretching</option>
+              <option value="hiit">⚡ HIIT</option>
+              <option value="football">⚽ Football / Soccer</option>
+              <option value="basketball">🏀 Basketball</option>
+              <option value="tennis">🎾 Tennis</option>
+              <option value="dancing">💃 Dancing</option>
+              <option value="stairclimb">🪜 Stair Climbing</option>
+              <option value="custom">✏️ Custom (enter kcal/hr below)</option>
+            </select>
+            <input type="number" id="cal-ex-min" placeholder="Minutes" min="1" max="480" style="flex:1;min-width:80px">
+            <input type="number" id="cal-ex-custom" placeholder="kcal/hr (custom only)" min="1" style="flex:1;min-width:90px">
+            <button class="cal-btn cal-btn-primary" onclick="calAddExercise()">Add</button>
+          </div>
+          <div id="cal-ex-list"></div>
+        </div>
+
+        <!-- Summary -->
+        <div class="cal-card">
+          <h3>📊 Daily Summary</h3>
+          <div class="cal-summary-grid">
+            <div class="cal-summary-item">
+              <div class="cal-summary-val" id="sum-eaten">0</div>
+              <div class="cal-summary-label">kcal Eaten</div>
+            </div>
+            <div class="cal-summary-item">
+              <div class="cal-summary-val" id="sum-burned" style="color:#f97316">0</div>
+              <div class="cal-summary-label">kcal Burned</div>
+            </div>
+            <div class="cal-summary-item">
+              <div class="cal-summary-val" id="sum-need" style="color:#818cf8">—</div>
+              <div class="cal-summary-label">Daily Need</div>
+            </div>
+            <div class="cal-summary-item net" id="sum-net-box">
+              <div class="cal-summary-val" id="sum-net">0</div>
+              <div class="cal-summary-label">Net Balance</div>
+            </div>
+          </div>
+          <div id="cal-advice" style="margin-top:12px"></div>
+        </div>
+      </div>
+
+      <!-- ══ SUGGEST MODE ══ -->
+      <div id="cal-suggest" style="display:none">
+        <div class="cal-card">
+          <h3>💡 Food Suggestions by Calorie Target</h3>
+          <p style="font-size:.75rem;color:#9ca3af;margin-bottom:14px">
+            Tell me your calorie target and which meal — I'll suggest foods fitting that budget, grouped by meal-appropriate options.
+          </p>
+          <div class="cal-grid-3">
+            <div class="cal-field">
+              <label>Target Calories (kcal)</label>
+              <input type="number" id="sug-cal" placeholder="500" min="50" max="3000">
+            </div>
+            <div class="cal-field">
+              <label>Meal</label>
+              <select id="sug-meal">
+                <option value="breakfast">🌅 Breakfast</option>
+                <option value="msnack">☕ Morning Snack</option>
+                <option value="lunch">☀️ Lunch</option>
+                <option value="asnack">🍎 Afternoon Snack</option>
+                <option value="dinner">🌙 Dinner</option>
+                <option value="lsnack">🌜 Late Snack</option>
+              </select>
+            </div>
+            <div class="cal-field" style="display:flex;align-items:flex-end;">
+              <button class="cal-btn cal-btn-primary" style="width:100%" onclick="calSuggest()">Get Suggestions</button>
+            </div>
+          </div>
+          <div id="sug-output"></div>
+        </div>
+      </div>
+
+    </section>
+
     <div style="margin-top:2.5rem;text-align:center;font-size:.72rem;color:var(--text-dim);">
       © 2026 SnakeConverter · For reference only — not medical or financial advice
     </div>
@@ -870,6 +1164,388 @@ function sciCalc() {
     document.getElementById('sci-expr').textContent='';
   } catch(e) {
     document.getElementById('sci-res').textContent='Error';
+  }
+}
+
+/* ══════════════════════════════════════════════════════
+   20. CALORIE ROBOT
+══════════════════════════════════════════════════════ */
+
+/* ── Food Database ── */
+const CAL_FOODS = {
+  breakfast: [
+    {n:'Boiled Egg',         e:'🥚', c:155, u:'g',  p:50},
+    {n:'Scrambled Eggs',     e:'🍳', c:149, u:'g',  p:100},
+    {n:'Omelette (2 eggs)',  e:'🍳', c:154, u:'g',  p:110},
+    {n:'White Toast',        e:'🍞', c:265, u:'g',  p:30},
+    {n:'Whole-Wheat Toast',  e:'🥖', c:247, u:'g',  p:30},
+    {n:'Oatmeal (cooked)',   e:'🥣', c:71,  u:'g',  p:150},
+    {n:'Greek Yogurt',       e:'🫙', c:59,  u:'g',  p:150},
+    {n:'Milk (whole)',        e:'🥛', c:61,  u:'ml', p:200},
+    {n:'Banana',             e:'🍌', c:89,  u:'g',  p:120},
+    {n:'Apple',              e:'🍎', c:52,  u:'g',  p:150},
+    {n:'Orange Juice',       e:'🍊', c:45,  u:'ml', p:200},
+    {n:'Pancake',            e:'🥞', c:227, u:'g',  p:80},
+    {n:'Waffle',             e:'🧇', c:291, u:'g',  p:75},
+    {n:'Bacon (cooked)',     e:'🥓', c:541, u:'g',  p:30},
+    {n:'Butter',             e:'🧈', c:717, u:'g',  p:10},
+    {n:'Cream Cheese',       e:'🧀', c:342, u:'g',  p:30},
+    {n:'Granola',            e:'🌾', c:471, u:'g',  p:50},
+    {n:'Honey',              e:'🍯', c:304, u:'g',  p:15},
+    {n:'Coffee (black)',     e:'☕', c:2,   u:'ml', p:250},
+    {n:'Latte (whole milk)', e:'☕', c:54,  u:'ml', p:250},
+    {n:'Avocado Toast',      e:'🥑', c:237, u:'g',  p:100},
+    {n:'Peanut Butter',      e:'🥜', c:588, u:'g',  p:30},
+  ],
+  msnack: [
+    {n:'Apple',              e:'🍎', c:52,  u:'g',  p:150},
+    {n:'Banana',             e:'🍌', c:89,  u:'g',  p:120},
+    {n:'Orange',             e:'🍊', c:47,  u:'g',  p:150},
+    {n:'Mixed Nuts',         e:'🥜', c:607, u:'g',  p:30},
+    {n:'Greek Yogurt',       e:'🫙', c:59,  u:'g',  p:100},
+    {n:'Granola Bar',        e:'🌾', c:471, u:'g',  p:40},
+    {n:'Rice Cake',          e:'🫙', c:387, u:'g',  p:20},
+    {n:'Dark Chocolate',     e:'🍫', c:546, u:'g',  p:20},
+    {n:'Coffee (black)',     e:'☕', c:2,   u:'ml', p:250},
+    {n:'Cappuccino',         e:'☕', c:74,  u:'ml', p:180},
+  ],
+  lunch: [
+    {n:'Chicken Breast (gr.)',e:'🍗', c:165, u:'g',  p:150},
+    {n:'White Rice (cooked)', e:'🍚', c:130, u:'g',  p:200},
+    {n:'Brown Rice (cooked)', e:'🍚', c:112, u:'g',  p:200},
+    {n:'Caesar Salad',        e:'🥗', c:100, u:'g',  p:200},
+    {n:'Pasta (cooked)',       e:'🍝', c:158, u:'g',  p:200},
+    {n:'Pizza (cheese)',       e:'🍕', c:266, u:'g',  p:200},
+    {n:'Turkey Sandwich',     e:'🥪', c:218, u:'g',  p:180},
+    {n:'Beef Burger',         e:'🍔', c:295, u:'g',  p:200},
+    {n:'Tomato Soup',         e:'🍲', c:36,  u:'ml', p:250},
+    {n:'Tuna (canned)',       e:'🐟', c:116, u:'g',  p:100},
+    {n:'Pita Bread',          e:'🫓', c:275, u:'g',  p:60},
+    {n:'Hummus',              e:'🫙', c:177, u:'g',  p:50},
+    {n:'Falafel',             e:'🧆', c:333, u:'g',  p:100},
+    {n:'Lentil Soup',         e:'🥣', c:71,  u:'ml', p:250},
+    {n:'Grilled Salmon',      e:'🐟', c:208, u:'g',  p:150},
+    {n:'Avocado',             e:'🥑', c:160, u:'g',  p:100},
+    {n:'Quinoa (cooked)',     e:'🌾', c:120, u:'g',  p:150},
+    {n:'Wrap / Tortilla',     e:'🌯', c:218, u:'g',  p:150},
+  ],
+  asnack: [
+    {n:'Apple',              e:'🍎', c:52,  u:'g',  p:150},
+    {n:'Carrot Sticks',      e:'🥕', c:41,  u:'g',  p:100},
+    {n:'Mixed Nuts',         e:'🥜', c:607, u:'g',  p:25},
+    {n:'Protein Bar',        e:'💪', c:380, u:'g',  p:60},
+    {n:'Popcorn (plain)',    e:'🍿', c:387, u:'g',  p:30},
+    {n:'Dark Chocolate',     e:'🍫', c:546, u:'g',  p:20},
+    {n:'Cheese (cheddar)',   e:'🧀', c:403, u:'g',  p:30},
+    {n:'Crackers (whole)',   e:'🫙', c:421, u:'g',  p:30},
+    {n:'Banana',             e:'🍌', c:89,  u:'g',  p:120},
+    {n:'Green Tea',          e:'🍵', c:1,   u:'ml', p:250},
+  ],
+  dinner: [
+    {n:'Beef Steak (gr.)',   e:'🥩', c:271, u:'g',  p:200},
+    {n:'Grilled Salmon',    e:'🐟', c:208, u:'g',  p:180},
+    {n:'Roast Chicken',     e:'🍗', c:239, u:'g',  p:200},
+    {n:'Pasta Bolognese',   e:'🍝', c:131, u:'g',  p:300},
+    {n:'Sushi (mixed)',     e:'🍣', c:143, u:'g',  p:200},
+    {n:'Stir-fry Veg.',    e:'🥦', c:75,  u:'g',  p:200},
+    {n:'Mashed Potato',    e:'🥔', c:83,  u:'g',  p:200},
+    {n:'Brown Rice',       e:'🍚', c:112, u:'g',  p:200},
+    {n:'Grilled Shrimp',   e:'🦐', c:99,  u:'g',  p:150},
+    {n:'Pork Chop (gr.)',  e:'🥩', c:231, u:'g',  p:180},
+    {n:'Tofu (firm)',      e:'🫙', c:76,  u:'g',  p:150},
+    {n:'Lamb Chop',        e:'🥩', c:294, u:'g',  p:150},
+    {n:'Lasagna',          e:'🍝', c:135, u:'g',  p:250},
+    {n:'Broccoli (st.)',   e:'🥦', c:35,  u:'g',  p:150},
+    {n:'Pita + Hummus',   e:'🫓', c:200, u:'g',  p:120},
+    {n:'Grilled Veggies', e:'🌽', c:55,  u:'g',  p:200},
+    {n:'Fish Fillet (gr.)',e:'🐟', c:166, u:'g',  p:180},
+  ],
+  lsnack: [
+    {n:'Warm Milk',        e:'🥛', c:61,  u:'ml', p:200},
+    {n:'Chamomile Tea',    e:'🍵', c:1,   u:'ml', p:250},
+    {n:'Banana',           e:'🍌', c:89,  u:'g',  p:120},
+    {n:'Greek Yogurt',     e:'🫙', c:59,  u:'g',  p:150},
+    {n:'Dark Chocolate',   e:'🍫', c:546, u:'g',  p:20},
+    {n:'Rice Cake',        e:'🫙', c:387, u:'g',  p:20},
+    {n:'Apple',            e:'🍎', c:52,  u:'g',  p:120},
+    {n:'Crackers',         e:'🫙', c:421, u:'g',  p:25},
+  ]
+};
+
+/* Exercise: kcal/hr per kg body weight × MET */
+const CAL_EX = {
+  walking:    {e:'🚶', label:'Walking', met:3.5},
+  jogging:    {e:'🏃', label:'Jogging', met:7.0},
+  running:    {e:'🏃', label:'Running (fast)', met:11.0},
+  cycling:    {e:'🚴', label:'Cycling', met:7.5},
+  swimming:   {e:'🏊', label:'Swimming', met:8.0},
+  gym:        {e:'🏋️', label:'Weight Training', met:5.0},
+  yoga:       {e:'🧘', label:'Yoga', met:3.0},
+  hiit:       {e:'⚡', label:'HIIT', met:12.0},
+  football:   {e:'⚽', label:'Football', met:7.0},
+  basketball: {e:'🏀', label:'Basketball', met:6.5},
+  tennis:     {e:'🎾', label:'Tennis', met:7.3},
+  dancing:    {e:'💃', label:'Dancing', met:4.5},
+  stairclimb: {e:'🪜', label:'Stair Climbing', met:9.0},
+  custom:     {e:'✏️', label:'Custom', met:0}
+};
+
+var calUserWeight = 70;
+var calTDEE = 0;
+var calExerciseList = [];
+var calFoodRows = { breakfast:[], msnack:[], lunch:[], asnack:[], dinner:[], lsnack:[] };
+
+function calSwitchMode(mode, btn) {
+  document.querySelectorAll('.cal-mode-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('cal-track').style.display   = mode === 'track'   ? '' : 'none';
+  document.getElementById('cal-suggest').style.display = mode === 'suggest' ? '' : 'none';
+}
+
+/* ── BMR Calculation (Mifflin-St Jeor) ── */
+function calCalcBMR() {
+  const gender   = document.getElementById('cal-gender').value;
+  const age      = parseFloat(document.getElementById('cal-age').value);
+  const weight   = parseFloat(document.getElementById('cal-weight').value);
+  const height   = parseFloat(document.getElementById('cal-height').value);
+  const activity = parseFloat(document.getElementById('cal-activity').value);
+  if (!age || !weight || !height) { alert('Please fill in age, weight and height.'); return; }
+  calUserWeight = weight;
+  const bmr = gender === 'male'
+    ? 10 * weight + 6.25 * height - 5 * age + 5
+    : 10 * weight + 6.25 * height - 5 * age - 161;
+  const tdee = Math.round(bmr * activity);
+  calTDEE = tdee;
+  const lose  = Math.round(tdee - 500);
+  const gain  = Math.round(tdee + 500);
+  const resEl = document.getElementById('cal-bmr-result');
+  resEl.style.display = 'flex';
+  resEl.innerHTML = [
+    `<div class="cal-bmr-chip"><strong>${Math.round(bmr)}</strong>BMR (kcal/day)</div>`,
+    `<div class="cal-bmr-chip"><strong>${tdee}</strong>Maintain Weight</div>`,
+    `<div class="cal-bmr-chip"><strong>${lose}</strong>Lose (−0.5kg/wk)</div>`,
+    `<div class="cal-bmr-chip"><strong>${gain}</strong>Gain (+0.5kg/wk)</div>`,
+  ].join('');
+  document.getElementById('sum-need').textContent = tdee;
+  calUpdateSummary();
+}
+
+/* ── Food Rows ── */
+function calAddRow(meal) {
+  const foods = CAL_FOODS[meal] || [];
+  const rowId = 'calrow_' + meal + '_' + Date.now();
+  const container = document.getElementById('meal-' + meal);
+  const div = document.createElement('div');
+  div.className = 'cal-food-row';
+  div.id = rowId;
+  const opts = foods.map((f,i) =>
+    `<option value="${i}">${f.e} ${f.n} (${f.c} kcal/100${f.u})</option>`
+  ).join('');
+  div.innerHTML = `
+    <select onchange="calRowChange('${meal}','${rowId}')">
+      <option value="">— Select food —</option>
+      ${opts}
+    </select>
+    <input type="number" placeholder="Amount (g/ml)" min="1" max="5000"
+      oninput="calRowChange('${meal}','${rowId}')" value="">
+    <div class="cal-food-cal" id="${rowId}_kcal">0 kcal</div>
+    <button class="cal-remove-btn" onclick="calRemoveRow('${meal}','${rowId}')">✕</button>
+  `;
+  container.appendChild(div);
+  calFoodRows[meal].push(rowId);
+}
+
+function calRowChange(meal, rowId) {
+  const div = document.getElementById(rowId);
+  if (!div) return;
+  const sel = div.querySelector('select');
+  const inp = div.querySelector('input');
+  const kcalEl = document.getElementById(rowId + '_kcal');
+  const idx = parseInt(sel.value);
+  const foods = CAL_FOODS[meal] || [];
+  if (isNaN(idx) || !foods[idx]) { kcalEl.textContent = '0 kcal'; calUpdateSummary(); return; }
+  const food = foods[idx];
+  const amount = parseFloat(inp.value) || food.p;
+  const kcal = Math.round(food.c * amount / 100);
+  kcalEl.textContent = kcal + ' kcal';
+  calUpdateSummary();
+}
+
+function calRemoveRow(meal, rowId) {
+  const div = document.getElementById(rowId);
+  if (div) div.remove();
+  calFoodRows[meal] = calFoodRows[meal].filter(r => r !== rowId);
+  calUpdateSummary();
+}
+
+/* ── Exercise ── */
+function calAddExercise() {
+  const type = document.getElementById('cal-ex-type').value;
+  const min  = parseFloat(document.getElementById('cal-ex-min').value);
+  const customKcal = parseFloat(document.getElementById('cal-ex-custom').value);
+  if (!min || min <= 0) { alert('Enter exercise duration in minutes.'); return; }
+  const ex = CAL_EX[type];
+  let kcalPerHr;
+  if (type === 'custom') {
+    if (!customKcal) { alert('Enter kcal/hr for custom exercise.'); return; }
+    kcalPerHr = customKcal;
+  } else {
+    kcalPerHr = ex.met * calUserWeight * 1.0;
+  }
+  const burned = Math.round(kcalPerHr * min / 60);
+  const id = 'exitem_' + Date.now();
+  calExerciseList.push({ id, burned });
+  const list = document.getElementById('cal-ex-list');
+  const div = document.createElement('div');
+  div.className = 'cal-exercise-item';
+  div.id = id;
+  div.innerHTML = `
+    <span>${ex ? ex.e : '✏️'} ${ex ? ex.label : 'Custom'} — ${min} min</span>
+    <span class="cal-exercise-kcal">−${burned} kcal</span>
+    <button class="cal-remove-btn" onclick="calRemoveEx('${id}')">✕</button>
+  `;
+  list.appendChild(div);
+  document.getElementById('cal-ex-min').value = '';
+  document.getElementById('cal-ex-custom').value = '';
+  calUpdateSummary();
+}
+
+function calRemoveEx(id) {
+  const div = document.getElementById(id);
+  if (div) div.remove();
+  calExerciseList = calExerciseList.filter(e => e.id !== id);
+  calUpdateSummary();
+}
+
+/* ── Summary ── */
+function calUpdateSummary() {
+  const meals = ['breakfast','msnack','lunch','asnack','dinner','lsnack'];
+  let totalEaten = 0;
+  meals.forEach(meal => {
+    const rows = document.querySelectorAll('#meal-' + meal + ' .cal-food-row');
+    let mealKcal = 0;
+    rows.forEach(row => {
+      const kcalEl = row.querySelector('.cal-food-cal');
+      if (kcalEl) mealKcal += parseInt(kcalEl.textContent) || 0;
+    });
+    const lbl = document.getElementById('kcal-' + meal);
+    if (lbl) lbl.textContent = mealKcal + ' kcal';
+    totalEaten += mealKcal;
+  });
+  const totalBurned = calExerciseList.reduce((s,e) => s + e.burned, 0);
+  const net = totalEaten - totalBurned;
+  document.getElementById('sum-eaten').textContent = totalEaten;
+  document.getElementById('sum-burned').textContent = totalBurned;
+  document.getElementById('sum-net').textContent = (net >= 0 ? '+' : '') + net;
+  const netBox = document.getElementById('sum-net-box');
+  if (calTDEE) {
+    const diff = net - calTDEE;
+    const adv = document.getElementById('cal-advice');
+    if (diff < -600) {
+      netBox.classList.add('deficit'); netBox.classList.remove('net');
+      adv.className = 'cal-advice warn';
+      adv.textContent = `⚠️ You are ${Math.abs(diff)} kcal below your daily need. Consider eating a bit more to avoid nutrient deficiency.`;
+    } else if (diff < 0) {
+      netBox.classList.remove('deficit'); netBox.classList.add('net');
+      adv.className = 'cal-advice ok';
+      adv.textContent = `✅ Great! You are ${Math.abs(diff)} kcal below your maintenance — a healthy calorie deficit for weight loss.`;
+    } else if (diff < 300) {
+      netBox.classList.remove('deficit'); netBox.classList.add('net');
+      adv.className = 'cal-advice ok';
+      adv.textContent = `✅ You are close to your maintenance calories. Good for weight maintenance.`;
+    } else {
+      netBox.classList.remove('net'); netBox.classList.add('deficit');
+      adv.className = 'cal-advice over';
+      adv.textContent = `⚠️ You are ${diff} kcal over your daily need. This may lead to weight gain over time.`;
+    }
+    adv.style.display = '';
+  }
+}
+
+/* ── Food Suggestions ── */
+function calSuggest() {
+  const target = parseFloat(document.getElementById('sug-cal').value);
+  const meal   = document.getElementById('sug-meal').value;
+  if (!target || target < 50) { alert('Enter a calorie target (at least 50 kcal).'); return; }
+  const foods = CAL_FOODS[meal] || [];
+  const out = document.getElementById('sug-output');
+  out.innerHTML = '';
+  if (!foods.length) { out.innerHTML = '<p style="color:#9ca3af;font-size:.8rem">No foods for this meal type.</p>'; return; }
+
+  /* Build suggestions: single foods fitting the target at typical portion */
+  const exact = [];   /* portion adjusted to exactly meet target */
+  const combos = [];  /* multi-food combinations */
+
+  foods.forEach(f => {
+    const portionForTarget = Math.round(target / f.c * 100);
+    if (portionForTarget >= 10 && portionForTarget <= 1000) {
+      exact.push({ food: f, portion: portionForTarget, kcal: Math.round(f.c * portionForTarget / 100) });
+    }
+  });
+
+  /* Sort by how close they are to target */
+  exact.sort((a,b) => Math.abs(a.kcal - target) - Math.abs(b.kcal - target));
+
+  /* Single food suggestions */
+  const h1 = document.createElement('div');
+  h1.className = 'sug-section-title';
+  h1.textContent = '🎯 Single Food — adjusted to your calorie target';
+  out.appendChild(h1);
+  exact.slice(0, 6).forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'sug-food-card';
+    div.innerHTML = `
+      <div class="sug-food-ico">${item.food.e}</div>
+      <div>
+        <div class="sug-food-name">${item.food.n}</div>
+        <div class="sug-food-detail">${item.portion}${item.food.u} · ${item.food.c} kcal per 100${item.food.u}</div>
+      </div>
+      <div class="sug-food-kcal">${item.kcal} kcal</div>
+    `;
+    out.appendChild(div);
+  });
+
+  /* Combo suggestions: 2-food combos close to target */
+  const h2 = document.createElement('div');
+  h2.className = 'sug-section-title';
+  h2.style.marginTop = '18px';
+  h2.textContent = '🍽️ Meal Combos — typical portions close to your target';
+  out.appendChild(h2);
+
+  const typicalItems = foods.map(f => ({ food: f, portion: f.p, kcal: Math.round(f.c * f.p / 100) }));
+  const found = [];
+  for (let i = 0; i < typicalItems.length && found.length < 5; i++) {
+    for (let j = i + 1; j < typicalItems.length && found.length < 5; j++) {
+      const total = typicalItems[i].kcal + typicalItems[j].kcal;
+      if (Math.abs(total - target) / target <= 0.3) {
+        found.push({ a: typicalItems[i], b: typicalItems[j], total });
+      }
+    }
+  }
+  found.sort((a,b) => Math.abs(a.total - target) - Math.abs(b.total - target));
+  if (!found.length) {
+    const p = document.createElement('p');
+    p.style.cssText = 'color:#9ca3af;font-size:.75rem;margin-top:6px';
+    p.textContent = 'No typical combo found within ±30% of your target. Try adjusting the target.';
+    out.appendChild(p);
+  } else {
+    found.forEach(c => {
+      const div = document.createElement('div');
+      div.className = 'sug-food-card';
+      div.style.flexDirection = 'column';
+      div.style.alignItems = 'flex-start';
+      div.style.gap = '6px';
+      div.innerHTML = `
+        <div style="display:flex;width:100%;align-items:center;justify-content:space-between">
+          <span style="font-size:.82rem;font-weight:700;color:#e8e4ff">${c.a.food.e} ${c.a.food.n} + ${c.b.food.e} ${c.b.food.n}</span>
+          <span class="sug-food-kcal">${c.total} kcal</span>
+        </div>
+        <div style="font-size:.68rem;color:#9ca3af">
+          ${c.a.food.n}: ${c.a.portion}${c.a.food.u} (${c.a.kcal} kcal) &nbsp;·&nbsp; ${c.b.food.n}: ${c.b.portion}${c.b.food.u} (${c.b.kcal} kcal)
+        </div>
+      `;
+      out.appendChild(div);
+    });
   }
 }
 </script>
