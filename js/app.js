@@ -60,15 +60,16 @@
 
   /* Tab title labels for topbar */
   const TAB_TITLES = {
-    excel:   document.querySelector('[data-i18n="tab.excel"]')?.textContent   || "Excel → PDF",
-    image:   document.querySelector('[data-i18n="tab.image"]')?.textContent   || "Image → PDF",
-    merge:   document.querySelector('[data-i18n="tab.merge"]')?.textContent   || "Merge PDF",
-    split:   document.querySelector('[data-i18n="tab.split"]')?.textContent   || "Split PDF",
-    encrypt: document.querySelector('[data-i18n="tab.encrypt"]')?.textContent || "Encrypt / Decrypt",
-    share:   document.querySelector('[data-i18n="tab.share"]')?.textContent   || "Share PDF",
+    excel:      document.querySelector('[data-i18n="tab.excel"]')?.textContent   || "Excel → PDF",
+    image:      document.querySelector('[data-i18n="tab.image"]')?.textContent   || "Image → PDF",
+    merge:      document.querySelector('[data-i18n="tab.merge"]')?.textContent   || "Merge PDF",
+    split:      document.querySelector('[data-i18n="tab.split"]')?.textContent   || "Split PDF",
+    encrypt:    document.querySelector('[data-i18n="tab.encrypt"]')?.textContent || "Encrypt / Decrypt",
+    share:      document.querySelector('[data-i18n="tab.share"]')?.textContent   || "Share PDF",
+    screenshot: "Screenshot → PDF",
   };
 
-  const VALID_TABS = new Set(['excel', 'image', 'merge', 'split', 'encrypt', 'share']);
+  const VALID_TABS = new Set(['excel', 'image', 'merge', 'split', 'encrypt', 'share', 'screenshot']);
 
   function switchTab(id) {
     if (!VALID_TABS.has(id)) id = 'excel';

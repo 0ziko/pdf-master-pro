@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "hooks": {
+    "postToolUse": [
+      {
+        "command": "node .cursor/hooks/audit-links.js",
+        "matcher": "Write|StrReplace",
+        "timeout": 15
+      }
+    ]
+  }
+}
