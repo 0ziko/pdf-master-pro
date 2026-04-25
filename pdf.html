@@ -448,6 +448,13 @@
           <div class="pdf-nav-hint" data-i18n="tab.share.hint">Public shareable link</div>
         </div>
       </button>
+      <button type="button" data-tab="screenshot" class="pdf-nav-item">
+        <span class="pdf-nav-icon">📸</span>
+        <div>
+          <div class="pdf-nav-name">Screenshot → PDF</div>
+          <div class="pdf-nav-hint">Images to PDF instantly</div>
+        </div>
+      </button>
       </div><!-- /pdf-nav-items-row -->
 
       <div class="pdf-sidebar-footer">
@@ -699,6 +706,48 @@
           </div>
         </div>
 
+        <!-- ══ Screenshot → PDF Panel ══ -->
+        <div data-panel="screenshot" class="panel pdf-tool-card" style="--gap:1rem;display:none">
+          <div style="display:flex;align-items:flex-start;gap:.75rem;margin-bottom:.75rem">
+            <span style="font-size:1.5rem">📸</span>
+            <div>
+              <div class="pdf-tool-card-title">Screenshot → PDF</div>
+              <div class="pdf-tool-card-desc">Select one or more images — combine them into a single PDF, one image per page</div>
+            </div>
+          </div>
+
+          <div id="ssPanelBody">
+            <div class="dropzone" id="ssDrop" onclick="document.getElementById('ssInput').click()"
+                ondragover="event.preventDefault();this.classList.add('drag-over')"
+                ondragleave="this.classList.remove('drag-over')"
+                ondrop="event.preventDefault();this.classList.remove('drag-over');ssHandleFiles(event.dataTransfer.files)">
+              <input type="file" id="ssInput" accept="image/*" multiple class="hidden" onchange="ssHandleFiles(this.files)">
+              <span class="dropzone-icon">📸</span>
+              <p class="drop-title">Drop images here or click to select</p>
+              <p class="drop-sub">PNG · JPG · WebP — multiple files supported</p>
+            </div>
+            <div id="ssFileList" style="margin-top:.7rem;display:flex;flex-wrap:wrap;gap:.4rem"></div>
+            <div style="margin-top:.8rem;display:flex;gap:.6rem;align-items:center;flex-wrap:wrap">
+              <label style="font-size:.72rem;color:var(--text-muted)">Page size:</label>
+              <select id="ssPageSize" class="calc-select" style="width:auto">
+                <option value="a4">A4</option>
+                <option value="letter">Letter</option>
+                <option value="fit">Fit to image</option>
+              </select>
+              <label style="font-size:.72rem;color:var(--text-muted)">Orientation:</label>
+              <select id="ssOrientation" class="calc-select" style="width:auto">
+                <option value="portrait">Portrait</option>
+                <option value="landscape">Landscape</option>
+              </select>
+            </div>
+            <button type="button" id="ssRun" class="btn-primary" style="margin-top:.9rem;width:100%" onclick="ssGenerate()" disabled>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Generate PDF
+            </button>
+            <div id="ssStatus" style="margin-top:.6rem;font-size:.75rem;color:var(--text-muted);text-align:center"></div>
+          </div>
+        </div>
+
       </div><!-- /pdf-content -->
     </main><!-- /pdf-main -->
   </div><!-- /pdf-layout -->
@@ -706,6 +755,98 @@
   <script>
     document.getElementById("imageFitA4").addEventListener("change", function () { document.getElementById("imageFit").value = "a4"; });
     document.getElementById("imageFitOrig").addEventListener("change", function () { document.getElementById("imageFit").value = "original"; });
+
+    /* ── Screenshot → PDF ── */
+    var _ssFiles = [];
+
+    function ssHandleFiles(files) {
+      var imgs = Array.from(files).filter(function(f){ return f.type.startsWith('image/'); });
+      _ssFiles = _ssFiles.concat(imgs);
+      ssRenderList();
+    }
+
+    function ssRenderList() {
+      var list = document.getElementById('ssFileList');
+      list.innerHTML = _ssFiles.map(function(f, i){
+        return '<div style="background:rgba(255,255,255,.05);border:1px solid var(--border-subtle);border-radius:.5rem;padding:.3rem .6rem;font-size:.72rem;display:flex;align-items:center;gap:.4rem">' +
+          '🖼 ' + f.name +
+          '<button onclick="ssRemove('+i+')" style="background:none;border:none;color:#f87171;cursor:pointer;font-size:.75rem;padding:0 0 0 .3rem">✕</button>' +
+        '</div>';
+      }).join('');
+      document.getElementById('ssRun').disabled = _ssFiles.length === 0;
+      document.getElementById('ssStatus').textContent = _ssFiles.length ? _ssFiles.length + ' image(s) selected' : '';
+    }
+
+    function ssRemove(idx) { _ssFiles.splice(idx,1); ssRenderList(); }
+
+    async function ssGenerate() {
+      if (!_ssFiles.length) return;
+      var btn = document.getElementById('ssRun');
+      var status = document.getElementById('ssStatus');
+      btn.disabled = true; status.textContent = 'Generating PDF…';
+
+      try {
+        var pageSize = document.getElementById('ssPageSize').value;
+        var orient   = document.getElementById('ssOrientation').value;
+
+        /* A4: 595×842pt, Letter: 612×792pt at 72dpi */
+        var PW = { a4:595, letter:612, fit:0 };
+        var PH = { a4:842, letter:792, fit:0 };
+        var pw = PW[pageSize], ph = PH[pageSize];
+        if (orient === 'landscape' && pageSize !== 'fit') { var tmp=pw; pw=ph; ph=tmp; }
+
+        /* Load jsPDF dynamically */
+        if (!window.jspdf) {
+          await new Promise(function(res,rej){
+            var s=document.createElement('script');
+            s.src='https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js';
+            s.onload=res; s.onerror=rej;
+            document.head.appendChild(s);
+          });
+        }
+        var { jsPDF } = window.jspdf;
+
+        var doc = null;
+        for (var i = 0; i < _ssFiles.length; i++) {
+          status.textContent = 'Processing image ' + (i+1) + '/' + _ssFiles.length + '…';
+          var src = await new Promise(function(res){
+            var reader = new FileReader();
+            reader.onload = function(e){ res(e.target.result); };
+            reader.readAsDataURL(_ssFiles[i]);
+          });
+          var img = await new Promise(function(res){
+            var im = new Image(); im.onload=function(){ res(im); }; im.src=src;
+          });
+
+          var iw = img.naturalWidth, ih = img.naturalHeight;
+          var pagW = pageSize === 'fit' ? iw * 0.75 : pw;
+          var pagH = pageSize === 'fit' ? ih * 0.75 : ph;
+          var fmt  = pageSize === 'fit' ? [pagW, pagH] : pageSize.toUpperCase();
+          var ori  = (orient === 'landscape' && pageSize !== 'fit') ? 'l' : 'p';
+
+          if (!doc) {
+            doc = new jsPDF({ unit:'pt', format: fmt, orientation: ori });
+          } else {
+            doc.addPage(fmt, ori);
+          }
+
+          /* Fit image into page */
+          var scale = Math.min(pagW / iw, pagH / ih);
+          var dw = iw * scale, dh = ih * scale;
+          var dx = (pagW - dw) / 2, dy = (pagH - dh) / 2;
+          var ext = (_ssFiles[i].type === 'image/png') ? 'PNG' : 'JPEG';
+          doc.addImage(src, ext, dx, dy, dw, dh);
+        }
+
+        doc.save('screenshots.pdf');
+        status.textContent = '✓ PDF downloaded!';
+        setTimeout(function(){ status.textContent = _ssFiles.length + ' image(s) selected'; }, 3000);
+      } catch(err) {
+        status.textContent = '✗ Error: ' + err.message;
+        console.error(err);
+      }
+      btn.disabled = false;
+    }
   </script>
   <script src="js/config.js"></script>
   <script src="js/i18n.js"></script>

@@ -121,6 +121,9 @@
       <a href="#dice-roller"      class="jump-link">🎲 Dice</a>
       <a href="#stopwatch"        class="jump-link">⏱️ Stopwatch</a>
       <a href="#countdown"        class="jump-link">⏳ Countdown</a>
+      <a href="#pomodoro"         class="jump-link">🍅 Pomodoro</a>
+      <a href="#invoice"          class="jump-link">🧾 Invoice</a>
+      <a href="#passmanager"      class="jump-link">🔐 Pass Manager</a>
     </nav>
 
     <div class="sc-sidebar-footer">
@@ -697,6 +700,188 @@
       </div>
     </section>
 
+    <!-- ══ POMODORO TIMER ══ -->
+    <section id="pomodoro" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">🍅</span>
+        <div><div class="tps-title">Pomodoro Timer</div><div class="tps-desc">25/5 focus sessions — configurable, with session tracking</div></div>
+      </div>
+      <style>
+        .pomo-clock { font-size: 3.8rem; font-weight: 900; text-align: center; letter-spacing: -.02em;
+          color: #f87171; margin: 1.2rem 0 .6rem; font-variant-numeric: tabular-nums; }
+        .pomo-clock.work  { color: #f87171; }
+        .pomo-clock.brk   { color: #4ade80; }
+        .pomo-mode-row { display:flex;gap:.4rem;justify-content:center;margin-bottom:1rem;flex-wrap:wrap; }
+        .pomo-mode-btn { padding:.28rem .9rem;border-radius:999px;border:1px solid var(--border-subtle);
+          font-size:.75rem;font-weight:700;background:transparent;color:var(--text-muted);cursor:pointer;transition:all .15s; }
+        .pomo-mode-btn.active { background:rgba(248,113,113,.2);border-color:#f87171;color:#fca5a5; }
+        .pomo-mode-btn.brk.active { background:rgba(74,222,128,.15);border-color:#4ade80;color:#86efac; }
+        .pomo-progress { height:6px;background:rgba(255,255,255,.06);border-radius:999px;margin:.6rem 0 1rem;overflow:hidden; }
+        .pomo-bar { height:100%;background:linear-gradient(90deg,#f87171,#fb923c);border-radius:999px;transition:width .9s linear; }
+        .pomo-bar.brk { background:linear-gradient(90deg,#4ade80,#34d399); }
+        .pomo-sessions { text-align:center;font-size:.75rem;color:var(--text-muted);margin-bottom:1rem; }
+        .pomo-settings { display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-top:1rem; }
+        .pomo-settings label { font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-dim);display:block;margin-bottom:.22rem; }
+      </style>
+      <div class="pomo-mode-row">
+        <button class="pomo-mode-btn active" id="pomoBtnWork" onclick="pomoSetMode('work')">🍅 Focus</button>
+        <button class="pomo-mode-btn brk"   id="pomoBtnShort" onclick="pomoSetMode('short')">☕ Short Break</button>
+        <button class="pomo-mode-btn brk"   id="pomoBtnLong"  onclick="pomoSetMode('long')">🌿 Long Break</button>
+      </div>
+      <div class="pomo-clock work" id="pomoClock">25:00</div>
+      <div class="pomo-progress"><div class="pomo-bar" id="pomoBar" style="width:100%"></div></div>
+      <div class="pomo-sessions" id="pomoSessions">Session 1 · 0 pomodoros completed</div>
+      <div class="tool-btn-row" style="justify-content:center;gap:.6rem">
+        <button class="btn-primary" id="pomoStartBtn" onclick="pomoToggle()">▶ Start</button>
+        <button class="btn-secondary" onclick="pomoReset()">↺ Reset</button>
+      </div>
+      <div class="pomo-settings">
+        <div><label>Focus (min)</label><input type="number" id="pomoFocusMin" class="input-field" value="25" min="1" max="90" onchange="pomoReset()"></div>
+        <div><label>Short break</label><input type="number" id="pomoShortMin" class="input-field" value="5"  min="1" max="30" onchange="pomoReset()"></div>
+        <div><label>Long break</label><input type="number" id="pomoLongMin"  class="input-field" value="15" min="1" max="60" onchange="pomoReset()"></div>
+      </div>
+    </section>
+
+    <!-- ══ INVOICE GENERATOR ══ -->
+    <section id="invoice" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">🧾</span>
+        <div><div class="tps-title">Invoice Generator</div><div class="tps-desc">Create a professional invoice and print/download as PDF — no account needed</div></div>
+      </div>
+      <style>
+        .inv-grid-2 { display:grid;grid-template-columns:1fr 1fr;gap:.6rem; }
+        @media(max-width:560px){.inv-grid-2{grid-template-columns:1fr;}}
+        .inv-label { font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);display:block;margin-bottom:.22rem; }
+        .inv-section-title { font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin:1rem 0 .5rem;border-bottom:1px solid var(--border-subtle);padding-bottom:.35rem; }
+        .inv-item-row { display:grid;grid-template-columns:2fr 70px 90px 30px;gap:.4rem;align-items:end;margin-bottom:.35rem; }
+        .inv-item-row label { font-size:.6rem;font-weight:700;color:var(--text-dim);text-transform:uppercase; }
+        .inv-total-row { display:flex;justify-content:flex-end; }
+        .inv-total-table { font-size:.82rem; }
+        .inv-total-table td { padding:.22rem .6rem; }
+        .inv-total-table td:last-child { text-align:right;font-weight:700;color:#a5b4fc; }
+        .inv-grand { font-size:1.05rem!important;color:#fff!important;border-top:1px solid var(--border-subtle);padding-top:.4rem!important; }
+      </style>
+      <div class="inv-grid-2">
+        <div>
+          <div class="inv-section-title">Your Company</div>
+          <div style="display:flex;flex-direction:column;gap:.45rem">
+            <div><label class="inv-label">Company / Your Name</label><input type="text" id="invFrom" class="input-field" placeholder="Acme Inc." /></div>
+            <div><label class="inv-label">Address</label><input type="text" id="invFromAddr" class="input-field" placeholder="123 Main St, City" /></div>
+            <div><label class="inv-label">Email</label><input type="text" id="invFromEmail" class="input-field" placeholder="hello@company.com" /></div>
+          </div>
+        </div>
+        <div>
+          <div class="inv-section-title">Bill To</div>
+          <div style="display:flex;flex-direction:column;gap:.45rem">
+            <div><label class="inv-label">Client Name</label><input type="text" id="invTo" class="input-field" placeholder="Client Corp." /></div>
+            <div><label class="inv-label">Address</label><input type="text" id="invToAddr" class="input-field" placeholder="456 Client Ave, City" /></div>
+            <div><label class="inv-label">Email</label><input type="text" id="invToEmail" class="input-field" placeholder="client@example.com" /></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="inv-grid-2" style="margin-top:.6rem">
+        <div><label class="inv-label">Invoice #</label><input type="text" id="invNum" class="input-field" value="INV-001" /></div>
+        <div><label class="inv-label">Date</label><input type="date" id="invDate" class="input-field" /></div>
+        <div><label class="inv-label">Due Date</label><input type="date" id="invDue" class="input-field" /></div>
+        <div><label class="inv-label">Currency</label>
+          <select id="invCur" class="calc-select">
+            <option value="USD">USD $</option><option value="EUR">EUR €</option><option value="GBP">GBP £</option>
+            <option value="TRY">TRY ₺</option><option value="JPY">JPY ¥</option><option value="CAD">CAD $</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="inv-section-title">Line Items</div>
+      <div id="invItems"></div>
+      <button class="btn-secondary" onclick="invAddRow()" style="font-size:.75rem;padding:.35rem .8rem;margin-top:.3rem">+ Add Item</button>
+
+      <div class="inv-grid-2" style="margin-top:.8rem">
+        <div><label class="inv-label">Tax (%)</label><input type="number" id="invTax" class="input-field" value="0" min="0" max="100" step="0.1" oninput="invCalc()" /></div>
+        <div><label class="inv-label">Discount (%)</label><input type="number" id="invDisc" class="input-field" value="0" min="0" max="100" step="0.1" oninput="invCalc()" /></div>
+      </div>
+
+      <div class="inv-total-row" style="margin-top:.8rem">
+        <table class="inv-total-table">
+          <tr><td>Subtotal</td><td id="invSubtotal">—</td></tr>
+          <tr><td>Discount</td><td id="invDiscAmt">—</td></tr>
+          <tr><td>Tax</td><td id="invTaxAmt">—</td></tr>
+          <tr class="inv-grand"><td><strong>Total</strong></td><td id="invTotal"><strong>—</strong></td></tr>
+        </table>
+      </div>
+
+      <div style="margin-top:.6rem"><label class="inv-label">Notes / Payment Terms</label><textarea id="invNotes" class="input-field" rows="2" placeholder="Payment due within 30 days. Thank you!"></textarea></div>
+
+      <div class="tool-btn-row" style="margin-top:1rem;gap:.6rem">
+        <button class="btn-primary" onclick="invPrint()">🖨️ Print / Save PDF</button>
+        <button class="btn-secondary" onclick="invReset()">↺ Clear</button>
+      </div>
+    </section>
+
+    <!-- ══ LOCAL PASSWORD MANAGER ══ -->
+    <section id="passmanager" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">🔐</span>
+        <div><div class="tps-title">Local Password Manager</div><div class="tps-desc">Store passwords encrypted in your browser — never leaves your device</div></div>
+      </div>
+      <style>
+        .pm-notice { padding:.5rem .8rem;background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:.6rem;font-size:.72rem;color:#fbbf24;margin-bottom:.8rem; }
+        .pm-lock-screen { text-align:center;padding:1.5rem 0; }
+        .pm-vault { display:none; }
+        .pm-entry { background:rgba(255,255,255,.04);border:1px solid var(--border-subtle);border-radius:.75rem;padding:.65rem .85rem;margin-bottom:.45rem;display:flex;align-items:center;gap:.6rem; }
+        .pm-entry-site { font-weight:700;font-size:.82rem;color:var(--text-primary);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap; }
+        .pm-entry-user { font-size:.72rem;color:var(--text-muted);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis; }
+        .pm-entry-pass { font-family:monospace;font-size:.75rem;color:#a5b4fc;letter-spacing:.08em; }
+        .pm-entry-actions { display:flex;gap:.3rem;flex-shrink:0; }
+        .pm-icon-btn { padding:.22rem .45rem;border:1px solid var(--border-subtle);border-radius:.4rem;background:transparent;color:var(--text-muted);cursor:pointer;font-size:.7rem;transition:all .14s; }
+        .pm-icon-btn:hover { color:var(--text-primary);border-color:rgba(255,255,255,.2); }
+        .pm-add-form { background:rgba(99,102,241,.05);border:1px solid rgba(99,102,241,.2);border-radius:.75rem;padding:.8rem;margin-top:.8rem; }
+        .pm-add-grid { display:grid;grid-template-columns:1fr 1fr;gap:.45rem; }
+        @media(max-width:520px){.pm-add-grid{grid-template-columns:1fr;}}
+      </style>
+      <div class="pm-notice">⚠️ Passwords are stored locally in your browser (localStorage) with basic obfuscation. Do not use for critical accounts. Clear browser data = passwords lost.</div>
+
+      <!-- Lock Screen -->
+      <div id="pmLock" class="pm-lock-screen">
+        <div style="font-size:2.5rem;margin-bottom:.8rem">🔒</div>
+        <p style="color:var(--text-muted);font-size:.82rem;margin-bottom:1rem">Set a master PIN to protect your vault</p>
+        <div style="display:flex;gap:.5rem;justify-content:center;max-width:300px;margin:0 auto">
+          <input type="password" id="pmPin" class="input-field" placeholder="Master PIN / password" style="flex:1" onkeydown="if(event.key==='Enter')pmUnlock()">
+          <button class="btn-primary" onclick="pmUnlock()">Unlock</button>
+        </div>
+        <div id="pmPinError" style="color:#f87171;font-size:.72rem;margin-top:.5rem"></div>
+      </div>
+
+      <!-- Vault -->
+      <div id="pmVault" class="pm-vault">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem;flex-wrap:wrap;gap:.4rem">
+          <input type="text" id="pmSearch" class="input-field" placeholder="🔍 Search…" style="flex:1;max-width:240px" oninput="pmRender()">
+          <button class="btn-secondary" onclick="pmLock()" style="font-size:.72rem;padding:.35rem .7rem">🔒 Lock</button>
+        </div>
+        <div id="pmList"></div>
+
+        <div class="pm-add-form">
+          <div style="font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.6rem">Add / Edit Entry</div>
+          <div class="pm-add-grid">
+            <div><label class="inv-label">Website / App</label><input type="text" id="pmSite" class="input-field" placeholder="github.com"></div>
+            <div><label class="inv-label">Username / Email</label><input type="text" id="pmUser" class="input-field" placeholder="user@email.com"></div>
+            <div><label class="inv-label">Password</label>
+              <div style="display:flex;gap:.3rem">
+                <input type="text" id="pmPass" class="input-field" placeholder="••••••••" style="flex:1">
+                <button class="btn-secondary" onclick="pmGenPass()" style="padding:.35rem .6rem;font-size:.7rem;white-space:nowrap">⚡ Gen</button>
+              </div>
+            </div>
+            <div><label class="inv-label">Notes</label><input type="text" id="pmNote" class="input-field" placeholder="Optional note"></div>
+          </div>
+          <input type="hidden" id="pmEditIdx" value="-1">
+          <div style="margin-top:.5rem;display:flex;gap:.4rem">
+            <button class="btn-primary" onclick="pmSave()" style="font-size:.75rem">💾 Save</button>
+            <button class="btn-secondary" onclick="pmClearForm()" style="font-size:.75rem">✕ Cancel</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
     </div><!-- /sc-content -->
   </main><!-- /sc-main -->
 </div><!-- /sc-tool-layout -->
@@ -1216,6 +1401,286 @@ const ToolsApp = (() => {
 
 /* Initial password */
 ToolsApp.genPass();
+
+/* ════ POMODORO ════ */
+var _pomoTimer = null, _pomoRunning = false, _pomoMode = 'work', _pomoSessions = 0;
+var _pomoTotal = 0, _pomoRemain = 0;
+
+function pomoMins() {
+  var map = { work: 'pomoFocusMin', short: 'pomoShortMin', long: 'pomoLongMin' };
+  return parseInt(document.getElementById(map[_pomoMode]).value) || 25;
+}
+
+function pomoSetMode(m) {
+  clearInterval(_pomoTimer); _pomoTimer = null; _pomoRunning = false;
+  _pomoMode = m;
+  document.getElementById('pomoStartBtn').textContent = '▶ Start';
+  var clock = document.getElementById('pomoClock');
+  clock.className = 'pomo-clock ' + (m === 'work' ? 'work' : 'brk');
+  document.getElementById('pomoBtnWork').classList.toggle('active', m==='work');
+  document.getElementById('pomoBtnShort').classList.toggle('active', m==='short');
+  document.getElementById('pomoBtnLong').classList.toggle('active', m==='long');
+  document.getElementById('pomoBar').className = 'pomo-bar' + (m !== 'work' ? ' brk' : '');
+  _pomoTotal = pomoMins() * 60; _pomoRemain = _pomoTotal;
+  pomoUpdateClock();
+}
+
+function pomoUpdateClock() {
+  var m = Math.floor(_pomoRemain/60), s = _pomoRemain%60;
+  document.getElementById('pomoClock').textContent = (m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+  document.getElementById('pomoBar').style.width = Math.round(_pomoRemain/_pomoTotal*100)+'%';
+}
+
+function pomoToggle() {
+  if (_pomoRunning) {
+    clearInterval(_pomoTimer); _pomoRunning = false;
+    document.getElementById('pomoStartBtn').textContent = '▶ Resume';
+  } else {
+    _pomoRunning = true;
+    document.getElementById('pomoStartBtn').textContent = '⏸ Pause';
+    _pomoTimer = setInterval(function(){
+      _pomoRemain--;
+      pomoUpdateClock();
+      if (_pomoRemain <= 0) {
+        clearInterval(_pomoTimer); _pomoRunning = false;
+        if (_pomoMode === 'work') { _pomoSessions++; }
+        document.getElementById('pomoSessions').textContent =
+          'Session ' + (_pomoSessions+1) + ' · ' + _pomoSessions + ' pomodoro' + (_pomoSessions!==1?'s':'') + ' completed';
+        try { new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAA...').play(); } catch(e){}
+        document.getElementById('pomoStartBtn').textContent = '▶ Start';
+      }
+    }, 1000);
+  }
+}
+
+function pomoReset() {
+  clearInterval(_pomoTimer); _pomoTimer = null; _pomoRunning = false;
+  _pomoTotal = pomoMins() * 60; _pomoRemain = _pomoTotal;
+  document.getElementById('pomoStartBtn').textContent = '▶ Start';
+  pomoUpdateClock();
+}
+
+/* init */
+(function(){ _pomoTotal = 25*60; _pomoRemain = _pomoTotal; pomoUpdateClock(); })();
+
+/* ════ INVOICE ════ */
+var _invRows = [];
+
+(function(){
+  var today = new Date();
+  var due = new Date(today); due.setDate(due.getDate()+30);
+  var fmt = function(d){ return d.toISOString().split('T')[0]; };
+  document.getElementById('invDate').value = fmt(today);
+  document.getElementById('invDue').value  = fmt(due);
+  invAddRow(); invAddRow(); invAddRow();
+})();
+
+function invAddRow() {
+  var idx = _invRows.length;
+  _invRows.push({desc:'', qty:1, price:0});
+  var container = document.getElementById('invItems');
+  var row = document.createElement('div');
+  row.className = 'inv-item-row';
+  row.dataset.idx = idx;
+  row.innerHTML =
+    '<div>' + (idx===0?'<label class="inv-label">Description</label>':'') +
+      '<input type="text" class="input-field inv-desc" placeholder="Service / Product" oninput="invCalc()" /></div>' +
+    '<div>' + (idx===0?'<label class="inv-label">Qty</label>':'') +
+      '<input type="number" class="input-field inv-qty" value="1" min="0" oninput="invCalc()" /></div>' +
+    '<div>' + (idx===0?'<label class="inv-label">Unit Price</label>':'') +
+      '<input type="number" class="input-field inv-price" value="0" min="0" step="0.01" oninput="invCalc()" /></div>' +
+    '<button class="pm-icon-btn" onclick="invRemoveRow(this)" style="align-self:center;margin-top:' + (idx===0?'18px':'0') + '">✕</button>';
+  container.appendChild(row);
+  invCalc();
+}
+
+function invRemoveRow(btn) {
+  btn.parentElement.remove(); invCalc();
+}
+
+function invCalc() {
+  var cur = document.getElementById('invCur').value;
+  var sym = {USD:'$',EUR:'€',GBP:'£',TRY:'₺',JPY:'¥',CAD:'CA$'}[cur] || cur + ' ';
+  var subtotal = 0;
+  document.querySelectorAll('#invItems .inv-item-row').forEach(function(row){
+    var qty   = parseFloat(row.querySelector('.inv-qty').value)   || 0;
+    var price = parseFloat(row.querySelector('.inv-price').value) || 0;
+    subtotal += qty * price;
+  });
+  var disc = parseFloat(document.getElementById('invDisc').value) || 0;
+  var tax  = parseFloat(document.getElementById('invTax').value)  || 0;
+  var discAmt = subtotal * disc / 100;
+  var taxAmt  = (subtotal - discAmt) * tax / 100;
+  var total   = subtotal - discAmt + taxAmt;
+  var f = function(n){ return sym + n.toFixed(2); };
+  document.getElementById('invSubtotal').textContent = f(subtotal);
+  document.getElementById('invDiscAmt').textContent  = disc > 0 ? '-' + f(discAmt) : '—';
+  document.getElementById('invTaxAmt').textContent   = tax  > 0 ? f(taxAmt) : '—';
+  document.getElementById('invTotal').innerHTML = '<strong>' + f(total) + '</strong>';
+}
+
+function invPrint() {
+  var cur = document.getElementById('invCur').value;
+  var sym = {USD:'$',EUR:'€',GBP:'£',TRY:'₺',JPY:'¥',CAD:'CA$'}[cur] || cur+' ';
+  var rows = [];
+  var subtotal = 0;
+  document.querySelectorAll('#invItems .inv-item-row').forEach(function(row){
+    var desc  = row.querySelector('.inv-desc').value  || '—';
+    var qty   = parseFloat(row.querySelector('.inv-qty').value)   || 0;
+    var price = parseFloat(row.querySelector('.inv-price').value) || 0;
+    var amt   = qty * price;
+    subtotal += amt;
+    if (desc !== '—' || amt) rows.push({desc,qty,price,amt});
+  });
+  var disc = parseFloat(document.getElementById('invDisc').value)||0;
+  var tax  = parseFloat(document.getElementById('invTax').value)||0;
+  var discAmt = subtotal*disc/100, taxAmt=(subtotal-discAmt)*tax/100, total=subtotal-discAmt+taxAmt;
+  var f = function(n){ return sym+n.toFixed(2); };
+  var win = window.open('','_blank');
+  win.document.write('<!DOCTYPE html><html><head><title>Invoice</title>' +
+    '<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;padding:40px;color:#111;font-size:13px}' +
+    'h1{font-size:28px;font-weight:900;color:#6366f1;margin-bottom:4px}.inv-header{display:flex;justify-content:space-between;margin-bottom:28px}' +
+    '.inv-from,.inv-to{flex:1}.inv-from{margin-right:20px}.inv-meta{text-align:right;font-size:12px;color:#555}' +
+    '.inv-meta b{font-size:14px;display:block;color:#111;margin-bottom:2px}' +
+    'table{width:100%;border-collapse:collapse;margin:20px 0}th{background:#f3f4f6;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.05em;padding:8px 10px;text-align:left}' +
+    'td{padding:8px 10px;border-bottom:1px solid #e5e7eb}.totals-table{width:240px;margin-left:auto}.totals-table td{border:none;padding:4px 10px}' +
+    '.grand td{font-size:15px;font-weight:700;border-top:2px solid #6366f1;padding-top:8px}.notes{margin-top:20px;font-size:12px;color:#555;border-top:1px solid #e5e7eb;padding-top:12px}' +
+    '@media print{body{padding:20px}}</style></head><body>' +
+    '<div class="inv-header">' +
+      '<div class="inv-from"><h1>INVOICE</h1><b style="font-size:15px;font-weight:700;margin-top:6px;display:block">' + (document.getElementById('invFrom').value||'Your Company') + '</b>' +
+        '<div style="color:#555;font-size:12px">' + (document.getElementById('invFromAddr').value||'') + '</div>' +
+        '<div style="color:#555;font-size:12px">' + (document.getElementById('invFromEmail').value||'') + '</div></div>' +
+      '<div class="inv-meta"><div><b>Bill To</b>' + (document.getElementById('invTo').value||'Client') + '<br>' +
+        (document.getElementById('invToAddr').value||'') + '<br>' + (document.getElementById('invToEmail').value||'') + '</div>' +
+        '<div style="margin-top:10px"><b>Invoice #</b>' + document.getElementById('invNum').value + '</div>' +
+        '<div><b>Date</b>' + document.getElementById('invDate').value + '</div>' +
+        '<div><b>Due</b>' + document.getElementById('invDue').value + '</div></div>' +
+    '</div>' +
+    '<table><thead><tr><th>Description</th><th>Qty</th><th>Unit Price</th><th>Amount</th></tr></thead><tbody>' +
+    rows.map(function(r){ return '<tr><td>'+r.desc+'</td><td>'+r.qty+'</td><td>'+f(r.price)+'</td><td>'+f(r.amt)+'</td></tr>'; }).join('') +
+    '</tbody></table>' +
+    '<table class="totals-table"><tbody>' +
+    '<tr><td>Subtotal</td><td>'+f(subtotal)+'</td></tr>' +
+    (disc>0?'<tr><td>Discount ('+disc+'%)</td><td>-'+f(discAmt)+'</td></tr>':'')+
+    (tax>0?'<tr><td>Tax ('+tax+'%)</td><td>'+f(taxAmt)+'</td></tr>':'')+
+    '<tr class="grand"><td>Total</td><td>'+f(total)+'</td></tr></tbody></table>' +
+    (document.getElementById('invNotes').value ? '<div class="notes"><b>Notes:</b> '+document.getElementById('invNotes').value+'</div>':'') +
+    '</body></html>');
+  win.document.close();
+  setTimeout(function(){ win.print(); }, 400);
+}
+
+function invReset() {
+  ['invFrom','invFromAddr','invFromEmail','invTo','invToAddr','invToEmail','invNotes'].forEach(function(id){ document.getElementById(id).value=''; });
+  document.getElementById('invNum').value='INV-001';
+  document.getElementById('invTax').value='0';
+  document.getElementById('invDisc').value='0';
+  document.getElementById('invItems').innerHTML='';
+  _invRows=[];
+  invAddRow(); invAddRow(); invAddRow();
+}
+
+/* ════ PASSWORD MANAGER ════ */
+var _pmPin = null, _pmData = [];
+
+function pmUnlock() {
+  var pin = document.getElementById('pmPin').value;
+  if (!pin) { document.getElementById('pmPinError').textContent = 'Enter a PIN'; return; }
+  var stored = localStorage.getItem('sc_pm_pin');
+  if (!stored) {
+    localStorage.setItem('sc_pm_pin', btoa(pin));
+    _pmPin = pin;
+  } else {
+    if (atob(stored) !== pin) { document.getElementById('pmPinError').textContent = '✗ Wrong PIN'; return; }
+    _pmPin = pin;
+  }
+  var raw = localStorage.getItem('sc_pm_vault');
+  _pmData = raw ? JSON.parse(atob(raw)) : [];
+  document.getElementById('pmLock').style.display = 'none';
+  document.getElementById('pmVault').style.display = '';
+  pmRender();
+}
+
+function pmLock() {
+  _pmPin = null; _pmData = [];
+  document.getElementById('pmLock').style.display = '';
+  document.getElementById('pmVault').style.display = 'none';
+  document.getElementById('pmPin').value = '';
+  document.getElementById('pmPinError').textContent = '';
+}
+
+function pmSave() {
+  var idx = parseInt(document.getElementById('pmEditIdx').value);
+  var entry = {
+    site: document.getElementById('pmSite').value,
+    user: document.getElementById('pmUser').value,
+    pass: document.getElementById('pmPass').value,
+    note: document.getElementById('pmNote').value,
+    ts: Date.now()
+  };
+  if (!entry.site && !entry.pass) return;
+  if (idx >= 0) { _pmData[idx] = entry; } else { _pmData.push(entry); }
+  localStorage.setItem('sc_pm_vault', btoa(JSON.stringify(_pmData)));
+  pmClearForm(); pmRender();
+}
+
+function pmClearForm() {
+  ['pmSite','pmUser','pmPass','pmNote'].forEach(function(id){ document.getElementById(id).value=''; });
+  document.getElementById('pmEditIdx').value = '-1';
+}
+
+function pmEdit(idx) {
+  var e = _pmData[idx];
+  document.getElementById('pmSite').value = e.site || '';
+  document.getElementById('pmUser').value = e.user || '';
+  document.getElementById('pmPass').value = e.pass || '';
+  document.getElementById('pmNote').value = e.note || '';
+  document.getElementById('pmEditIdx').value = idx;
+}
+
+function pmDelete(idx) {
+  if (!confirm('Delete this entry?')) return;
+  _pmData.splice(idx,1);
+  localStorage.setItem('sc_pm_vault', btoa(JSON.stringify(_pmData)));
+  pmRender();
+}
+
+function pmRender() {
+  var q = (document.getElementById('pmSearch').value||'').toLowerCase();
+  var list = document.getElementById('pmList');
+  if (!_pmData.length) { list.innerHTML = '<div style="text-align:center;color:var(--text-dim);font-size:.78rem;padding:1rem">No entries yet — add your first password below</div>'; return; }
+  list.innerHTML = _pmData.map(function(e,i){
+    if (q && !((e.site||'').toLowerCase().includes(q) || (e.user||'').toLowerCase().includes(q))) return '';
+    var masked = '•'.repeat(Math.min((e.pass||'').length,12));
+    return '<div class="pm-entry">' +
+      '<div style="flex:1;min-width:0">' +
+        '<div class="pm-entry-site">' + (e.site||'—') + '</div>' +
+        '<div class="pm-entry-user">' + (e.user||'') + '</div>' +
+        (e.note ? '<div style="font-size:.67rem;color:var(--text-dim)">' + e.note + '</div>' : '') +
+      '</div>' +
+      '<div class="pm-entry-pass" id="pmPw'+i+'">' + masked + '</div>' +
+      '<div class="pm-entry-actions">' +
+        '<button class="pm-icon-btn" onclick="pmTogglePass('+i+')" title="Show/Hide">👁</button>' +
+        '<button class="pm-icon-btn" onclick="navigator.clipboard.writeText('+JSON.stringify(e.pass||'')+')" title="Copy">📋</button>' +
+        '<button class="pm-icon-btn" onclick="pmEdit('+i+')" title="Edit">✏️</button>' +
+        '<button class="pm-icon-btn" onclick="pmDelete('+i+')" title="Delete" style="color:#f87171">✕</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function pmTogglePass(idx) {
+  var el = document.getElementById('pmPw'+idx);
+  if (!el) return;
+  var e = _pmData[idx];
+  el.textContent = el.textContent.includes('•') ? (e.pass||'') : '•'.repeat(Math.min((e.pass||'').length,12));
+}
+
+function pmGenPass() {
+  var chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';
+  var pass = Array.from({length:16}, function(){ return chars[Math.floor(Math.random()*chars.length)]; }).join('');
+  document.getElementById('pmPass').value = pass;
+}
 
 /* ── Sidebar tab navigation ── */
 (function () {
