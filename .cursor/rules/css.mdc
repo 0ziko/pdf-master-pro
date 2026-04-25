@@ -1,0 +1,44 @@
+---
+description: CSS Agent rules — dark theme design tokens and component patterns
+globs: "css/*.css"
+alwaysApply: false
+---
+
+# CSS Rules
+
+## Design Tokens — Always Use Variables
+```css
+--bg-deep        /* #0a0a12 — page background */
+--bg-card        /* #12121e — card/panel background */
+--border-subtle  /* rgba(255,255,255,.08) */
+--border-glow    /* rgba(130,80,255,.45) — focus ring */
+--text-primary   /* #f0eeff */
+--text-muted     /* #a09ab8 */
+--text-dim       /* #6b6585 — placeholder, secondary */
+--accent         /* #8250ff */
+--accent-hover   /* #9b6dff */
+```
+**Never hardcode hex colors.** Always use `var(--token-name)`.
+
+## Component Checklist (before adding new CSS)
+- Does a class already exist in `css/app.css`? Check first.
+- New component classes go in `css/app.css` under the matching section comment.
+- Page-level `<style>` blocks only for one-off, non-reusable overrides (e.g. hero gradient).
+
+## Input Field Standard
+```css
+/* Always applied to .input-field — do not override without strong reason */
+background: rgba(255,255,255,0.06);
+border: 1px solid var(--border-subtle);
+color: var(--text-primary);   /* This prevents white-on-white text */
+```
+
+## Spacing & Sizing
+- Font sizes: `0.85rem` body, `0.77rem` labels/captions, `0.67rem` descriptions
+- Border radius: `0.9rem` cards, `0.65rem` inputs, `0.6rem` buttons
+- Shadows: `0 4px 24px rgba(0,0,0,.35)` for cards
+
+## Layout
+- Grid and Flexbox only — no floats, no tables for layout.
+- `dir-grid` (index.html) uses 6-column CSS grid: `grid-template-columns: repeat(6, 1fr)`
+- `dir-item-desc` must stay `white-space: nowrap; overflow: hidden; text-overflow: ellipsis;` to prevent column misalignment.

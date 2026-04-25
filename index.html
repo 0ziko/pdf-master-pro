@@ -3,7 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SnakeConverter — All Tools</title>
+  <title>SnakeConverter — Free Online Tools & Converters</title>
+
+  <!-- SEO -->
+  <meta name="description" content="SnakeConverter: 50+ free online tools — PDF converter, unit converter, calculator, developer tools, color tools and more. No signup, no install, works in your browser." />
+  <meta name="keywords" content="online converter, pdf tools, unit converter, calculator, developer tools, color converter, base64, qr code, password generator, free tools" />
+  <meta name="author" content="SnakeConverter" />
+  <link rel="canonical" href="https://snakeconverter.pages.dev/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://snakeconverter.pages.dev/" />
+  <meta property="og:title"       content="SnakeConverter — Free Online Tools & Converters" />
+  <meta property="og:description" content="50+ free online tools. PDF, unit conversions, calculators, developer utilities and color tools — all in one place, no signup required." />
+  <meta property="og:image"       content="https://snakeconverter.pages.dev/og-image.png" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card"        content="summary_large_image" />
+  <meta name="twitter:title"       content="SnakeConverter — Free Online Tools" />
+  <meta name="twitter:description" content="50+ free online tools in your browser. No signup, no install." />
+  <meta name="twitter:image"       content="https://snakeconverter.pages.dev/og-image.png" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="css/app.css" />
   <style>
@@ -47,14 +70,15 @@
     }
     .dir-col:last-child { border-right: none; }
 
-    /* Category header */
+    /* Category header — fixed height so all columns align regardless of text length */
     .dir-cat {
-      display: flex; align-items: center; gap: .4rem;
-      font-size: .68rem; font-weight: 800; text-transform: uppercase;
-      letter-spacing: .1em; margin-bottom: .9rem; padding-bottom: .5rem;
+      display: flex; align-items: flex-start; gap: .4rem;
+      font-size: .64rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .07em; margin-bottom: .9rem; padding-bottom: .5rem;
       border-bottom: 2px solid currentColor;
+      min-height: 2.6rem;
     }
-    .dir-cat-icon { font-size: 1rem; }
+    .dir-cat-icon { font-size: .95rem; flex-shrink: 0; margin-top: .06rem; }
 
     /* Accent colors per category */
     .cat-pdf   { color: #a78bfa; border-color: #7c3aed; }
@@ -123,7 +147,7 @@
           <canvas id="snakeCanvas"></canvas>
           <span id="snakeChomp" class="snake-chomp"></span>
         </div>
-        <p id="snakeCaption" class="snake-caption" style="margin-bottom:.2rem;">Pick a tool and let's go! 🐍</p>
+        <p id="snakeCaption" class="snake-caption" data-i18n="index.caption" style="margin-bottom:.2rem;">Pick a tool and let's go! 🐍</p>
       </div>
 
       <h1 class="site-title">SnakeConverter</h1>
@@ -402,6 +426,18 @@
 const snake = new SnakeMascot("snakeCanvas");
 document.querySelectorAll(".dir-item").forEach(item => {
   item.addEventListener("mouseenter", () => snake.onFileSelect());
+});
+
+/* Re-apply i18n after snake may reset caption */
+document.querySelectorAll("[data-lang-btn]").forEach(btn => {
+  btn.addEventListener("click", () => {
+    requestAnimationFrame(() => {
+      const cap = document.getElementById("snakeCaption");
+      if (cap && cap.dataset.i18n) {
+        cap.textContent = window.PdfMasterI18n.t(cap.dataset.i18n);
+      }
+    });
+  });
 });
 
 /* ── Search / filter ── */

@@ -1,0 +1,53 @@
+---
+description: Logic Agent rules — JS tool functions, namespaces, and conventions
+globs: "js/*.js"
+alwaysApply: false
+---
+
+# JavaScript Rules
+
+## Namespace Pattern
+Each tool page has its own namespace exposed on `window`:
+```javascript
+var CalcTools = window.CalcTools = window.CalcTools || {};
+CalcTools.calculate = function () { /* ... */ };
+```
+| Page | Namespace |
+|------|-----------|
+| tools.html | `SnakeTools` |
+| units.html | `SnakeUnits` |
+| calc.html | `CalcTools` |
+| dev.html | `DevTools` |
+| color.html | `ColorTools` |
+
+## Function Rules
+- Validate inputs first — if invalid, write an error string to the result container, return early.
+- Never `alert()`, `confirm()`, or `prompt()`.
+- Result always written to the DOM — never `return` raw values from onclick handlers.
+- Use `document.getElementById('...')` — no jQuery.
+
+## Adding a New Tool Function
+```javascript
+/* ── Tool Name ── */
+Namespace.toolName = function () {
+  var val = document.getElementById('inputId').value.trim();
+  var out = document.getElementById('outputId');
+  if (!val) { out.textContent = 'Please enter a value.'; return; }
+  out.textContent = /* computation */;
+};
+```
+
+## i18n in JS
+```javascript
+// Get translated string
+var label = window.PdfMasterI18n.t('key.name');
+// Get current language
+var lang = window.PdfMasterI18n.getLang(); // 'en' | 'tr'
+```
+
+## Snake API (do not modify snake-mascot.js for integrations)
+```javascript
+window.snakeMascot.onFileSelect();       // wiggle on input
+window.snakeMascot.processStart(fn);     // eat → process → spit
+window.snakeMascot.snackFile();          // eat one file (adds bump)
+```

@@ -1,0 +1,42 @@
+---
+description: UI Agent rules — HTML page structure and component conventions
+globs: "**/*.html"
+alwaysApply: false
+---
+
+# HTML / UI Rules
+
+## Page Structure (every tool page)
+1. `<head>` — Tailwind CDN → `css/app.css` → page-specific `<style>` (minimal)
+2. `<header>` — lang-switcher + back link + badge + `<h1>` + subtitle
+3. Snake stage — `#snakeCanvas`, `#snakeChomp`, `#snakeCaption`
+4. Focus-bar or jump-nav (auto-generated)
+5. `<section id="..." class="tool-page-section">` for each tool
+6. Scripts: tool JS → `snake-mascot.js` → `snake-tools.js` → `i18n.js` → focus-mode IIFE
+
+## Tool Section Template
+```html
+<section id="tool-slug" class="tool-page-section">
+  <div class="tps-header">
+    <span class="tps-icon">🔧</span>
+    <div>
+      <h2 class="tps-title" data-i18n="cat.slug.name">Title</h2>
+      <p class="tps-desc" data-i18n="cat.slug.desc">Description.</p>
+    </div>
+  </div>
+  <div class="tps-body">
+    <!-- inputs + button + result -->
+  </div>
+</section>
+```
+
+## Input Rules
+- ✅ `<input class="input-field" type="text" />`
+- ✅ `<select class="input-field">`
+- ✅ `<textarea class="input-field">`
+- ❌ Never bare `<input>` without `class="input-field"`
+
+## i18n on HTML
+- Text: `data-i18n="key"` on the element
+- Placeholder: `data-i18n-ph="key"` on input
+- Directory links (index.html): both `.dir-item-name` and `.dir-item-desc` need `data-i18n`

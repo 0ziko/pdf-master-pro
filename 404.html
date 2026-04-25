@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 — Page Not Found · SnakeConverter</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/app.css" />
+  <style>
+    body { display: flex; align-items: center; justify-content: center; min-height: 100vh; text-align: center; }
+    .wrap { max-width: 480px; padding: 2rem; }
+    .code { font-size: 6rem; font-weight: 900; line-height: 1;
+            background: linear-gradient(135deg, #8250ff, #ff4d8f);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .snake-art { font-size: 3rem; margin: 1rem 0; animation: wiggle 1.8s ease-in-out infinite; }
+    @keyframes wiggle {
+      0%,100% { transform: rotate(-6deg); }
+      50%      { transform: rotate(6deg); }
+    }
+    .msg  { font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: .5rem; }
+    .sub  { font-size: .85rem; color: var(--text-muted); margin-bottom: 2rem; }
+    .nav-links { display: flex; gap: .75rem; justify-content: center; flex-wrap: wrap; }
+    .nav-links a {
+      padding: .5rem 1.2rem; border-radius: .6rem; font-size: .83rem; font-weight: 600;
+      text-decoration: none; transition: all .2s;
+    }
+    .btn-home { background: var(--accent); color: #fff; }
+    .btn-home:hover { background: var(--accent-hover); }
+    .btn-back { background: rgba(255,255,255,.07); color: var(--text-muted); border: 1px solid var(--border-subtle); }
+    .btn-back:hover { color: var(--text-primary); background: rgba(255,255,255,.12); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="code">404</div>
+    <div class="snake-art">🐍</div>
+    <p class="msg">Oops! The snake ate this page.</p>
+    <p class="sub">The page you're looking for doesn't exist or has been moved.</p>
+    <div class="nav-links">
+      <a href="index.html" class="btn-home">🏠 Go Home</a>
+      <a href="javascript:history.back()" class="btn-back">← Go Back</a>
+    </div>
+  </div>
+</body>
+</html>

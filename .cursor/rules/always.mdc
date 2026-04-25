@@ -1,0 +1,27 @@
+---
+description: SnakeConverter global rules — always apply to every session
+alwaysApply: true
+---
+
+# SnakeConverter — Global Rules
+
+## Stack
+Vanilla JS · Tailwind CSS CDN · HTML5 Canvas · No backend · No build step for dev
+
+## Non-negotiables
+- All styles → `css/app.css`. Never add reusable styles in `<style>` blocks.
+- All form inputs must have `class="input-field"` — prevents white-on-white text in dark theme.
+- Every text element visible to the user needs a `data-i18n="key"` attribute.
+- EN + TR translations must always be added together in `js/i18n.js`.
+- Never `alert()` — show errors/results in the DOM.
+
+## Before finishing any task
+1. Confirm the feature works in the browser (don't just assume).
+2. Switch language EN↔TR and verify all text updates.
+3. Check browser console — zero errors allowed.
+
+## File ownership (don't cross-pollinate)
+- Layout/visual → `css/app.css` + HTML class names
+- Tool logic → `js/*.js` namespaces (`CalcTools`, `DevTools`, etc.)
+- Translations → `js/i18n.js` + `data-i18n` attributes
+- Animation → `js/snake-tools.js` (integration), `js/snake-mascot.js` (engine only)
