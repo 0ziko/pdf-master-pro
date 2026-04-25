@@ -101,632 +101,1181 @@
   }
   </script>
 
-  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="css/app.css" />
   <style>
-    /* ── Reset main card to full-width directory feel ── */
-    .main-card { max-width: 960px; padding: 0; background: var(--card-bg); }
+    /* ─────────────────────────────────────────────
+       INDEX LAYOUT  —  sidebar + content panel
+    ───────────────────────────────────────────── */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    /* ── Compact hero ── */
-    .hero {
-      text-align: center;
-      padding: 2rem 2rem 1.4rem;
-      border-bottom: 1px solid var(--border-subtle);
-      position: relative;
+    body {
+      background: var(--app-bg, #0d0d1a);
+      color: var(--text-primary, #e8e4ff);
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      height: 100vh;
+      overflow: hidden;
     }
-    .hero .snake-stage { margin-bottom: .5rem; }
-    .hero .site-title  { margin: .2rem 0 .1rem; font-size: 1.9rem; }
-    .hero .site-sub    { margin-bottom: .8rem; font-size: .8rem; }
+
+    /* ── Root layout ── */
+    .idx-layout {
+      display: flex;
+      height: 100vh;
+      width: 100%;
+    }
+
+    /* ══════════════════════════════════
+       SIDEBAR
+    ══════════════════════════════════ */
+    .idx-sidebar {
+      width: 220px;
+      min-width: 220px;
+      background: #10101e;
+      border-right: 1px solid rgba(130,80,255,.2);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Logo */
+    .idx-logo {
+      padding: 18px 16px 12px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: -.02em;
+      background: linear-gradient(90deg, #a78bfa, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      flex-shrink: 0;
+      border-bottom: 1px solid rgba(130,80,255,.15);
+    }
+
+    /* Snake canvas area */
+    .idx-snake-wrap {
+      padding: 10px 14px 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      flex-shrink: 0;
+      border-bottom: 1px solid rgba(130,80,255,.1);
+    }
+    .idx-snake-wrap canvas { display: block; }
+    #idxSnakeCaption {
+      font-size: .6rem;
+      color: var(--text-dim, #6b7280);
+      text-align: center;
+      margin-top: 2px;
+      min-height: 14px;
+    }
 
     /* Search */
-    .search-wrap { max-width: 380px; margin: 0 auto; position: relative; }
-    .search-icon { position: absolute; left: .85rem; top: 50%; transform: translateY(-50%);
-      color: var(--text-muted); pointer-events: none; }
-    .search-input { width: 100%; background: rgba(255,255,255,.06);
-      border: 1px solid var(--border-subtle); border-radius: 999px;
-      padding: .52rem 1rem .52rem 2.4rem; color: var(--text-primary);
-      font-size: .83rem; outline: none; transition: border-color .2s; }
-    .search-input:focus { border-color: var(--border-glow); }
+    .idx-search {
+      padding: 10px 14px;
+      flex-shrink: 0;
+      border-bottom: 1px solid rgba(130,80,255,.1);
+    }
+    .idx-search-wrap {
+      position: relative;
+    }
+    .idx-search-icon {
+      position: absolute;
+      left: 9px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #6b7280;
+      pointer-events: none;
+    }
+    .idx-search-input {
+      width: 100%;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(130,80,255,.25);
+      border-radius: 8px;
+      padding: 6px 10px 6px 28px;
+      color: #e8e4ff;
+      font-size: .74rem;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .idx-search-input::placeholder { color: #6b7280; }
+    .idx-search-input:focus { border-color: #8250ff; }
 
-    /* ── Directory grid ── */
-    .dir-grid {
+    /* Nav */
+    .idx-nav {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 6px 0;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(130,80,255,.3) transparent;
+    }
+    .idx-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      width: 100%;
+      padding: 9px 16px;
+      background: none;
+      border: none;
+      color: #9ca3af;
+      font-size: .77rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: left;
+      transition: all .15s;
+      border-left: 3px solid transparent;
+    }
+    .idx-nav-item:hover {
+      color: #e8e4ff;
+      background: rgba(130,80,255,.08);
+    }
+    .idx-nav-item.active {
+      color: #c4b5fd;
+      background: rgba(130,80,255,.15);
+      border-left-color: #8250ff;
+    }
+    .idx-nav-icon {
+      font-size: .95rem;
+      width: 18px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .idx-nav-count {
+      margin-left: auto;
+      font-size: .6rem;
+      background: rgba(130,80,255,.2);
+      color: #a78bfa;
+      padding: 1px 6px;
+      border-radius: 99px;
+      font-weight: 700;
+    }
+
+    /* Sidebar footer */
+    .idx-sidebar-footer {
+      padding: 12px 16px;
+      border-top: 1px solid rgba(130,80,255,.12);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .lang-btn {
+      background: none;
+      border: 1px solid rgba(130,80,255,.35);
+      color: #9ca3af;
+      font-size: .7rem;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .lang-btn.lang-active, .lang-btn:hover {
+      background: rgba(130,80,255,.2);
+      color: #c4b5fd;
+      border-color: #8250ff;
+    }
+    .idx-pricing-link {
+      font-size: .68rem;
+      color: #8250ff;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .idx-pricing-link:hover { color: #a78bfa; }
+
+    /* ══════════════════════════════════
+       MAIN CONTENT
+    ══════════════════════════════════ */
+    .idx-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: #0d0d1a;
+    }
+
+    /* Top bar */
+    .idx-topbar {
+      padding: 16px 28px;
+      border-bottom: 1px solid rgba(130,80,255,.15);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .idx-breadcrumb {
+      font-size: .7rem;
+      color: #6b7280;
+    }
+    .idx-breadcrumb span { color: #a78bfa; font-weight: 600; }
+    .idx-topbar-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #e8e4ff;
+    }
+    .idx-badge {
+      font-size: .65rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 99px;
+      background: rgba(34,197,94,.12);
+      color: #4ade80;
+      border: 1px solid rgba(34,197,94,.25);
+    }
+
+    /* Content scroll area */
+    .idx-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 28px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(130,80,255,.3) transparent;
+    }
+
+    /* Category panel */
+    .idx-panel { display: none; }
+    .idx-panel.visible { display: block; }
+
+    .idx-panel-hdr {
+      margin-bottom: 20px;
+    }
+    .idx-panel-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #e8e4ff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 4px;
+    }
+    .idx-panel-desc {
+      font-size: .78rem;
+      color: #9ca3af;
+    }
+
+    /* Tools grid */
+    .idx-tools-grid {
       display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      border-top: 1px solid var(--border-subtle);
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
     }
-    @media (max-width: 900px) { .dir-grid { grid-template-columns: repeat(3, 1fr); } }
-    @media (max-width: 600px) { .dir-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 960px) { .idx-tools-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 680px) { .idx-tools-grid { grid-template-columns: 1fr; } }
 
-    /* ── Directory column ── */
-    .dir-col {
-      border-right: 1px solid var(--border-subtle);
-      padding: 1.2rem 1rem 1.5rem;
-    }
-    .dir-col:last-child { border-right: none; }
-
-    /* Category header — fixed height so all columns align regardless of text length */
-    .dir-cat {
-      display: flex; align-items: flex-start; gap: .4rem;
-      font-size: .64rem; font-weight: 800; text-transform: uppercase;
-      letter-spacing: .07em; margin-bottom: .9rem; padding-bottom: .5rem;
-      border-bottom: 2px solid currentColor;
-      min-height: 2.6rem;
-    }
-    .dir-cat-icon { font-size: .95rem; flex-shrink: 0; margin-top: .06rem; }
-
-    /* ── Mobile overrides ── */
-    @media (max-width: 600px) {
-      body { overflow-x: hidden; }
-      .main-card { border-radius: 0; width: 100%; max-width: 100%; }
-
-      /* Hero */
-      .hero { padding: .9rem .9rem .8rem; }
-      .hero .site-title { font-size: 1.45rem; }
-      .hero .site-sub   { font-size: .73rem; margin-bottom: .55rem; }
-      .lang-switcher { top: .6rem; right: .75rem; }
-      .search-wrap { max-width: 100%; }
-
-      /* Grid: single column — categories stack */
-      .dir-grid { grid-template-columns: 1fr; width: 100%; }
-
-      .dir-col {
-        display: block;                              /* plain block, no inner grid */
-        border-right: none;
-        border-bottom: 1px solid var(--border-subtle);
-        padding: .9rem .9rem 1rem;
-        width: 100%;
-        box-sizing: border-box;
-        overflow: hidden;
-      }
-      .dir-col:last-child { border-bottom: none; }
-      .dir-cat { min-height: auto; margin-bottom: .65rem; font-size: .62rem; }
-
-      /* Items: horizontal rows, icon + text side by side */
-      .dir-item {
-        display: flex;
-        align-items: center;
-        gap: .5rem;
-        padding: .35rem .3rem;
-        font-size: .8rem;
-        width: 100%;
-        box-sizing: border-box;
-        overflow: hidden;
-      }
-      .dir-item-icon { font-size: .9rem; flex-shrink: 0; }
-      .dir-item-text { display: flex; flex-direction: column; min-width: 0; flex: 1; overflow: hidden; }
-      .dir-item-name { font-size: .78rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-      .dir-item-desc {
-        font-size: .64rem;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        color: var(--text-dim);
-      }
-      .dir-view-all { font-size: .66rem; margin-top: .6rem; }
-    }
-
-    /* Accent colors per category */
-    .cat-pdf   { color: #a78bfa; border-color: #7c3aed; }
-    .cat-units { color: #a5b4fc; border-color: #6366f1; }
-    .cat-text  { color: #93c5fd; border-color: #2563eb; }
-    .cat-dev   { color: #c4b5fd; border-color: #8b5cf6; }
-    .cat-calc  { color: #6ee7b7; border-color: #059669; }
-    .cat-color { color: #fcd34d; border-color: #d97706; }
-
-    /* Tool item links */
-    .dir-item {
-      display: flex; align-items: flex-start; gap: .45rem;
-      padding: .32rem .25rem; border-radius: .4rem;
-      color: var(--text-muted); text-decoration: none;
-      font-size: .8rem; line-height: 1.3; transition: all .15s;
+    /* Tool card */
+    .idx-tool-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      background: rgba(255,255,255,.03);
+      border: 1px solid rgba(130,80,255,.15);
+      border-radius: 12px;
+      text-decoration: none;
+      color: inherit;
+      transition: all .18s;
       cursor: pointer;
     }
-    .dir-item:hover {
-      color: var(--text-primary);
-      background: rgba(255,255,255,.06);
-      padding-left: .5rem;
+    .idx-tool-card:hover {
+      background: rgba(130,80,255,.1);
+      border-color: rgba(130,80,255,.4);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(130,80,255,.15);
     }
-    .dir-item.hidden { display: none; }
-    .dir-item-icon { font-size: .95rem; flex-shrink: 0; margin-top: .05rem; }
-    .dir-item-text { display: flex; flex-direction: column; min-width: 0; }
-    .dir-item-name { font-weight: 700; font-size: .79rem; color: var(--text-primary); }
-    .dir-item-desc {
-      font-size: .67rem; color: var(--text-dim); line-height: 1.3;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    .idx-tool-card-ico {
+      font-size: 1.6rem;
+      flex-shrink: 0;
+      width: 36px;
+      text-align: center;
+    }
+    .idx-tool-card-body { min-width: 0; flex: 1; }
+    .idx-tool-card-name {
+      font-size: .84rem;
+      font-weight: 700;
+      color: #e8e4ff;
+      margin-bottom: 2px;
+    }
+    .idx-tool-card-desc {
+      font-size: .68rem;
+      color: #9ca3af;
+      line-height: 1.4;
+    }
+    .idx-tool-card-arr {
+      margin-left: auto;
+      color: #8250ff;
+      font-size: .9rem;
+      flex-shrink: 0;
+      align-self: center;
+      opacity: 0;
+      transition: opacity .15s;
+    }
+    .idx-tool-card:hover .idx-tool-card-arr { opacity: 1; }
+
+    /* Search results */
+    .idx-search-results {
+      display: none;
+    }
+    .idx-search-results.visible {
+      display: block;
+    }
+    .idx-search-no-result {
+      text-align: center;
+      color: #6b7280;
+      padding: 40px;
+      font-size: .85rem;
     }
 
-    /* "View all" link at bottom of column */
-    .dir-view-all {
-      display: inline-flex; align-items: center; gap: .25rem;
-      font-size: .68rem; font-weight: 700; text-decoration: none;
-      margin-top: .8rem; color: var(--text-dim); transition: color .15s;
+    /* ── MOBILE ── */
+    @media (max-width: 700px) {
+      body { overflow: auto; height: auto; }
+      .idx-layout { flex-direction: column; height: auto; }
+      .idx-sidebar {
+        width: 100%;
+        min-width: 0;
+        border-right: none;
+        border-bottom: 1px solid rgba(130,80,255,.2);
+      }
+      .idx-snake-wrap { display: none; }
+      .idx-nav {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 6px 10px;
+        gap: 4px;
+        scrollbar-width: none;
+      }
+      .idx-nav::-webkit-scrollbar { display: none; }
+      .idx-nav-item {
+        flex-shrink: 0;
+        white-space: nowrap;
+        padding: 6px 12px;
+        border-radius: 20px;
+        border-left: none;
+        border: 1px solid transparent;
+        font-size: .71rem;
+      }
+      .idx-nav-item.active {
+        border-color: #8250ff;
+        background: rgba(130,80,255,.2);
+        border-left-color: transparent;
+      }
+      .idx-nav-count { display: none; }
+      .idx-main { overflow: visible; }
+      .idx-content { overflow: visible; padding: 16px; }
+      .idx-topbar { padding: 12px 16px; }
+      .idx-topbar-title { font-size: .95rem; }
     }
-    .dir-view-all:hover { color: var(--text-muted); }
-
-    /* Hide entire column when search empty */
-    .dir-col.hidden { display: none; }
-
-    /* Footer */
-    .dir-footer {
-      text-align: center; font-size: .7rem; color: var(--text-dim);
-      padding: .9rem; border-top: 1px solid var(--border-subtle);
-    }
-
-    /* Lang switcher position inside hero */
-    .lang-switcher { position: absolute; top: 1rem; right: 1.2rem; }
   </style>
 </head>
 <body>
-<div class="app-wrap">
-  <div class="main-card">
 
-    <!-- ══ Hero ══════════════════════════════════════ -->
-    <div class="hero">
-      <div class="lang-switcher">
+<div class="idx-layout">
+
+  <!-- ═══════════════════════════════════════
+       SIDEBAR
+  ═══════════════════════════════════════ -->
+  <aside class="idx-sidebar">
+
+    <div class="idx-logo">🐍 SnakeConverter</div>
+
+    <!-- Snake mascot -->
+    <div class="idx-snake-wrap">
+      <div class="snake-chomp-wrap">
+        <canvas id="snakeCanvas"></canvas>
+        <span id="snakeChomp" class="snake-chomp"></span>
+      </div>
+      <p id="idxSnakeCaption" data-i18n="index.caption"></p>
+    </div>
+
+    <!-- Search -->
+    <div class="idx-search">
+      <div class="idx-search-wrap">
+        <svg class="idx-search-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="idxSearchInput" class="idx-search-input" placeholder="Search tools…" data-i18n-ph="index.search" oninput="handleSearch(this.value)" />
+      </div>
+    </div>
+
+    <!-- Category Navigation -->
+    <nav class="idx-nav" id="idxNav">
+      <button class="idx-nav-item active" data-cat="pdf"      onclick="switchCat('pdf',this)">
+        <span class="idx-nav-icon">📄</span>
+        <span data-i18n="cat.pdf">PDF Tools</span>
+        <span class="idx-nav-count">6</span>
+      </button>
+      <button class="idx-nav-item" data-cat="units"    onclick="switchCat('units',this)">
+        <span class="idx-nav-icon">📐</span>
+        <span data-i18n="cat.units">Unit Converters</span>
+        <span class="idx-nav-count">13</span>
+      </button>
+      <button class="idx-nav-item" data-cat="text"     onclick="switchCat('text',this)">
+        <span class="idx-nav-icon">🔤</span>
+        <span data-i18n="cat.text">Text & Writing</span>
+        <span class="idx-nav-count">8</span>
+      </button>
+      <button class="idx-nav-item" data-cat="security" onclick="switchCat('security',this)">
+        <span class="idx-nav-icon">🔑</span>
+        <span data-i18n="cat.security">Security & Generators</span>
+        <span class="idx-nav-count">5</span>
+      </button>
+      <button class="idx-nav-item" data-cat="calc"     onclick="switchCat('calc',this)">
+        <span class="idx-nav-icon">🧮</span>
+        <span data-i18n="cat.calc">Calculators</span>
+        <span class="idx-nav-count">5</span>
+      </button>
+      <button class="idx-nav-item" data-cat="finance"  onclick="switchCat('finance',this)">
+        <span class="idx-nav-icon">💰</span>
+        <span data-i18n="cat.finance">Finance & Currency</span>
+        <span class="idx-nav-count">3</span>
+      </button>
+      <button class="idx-nav-item" data-cat="datetime" onclick="switchCat('datetime',this)">
+        <span class="idx-nav-icon">📅</span>
+        <span data-i18n="cat.datetime">Date & Time</span>
+        <span class="idx-nav-count">4</span>
+      </button>
+      <button class="idx-nav-item" data-cat="dev"      onclick="switchCat('dev',this)">
+        <span class="idx-nav-icon">💻</span>
+        <span data-i18n="cat.dev">Developer Tools</span>
+        <span class="idx-nav-count">10</span>
+      </button>
+      <button class="idx-nav-item" data-cat="color"    onclick="switchCat('color',this)">
+        <span class="idx-nav-icon">🎨</span>
+        <span data-i18n="cat.color">Color & Design</span>
+        <span class="idx-nav-count">7</span>
+      </button>
+      <button class="idx-nav-item" data-cat="health"   onclick="switchCat('health',this)">
+        <span class="idx-nav-icon">🏥</span>
+        <span data-i18n="cat.health">Health & Life</span>
+        <span class="idx-nav-count">3</span>
+      </button>
+    </nav>
+
+    <!-- Footer -->
+    <div class="idx-sidebar-footer">
+      <div style="display:flex;gap:5px;">
         <button type="button" data-lang-btn="en" class="lang-btn lang-active">EN</button>
         <button type="button" data-lang-btn="tr" class="lang-btn">TR</button>
       </div>
-
-      <div class="snake-stage" style="margin-bottom:.4rem;">
-        <div class="snake-chomp-wrap">
-          <canvas id="snakeCanvas"></canvas>
-          <span id="snakeChomp" class="snake-chomp"></span>
-        </div>
-        <p id="snakeCaption" class="snake-caption" data-i18n="index.caption" style="margin-bottom:.2rem;">Pick a tool and let's go! 🐍</p>
-      </div>
-
-      <h1 class="site-title">SnakeConverter</h1>
-      <p class="site-sub" data-i18n="index.sub">50+ free browser tools — zero uploads, zero servers</p>
-
-      <div class="search-wrap">
-        <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" class="search-input" data-i18n-ph="index.search" placeholder="Search tools…" oninput="filterDir(this.value)" />
-      </div>
+      <a href="pricing.html" class="idx-pricing-link" data-i18n="nav.pricing">Pricing</a>
     </div>
 
-    <!-- ══ Directory ══════════════════════════════════ -->
-    <div class="dir-grid" id="dirGrid">
+  </aside>
 
-      <!-- ── PDF Tools ── -->
-      <div class="dir-col" data-col="pdf">
-        <div class="dir-cat cat-pdf">
-          <span class="dir-cat-icon">📄</span><span data-i18n="cat.pdf">PDF Tools</span>
-        </div>
-        <a href="pdf.html#excel"   class="dir-item" data-search="excel spreadsheet xls csv convert pdf">
-          <span class="dir-item-icon">📊</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="pdf.excel.name">Excel → PDF</span><span class="dir-item-desc" data-i18n="pdf.excel.desc">xlsx, xls, csv with full Unicode</span></span>
-        </a>
-        <a href="pdf.html#image"   class="dir-item" data-search="image photo jpg png webp bmp convert pdf">
-          <span class="dir-item-icon">🖼️</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="pdf.image.name">Image → PDF</span><span class="dir-item-desc" data-i18n="pdf.image.desc">PNG, JPEG, WebP, GIF, BMP</span></span>
-        </a>
-        <a href="pdf.html#merge"   class="dir-item" data-search="merge combine join pdf multiple files">
-          <span class="dir-item-icon">🔗</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="pdf.merge.name">Merge PDFs</span><span class="dir-item-desc" data-i18n="pdf.merge.desc">Combine multiple PDFs into one</span></span>
-        </a>
-        <a href="pdf.html#split"   class="dir-item" data-search="split extract pages pdf zip">
-          <span class="dir-item-icon">✂️</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="pdf.split.name">Split PDF</span><span class="dir-item-desc" data-i18n="pdf.split.desc">Extract pages or custom ranges</span></span>
-        </a>
-        <a href="pdf.html#encrypt" class="dir-item" data-search="encrypt lock password protect pdf">
-          <span class="dir-item-icon">🔒</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="pdf.encrypt.name">Encrypt / Decrypt</span><span class="dir-item-desc" data-i18n="pdf.encrypt.desc">Password-protect or unlock PDFs</span></span>
-        </a>
-        <a href="pdf.html" class="dir-view-all" data-i18n="viewall.pdf">All PDF tools →</a>
+  <!-- ═══════════════════════════════════════
+       MAIN CONTENT
+  ═══════════════════════════════════════ -->
+  <main class="idx-main">
+
+    <!-- Top bar -->
+    <div class="idx-topbar">
+      <div>
+        <div class="idx-breadcrumb">SnakeConverter › <span id="idxBreadcat" data-i18n="cat.pdf">PDF Tools</span></div>
+        <div class="idx-topbar-title" id="idxPanelTitle" data-i18n="cat.pdf">PDF Tools</div>
       </div>
-
-      <!-- ── Unit Converters ── -->
-      <div class="dir-col" data-col="units">
-        <div class="dir-cat cat-units">
-          <span class="dir-cat-icon">📏</span><span data-i18n="cat.units">Unit Converters</span>
-        </div>
-        <a href="units.html#length"      class="dir-item" data-search="length distance km miles feet inches meter uzunluk">
-          <span class="dir-item-icon">📏</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="units.length.name">Length</span><span class="dir-item-desc" data-i18n="units.length.desc">km, m, cm, miles, ft, in</span></span>
-        </a>
-        <a href="units.html#weight"      class="dir-item" data-search="weight mass kg lbs pounds grams ounces ağırlık kütle">
-          <span class="dir-item-icon">⚖️</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="units.weight.name">Weight / Mass</span><span class="dir-item-desc" data-i18n="units.weight.desc">kg, g, lbs, oz, stones</span></span>
-        </a>
-        <a href="units.html#temperature" class="dir-item" data-search="temperature celsius fahrenheit kelvin sıcaklık">
-          <span class="dir-item-icon">🌡️</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="units.temp.name">Temperature</span><span class="dir-item-desc" data-i18n="units.temp.desc">°C, °F, K, °R</span></span>
-        </a>
-        <a href="units.html#area"        class="dir-item" data-search="area square meter feet acres hectare alan">
-          <span class="dir-item-icon">📐</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="units.area.name">Area</span><span class="dir-item-desc" data-i18n="units.area.desc">m², km², ft², acres, hectares</span></span>
-        </a>
-        <a href="units.html#volume"      class="dir-item" data-search="volume liter gallon cup fluid ounce hacim">
-          <span class="dir-item-icon">🧪</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="units.volume.name">Volume</span><span class="dir-item-desc" data-i18n="units.volume.desc">L, mL, gallons, cups, fl oz</span></span>
-        </a>
-        <a href="units.html#speed"       class="dir-item" data-search="speed km/h mph knot mach velocity hız">
-          <span class="dir-item-icon">💨</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="units.speed.name">Speed</span><span class="dir-item-desc" data-i18n="units.speed.desc">km/h, mph, m/s, knots, Mach</span></span>
-        </a>
-        <a href="units.html#data"        class="dir-item" data-search="data storage byte kilobyte megabyte gigabyte veri depolama">
-          <span class="dir-item-icon">💾</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="units.data.name">Data Storage</span><span class="dir-item-desc" data-i18n="units.data.desc">B, KB, MB, GB, TB, PB</span></span>
-        </a>
-        <a href="units.html#time"        class="dir-item" data-search="time duration seconds minutes hours days süre zaman">
-          <span class="dir-item-icon">⏱️</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="units.time.name">Time Duration</span><span class="dir-item-desc" data-i18n="units.time.desc">ms, s, min, h, days, weeks, yr</span></span>
-        </a>
-        <a href="units.html#energy"      class="dir-item" data-search="energy joule calorie kwh btu enerji">
-          <span class="dir-item-icon">⚡</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="units.energy.name">Energy</span><span class="dir-item-desc" data-i18n="units.energy.desc">J, kJ, cal, kcal, kWh, BTU</span></span>
-        </a>
-        <a href="units.html#pressure"    class="dir-item" data-search="pressure pascal bar psi atm mmhg basınç">
-          <span class="dir-item-icon">🔵</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="units.pressure.name">Pressure</span><span class="dir-item-desc" data-i18n="units.pressure.desc">Pa, bar, psi, atm, mmHg</span></span>
-        </a>
-        <a href="units.html#fuel"        class="dir-item" data-search="fuel efficiency mpg l/100km km/l yakıt verimlilik">
-          <span class="dir-item-icon">⛽</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="units.fuel.name">Fuel Efficiency</span><span class="dir-item-desc" data-i18n="units.fuel.desc">L/100km, km/L, MPG</span></span>
-        </a>
-        <a href="units.html#cooking" class="dir-item" data-search="cooking measurement cups tablespoon teaspoon liter mutfak ölçü">
-          <span class="dir-item-icon">🍳</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="units.cooking.name">Cooking Measurements</span><span class="dir-item-desc" data-i18n="units.cooking.desc">Cups, tbsp, tsp, ml, liters and more</span></span>
-        </a>
-        <a href="units.html#shoe-size" class="dir-item" data-search="shoe size converter eu us uk cm ayakkabı numara">
-          <span class="dir-item-icon">👟</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="units.shoe.name">Shoe Size Converter</span><span class="dir-item-desc" data-i18n="units.shoe.desc">EU, US Men, US Women, UK, CM</span></span>
-        </a>
-        <a href="units.html#typography" class="dir-item" data-search="typography units px rem em pt vw convert tipografi">
-          <span class="dir-item-icon">🔤</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="units.typo.name">Typography Units</span><span class="dir-item-desc" data-i18n="units.typo.desc">px ↔ rem ↔ em ↔ pt ↔ vw</span></span>
-        </a>
-        <a href="units.html" class="dir-view-all" data-i18n="viewall.units">All unit converters →</a>
-      </div>
-
-      <!-- ── Text & Utility Tools ── -->
-      <div class="dir-col" data-col="text">
-        <div class="dir-cat cat-text">
-          <span class="dir-cat-icon">✍️</span><span data-i18n="cat.text">Text &amp; Utility</span>
-        </div>
-        <a href="tools.html#words"   class="dir-item" data-search="word count character sentence paragraph reading time kelime sayacı">
-          <span class="dir-item-icon">📊</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="text.words.name">Word Counter</span><span class="dir-item-desc" data-i18n="text.words.desc">Words, chars, sentences, read time</span></span>
-        </a>
-        <a href="tools.html#case"    class="dir-item" data-search="uppercase lowercase title camel snake kebab case büyük küçük harf">
-          <span class="dir-item-icon">Aa</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="text.case.name">Text Case</span><span class="dir-item-desc" data-i18n="text.case.desc">UPPER, lower, Title, camelCase…</span></span>
-        </a>
-        <a href="tools.html#base64"  class="dir-item" data-search="base64 encode decode convert text şifrele">
-          <span class="dir-item-icon">&lt;/&gt;</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="text.base64.name">Base64</span><span class="dir-item-desc" data-i18n="text.base64.desc">Encode or decode Base64 strings</span></span>
-        </a>
-        <a href="tools.html#age"     class="dir-item" data-search="age birthday calculator years months days yaş hesaplama">
-          <span class="dir-item-icon">🎂</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="text.age.name">Age Calculator</span><span class="dir-item-desc" data-i18n="text.age.desc">Exact age + birthday countdown</span></span>
-        </a>
-        <a href="tools.html#bmi"     class="dir-item" data-search="bmi body mass index weight height vki vücut kitle">
-          <span class="dir-item-icon">❤️</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="text.bmi.name">BMI Calculator</span><span class="dir-item-desc" data-i18n="text.bmi.desc">Body Mass Index with visual gauge</span></span>
-        </a>
-        <a href="tools.html#percent" class="dir-item" data-search="percentage percent calculator change yüzde hesaplama">
-          <span class="dir-item-icon">%</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="text.percent.name">Percentage</span><span class="dir-item-desc" data-i18n="text.percent.desc">X% of Y · What % · % Change</span></span>
-        </a>
-        <a href="tools.html#random"  class="dir-item" data-search="random number generator dice rastgele sayı">
-          <span class="dir-item-icon">🎲</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="text.random.name">Random Number</span><span class="dir-item-desc" data-i18n="text.random.desc">Range, count, unique options</span></span>
-        </a>
-        <a href="tools.html#pass"    class="dir-item" data-search="password generator secure strong şifre üretici">
-          <span class="dir-item-icon">🔐</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="text.pass.name">Password Generator</span><span class="dir-item-desc" data-i18n="text.pass.desc">Secure passwords + strength meter</span></span>
-        </a>
-        <a href="tools.html#qr"      class="dir-item" data-search="qr code generator url link qr kod">
-          <span class="dir-item-icon">📱</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="text.qr.name">QR Code</span><span class="dir-item-desc" data-i18n="text.qr.desc">Generate downloadable QR codes</span></span>
-        </a>
-        <a href="tools.html#unix"    class="dir-item" data-search="unix timestamp date time converter epoch zaman damgası">
-          <span class="dir-item-icon">⏱</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="text.unix.name">Unix Timestamp</span><span class="dir-item-desc" data-i18n="text.unix.desc">Live epoch clock · Date conversion</span></span>
-        </a>
-        <a href="tools.html#morse-code" class="dir-item" data-search="morse code encode decode dot dash mors kodu">
-          <span class="dir-item-icon">📡</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="text.morse.name">Morse Code</span><span class="dir-item-desc" data-i18n="text.morse.desc">Encode text to Morse or decode Morse</span></span>
-        </a>
-        <a href="tools.html#text-binary" class="dir-item" data-search="binary text converter bytes ikili metin">
-          <span class="dir-item-icon">01</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="text.binary.name">Text ↔ Binary</span><span class="dir-item-desc" data-i18n="text.binary.desc">Convert text to binary bytes or decode</span></span>
-        </a>
-        <a href="tools.html#palindrome" class="dir-item" data-search="palindrome checker word sentence palindrom">
-          <span class="dir-item-icon">🔄</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="text.palindrome.name">Palindrome Checker</span><span class="dir-item-desc" data-i18n="text.palindrome.desc">Check if a phrase reads the same backwards</span></span>
-        </a>
-        <a href="tools.html#dedupe-lines" class="dir-item" data-search="duplicate lines remove dedupe tekrar satır sil">
-          <span class="dir-item-icon">🧹</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="text.dedupe.name">Duplicate Line Remover</span><span class="dir-item-desc" data-i18n="text.dedupe.desc">Remove duplicate lines, preserve order</span></span>
-        </a>
-        <a href="tools.html#text-reverser" class="dir-item" data-search="reverse text string words ters çevirici">
-          <span class="dir-item-icon">↩️</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="text.reverser.name">Text Reverser</span><span class="dir-item-desc" data-i18n="text.reverser.desc">Reverse entire string or word-by-word</span></span>
-        </a>
-        <a href="tools.html#string-inspector" class="dir-item" data-search="string inspector analyze characters words lines dize analiz">
-          <span class="dir-item-icon">🔬</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="text.inspector.name">String Inspector</span><span class="dir-item-desc" data-i18n="text.inspector.desc">Deep analysis: chars, words, unique</span></span>
-        </a>
-        <a href="tools.html#coin-flip" class="dir-item" data-search="coin flip heads tails random para yazı tura">
-          <span class="dir-item-icon">🪙</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="text.coin.name">Coin Flip</span><span class="dir-item-desc" data-i18n="text.coin.desc">Flip a coin and track heads/tails</span></span>
-        </a>
-        <a href="tools.html#dice-roller" class="dir-item" data-search="dice roller d6 d20 random zar atma">
-          <span class="dir-item-icon">🎲</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="text.dice.name">Dice Roller</span><span class="dir-item-desc" data-i18n="text.dice.desc">Roll multiple dice types and see total</span></span>
-        </a>
-        <a href="tools.html#stopwatch" class="dir-item" data-search="stopwatch timer lap kronometre">
-          <span class="dir-item-icon">⏱️</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="text.stopwatch.name">Stopwatch</span><span class="dir-item-desc" data-i18n="text.stopwatch.desc">Precise timer with lap tracking</span></span>
-        </a>
-        <a href="tools.html#countdown" class="dir-item" data-search="countdown timer geri sayım sayaç">
-          <span class="dir-item-icon">⏳</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="text.countdown.name">Countdown Timer</span><span class="dir-item-desc" data-i18n="text.countdown.desc">Set a timer with visual progress bar</span></span>
-        </a>
-        <a href="tools.html" class="dir-view-all" data-i18n="viewall.text">All utility tools →</a>
-      </div>
-
-      <!-- ── Developer Tools ── -->
-      <div class="dir-col" data-col="dev">
-        <div class="dir-cat cat-dev">
-          <span class="dir-cat-icon">💻</span><span data-i18n="cat.dev">Developer</span>
-        </div>
-        <a href="dev.html#json"  class="dir-item" data-search="json formatter validator minify beautify biçimlendirici">
-          <span class="dir-item-icon">{ }</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="dev.json.name">JSON Formatter</span><span class="dir-item-desc" data-i18n="dev.json.desc">Format, validate, or minify JSON</span></span>
-        </a>
-        <a href="dev.html#hash"  class="dir-item" data-search="sha hash sha256 sha512 sha1 generator hash üretici">
-          <span class="dir-item-icon">🔒</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="dev.hash.name">Hash Generator</span><span class="dir-item-desc" data-i18n="dev.hash.desc">SHA-1, SHA-256, SHA-384, SHA-512</span></span>
-        </a>
-        <a href="dev.html#uuid"  class="dir-item" data-search="uuid guid generator unique id üretici">
-          <span class="dir-item-icon">🔑</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="dev.uuid.name">UUID Generator</span><span class="dir-item-desc" data-i18n="dev.uuid.desc">Cryptographically secure v4 UUIDs</span></span>
-        </a>
-        <a href="dev.html#regex" class="dir-item" data-search="regex tester pattern match flags test">
-          <span class="dir-item-icon">🔍</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="dev.regex.name">Regex Tester</span><span class="dir-item-desc" data-i18n="dev.regex.desc">Live pattern matching + highlighting</span></span>
-        </a>
-        <a href="dev.html#url"   class="dir-item" data-search="url encode decode percent encoding kodlama">
-          <span class="dir-item-icon">🔗</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="dev.url.name">URL Encode / Decode</span><span class="dir-item-desc" data-i18n="dev.url.desc">Percent-encode or decode URLs</span></span>
-        </a>
-        <a href="dev.html#html"  class="dir-item" data-search="html entity encode decode escape varlık">
-          <span class="dir-item-icon">&lt;/&gt;</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="dev.html.name">HTML Entities</span><span class="dir-item-desc" data-i18n="dev.html.desc">Escape/unescape HTML characters</span></span>
-        </a>
-        <a href="dev.html#base"  class="dir-item" data-search="binary octal decimal hexadecimal base converter taban dönüştürücü">
-          <span class="dir-item-icon">01</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="dev.base.name">Base Converter</span><span class="dir-item-desc" data-i18n="dev.base.desc">Binary ↔ Octal ↔ Decimal ↔ Hex</span></span>
-        </a>
-        <a href="dev.html#roman" class="dir-item" data-search="roman numeral converter number roma rakamları">
-          <span class="dir-item-icon">Ⅻ</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="dev.roman.name">Roman Numerals</span><span class="dir-item-desc" data-i18n="dev.roman.desc">Numbers 1–3999 ↔ Roman notation</span></span>
-        </a>
-        <a href="dev.html#lorem" class="dir-item" data-search="lorem ipsum placeholder text generator yer tutucu">
-          <span class="dir-item-icon">✍️</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="dev.lorem.name">Lorem Ipsum</span><span class="dir-item-desc" data-i18n="dev.lorem.desc">Placeholder text generator</span></span>
-        </a>
-        <a href="dev.html#md"    class="dir-item" data-search="markdown preview html render önizleme">
-          <span class="dir-item-icon">📝</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="dev.md.name">Markdown Preview</span><span class="dir-item-desc" data-i18n="dev.md.desc">Live side-by-side MD rendering</span></span>
-        </a>
-        <a href="dev.html#css-minifier" class="dir-item" data-search="css minifier minify compress optimize sıkıştır">
-          <span class="dir-item-icon">🗜️</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="dev.cssmin.name">CSS Minifier</span><span class="dir-item-desc" data-i18n="dev.cssmin.desc">Minify CSS and see size reduction</span></span>
-        </a>
-        <a href="dev.html#json-csv" class="dir-item" data-search="json csv convert array table dönüştür">
-          <span class="dir-item-icon">📊</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="dev.jsoncsv.name">JSON ↔ CSV</span><span class="dir-item-desc" data-i18n="dev.jsoncsv.desc">Convert JSON array to CSV or vice versa</span></span>
-        </a>
-        <a href="dev.html#diff-checker" class="dir-item" data-search="diff checker compare text lines fark">
-          <span class="dir-item-icon">🔍</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="dev.diff.name">Diff Checker</span><span class="dir-item-desc" data-i18n="dev.diff.desc">Highlight added and removed lines</span></span>
-        </a>
-        <a href="dev.html#cron-parser" class="dir-item" data-search="cron parser expression schedule job zamanla">
-          <span class="dir-item-icon">⏰</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="dev.cron.name">CRON Parser</span><span class="dir-item-desc" data-i18n="dev.cron.desc">Parse cron expressions and next run times</span></span>
-        </a>
-        <a href="dev.html#jwt-encoder" class="dir-item" data-search="jwt encoder sign token hs256 imza token">
-          <span class="dir-item-icon">🔐</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="dev.jwtenc.name">JWT Encoder</span><span class="dir-item-desc" data-i18n="dev.jwtenc.desc">Sign a JWT token with HS256</span></span>
-        </a>
-        <a href="dev.html#char-diff" class="dir-item" data-search="character diff compare strings char karakter fark">
-          <span class="dir-item-icon">🔠</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="dev.chardiff.name">Character Diff</span><span class="dir-item-desc" data-i18n="dev.chardiff.desc">Highlight exact character changes</span></span>
-        </a>
-        <a href="dev.html" class="dir-view-all" data-i18n="viewall.dev">All dev tools →</a>
-      </div>
-
-      <!-- ── Calculators ── -->
-      <div class="dir-col" data-col="calc">
-        <div class="dir-cat cat-calc">
-          <span class="dir-cat-icon">🧮</span><span data-i18n="cat.calc">Calculators</span>
-        </div>
-        <a href="calc.html#discount" class="dir-item" data-search="discount calculator sale price percentage off indirim">
-          <span class="dir-item-icon">🏷️</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="calc.discount.name">Discount</span><span class="dir-item-desc" data-i18n="calc.discount.desc">Sale price &amp; savings amount</span></span>
-        </a>
-        <a href="calc.html#vat"      class="dir-item" data-search="vat tax gst calculator kdv vergi">
-          <span class="dir-item-icon">🧾</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="calc.vat.name">VAT / Tax</span><span class="dir-item-desc" data-i18n="calc.vat.desc">Add or extract tax from a price</span></span>
-        </a>
-        <a href="calc.html#tip"      class="dir-item" data-search="tip calculator restaurant bill split bahşiş">
-          <span class="dir-item-icon">🍽️</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="calc.tip.name">Tip Calculator</span><span class="dir-item-desc" data-i18n="calc.tip.desc">Tip + total + per-person split</span></span>
-        </a>
-        <a href="calc.html#compound" class="dir-item" data-search="compound interest calculator investment savings bileşik faiz">
-          <span class="dir-item-icon">📈</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="calc.compound.name">Compound Interest</span><span class="dir-item-desc" data-i18n="calc.compound.desc">Investment growth over time</span></span>
-        </a>
-        <a href="calc.html#loan"     class="dir-item" data-search="loan emi mortgage monthly payment calculator kredi taksit">
-          <span class="dir-item-icon">🏦</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="calc.loan.name">Loan / EMI</span><span class="dir-item-desc" data-i18n="calc.loan.desc">Monthly payment &amp; total interest</span></span>
-        </a>
-        <a href="calc.html#fuel"     class="dir-item" data-search="fuel cost trip calculator petrol diesel yakıt maliyet">
-          <span class="dir-item-icon">⛽</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="calc.fuel.name">Fuel Cost</span><span class="dir-item-desc" data-i18n="calc.fuel.desc">Trip cost by distance + efficiency</span></span>
-        </a>
-        <a href="calc.html#bmr"      class="dir-item" data-search="bmr tdee calorie calculator metabolic rate kalori">
-          <span class="dir-item-icon">🔥</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="calc.bmr.name">BMR / TDEE</span><span class="dir-item-desc" data-i18n="calc.bmr.desc">Daily calorie needs</span></span>
-        </a>
-        <a href="calc.html#water"    class="dir-item" data-search="water intake calculator daily hydration su ihtiyacı">
-          <span class="dir-item-icon">💧</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="calc.water.name">Water Intake</span><span class="dir-item-desc" data-i18n="calc.water.desc">Daily hydration recommendation</span></span>
-        </a>
-        <a href="calc.html#sleep"    class="dir-item" data-search="sleep cycle calculator wake time uyku döngüsü">
-          <span class="dir-item-icon">😴</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="calc.sleep.name">Sleep Cycles</span><span class="dir-item-desc" data-i18n="calc.sleep.desc">Best wake times per 90-min cycles</span></span>
-        </a>
-        <a href="calc.html#due"      class="dir-item" data-search="pregnancy due date calculator lmp doğum tarihi">
-          <span class="dir-item-icon">🤰</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="calc.due.name">Pregnancy Due Date</span><span class="dir-item-desc" data-i18n="calc.due.desc">LMP + 280 days (Naegele's rule)</span></span>
-        </a>
-        <a href="calc.html#date-diff" class="dir-item" data-search="date difference days weeks months years tarih farkı">
-          <span class="dir-item-icon">📅</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="calc.datediff.name">Date Difference</span><span class="dir-item-desc" data-i18n="calc.datediff.desc">Days, weeks, months, working days</span></span>
-        </a>
-        <a href="calc.html#timezone" class="dir-item" data-search="timezone converter time zones world clock saat dilimi">
-          <span class="dir-item-icon">🌍</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="calc.timezone.name">Time Zone Converter</span><span class="dir-item-desc" data-i18n="calc.timezone.desc">Convert time to all major time zones</span></span>
-        </a>
-        <a href="calc.html#statistics" class="dir-item" data-search="statistics mean median mode variance standard deviation istatistik">
-          <span class="dir-item-icon">📊</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="calc.stats.name">Statistics Calculator</span><span class="dir-item-desc" data-i18n="calc.stats.desc">Mean, median, mode, std deviation</span></span>
-        </a>
-        <a href="calc.html#aspect-ratio" class="dir-item" data-search="aspect ratio width height resolution en boy oranı">
-          <span class="dir-item-icon">📐</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="calc.aspect.name">Aspect Ratio</span><span class="dir-item-desc" data-i18n="calc.aspect.desc">Simplify ratio or calculate dimension</span></span>
-        </a>
-        <a href="calc.html#num-to-words" class="dir-item" data-search="number words english turkish sayı yazı dönüştür">
-          <span class="dir-item-icon">🔢</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="calc.numwords.name">Number to Words</span><span class="dir-item-desc" data-i18n="calc.numwords.desc">Convert numbers to EN/TR words</span></span>
-        </a>
-        <a href="calc.html#currency" class="dir-item" data-search="currency converter usd eur gbp try döviz çevirici">
-          <span class="dir-item-icon">💱</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="calc.currency.name">Currency Converter</span><span class="dir-item-desc" data-i18n="calc.currency.desc">Approximate static rates — 12 currencies</span></span>
-        </a>
-        <a href="calc.html#quadratic" class="dir-item" data-search="quadratic solver equation roots discriminant denklem kökler">
-          <span class="dir-item-icon">🧮</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="calc.quadratic.name">Quadratic Solver</span><span class="dir-item-desc" data-i18n="calc.quadratic.desc">Solve ax²+bx+c=0 — real or complex roots</span></span>
-        </a>
-        <a href="calc.html#sci-calc" class="dir-item" data-search="scientific calculator sin cos tan log sqrt bilimsel hesap">
-          <span class="dir-item-icon">🔬</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="calc.sci.name">Scientific Calculator</span><span class="dir-item-desc" data-i18n="calc.sci.desc">Full scientific calculator with history</span></span>
-        </a>
-        <a href="calc.html" class="dir-view-all" data-i18n="viewall.calc">All calculators →</a>
-      </div>
-
-      <!-- ── Color Tools ── -->
-      <div class="dir-col" data-col="color">
-        <div class="dir-cat cat-color">
-          <span class="dir-cat-icon">🎨</span><span data-i18n="cat.color">Color Tools</span>
-        </div>
-        <a href="color.html#convert"  class="dir-item" data-search="hex rgb hsl cmyk color converter renk dönüştürücü">
-          <span class="dir-item-icon">🎨</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="color.convert.name">Color Converter</span><span class="dir-item-desc" data-i18n="color.convert.desc">HEX ↔ RGB ↔ HSL ↔ CMYK</span></span>
-        </a>
-        <a href="color.html#contrast" class="dir-item" data-search="color contrast checker wcag accessibility kontrast">
-          <span class="dir-item-icon">👁️</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="color.contrast.name">Contrast Checker</span><span class="dir-item-desc" data-i18n="color.contrast.desc">WCAG AA/AAA compliance</span></span>
-        </a>
-        <a href="color.html#shades"   class="dir-item" data-search="color shades tints palette generator ton üretici">
-          <span class="dir-item-icon">🌈</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="color.shades.name">Shade Generator</span><span class="dir-item-desc" data-i18n="color.shades.desc">Full lightness scale from any color</span></span>
-        </a>
-        <a href="color.html#gradient" class="dir-item" data-search="css gradient builder linear radial geçiş renk">
-          <span class="dir-item-icon">✨</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="color.gradient.name">Gradient Builder</span><span class="dir-item-desc" data-i18n="color.gradient.desc">Linear/radial CSS gradients</span></span>
-        </a>
-        <a href="color.html#color-blind" class="dir-item" data-search="color blindness simulator protanopia deuteranopia renk körlüğü">
-          <span class="dir-item-icon">👁️</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="color.blind.name">Color Blind Simulator</span><span class="dir-item-desc" data-i18n="color.blind.desc">Protanopia, Deuteranopia, Tritanopia</span></span>
-        </a>
-        <a href="color.html#random-palette" class="dir-item" data-search="random palette generator harmonious complementary colors palet">
-          <span class="dir-item-icon">🎨</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="color.palette.name">Random Palette</span><span class="dir-item-desc" data-i18n="color.palette.desc">5 harmonious colors, CSS vars ready</span></span>
-        </a>
-        <a href="color.html#tint-shade" class="dir-item" data-search="tint shade generator lighter darker color swatches ton açık koyu">
-          <span class="dir-item-icon">🌓</span>
-          <span class="dir-item-text"><span class="dir-item-name" data-i18n="color.tintshade.name">Tint &amp; Shade Generator</span><span class="dir-item-desc" data-i18n="color.tintshade.desc">9 tints + 9 shades from any color</span></span>
-        </a>
-        <a href="color.html" class="dir-view-all" data-i18n="viewall.color">All color tools →</a>
-      </div>
-
-
-    </div><!-- /dir-grid -->
-
-    <!-- Email capture -->
-    <div style="text-align:center; padding:28px 20px 12px; border-top:1px solid rgba(130,80,255,.1);">
-      <p style="font-size:13px; color:#9ca3af; margin-bottom:12px;" data-i18n="index.newsletter">
-        🚀 Get notified when new tools drop — no spam, unsubscribe anytime.
-      </p>
-      <form id="nl-form" style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap; max-width:420px; margin:0 auto;">
-        <input type="email" id="nl-email" placeholder="your@email.com" required
-          style="flex:1; min-width:200px; padding:9px 14px; border-radius:10px;
-                 border:1px solid rgba(130,80,255,.35); background:#12121e;
-                 color:#f0eeff; font-size:14px; outline:none;" />
-        <button type="submit"
-          style="padding:9px 18px; border-radius:10px; border:none; cursor:pointer;
-                 background:linear-gradient(135deg,#8250ff,#6030e0); color:#fff;
-                 font-size:13px; font-weight:700; white-space:nowrap;">
-          Notify me ✓
-        </button>
-      </form>
-      <p id="nl-ok" style="display:none; color:#4ade80; font-size:13px; margin-top:10px;">
-        🎉 You're in! We'll keep you posted.
-      </p>
+      <div class="idx-badge">🌐 Browser · No Server</div>
     </div>
 
-    <div class="dir-footer">
-      <span data-i18n="index.footer">© 2026 SnakeConverter · All tools run in your browser</span>
-      &nbsp;·&nbsp;
-      <a href="pricing.html" style="color:#8250ff; text-decoration:none; font-size:0.7rem;">Pricing</a>
-    </div>
+    <!-- Content area -->
+    <div class="idx-content">
 
-  </div><!-- /main-card -->
-</div><!-- /app-wrap -->
+      <!-- ── SEARCH RESULTS ── -->
+      <div class="idx-search-results" id="idxSearchResults">
+        <div class="idx-panel-hdr">
+          <div class="idx-panel-title">🔍 <span data-i18n="index.search.results">Search Results</span></div>
+        </div>
+        <div class="idx-tools-grid" id="idxSearchGrid"></div>
+        <div class="idx-search-no-result" id="idxSearchEmpty" style="display:none" data-i18n="index.search.empty">No tools found. Try a different keyword.</div>
+      </div>
+
+      <!-- ══ 1. PDF Tools ══ -->
+      <div class="idx-panel visible" id="panel-pdf">
+        <div class="idx-panel-hdr">
+          <div class="idx-panel-title">📄 <span data-i18n="cat.pdf">PDF Tools</span></div>
+          <div class="idx-panel-desc" data-i18n="cat.pdf.desc">Convert, merge, split, protect and share PDF files — all in your browser, nothing uploaded.</div>
+        </div>
+        <div class="idx-tools-grid">
+          <a href="pdf.html" class="idx-tool-card" data-search="excel csv xls pdf convert">
+            <span class="idx-tool-card-ico">📊</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="pdf.excel.name">Excel → PDF</div>
+              <div class="idx-tool-card-desc" data-i18n="pdf.excel.desc">xlsx, xls, csv with full Unicode</div>
+            </div>
+            <span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="pdf.html" class="idx-tool-card" data-search="image photo jpeg png webp gif bmp pdf">
+            <span class="idx-tool-card-ico">🖼️</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="pdf.image.name">Image → PDF</div>
+              <div class="idx-tool-card-desc" data-i18n="pdf.image.desc">PNG, JPEG, WebP, GIF, BMP</div>
+            </div>
+            <span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="pdf.html" class="idx-tool-card" data-search="merge combine join pdf multiple files">
+            <span class="idx-tool-card-ico">🔗</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="pdf.merge.name">Merge PDFs</div>
+              <div class="idx-tool-card-desc" data-i18n="pdf.merge.desc">Combine multiple PDFs into one</div>
+            </div>
+            <span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="pdf.html" class="idx-tool-card" data-search="split extract pages pdf zip ranges">
+            <span class="idx-tool-card-ico">✂️</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="pdf.split.name">Split PDF</div>
+              <div class="idx-tool-card-desc" data-i18n="pdf.split.desc">Extract pages or custom ranges</div>
+            </div>
+            <span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="pdf.html" class="idx-tool-card" data-search="encrypt lock password protect pdf decrypt aes">
+            <span class="idx-tool-card-ico">🔒</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="pdf.encrypt.name">Encrypt / Decrypt</div>
+              <div class="idx-tool-card-desc" data-i18n="pdf.encrypt.desc">AES-256 password protection</div>
+            </div>
+            <span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="pdf.html" class="idx-tool-card" data-search="share pdf link upload public url">
+            <span class="idx-tool-card-ico">🌐</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="pdf.share.name">Share PDF</div>
+              <div class="idx-tool-card-desc" data-i18n="pdf.share.desc">Generate a public shareable link</div>
+            </div>
+            <span class="idx-tool-card-arr">›</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- ══ 2. Unit Converters ══ -->
+      <div class="idx-panel" id="panel-units">
+        <div class="idx-panel-hdr">
+          <div class="idx-panel-title">📐 <span data-i18n="cat.units">Unit Converters</span></div>
+          <div class="idx-panel-desc" data-i18n="cat.units.desc">Convert between any units of measurement instantly — length, weight, temperature and more.</div>
+        </div>
+        <div class="idx-tools-grid">
+          <a href="units.html#length" class="idx-tool-card" data-search="length km m cm ft in mile unit">
+            <span class="idx-tool-card-ico">📏</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="unit.length.name">Length</div>
+              <div class="idx-tool-card-desc" data-i18n="unit.length.desc">km, m, cm, ft, in, miles</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="units.html#weight" class="idx-tool-card" data-search="weight mass kg lb oz gram ton">
+            <span class="idx-tool-card-ico">⚖️</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="unit.weight.name">Weight / Mass</div>
+              <div class="idx-tool-card-desc" data-i18n="unit.weight.desc">kg, g, lb, oz, stones</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="units.html#temperature" class="idx-tool-card" data-search="temperature celsius fahrenheit kelvin">
+            <span class="idx-tool-card-ico">🌡️</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="unit.temp.name">Temperature</div>
+              <div class="idx-tool-card-desc" data-i18n="unit.temp.desc">°C, °F, K, °R</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="units.html#area" class="idx-tool-card" data-search="area m2 ft2 acre hectare km2">
+            <span class="idx-tool-card-ico">📐</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="unit.area.name">Area</div>
+              <div class="idx-tool-card-desc" data-i18n="unit.area.desc">m², ft², acres, hectares</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="units.html#volume" class="idx-tool-card" data-search="volume liter gallon ml cup fluid oz">
+            <span class="idx-tool-card-ico">🧴</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="unit.volume.name">Volume</div>
+              <div class="idx-tool-card-desc" data-i18n="unit.volume.desc">L, mL, gallons, cups, fl oz</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="units.html#speed" class="idx-tool-card" data-search="speed kmh mph knot m/s">
+            <span class="idx-tool-card-ico">🚗</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="unit.speed.name">Speed</div>
+              <div class="idx-tool-card-desc" data-i18n="unit.speed.desc">km/h, mph, m/s, knots, Mach</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="units.html#data" class="idx-tool-card" data-search="data storage bytes kb mb gb tb">
+            <span class="idx-tool-card-ico">💾</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="unit.data.name">Data Storage</div>
+              <div class="idx-tool-card-desc" data-i18n="unit.data.desc">B, KB, MB, GB, TB, PB</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="units.html#time" class="idx-tool-card" data-search="time duration seconds minutes hours days weeks">
+            <span class="idx-tool-card-ico">⏱️</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="unit.time.name">Time Duration</div>
+              <div class="idx-tool-card-desc" data-i18n="unit.time.desc">ms, s, min, h, days, weeks, yr</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="units.html#energy" class="idx-tool-card" data-search="energy joule calorie kwh btu">
+            <span class="idx-tool-card-ico">⚡</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="unit.energy.name">Energy</div>
+              <div class="idx-tool-card-desc" data-i18n="unit.energy.desc">J, kJ, cal, kcal, kWh, BTU</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="units.html#pressure" class="idx-tool-card" data-search="pressure pascal bar psi atm mmhg">
+            <span class="idx-tool-card-ico">🔬</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="unit.pressure.name">Pressure</div>
+              <div class="idx-tool-card-desc" data-i18n="unit.pressure.desc">Pa, bar, psi, atm, mmHg</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="units.html#fuel" class="idx-tool-card" data-search="fuel efficiency mpg l/100km">
+            <span class="idx-tool-card-ico">⛽</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="unit.fuel.name">Fuel Efficiency</div>
+              <div class="idx-tool-card-desc" data-i18n="unit.fuel.desc">L/100km, km/L, MPG</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="units.html#cooking" class="idx-tool-card" data-search="cooking cups tbsp tsp ml liter pints">
+            <span class="idx-tool-card-ico">🍳</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="unit.cooking.name">Cooking</div>
+              <div class="idx-tool-card-desc" data-i18n="unit.cooking.desc">Cups, tbsp, tsp, mL, fl oz</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="units.html#shoe" class="idx-tool-card" data-search="shoe size us eu uk cm foot">
+            <span class="idx-tool-card-ico">👟</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="unit.shoe.name">Shoe Size</div>
+              <div class="idx-tool-card-desc" data-i18n="unit.shoe.desc">EU, US Men, US Women, UK, CM</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- ══ 3. Text & Writing ══ -->
+      <div class="idx-panel" id="panel-text">
+        <div class="idx-panel-hdr">
+          <div class="idx-panel-title">🔤 <span data-i18n="cat.text">Text & Writing</span></div>
+          <div class="idx-panel-desc" data-i18n="cat.text.desc">Analyze, transform and inspect text in every way possible.</div>
+        </div>
+        <div class="idx-tools-grid">
+          <a href="tools.html#wordcount" class="idx-tool-card" data-search="word count characters sentences read time">
+            <span class="idx-tool-card-ico">📝</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.wordcount.name">Word Counter</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.wordcount.desc">Words, chars, sentences, read time</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="tools.html#textcase" class="idx-tool-card" data-search="text case upper lower title camel snake">
+            <span class="idx-tool-card-ico">Aa</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.textcase.name">Text Case</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.textcase.desc">UPPER, lower, Title, camelCase…</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="tools.html#morse" class="idx-tool-card" data-search="morse code encode decode dots dashes">
+            <span class="idx-tool-card-ico">📻</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.morse.name">Morse Code</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.morse.desc">Encode or decode Morse</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="tools.html#binary" class="idx-tool-card" data-search="text binary bits bytes 01 encode decode">
+            <span class="idx-tool-card-ico">01</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.binary.name">Text ↔ Binary</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.binary.desc">Convert text to binary bytes</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="tools.html#palindrome" class="idx-tool-card" data-search="palindrome checker word phrase reverse">
+            <span class="idx-tool-card-ico">🔍</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.palindrome.name">Palindrome Checker</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.palindrome.desc">Checks if text reads the same backwards</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="tools.html#dupremover" class="idx-tool-card" data-search="duplicate remove lines unique text">
+            <span class="idx-tool-card-ico">🗑️</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.dupremover.name">Duplicate Remover</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.dupremover.desc">Remove duplicate lines from text</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="tools.html#reverser" class="idx-tool-card" data-search="reverse text flip backwards mirror">
+            <span class="idx-tool-card-ico">↩️</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.reverser.name">Text Reverser</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.reverser.desc">Reverse any text or sentence</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="tools.html#stringinspect" class="idx-tool-card" data-search="string inspector character codes unicode ascii">
+            <span class="idx-tool-card-ico">🔎</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.stringinspect.name">String Inspector</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.stringinspect.desc">Char codes, Unicode info</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- ══ 4. Security & Generators ══ -->
+      <div class="idx-panel" id="panel-security">
+        <div class="idx-panel-hdr">
+          <div class="idx-panel-title">🔑 <span data-i18n="cat.security">Security & Generators</span></div>
+          <div class="idx-panel-desc" data-i18n="cat.security.desc">Generate secure passwords, random numbers, QR codes and other content.</div>
+        </div>
+        <div class="idx-tools-grid">
+          <a href="tools.html#passgen" class="idx-tool-card" data-search="password generator secure strength symbols">
+            <span class="idx-tool-card-ico">🔑</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.passgen.name">Password Generator</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.passgen.desc">Secure passwords + strength meter</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="tools.html#random" class="idx-tool-card" data-search="random number range count unique">
+            <span class="idx-tool-card-ico">🎲</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.random.name">Random Number</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.random.desc">Range, count, unique options</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="tools.html#qr" class="idx-tool-card" data-search="qr code generate download png url">
+            <span class="idx-tool-card-ico">📱</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.qr.name">QR Code Generator</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.qr.desc">Generate downloadable QR codes</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="tools.html#coin" class="idx-tool-card" data-search="coin flip heads tails random">
+            <span class="idx-tool-card-ico">🪙</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.coin.name">Coin Flip</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.coin.desc">Heads or tails — animated flip</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="tools.html#dice" class="idx-tool-card" data-search="dice roller roll d6 d20 multiple">
+            <span class="idx-tool-card-ico">🎰</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.dice.name">Dice Roller</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.dice.desc">Roll any number of dice</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- ══ 5. Calculators ══ -->
+      <div class="idx-panel" id="panel-calc">
+        <div class="idx-panel-hdr">
+          <div class="idx-panel-title">🧮 <span data-i18n="cat.calc">Calculators</span></div>
+          <div class="idx-panel-desc" data-i18n="cat.calc.desc">Math, statistics, ratios and scientific calculations.</div>
+        </div>
+        <div class="idx-tools-grid">
+          <a href="calc.html#percentage" class="idx-tool-card" data-search="percentage percent of what change increase decrease">
+            <span class="idx-tool-card-ico">%</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.percentage.name">Percentage</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.percentage.desc">X% of Y · What % · % Change</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="calc.html#statistics" class="idx-tool-card" data-search="statistics mean median mode variance std deviation">
+            <span class="idx-tool-card-ico">📊</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.statistics.name">Statistics</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.statistics.desc">Mean, median, mode, std deviation</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="calc.html#quadratic" class="idx-tool-card" data-search="quadratic equation solver ax2 bx c roots">
+            <span class="idx-tool-card-ico">📈</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.quadratic.name">Quadratic Solver</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.quadratic.desc">Solve ax²+bx+c=0</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="calc.html#scientific" class="idx-tool-card" data-search="scientific calculator advanced math sin cos log">
+            <span class="idx-tool-card-ico">🔢</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.scientific.name">Scientific Calculator</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.scientific.desc">sin, cos, log, factorial…</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="calc.html#aspectratio" class="idx-tool-card" data-search="aspect ratio width height 16:9 4:3">
+            <span class="idx-tool-card-ico">📐</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.aspectratio.name">Aspect Ratio</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.aspectratio.desc">Calculate width:height ratio</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- ══ 6. Finance & Currency ══ -->
+      <div class="idx-panel" id="panel-finance">
+        <div class="idx-panel-hdr">
+          <div class="idx-panel-title">💰 <span data-i18n="cat.finance">Finance & Currency</span></div>
+          <div class="idx-panel-desc" data-i18n="cat.finance.desc">Currency conversion, loan calculations and number formatting.</div>
+        </div>
+        <div class="idx-tools-grid">
+          <a href="calc.html#currency" class="idx-tool-card" data-search="currency converter usd eur try exchange rate">
+            <span class="idx-tool-card-ico">💱</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.currency.name">Currency Converter</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.currency.desc">Live exchange rates (150+ currencies)</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="calc.html#loan" class="idx-tool-card" data-search="loan emi mortgage monthly payment interest">
+            <span class="idx-tool-card-ico">🏦</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.loan.name">Loan / EMI</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.loan.desc">Monthly payment + total interest</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="calc.html#numwords" class="idx-tool-card" data-search="number to words 1234 one thousand spelling">
+            <span class="idx-tool-card-ico">🔡</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.numwords.name">Number to Words</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.numwords.desc">1,234 → "one thousand two hundred…"</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- ══ 7. Date & Time ══ -->
+      <div class="idx-panel" id="panel-datetime">
+        <div class="idx-panel-hdr">
+          <div class="idx-panel-title">📅 <span data-i18n="cat.datetime">Date & Time</span></div>
+          <div class="idx-panel-desc" data-i18n="cat.datetime.desc">Calculate date differences, convert timestamps and use timers.</div>
+        </div>
+        <div class="idx-tools-grid">
+          <a href="calc.html#datediff" class="idx-tool-card" data-search="date difference days between two dates calculator">
+            <span class="idx-tool-card-ico">📅</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.datediff.name">Date Difference</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.datediff.desc">Days, weeks, months between dates</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="calc.html#timezone" class="idx-tool-card" data-search="timezone converter utc gmt world clock">
+            <span class="idx-tool-card-ico">🌍</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.timezone.name">Time Zone</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.timezone.desc">Convert across 400+ time zones</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="tools.html#stopwatch" class="idx-tool-card" data-search="stopwatch timer millisecond precision laps">
+            <span class="idx-tool-card-ico">⏱️</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.stopwatch.name">Stopwatch</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.stopwatch.desc">Millisecond precision with laps</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="tools.html#countdown" class="idx-tool-card" data-search="countdown timer set alarm minutes seconds">
+            <span class="idx-tool-card-ico">⏳</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.countdown.name">Countdown Timer</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.countdown.desc">Set a countdown timer</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- ══ 8. Developer Tools ══ -->
+      <div class="idx-panel" id="panel-dev">
+        <div class="idx-panel-hdr">
+          <div class="idx-panel-title">💻 <span data-i18n="cat.dev">Developer Tools</span></div>
+          <div class="idx-panel-desc" data-i18n="cat.dev.desc">Encode, format, validate and convert data — essential tools for every developer.</div>
+        </div>
+        <div class="idx-tools-grid">
+          <a href="dev.html#json" class="idx-tool-card" data-search="json formatter beautify validate minify">
+            <span class="idx-tool-card-ico">{}</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.json.name">JSON Formatter</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.json.desc">Format & validate JSON</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="dev.html#html" class="idx-tool-card" data-search="html encode decode entities escape">
+            <span class="idx-tool-card-ico">🌐</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.html.name">HTML Encoder</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.html.desc">Encode/decode HTML entities</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="dev.html#url" class="idx-tool-card" data-search="url encode decode percent uri">
+            <span class="idx-tool-card-ico">🔗</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.url.name">URL Encoder</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.url.desc">Encode/decode URLs</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="dev.html#regex" class="idx-tool-card" data-search="regex tester test pattern match groups flags">
+            <span class="idx-tool-card-ico">🔍</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.regex.name">Regex Tester</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.regex.desc">Test regex with live highlighting</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="tools.html#base64" class="idx-tool-card" data-search="base64 encode decode string binary">
+            <span class="idx-tool-card-ico"></span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.base64.name">Base64</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.base64.desc">Encode or decode Base64 strings</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="tools.html#timestamp" class="idx-tool-card" data-search="unix timestamp epoch date time convert">
+            <span class="idx-tool-card-ico">🕐</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.timestamp.name">Unix Timestamp</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.timestamp.desc">Live epoch clock · Date conversion</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="dev.html#css" class="idx-tool-card" data-search="css minifier compress stylesheet">
+            <span class="idx-tool-card-ico">🗜️</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.cssmin.name">CSS Minifier</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.cssmin.desc">Minify & compress CSS code</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="dev.html#jsontab" class="idx-tool-card" data-search="json csv convert table spreadsheet">
+            <span class="idx-tool-card-ico">↔️</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.jsontab.name">JSON ↔ CSV</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.jsontab.desc">Convert between JSON and CSV</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="dev.html#diff" class="idx-tool-card" data-search="diff checker compare text files changes">
+            <span class="idx-tool-card-ico">📊</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.diff.name">Diff Checker</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.diff.desc">Compare two texts line by line</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="dev.html#cron" class="idx-tool-card" data-search="cron parser expression schedule next run">
+            <span class="idx-tool-card-ico">⏰</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.cron.name">CRON Parser</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.cron.desc">Parse cron expressions & next runs</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- ══ 9. Color & Design ══ -->
+      <div class="idx-panel" id="panel-color">
+        <div class="idx-panel-hdr">
+          <div class="idx-panel-title">🎨 <span data-i18n="cat.color">Color & Design</span></div>
+          <div class="idx-panel-desc" data-i18n="cat.color.desc">Convert, generate, test and explore colors for web and design projects.</div>
+        </div>
+        <div class="idx-tools-grid">
+          <a href="color.html#converter" class="idx-tool-card" data-search="hex rgb hsl color convert picker">
+            <span class="idx-tool-card-ico">🎨</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.hexrgb.name">HEX ↔ RGB ↔ HSL</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.hexrgb.desc">All color format conversions</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="color.html#palette" class="idx-tool-card" data-search="color palette generator harmonious complementary">
+            <span class="idx-tool-card-ico">🌈</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.palette.name">Palette Generator</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.palette.desc">Harmonious color palettes</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="color.html#contrast" class="idx-tool-card" data-search="contrast checker wcag aa aaa accessibility">
+            <span class="idx-tool-card-ico">👁️</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.contrast.name">Contrast Checker</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.contrast.desc">WCAG AA / AAA compliance</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="color.html#gradient" class="idx-tool-card" data-search="gradient builder css linear radial colors">
+            <span class="idx-tool-card-ico">🌅</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.gradient.name">Gradient Builder</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.gradient.desc">CSS gradient maker & preview</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="color.html#blindness" class="idx-tool-card" data-search="color blindness simulate cvd deuteranopia protanopia">
+            <span class="idx-tool-card-ico">🔬</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.blindness.name">Color Blindness Sim</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.blindness.desc">Simulate CVD vision modes</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="color.html#random" class="idx-tool-card" data-search="random color palette generator set">
+            <span class="idx-tool-card-ico">🎲</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.randomcolor.name">Random Palette</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.randomcolor.desc">Instant random color set</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="color.html#tint" class="idx-tool-card" data-search="tint shade lighter darker color variants">
+            <span class="idx-tool-card-ico">🌓</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.tint.name">Tint & Shade</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.tint.desc">Lighter/darker color variants</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- ══ 10. Health & Life ══ -->
+      <div class="idx-panel" id="panel-health">
+        <div class="idx-panel-hdr">
+          <div class="idx-panel-title">🏥 <span data-i18n="cat.health">Health & Life</span></div>
+          <div class="idx-panel-desc" data-i18n="cat.health.desc">BMI, age calculation and typography unit conversions.</div>
+        </div>
+        <div class="idx-tools-grid">
+          <a href="calc.html#bmi" class="idx-tool-card" data-search="bmi body mass index weight height calculator">
+            <span class="idx-tool-card-ico">❤️</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.bmi.name">BMI Calculator</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.bmi.desc">Body mass index with visual gauge</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="calc.html#age" class="idx-tool-card" data-search="age calculator birthday exact years months days">
+            <span class="idx-tool-card-ico">🎂</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.age.name">Age Calculator</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.age.desc">Exact age + birthday countdown</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="units.html#typography" class="idx-tool-card" data-search="typography px pt em rem font size units">
+            <span class="idx-tool-card-ico">🔤</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.typography.name">Typography Units</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.typography.desc">px, pt, em, rem, vw conversions</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+        </div>
+      </div>
+
+    </div><!-- /idx-content -->
+  </main>
+
+</div><!-- /idx-layout -->
 
 <script src="js/i18n.js"></script>
 <script src="js/snake-mascot.js"></script>
 <script src="js/snake-tools.js"></script>
 <script>
-/* ── Snake mascot (index page hover reactions) ── */
-/* window.snakeMascot is set by snake-tools.js; wait for it */
-document.querySelectorAll(".dir-item").forEach(item => {
-  item.addEventListener("mouseenter", () => {
-    if (window.snakeMascot) window.snakeMascot.onFileSelect();
-  });
-});
+/* ── Category switcher ── */
+var CAT_LABELS = {
+  pdf:      { en: 'PDF Tools',              tr: 'PDF Araçları' },
+  units:    { en: 'Unit Converters',        tr: 'Birim Dönüştürücüler' },
+  text:     { en: 'Text & Writing',         tr: 'Metin & Yazı' },
+  security: { en: 'Security & Generators',  tr: 'Güvenlik & Oluşturucular' },
+  calc:     { en: 'Calculators',            tr: 'Hesap Makineleri' },
+  finance:  { en: 'Finance & Currency',     tr: 'Finans & Para Birimi' },
+  datetime: { en: 'Date & Time',            tr: 'Tarih & Saat' },
+  dev:      { en: 'Developer Tools',        tr: 'Geliştirici Araçları' },
+  color:    { en: 'Color & Design',         tr: 'Renk & Tasarım' },
+  health:   { en: 'Health & Life',          tr: 'Sağlık & Yaşam' }
+};
 
-/* Caption is now handled inside i18n.js apply() via data-i18n attribute */
+function switchCat(cat, btn) {
+  /* hide all panels */
+  document.querySelectorAll('.idx-panel').forEach(p => p.classList.remove('visible'));
+  /* deactivate all nav items */
+  document.querySelectorAll('.idx-nav-item').forEach(b => b.classList.remove('active'));
+  /* activate selected */
+  var panel = document.getElementById('panel-' + cat);
+  if (panel) panel.classList.add('visible');
+  if (btn) btn.classList.add('active');
+  /* update topbar */
+  var lang = (localStorage.getItem('sc_lang') || 'en');
+  var label = (CAT_LABELS[cat] || {})[lang] || cat;
+  var titleEl = document.getElementById('idxPanelTitle');
+  var breadEl = document.getElementById('idxBreadcat');
+  if (titleEl) titleEl.textContent = label;
+  if (breadEl) breadEl.textContent = label;
+  /* hide search results */
+  document.getElementById('idxSearchResults').classList.remove('visible');
+  if (document.getElementById('idxSearchInput')) document.getElementById('idxSearchInput').value = '';
+  /* snake hover */
+  if (window.snakeMascot) window.snakeMascot.onFileSelect();
+}
 
-/* ── Search / filter ── */
-function filterDir(query) {
-  const q = query.toLowerCase().trim();
-  let anyVisible = false;
+/* ── Handle hash on load ── */
+(function(){
+  var hash = (location.hash || '').replace('#','');
+  var hashMap = {
+    excel:'pdf', image:'pdf', merge:'pdf', split:'pdf', encrypt:'pdf', share:'pdf',
+    length:'units', weight:'units', temperature:'units', area:'units', volume:'units',
+    speed:'units', data:'units', time:'units', energy:'units', pressure:'units',
+    fuel:'units', cooking:'units', shoe:'units', typography:'health',
+    wordcount:'text', textcase:'text', morse:'text', binary:'text',
+    palindrome:'text', dupremover:'text', reverser:'text', stringinspect:'text',
+    passgen:'security', random:'security', qr:'security', coin:'security', dice:'security',
+    percentage:'calc', statistics:'calc', quadratic:'calc', scientific:'calc', aspectratio:'calc',
+    currency:'finance', loan:'finance', numwords:'finance',
+    datediff:'datetime', timezone:'datetime', stopwatch:'datetime', countdown:'datetime',
+    json:'dev', html:'dev', url:'dev', regex:'dev', base64:'dev', timestamp:'dev',
+    css:'dev', jsontab:'dev', diff:'dev', cron:'dev',
+    converter:'color', palette:'color', contrast:'color', gradient:'color',
+    blindness:'color', random_color:'color', tint:'color',
+    bmi:'health', age:'health'
+  };
+  var cat = hash ? (hashMap[hash] || 'pdf') : 'pdf';
+  var btn = document.querySelector('[data-cat="'+cat+'"]');
+  switchCat(cat, btn);
+})();
 
-  document.querySelectorAll(".dir-col").forEach(col => {
-    let colVisible = false;
-    col.querySelectorAll(".dir-item").forEach(item => {
-      const text = (item.dataset.search || "") + " " + item.textContent;
-      const match = !q || text.toLowerCase().includes(q);
-      item.classList.toggle("hidden", !match);
-      if (match) colVisible = true;
-    });
-    col.classList.toggle("hidden", !colVisible && !!q);
-    if (colVisible) anyVisible = true;
+/* ── Search ── */
+var ALL_CARDS = null;
+function buildCardIndex() {
+  if (ALL_CARDS) return;
+  ALL_CARDS = [];
+  document.querySelectorAll('.idx-tool-card').forEach(function(card) {
+    var panel = card.closest('.idx-panel');
+    var cat = panel ? panel.id.replace('panel-','') : '';
+    ALL_CARDS.push({ el: card.cloneNode(true), cat: cat,
+      text: ((card.dataset.search||'') + ' ' + card.textContent).toLowerCase() });
   });
 }
+
+function handleSearch(q) {
+  buildCardIndex();
+  q = q.toLowerCase().trim();
+  var resultsPanel = document.getElementById('idxSearchResults');
+  var grid = document.getElementById('idxSearchGrid');
+  var emptyMsg = document.getElementById('idxSearchEmpty');
+
+  if (!q) {
+    resultsPanel.classList.remove('visible');
+    /* restore last active panel */
+    var active = document.querySelector('.idx-nav-item.active');
+    if (active) {
+      var cat = active.dataset.cat;
+      var panel = document.getElementById('panel-' + cat);
+      if (panel) panel.classList.add('visible');
+    } else {
+      switchCat('pdf', document.querySelector('[data-cat="pdf"]'));
+    }
+    return;
+  }
+
+  /* hide all category panels */
+  document.querySelectorAll('.idx-panel:not(#idxSearchResults)').forEach(p => p.classList.remove('visible'));
+  resultsPanel.classList.add('visible');
+
+  grid.innerHTML = '';
+  var matches = ALL_CARDS.filter(c => c.text.includes(q));
+  if (matches.length === 0) {
+    emptyMsg.style.display = 'block';
+  } else {
+    emptyMsg.style.display = 'none';
+    matches.forEach(function(m) {
+      var clone = m.el.cloneNode(true);
+      grid.appendChild(clone);
+    });
+  }
+}
+
+/* ── Snake mascot hover on tool cards ── */
+document.addEventListener('mouseover', function(e) {
+  if (e.target.closest('.idx-tool-card') && window.snakeMascot) {
+    window.snakeMascot.onFileSelect();
+  }
+});
+
+/* ── Newsletter / analytics ── */
 </script>
 <script src="js/analytics.js"></script>
 <script>
-/* Newsletter form */
 var nlForm = document.getElementById("nl-form");
 if (nlForm) {
-  nlForm.addEventListener("submit", function (e) {
+  nlForm.addEventListener("submit", function(e) {
     e.preventDefault();
     var email = document.getElementById("nl-email").value;
     var list = JSON.parse(localStorage.getItem("sc_newsletter") || "[]");
