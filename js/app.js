@@ -72,14 +72,13 @@
 
   function switchTab(id) {
     if (!VALID_TABS.has(id)) id = 'excel';
-    /* Update nav items — supports tab-btn, sc-nav-item, pdf-nav-item */
-    tabs.forEach((t) => {
+    /* Re-query every call so newly-added or lazily-inserted elements are captured */
+    document.querySelectorAll("[data-tab]").forEach((t) => {
       const match = t.getAttribute("data-tab") === id;
       t.classList.toggle("tab-active", match);
       t.classList.toggle("active",     match);
     });
-    /* Show / hide panels */
-    panels.forEach((p) =>
+    document.querySelectorAll("[data-panel]").forEach((p) =>
       p.classList.toggle("is-visible", p.getAttribute("data-panel") === id)
     );
     /* Update topbar title */
@@ -437,12 +436,12 @@
 
     drop.addEventListener('click', () => input && input.click());
     if (input) input.addEventListener('change', () => { if (input.files[0]) setShareFile(input.files[0]); });
-    drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('drag-over'); });
-    drop.addEventListener('dragleave', () => drop.classList.remove('drag-over'));
-    drop.addEventListener('dragend',   () => drop.classList.remove('drag-over'));
+    drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('dragover'); });
+    drop.addEventListener('dragleave', () => drop.classList.remove('dragover'));
+    drop.addEventListener('dragend',   () => drop.classList.remove('dragover'));
     drop.addEventListener('drop', e => {
       e.preventDefault();
-      drop.classList.remove('drag-over');
+      drop.classList.remove('dragover');
       const f = e.dataTransfer.files[0];
       if (f) setShareFile(f);
     });
