@@ -418,17 +418,28 @@
 
     let shareFile = null;
 
+    function isPdfFile(file) {
+      if (!file) return false;
+      return file.type === 'application/pdf'
+          || file.type === 'application/x-pdf'
+          || file.name.toLowerCase().endsWith('.pdf');
+    }
+
     function setShareFile(file) {
-      if (!file || file.type !== 'application/pdf') return;
+      if (!isPdfFile(file)) {
+        alert('Please drop a PDF file (.pdf)');
+        return;
+      }
       shareFile = file;
-      statusTx.textContent = file.name;
-      statusEl.style.display = 'flex';
+      if (statusTx) statusTx.textContent = file.name;
+      if (statusEl) statusEl.style.display = 'flex';
     }
 
     drop.addEventListener('click', () => input && input.click());
-    input && input.addEventListener('change', () => { if (input.files[0]) setShareFile(input.files[0]); });
+    if (input) input.addEventListener('change', () => { if (input.files[0]) setShareFile(input.files[0]); });
     drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('drag-over'); });
     drop.addEventListener('dragleave', () => drop.classList.remove('drag-over'));
+    drop.addEventListener('dragend',   () => drop.classList.remove('drag-over'));
     drop.addEventListener('drop', e => {
       e.preventDefault();
       drop.classList.remove('drag-over');
@@ -437,11 +448,19 @@
     });
 
     runBtn.addEventListener('click', async () => {
-      if (!shareFile) return alert('Please select a PDF to share.');
-      await withSnake(runBtn, async () => {
-        const blob = new Blob([await shareFile.arrayBuffer()], { type: 'application/pdf' });
-        window.uploadAndShare(blob, shareFile.name, 'sharePanelDirect', 'shareUrlDirect');
-      });
+      if (!shareFile) {
+        alert('Please select or drop a PDF file first.');
+        return;
+      }
+      try {
+        await withSnake(runBtn, async () => {
+          const bytes = await shareFile.arrayBuffer();
+          const blob  = new Blob([bytes], { type: 'application/pdf' });
+          await window.uploadAndShare(blob, shareFile.name, 'sharePanelDirect', 'shareUrlDirect');
+        });
+      } catch (e) {
+        alert('Share failed: ' + (e.message || e));
+      }
     });
   })();
 
