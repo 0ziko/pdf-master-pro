@@ -760,6 +760,82 @@ body::before {
    TOOLS PAGE: Shared components
 ═══════════════════════════════════════════════════════════ */
 
+/* ── Input field (shared across all tool pages) ─────── */
+.input-field {
+  width: 100%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.65rem;
+  padding: 0.52rem 0.75rem;
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.input-field:focus {
+  border-color: var(--border-glow);
+  background: rgba(255,255,255,0.09);
+}
+.input-field::placeholder { color: var(--text-dim); }
+
+/* Global dark-theme reset for all native inputs & selects
+   (covers any input not explicitly given .input-field) */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+input[type="time"],
+input[type="url"],
+input[type="search"],
+textarea,
+select {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.65rem;
+  padding: 0.52rem 0.75rem;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--border-glow);
+  background: rgba(255,255,255,0.09);
+}
+input::placeholder,
+textarea::placeholder { color: var(--text-dim); }
+
+/* color picker keeps native look */
+input[type="color"] {
+  width: 52px; height: 38px; padding: 2px;
+  background: transparent; cursor: pointer;
+  border-radius: 0.5rem;
+}
+
+/* range stays accent-colored */
+input[type="range"] {
+  background: transparent;
+  border: none;
+  padding: 0;
+  accent-color: var(--accent);
+}
+
 /* Large textarea for tools */
 .tool-textarea {
   width: 100%;
