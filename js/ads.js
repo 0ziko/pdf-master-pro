@@ -1,164 +1,196 @@
-/* ── SnakeConverter Ads Module ──────────────────────────────────────
-   Supports:
-     A. EthicalAds   → https://ethicalads.io  (recommended, easy approval)
-     B. Google AdSense → https://adsense.google.com (higher CPM, harder approval)
+/* ── SnakeConverter Ads — v2 ────────────────────────────────────────
+   3 named slots, fully responsive (mobile + desktop).
 
-   HOW TO ACTIVATE:
-   1. EthicalAds: sign up at ethicalads.io → get your publisher ID
-      → Set AD_PROVIDER = 'ethicalads' and ETHICAL_PUBLISHER_ID below
-   2. AdSense: get approved at adsense.google.com → get client ID + slot IDs
-      → Set AD_PROVIDER = 'adsense' and fill ADSENSE_CLIENT + ADSENSE_SLOT below
+   SLOT IDs — fill these after AdSense approval:
+     AdSense → Ads → By ad unit → Display ads → Create → copy data-ad-slot
 
-   Ads only render when AD_ENABLED = true AND the user has accepted cookies.
-   Pro users (localStorage sc_pro = 'true') see no ads.
+   AD_SLOT_TOP    → horizontal banner after snake mascot       (leaderboard)
+   AD_SLOT_MID    → rectangle in middle of tool sections       (in-article)
+   AD_SLOT_BOTTOM → banner before SEO / footer area            (leaderboard)
+
+   Pro users (sc_pro = 'true') → NO ADS shown.
+   GDPR: ads only load after cookie consent is accepted.
 ──────────────────────────────────────────────────────────────────── */
 (function () {
   'use strict';
 
-  /* ─── CONFIG ────────────────────────────────────────────────────── */
-  var AD_ENABLED        = true;               /* Set false to disable all ads  */
-  var AD_PROVIDER       = 'adsense';          /* 'ethicalads' | 'adsense'      */
+  /* ─── CONFIG ─────────────────────────────────────────────────────── */
+  var AD_ENABLED     = true;
+  var ADSENSE_CLIENT = 'ca-pub-1033284237916727';
 
-  /* EthicalAds */
-  var ETHICAL_PUBLISHER_ID = 'YOUR_PUBLISHER_ID'; /* ← ethicalads.io publisher ID */
-
-  /* AdSense */
-  var ADSENSE_CLIENT    = 'ca-pub-1033284237916727'; /* snakeconverter.com AdSense  */
-  var ADSENSE_SLOT      = 'XXXXXXXXXX';              /* ← AdSense'den slot ID al    */
+  /* Fill these 3 slot IDs from AdSense dashboard after approval */
+  var AD_SLOT_TOP    = 'XXXXXXXXXX';  /* top banner — leaderboard 728×90   */
+  var AD_SLOT_MID    = 'XXXXXXXXXX';  /* mid rect   — rectangle  336×280   */
+  var AD_SLOT_BOTTOM = 'XXXXXXXXXX';  /* bottom     — leaderboard 728×90   */
   /* ─────────────────────────────────────────────────────────────── */
 
-  /* Skip for Pro users */
   function isPro() {
     try { return localStorage.getItem('sc_pro') === 'true'; } catch (e) { return false; }
   }
-
-  /* Skip if ads disabled or user is Pro */
   if (!AD_ENABLED || isPro()) return;
 
-  /* Inject shared ad styles */
+  /* ── CSS ─────────────────────────────────────────────────────────── */
   function injectStyles() {
-    var css = [
-      '.sc-ad-wrap{',
-        'margin:1.5rem 0;text-align:center;',
-      '}',
-      '.sc-ad-label{',
-        'font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;',
-        'color:#4b5563;margin-bottom:.4rem;display:block;',
-      '}',
-      '.sc-ad-inner{',
-        'display:inline-block;border-radius:.75rem;overflow:hidden;',
-        'border:1px solid rgba(255,255,255,.06);',
-        'background:rgba(255,255,255,.02);',
-        'min-height:90px;width:100%;max-width:728px;',
-      '}',
-      /* EthicalAds native */
-      '[data-ea-publisher]{',
-        'max-width:100% !important;',
-      '}',
-    ].join('');
+    if (document.getElementById('__scAdsCSS__')) return;
+    var css = `
+      /* ── Shared ad wrapper ── */
+      .sc-ad {
+        display: block;
+        width: 100%;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+      }
+      .sc-ad-label {
+        display: block;
+        font-size: .58rem;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        color: #374151;
+        margin-bottom: .35rem;
+        user-select: none;
+      }
+      .sc-ad ins.adsbygoogle {
+        display: block;
+        margin: 0 auto;
+        background: transparent;
+      }
+
+      /* ── Top slot: horizontal leaderboard ── */
+      .sc-ad-top {
+        padding: .75rem 0 .5rem;
+        border-bottom: 1px solid rgba(255,255,255,.05);
+        background: rgba(0,0,0,.12);
+      }
+      .sc-ad-top ins.adsbygoogle {
+        width: 100%;
+        max-width: 728px;
+        height: 90px;
+      }
+      /* Mobile: smaller banner */
+      @media (max-width: 767px) {
+        .sc-ad-top ins.adsbygoogle {
+          max-width: 320px;
+          height: 50px;
+        }
+      }
+
+      /* ── Mid slot: rectangle ── */
+      .sc-ad-mid {
+        padding: 1.25rem 0;
+        border-top: 1px solid rgba(255,255,255,.04);
+        border-bottom: 1px solid rgba(255,255,255,.04);
+      }
+      .sc-ad-mid ins.adsbygoogle {
+        width: 336px;
+        height: 280px;
+      }
+      /* Mobile: full-width responsive */
+      @media (max-width: 767px) {
+        .sc-ad-mid ins.adsbygoogle {
+          width: 100%;
+          height: 250px;
+        }
+      }
+
+      /* ── Bottom slot: leaderboard ── */
+      .sc-ad-bottom {
+        padding: 1rem 0 .75rem;
+        border-top: 1px solid rgba(255,255,255,.05);
+        background: rgba(0,0,0,.1);
+        margin-top: 1.5rem;
+      }
+      .sc-ad-bottom ins.adsbygoogle {
+        width: 100%;
+        max-width: 728px;
+        height: 90px;
+      }
+      @media (max-width: 767px) {
+        .sc-ad-bottom ins.adsbygoogle {
+          max-width: 320px;
+          height: 100px;
+        }
+      }
+    `;
     var st = document.createElement('style');
+    st.id = '__scAdsCSS__';
     st.textContent = css;
     document.head.appendChild(st);
   }
 
-  /* ── EthicalAds loader ───────────────────────────────────────── */
-  function loadEthicalAds(containers) {
-    /* Load EthicalAds script once */
-    if (!document.querySelector('script[src*="ethicalads"]')) {
-      var s = document.createElement('script');
-      s.async = true;
-      s.src = 'https://media.ethicalads.io/media/client/ethicalads.min.js';
-      document.head.appendChild(s);
-    }
-
-    containers.forEach(function (wrap) {
-      var inner = wrap.querySelector('.sc-ad-inner');
-      if (!inner) return;
-      var div = document.createElement('div');
-      div.setAttribute('data-ea-publisher', ETHICAL_PUBLISHER_ID);
-      div.setAttribute('data-ea-type', 'image');
-      div.className = 'horizontal';
-      inner.appendChild(div);
-    });
+  /* ── Build one <ins> adsbygoogle unit ───────────────────────────── */
+  function buildIns(slotId, format) {
+    var ins = document.createElement('ins');
+    ins.className = 'adsbygoogle';
+    ins.setAttribute('data-ad-client', ADSENSE_CLIENT);
+    ins.setAttribute('data-ad-slot', slotId);
+    ins.setAttribute('data-ad-format', format || 'auto');
+    ins.setAttribute('data-full-width-responsive', 'true');
+    return ins;
   }
 
-  /* ── AdSense loader ──────────────────────────────────────────── */
-  function loadAdSense(containers) {
-    if (!document.querySelector('script[src*="adsbygoogle"]')) {
-      var s = document.createElement('script');
-      s.async = true;
-      s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + ADSENSE_CLIENT;
-      s.crossOrigin = 'anonymous';
-      document.head.appendChild(s);
-    }
+  /* ── Build a complete ad block ──────────────────────────────────── */
+  function buildAd(slotId, posClass, format) {
+    var wrap = document.createElement('div');
+    wrap.className = 'sc-ad ' + posClass;
+    var label = document.createElement('span');
+    label.className = 'sc-ad-label';
+    label.textContent = 'Advertisement';
+    wrap.appendChild(label);
+    var ins = buildIns(slotId, format);
+    wrap.appendChild(ins);
+    return wrap;
+  }
 
-    containers.forEach(function (wrap) {
-      var inner = wrap.querySelector('.sc-ad-inner');
-      if (!inner) return;
-      var ins = document.createElement('ins');
-      ins.className = 'adsbygoogle';
-      ins.style.cssText = 'display:block;width:100%;';
-      ins.setAttribute('data-ad-client', ADSENSE_CLIENT);
-      ins.setAttribute('data-ad-slot', ADSENSE_SLOT);
-      ins.setAttribute('data-ad-format', 'auto');
-      ins.setAttribute('data-full-width-responsive', 'true');
-      inner.appendChild(ins);
+  /* ── Push all inserted <ins> to AdSense ─────────────────────────── */
+  function pushAll() {
+    document.querySelectorAll('.sc-ad ins.adsbygoogle').forEach(function (ins) {
       try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) {}
     });
   }
 
-  /* ── Create ad wrapper HTML ─────────────────────────────────── */
-  function buildAdWrap() {
-    var wrap = document.createElement('div');
-    wrap.className = 'sc-ad-wrap';
-    wrap.innerHTML = '<span class="sc-ad-label">Advertisement</span><div class="sc-ad-inner"></div>';
-    return wrap;
-  }
-
-  /* ── Place ads on page ──────────────────────────────────────── */
+  /* ── Place ads ──────────────────────────────────────────────────── */
   function placeAds() {
-    var mainCard = document.querySelector('.main-card');
-    if (!mainCard) return;
-
-    var containers = [];
-
-    /* 1. After the snake mascot / page header */
-    var stage = mainCard.querySelector('.snake-stage');
-    if (stage && stage.nextSibling) {
-      var w1 = buildAdWrap();
-      mainCard.insertBefore(w1, stage.nextSibling);
-      containers.push(w1);
-    }
-
-    /* 2. Before the SEO content block (if it exists) */
-    var seoBlock = mainCard.querySelector('.sc-seo-block');
-    if (seoBlock) {
-      var w2 = buildAdWrap();
-      mainCard.insertBefore(w2, seoBlock);
-      containers.push(w2);
-    }
-
-    /* Load provider */
-    if (containers.length === 0) return;
     injectStyles();
-    if (AD_PROVIDER === 'ethicalads') {
-      loadEthicalAds(containers);
-    } else {
-      loadAdSense(containers);
+
+    /* ─ 1. TOP: after .snake-stage ─ */
+    var stage = document.querySelector('.main-card .snake-stage');
+    if (stage) {
+      var adTop = buildAd(AD_SLOT_TOP, 'sc-ad-top', 'horizontal');
+      stage.insertAdjacentElement('afterend', adTop);
     }
+
+    /* ─ 2. MID: after first tool-page-section or jump-nav ─ */
+    var midAnchor = document.querySelector(
+      '.main-card .tool-page-section:nth-of-type(2), ' +
+      '.main-card .jump-nav, ' +
+      '.main-card .pdf-nav'
+    );
+    if (midAnchor) {
+      var adMid = buildAd(AD_SLOT_MID, 'sc-ad-mid', 'rectangle');
+      midAnchor.insertAdjacentElement('afterend', adMid);
+    }
+
+    /* ─ 3. BOTTOM: before .sc-seo-block ─ */
+    var seoBlock = document.querySelector('.main-card .sc-seo-block');
+    if (seoBlock) {
+      var adBot = buildAd(AD_SLOT_BOTTOM, 'sc-ad-bottom', 'horizontal');
+      seoBlock.insertAdjacentElement('beforebegin', adBot);
+    }
+
+    /* Push all units to AdSense */
+    setTimeout(pushAll, 300);
   }
 
-  /* Boot after DOM ready */
+  /* ── GDPR gate ──────────────────────────────────────────────────── */
   function boot() {
-    /* Only show ads if user has accepted cookies (GDPR) */
     var consent = null;
     try { consent = localStorage.getItem('sc_cookie_consent'); } catch (e) {}
-    if (consent !== 'accepted') {
-      /* Wait for consent event */
+    if (consent === 'accepted') {
+      placeAds();
+    } else {
       document.addEventListener('sc:consent:accepted', placeAds, { once: true });
-      return;
     }
-    placeAds();
   }
 
   if (document.readyState === 'loading') {
