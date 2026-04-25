@@ -1171,11 +1171,13 @@ function doCurrency() {
     if (!rates[from] || !rates[to]) return errMsg('cur-result', 'Currency not supported.');
     var result = amt / rates[from] * rates[to];
     var el = document.getElementById('cur-result');
+    var rate = rates[to] / rates[from];
     var source = err === 'offline'
       ? '⚠ Offline — using approximate rates.'
       : '✓ Live rate · European Central Bank · Updates every hour';
     el.innerHTML = '<div class="currency-result">' + amt.toFixed(2) + ' ' + from +
       ' = <strong>' + result.toFixed(4) + ' ' + to + '</strong></div>' +
+      '<div class="currency-rate">1 ' + from + ' = ' + rate.toFixed(4) + ' ' + to + '</div>' +
       '<div class="currency-note">' + source + '</div>';
     el.style.display = '';
   });
