@@ -105,10 +105,11 @@
   };
 
   function switchTab(id) {
-    /* Update nav items — supports both .tab-btn (old) and .sc-nav-item (new sidebar) */
+    /* Update nav items — supports tab-btn, sc-nav-item, pdf-nav-item */
     tabs.forEach((t) => {
-      t.classList.toggle("tab-active", t.getAttribute("data-tab") === id);
-      t.classList.toggle("active",     t.getAttribute("data-tab") === id);
+      const match = t.getAttribute("data-tab") === id;
+      t.classList.toggle("tab-active", match);
+      t.classList.toggle("active",     match);
     });
     /* Show / hide panels */
     panels.forEach((p) =>
