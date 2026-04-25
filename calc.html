@@ -100,7 +100,15 @@
       <a href="#ideal"    class="jump-link">⚖️ Ideal Weight</a>
       <a href="#water"    class="jump-link">💧 Water Intake</a>
       <a href="#sleep"    class="jump-link">😴 Sleep Cycles</a>
-      <a href="#due"      class="jump-link">🤰 Due Date</a>
+      <a href="#due"        class="jump-link">🤰 Due Date</a>
+      <a href="#date-diff"  class="jump-link">📅 Date Diff</a>
+      <a href="#timezone"   class="jump-link">🌍 Timezone</a>
+      <a href="#statistics" class="jump-link">📊 Stats</a>
+      <a href="#aspect-ratio" class="jump-link">📐 Aspect Ratio</a>
+      <a href="#num-to-words" class="jump-link">🔢 Num→Words</a>
+      <a href="#currency"   class="jump-link">💱 Currency</a>
+      <a href="#quadratic"  class="jump-link">🧮 Quadratic</a>
+      <a href="#sci-calc"   class="jump-link">🔬 Sci Calc</a>
     </nav>
 
     <!-- ── Discount ── -->
@@ -344,6 +352,202 @@
       </div>
     </section>
 
+    <!-- 12. Date Difference -->
+    <section id="date-diff" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">📅</span>
+        <div><div class="tps-title" data-i18n="calc.datediff.name">Date Difference</div><div class="tps-desc" data-i18n="calc.datediff.desc">Days, weeks, months, years and working days between two dates</div></div>
+      </div>
+      <div class="calc-form">
+        <div class="calc-row">
+          <div><label class="calc-label">Start Date</label><input type="date" id="dd-from" class="input-field" /></div>
+          <div><label class="calc-label">End Date</label><input type="date" id="dd-to" class="input-field" /></div>
+        </div>
+        <button type="button" onclick="doDateDiff()" class="btn-primary">Calculate</button>
+        <div id="dd-result" style="display:none"></div>
+      </div>
+    </section>
+
+    <!-- 13. Timezone Converter -->
+    <section id="timezone" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">🌍</span>
+        <div><div class="tps-title" data-i18n="calc.timezone.name">Time Zone Converter</div><div class="tps-desc" data-i18n="calc.timezone.desc">Convert a time to all major time zones at once</div></div>
+      </div>
+      <div class="calc-form">
+        <div class="calc-row">
+          <div><label class="calc-label">Time</label><input type="time" id="tz-time" class="input-field" /></div>
+          <div><label class="calc-label">Date</label><input type="date" id="tz-date" class="input-field" /></div>
+        </div>
+        <div><label class="calc-label">From Timezone</label>
+          <select id="tz-from" class="calc-select">
+            <option value="UTC">UTC</option>
+            <option value="America/New_York">New York (ET)</option>
+            <option value="America/Chicago">Chicago (CT)</option>
+            <option value="America/Denver">Denver (MT)</option>
+            <option value="America/Los_Angeles">Los Angeles (PT)</option>
+            <option value="America/Sao_Paulo">São Paulo (BRT)</option>
+            <option value="Europe/London">London (GMT/BST)</option>
+            <option value="Europe/Paris">Paris (CET)</option>
+            <option value="Europe/Istanbul" selected>Istanbul (TRT)</option>
+            <option value="Europe/Moscow">Moscow (MSK)</option>
+            <option value="Asia/Dubai">Dubai (GST)</option>
+            <option value="Asia/Kolkata">Mumbai (IST)</option>
+            <option value="Asia/Shanghai">Shanghai (CST)</option>
+            <option value="Asia/Tokyo">Tokyo (JST)</option>
+            <option value="Australia/Sydney">Sydney (AEST)</option>
+          </select>
+        </div>
+        <button type="button" onclick="doTimezone()" class="btn-primary">Convert</button>
+        <div id="tz-result" class="tz-grid" style="display:none"></div>
+      </div>
+    </section>
+
+    <!-- 14. Statistics Calculator -->
+    <section id="statistics" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">📊</span>
+        <div><div class="tps-title" data-i18n="calc.stats.name">Statistics Calculator</div><div class="tps-desc" data-i18n="calc.stats.desc">Mean, median, mode, variance, std deviation and more</div></div>
+      </div>
+      <div class="calc-form">
+        <div><label class="calc-label">Numbers (comma or newline separated)</label>
+          <textarea id="stats-input" class="input-field" style="min-height:80px;resize:vertical;" placeholder="1, 2, 3, 4, 5"></textarea>
+        </div>
+        <button type="button" onclick="doStats()" class="btn-primary">Calculate</button>
+        <div id="stats-result" class="stat-result-grid" style="display:none"></div>
+      </div>
+    </section>
+
+    <!-- 15. Aspect Ratio Calculator -->
+    <section id="aspect-ratio" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">📐</span>
+        <div><div class="tps-title" data-i18n="calc.aspect.name">Aspect Ratio Calculator</div><div class="tps-desc" data-i18n="calc.aspect.desc">Simplify ratio or calculate missing dimension</div></div>
+      </div>
+      <div class="calc-form">
+        <div class="calc-row">
+          <div><label class="calc-label">Width</label><input type="number" id="ar-w" class="input-field" placeholder="1920" /></div>
+          <div><label class="calc-label">Height</label><input type="number" id="ar-h" class="input-field" placeholder="1080" /></div>
+        </div>
+        <button type="button" onclick="doAspectRatio()" class="btn-primary">Calculate Ratio</button>
+        <div id="ar-result" class="aspect-output" style="display:none;"></div>
+      </div>
+    </section>
+
+    <!-- 16. Number to Words -->
+    <section id="num-to-words" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">🔢</span>
+        <div><div class="tps-title" data-i18n="calc.numwords.name">Number to Words</div><div class="tps-desc" data-i18n="calc.numwords.desc">Convert numbers to English and Turkish words</div></div>
+      </div>
+      <div class="calc-form">
+        <div><label class="calc-label">Number (up to 999,999,999)</label>
+          <input type="number" id="n2w-input" class="input-field" placeholder="e.g. 1234567" min="0" max="999999999" />
+        </div>
+        <button type="button" onclick="doNumToWords()" class="btn-primary">Convert</button>
+        <div id="n2w-result" class="n2w-out" style="display:none;"></div>
+      </div>
+    </section>
+
+    <!-- 17. Currency Converter -->
+    <section id="currency" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">💱</span>
+        <div><div class="tps-title" data-i18n="calc.currency.name">Currency Converter</div><div class="tps-desc" data-i18n="calc.currency.desc">Approximate static rates — USD, EUR, GBP, TRY, JPY and more</div></div>
+      </div>
+      <div class="calc-form">
+        <div><label class="calc-label">Amount</label><input type="number" id="cur-amount" class="input-field" placeholder="100" value="100" /></div>
+        <div class="calc-row">
+          <div><label class="calc-label">From</label>
+            <select id="cur-from" class="calc-select">
+              <option value="USD">USD — US Dollar</option><option value="EUR">EUR — Euro</option>
+              <option value="GBP">GBP — British Pound</option><option value="TRY">TRY — Turkish Lira</option>
+              <option value="JPY">JPY — Japanese Yen</option><option value="CHF">CHF — Swiss Franc</option>
+              <option value="CAD">CAD — Canadian Dollar</option><option value="AUD">AUD — Australian Dollar</option>
+              <option value="CNY">CNY — Chinese Yuan</option><option value="INR">INR — Indian Rupee</option>
+              <option value="AED">AED — UAE Dirham</option><option value="SAR">SAR — Saudi Riyal</option>
+            </select>
+          </div>
+          <div><label class="calc-label">To</label>
+            <select id="cur-to" class="calc-select">
+              <option value="USD">USD — US Dollar</option><option value="EUR">EUR — Euro</option>
+              <option value="GBP">GBP — British Pound</option><option value="TRY" selected>TRY — Turkish Lira</option>
+              <option value="JPY">JPY — Japanese Yen</option><option value="CHF">CHF — Swiss Franc</option>
+              <option value="CAD">CAD — Canadian Dollar</option><option value="AUD">AUD — Australian Dollar</option>
+              <option value="CNY">CNY — Chinese Yuan</option><option value="INR">INR — Indian Rupee</option>
+              <option value="AED">AED — UAE Dirham</option><option value="SAR">SAR — Saudi Riyal</option>
+            </select>
+          </div>
+        </div>
+        <button type="button" onclick="doCurrency()" class="btn-primary">Convert</button>
+        <div id="cur-result" style="display:none;"></div>
+      </div>
+    </section>
+
+    <!-- 18. Quadratic Solver -->
+    <section id="quadratic" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">🧮</span>
+        <div><div class="tps-title" data-i18n="calc.quadratic.name">Quadratic Solver</div><div class="tps-desc" data-i18n="calc.quadratic.desc">Solve ax²+bx+c=0 — real or complex roots + vertex</div></div>
+      </div>
+      <div class="calc-form">
+        <div class="calc-row">
+          <div><label class="calc-label">a</label><input type="number" id="q-a" class="input-field" placeholder="1" value="1" /></div>
+          <div><label class="calc-label">b</label><input type="number" id="q-b" class="input-field" placeholder="-3" value="-3" /></div>
+          <div><label class="calc-label">c</label><input type="number" id="q-c" class="input-field" placeholder="2" value="2" /></div>
+        </div>
+        <button type="button" onclick="doQuadratic()" class="btn-primary">Solve</button>
+        <div id="q-result" style="display:none;"></div>
+      </div>
+    </section>
+
+    <!-- 19. Scientific Calculator -->
+    <section id="sci-calc" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">🔬</span>
+        <div><div class="tps-title" data-i18n="calc.sci.name">Scientific Calculator</div><div class="tps-desc" data-i18n="calc.sci.desc">Full scientific calculator with history</div></div>
+      </div>
+      <div class="sci-display">
+        <div class="sci-expr" id="sci-expr"></div>
+        <div class="sci-result" id="sci-res">0</div>
+      </div>
+      <div class="sci-keypad" id="sci-keypad">
+        <button class="sci-btn fn" onclick="sciKey('Math.sin(')">sin</button>
+        <button class="sci-btn fn" onclick="sciKey('Math.cos(')">cos</button>
+        <button class="sci-btn fn" onclick="sciKey('Math.tan(')">tan</button>
+        <button class="sci-btn fn" onclick="sciKey('Math.log10(')">log</button>
+        <button class="sci-btn fn" onclick="sciKey('Math.log(')">ln</button>
+        <button class="sci-btn fn" onclick="sciKey('Math.sqrt(')">√</button>
+        <button class="sci-btn fn" onclick="sciKey('**2')">x²</button>
+        <button class="sci-btn fn" onclick="sciKey('**3')">x³</button>
+        <button class="sci-btn fn" onclick="sciKey('1/(')">1/x</button>
+        <button class="sci-btn op" onclick="sciKey('Math.PI')">π</button>
+        <button class="sci-btn op" onclick="sciKey('Math.E')">e</button>
+        <button class="sci-btn clr" onclick="sciClear()">C</button>
+        <button class="sci-btn op" onclick="sciKey('(')">(</button>
+        <button class="sci-btn op" onclick="sciKey(')')">)</button>
+        <button class="sci-btn op" onclick="sciKey('%')">%</button>
+        <button class="sci-btn op" onclick="sciKey('/')">÷</button>
+        <button class="sci-btn" onclick="sciKey('7')">7</button>
+        <button class="sci-btn" onclick="sciKey('8')">8</button>
+        <button class="sci-btn" onclick="sciKey('9')">9</button>
+        <button class="sci-btn op" onclick="sciKey('*')">×</button>
+        <button class="sci-btn" onclick="sciKey('4')">4</button>
+        <button class="sci-btn" onclick="sciKey('5')">5</button>
+        <button class="sci-btn" onclick="sciKey('6')">6</button>
+        <button class="sci-btn op" onclick="sciKey('-')">−</button>
+        <button class="sci-btn" onclick="sciKey('1')">1</button>
+        <button class="sci-btn" onclick="sciKey('2')">2</button>
+        <button class="sci-btn" onclick="sciKey('3')">3</button>
+        <button class="sci-btn op" onclick="sciKey('+')">+</button>
+        <button class="sci-btn" onclick="sciKey('0')" style="grid-column:span 2">0</button>
+        <button class="sci-btn" onclick="sciKey('.')">.</button>
+        <button class="sci-btn" onclick="sciBack()">⌫</button>
+        <button class="sci-btn eq" onclick="sciCalc()">=</button>
+      </div>
+      <div class="sci-history" id="sci-history"></div>
+    </section>
+
     <div style="margin-top:2.5rem;text-align:center;font-size:.72rem;color:var(--text-dim);">
       © 2026 SnakeConverter · For reference only — not medical or financial advice
     </div>
@@ -459,6 +663,181 @@ function doDue() {
   const r = calcDueDate(document.getElementById("due-lmp").value);
   if (!r) return errMsg("due-result");
   showResult("due-result", ri("Due Date",r.dueDate) + ri("Days Remaining",r.daysLeft+" days") + ri("Weeks Pregnant",r.weeksPregn+" wk") + ri("Trimester",r.trimester));
+}
+
+/* ── 12. Date Difference ── */
+function doDateDiff() {
+  const a=new Date(document.getElementById('dd-from').value), b=new Date(document.getElementById('dd-to').value);
+  if (!a||!b||isNaN(a)||isNaN(b)) return errMsg('dd-result','Please select both dates.');
+  const diff=Math.abs(b-a), msDay=86400000;
+  const totalDays=Math.round(diff/msDay);
+  const totalWeeks=(totalDays/7).toFixed(2);
+  const months=Math.abs((b.getFullYear()-a.getFullYear())*12+(b.getMonth()-a.getMonth()));
+  const years=(totalDays/365.25).toFixed(2);
+  // Working days (Mon-Fri)
+  let wd=0; const s=new Date(Math.min(a,b)), e=new Date(Math.max(a,b));
+  for(let d=new Date(s);d<=e;d.setDate(d.getDate()+1)){const day=d.getDay();if(day!==0&&day!==6)wd++;}
+  document.getElementById('dd-result').className='result-box';
+  document.getElementById('dd-result').innerHTML=ri('Total Days',totalDays)+ri('Total Weeks',totalWeeks)+ri('Months',months)+ri('Years (approx)',years)+ri('Working Days',wd);
+  document.getElementById('dd-result').style.display='';
+}
+
+/* ── 13. Timezone ── */
+const TZ_ZONES=[
+  {id:'UTC',label:'UTC',tz:'UTC'},
+  {id:'ET',label:'New York',tz:'America/New_York'},
+  {id:'CT',label:'Chicago',tz:'America/Chicago'},
+  {id:'MT',label:'Denver',tz:'America/Denver'},
+  {id:'PT',label:'Los Angeles',tz:'America/Los_Angeles'},
+  {id:'BRT',label:'São Paulo',tz:'America/Sao_Paulo'},
+  {id:'GMT',label:'London',tz:'Europe/London'},
+  {id:'CET',label:'Paris',tz:'Europe/Paris'},
+  {id:'TRT',label:'Istanbul',tz:'Europe/Istanbul'},
+  {id:'MSK',label:'Moscow',tz:'Europe/Moscow'},
+  {id:'GST',label:'Dubai',tz:'Asia/Dubai'},
+  {id:'IST',label:'Mumbai',tz:'Asia/Kolkata'},
+  {id:'CST',label:'Shanghai',tz:'Asia/Shanghai'},
+  {id:'JST',label:'Tokyo',tz:'Asia/Tokyo'},
+  {id:'AEST',label:'Sydney',tz:'Australia/Sydney'},
+];
+function doTimezone() {
+  const timeVal=document.getElementById('tz-time').value||'12:00';
+  const dateVal=document.getElementById('tz-date').value||new Date().toISOString().split('T')[0];
+  const fromTz=document.getElementById('tz-from').value;
+  const dtStr=dateVal+'T'+timeVal+':00';
+  const srcDate=new Date(new Intl.DateTimeFormat('en-CA',{timeZone:fromTz,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false}).format(new Date(dtStr)).replace(/\//g,'-').replace(', ','T'));
+  const utcMs=new Date(dtStr).getTime();
+  const el=document.getElementById('tz-result');
+  el.innerHTML=TZ_ZONES.map(z=>{
+    const fmt=new Intl.DateTimeFormat('en-US',{timeZone:z.tz,hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false,timeZoneName:'short'}).format(new Date(utcMs));
+    return `<div class="tz-item"><div class="tz-name">${z.id}</div><div class="tz-time">${fmt.split(' ')[0]}</div><div class="tz-offset">${z.label}</div></div>`;
+  }).join('');
+  el.style.display='grid';
+}
+
+/* ── 14. Statistics ── */
+function doStats() {
+  const raw=document.getElementById('stats-input').value.replace(/\n/g,',');
+  const nums=raw.split(',').map(s=>parseFloat(s.trim())).filter(n=>!isNaN(n));
+  if (!nums.length) return errMsg('stats-result','Enter at least one number.');
+  const n=nums.length, sum=nums.reduce((a,b)=>a+b,0), mean=sum/n;
+  const sorted=[...nums].sort((a,b)=>a-b);
+  const median=n%2?sorted[Math.floor(n/2)]:(sorted[n/2-1]+sorted[n/2])/2;
+  const freq={}; nums.forEach(v=>freq[v]=(freq[v]||0)+1);
+  const maxF=Math.max(...Object.values(freq));
+  const mode=Object.entries(freq).filter(([,v])=>v===maxF).map(([k])=>+k).join(', ');
+  const range=sorted[n-1]-sorted[0];
+  const variance=nums.reduce((a,v)=>a+(v-mean)**2,0)/n;
+  const std=Math.sqrt(variance);
+  const el=document.getElementById('stats-result');
+  const si=(l,v)=>`<div class="stat-result-item"><div class="stat-result-label">${l}</div><div class="stat-result-val">${typeof v==='number'?+v.toFixed(6):v}</div></div>`;
+  el.innerHTML=si('Count',n)+si('Sum',+sum.toFixed(6))+si('Mean',mean)+si('Median',median)+si('Mode',mode)+si('Range',range)+si('Variance',variance)+si('Std Dev',std)+si('Min',sorted[0])+si('Max',sorted[n-1]);
+  el.style.display='grid';
+}
+
+/* ── 15. Aspect Ratio ── */
+function gcd(a,b){return b?gcd(b,a%b):a;}
+function doAspectRatio() {
+  const w=parseInt(document.getElementById('ar-w').value), h=parseInt(document.getElementById('ar-h').value);
+  if (!w||!h||w<=0||h<=0) return errMsg('ar-result','Enter valid width and height.');
+  const g=gcd(w,h), rw=w/g, rh=h/g;
+  const el=document.getElementById('ar-result');
+  el.textContent=rw+' : '+rh;
+  el.style.display='flex';
+}
+
+/* ── 16. Number to Words ── */
+const N2W_EN=['','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen'];
+const N2W_TENS=['','','twenty','thirty','forty','fifty','sixty','seventy','eighty','ninety'];
+const N2W_TR=['','bir','iki','üç','dört','beş','altı','yedi','sekiz','dokuz','on','on bir','on iki','on üç','on dört','on beş','on altı','on yedi','on sekiz','on dokuz'];
+const N2W_TENS_TR=['','','yirmi','otuz','kırk','elli','altmış','yetmiş','seksen','doksan'];
+function _n2wEn(n) {
+  if (n===0) return 'zero'; if (n<0) return 'negative '+_n2wEn(-n);
+  if (n<20) return N2W_EN[n];
+  if (n<100) return N2W_TENS[Math.floor(n/10)]+(n%10?' '+N2W_EN[n%10]:'');
+  if (n<1000) return N2W_EN[Math.floor(n/100)]+' hundred'+(n%100?' '+_n2wEn(n%100):'');
+  if (n<1000000) return _n2wEn(Math.floor(n/1000))+' thousand'+(n%1000?' '+_n2wEn(n%1000):'');
+  if (n<1000000000) return _n2wEn(Math.floor(n/1000000))+' million'+(n%1000000?' '+_n2wEn(n%1000000):'');
+  return n.toString();
+}
+function _n2wTr(n) {
+  if (n===0) return 'sıfır';
+  if (n<20) return N2W_TR[n];
+  if (n<100) return N2W_TENS_TR[Math.floor(n/10)]+(n%10?' '+N2W_TR[n%10]:'');
+  if (n<1000) return (Math.floor(n/100)===1?'':''+N2W_TR[Math.floor(n/100)])+' yüz'+(n%100?' '+_n2wTr(n%100):'');
+  if (n<1000000) return _n2wTr(Math.floor(n/1000))+' bin'+(n%1000?' '+_n2wTr(n%1000):'');
+  if (n<1000000000) return _n2wTr(Math.floor(n/1000000))+' milyon'+(n%1000000?' '+_n2wTr(n%1000000):'');
+  return n.toString();
+}
+function doNumToWords() {
+  const v=parseInt(document.getElementById('n2w-input').value);
+  if (isNaN(v)||v<0||v>999999999) return errMsg('n2w-result','Enter a number between 0 and 999,999,999.');
+  const el=document.getElementById('n2w-result');
+  el.innerHTML=`<div class="n2w-item"><div class="n2w-lang">English</div><div class="n2w-text">${_n2wEn(v)}</div></div><div class="n2w-item"><div class="n2w-lang">Türkçe</div><div class="n2w-text">${_n2wTr(v)}</div></div>`;
+  el.style.display='flex';
+}
+
+/* ── 17. Currency ── */
+const RATES={USD:1,EUR:0.92,GBP:0.79,TRY:32.5,JPY:149.5,CHF:0.89,CAD:1.36,AUD:1.53,CNY:7.24,INR:83.2,AED:3.67,SAR:3.75};
+function doCurrency() {
+  const amt=parseFloat(document.getElementById('cur-amount').value);
+  const from=document.getElementById('cur-from').value, to=document.getElementById('cur-to').value;
+  if (isNaN(amt)) return errMsg('cur-result','Enter a valid amount.');
+  const result=amt/RATES[from]*RATES[to];
+  const el=document.getElementById('cur-result');
+  el.innerHTML=`<div class="currency-result">${amt.toFixed(2)} ${from} = <strong>${result.toFixed(4)} ${to}</strong></div><div class="currency-note">⚠ Rates are approximate, updated periodically. Not for financial decisions.</div>`;
+  el.style.display='';
+}
+
+/* ── 18. Quadratic ── */
+function doQuadratic() {
+  const a=parseFloat(document.getElementById('q-a').value), b=parseFloat(document.getElementById('q-b').value), c=parseFloat(document.getElementById('q-c').value);
+  if (isNaN(a)||isNaN(b)||isNaN(c)||a===0) return errMsg('q-result','Enter valid a (≠0), b, c.');
+  const disc=b*b-4*a*c;
+  const vx=-b/(2*a), vy=c-b*b/(4*a);
+  let r1,r2;
+  if (disc>=0) {
+    r1=(-b+Math.sqrt(disc))/(2*a); r2=(-b-Math.sqrt(disc))/(2*a);
+    r1=+r1.toFixed(6); r2=+r2.toFixed(6);
+  } else {
+    const realPart=-b/(2*a), imagPart=Math.sqrt(-disc)/(2*a);
+    r1=`${+realPart.toFixed(4)} + ${+imagPart.toFixed(4)}i`;
+    r2=`${+realPart.toFixed(4)} − ${+imagPart.toFixed(4)}i`;
+  }
+  const el=document.getElementById('q-result');
+  el.className='quad-result';
+  el.innerHTML=[
+    `<div class="quad-row"><span class="quad-label">Discriminant (Δ)</span><span class="quad-val">${+disc.toFixed(6)}</span></div>`,
+    `<div class="quad-row"><span class="quad-label">Root 1 (x₁)</span><span class="quad-val">${r1}</span></div>`,
+    `<div class="quad-row"><span class="quad-label">Root 2 (x₂)</span><span class="quad-val">${r2}</span></div>`,
+    `<div class="quad-row"><span class="quad-label">Vertex</span><span class="quad-val">(${+vx.toFixed(6)}, ${+vy.toFixed(6)})</span></div>`,
+  ].join('');
+  el.style.display='flex';
+}
+
+/* ── 19. Scientific Calculator ── */
+var _sciExpr='';
+var _sciHist=[];
+function sciKey(k) {
+  _sciExpr+=k;
+  document.getElementById('sci-expr').textContent=_sciExpr.replace(/Math\./g,'').replace(/\*\*/g,'^');
+}
+function sciBack() { _sciExpr=_sciExpr.slice(0,-1); document.getElementById('sci-expr').textContent=_sciExpr.replace(/Math\./g,'').replace(/\*\*/g,'^'); }
+function sciClear() { _sciExpr=''; document.getElementById('sci-expr').textContent=''; document.getElementById('sci-res').textContent='0'; }
+function sciCalc() {
+  try {
+    const safe=_sciExpr.replace(/[^0-9+\-*/().%^eMathsincotaglqrPIE\s]/g,'');
+    const result=Function('"use strict"; return ('+_sciExpr+')')();
+    const display=isFinite(result)?+result.toFixed(10):result;
+    document.getElementById('sci-res').textContent=display;
+    _sciHist.unshift(_sciExpr.replace(/Math\./g,'').replace(/\*\*/g,'^')+' = '+display);
+    if (_sciHist.length>5) _sciHist.pop();
+    document.getElementById('sci-history').innerHTML=_sciHist.map(h=>`<div>${h}</div>`).join('');
+    _sciExpr='';
+    document.getElementById('sci-expr').textContent='';
+  } catch(e) {
+    document.getElementById('sci-res').textContent='Error';
+  }
 }
 </script>
 <script src="js/snake-mascot.js"></script>

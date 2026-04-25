@@ -75,7 +75,17 @@
       <a href="#pass"    class="jump-link">🔐 Password</a>
       <a href="#qr"      class="jump-link">📱 QR Code</a>
       <a href="#base64"  class="jump-link">&lt;/&gt; Base64</a>
-      <a href="#unix"    class="jump-link">⏱ Timestamp</a>
+      <a href="#unix"          class="jump-link">⏱ Timestamp</a>
+      <a href="#morse-code"    class="jump-link">📡 Morse</a>
+      <a href="#text-binary"   class="jump-link">01 Binary</a>
+      <a href="#palindrome"    class="jump-link">🔄 Palindrome</a>
+      <a href="#dedupe-lines"  class="jump-link">🧹 Dedupe</a>
+      <a href="#text-reverser" class="jump-link">↩️ Reverser</a>
+      <a href="#string-inspector" class="jump-link">🔬 Inspector</a>
+      <a href="#coin-flip"     class="jump-link">🪙 Coin</a>
+      <a href="#dice-roller"   class="jump-link">🎲 Dice</a>
+      <a href="#stopwatch"     class="jump-link">⏱️ Stopwatch</a>
+      <a href="#countdown"     class="jump-link">⏳ Countdown</a>
     </nav>
 
     <!-- ════════ SECTIONS ════════ -->
@@ -451,6 +461,180 @@
     </div>
     </section>
 
+    <!-- 11. Morse Code -->
+    <section id="morse-code" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">📡</span>
+        <div><div class="tps-title" data-i18n="text.morse.name">Morse Code</div><div class="tps-desc" data-i18n="text.morse.desc">Convert text to Morse code or decode Morse back to text</div></div>
+      </div>
+      <div class="space-y">
+        <textarea id="morse-input" class="tool-textarea" rows="4" placeholder="Enter text or Morse code…"></textarea>
+        <div class="tool-btn-row">
+          <button type="button" class="btn-primary" onclick="ToolsApp.morseEncode()">Text → Morse</button>
+          <button type="button" class="btn-secondary" onclick="ToolsApp.morseDecode()">Morse → Text</button>
+        </div>
+        <div id="morse-output" class="tool-output-box" style="display:none;"></div>
+      </div>
+    </section>
+
+    <!-- 12. Text to Binary -->
+    <section id="text-binary" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">01</span>
+        <div><div class="tps-title" data-i18n="text.binary.name">Text ↔ Binary</div><div class="tps-desc" data-i18n="text.binary.desc">Convert text to binary bytes or binary back to text</div></div>
+      </div>
+      <div class="space-y">
+        <textarea id="binary-input" class="tool-textarea" rows="4" placeholder="Enter text or binary (space-separated bytes)…"></textarea>
+        <div class="tool-btn-row">
+          <button type="button" class="btn-primary" onclick="ToolsApp.textToBinary()">Text → Binary</button>
+          <button type="button" class="btn-secondary" onclick="ToolsApp.binaryToText()">Binary → Text</button>
+        </div>
+        <div id="binary-output" class="tool-output-box" style="display:none;"></div>
+      </div>
+    </section>
+
+    <!-- 13. Palindrome Checker -->
+    <section id="palindrome" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">🔄</span>
+        <div><div class="tps-title" data-i18n="text.palindrome.name">Palindrome Checker</div><div class="tps-desc" data-i18n="text.palindrome.desc">Check if a word or phrase reads the same forwards and backwards</div></div>
+      </div>
+      <div class="space-y">
+        <input type="text" id="palindrome-input" class="input-field" placeholder="Enter a word or sentence…" />
+        <button type="button" class="btn-primary" onclick="ToolsApp.checkPalindrome()">Check</button>
+        <div id="palindrome-output" style="display:none;"></div>
+      </div>
+    </section>
+
+    <!-- 14. Duplicate Line Remover -->
+    <section id="dedupe-lines" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">🧹</span>
+        <div><div class="tps-title" data-i18n="text.dedupe.name">Duplicate Line Remover</div><div class="tps-desc" data-i18n="text.dedupe.desc">Remove duplicate lines while preserving order</div></div>
+      </div>
+      <div class="space-y">
+        <textarea id="dedupe-input" class="tool-textarea" rows="6" placeholder="Paste lines here…"></textarea>
+        <label class="check-toggle"><input type="checkbox" id="dedupe-case" /><span data-i18n="text.dedupe.case">Case-sensitive</span></label>
+        <button type="button" class="btn-primary" onclick="ToolsApp.dedupeLines()">Remove Duplicates</button>
+        <div id="dedupe-output" class="tool-output-box" style="display:none;"></div>
+      </div>
+    </section>
+
+    <!-- 15. Text Reverser -->
+    <section id="text-reverser" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">↩️</span>
+        <div><div class="tps-title" data-i18n="text.reverser.name">Text Reverser</div><div class="tps-desc" data-i18n="text.reverser.desc">Reverse entire string or word-by-word</div></div>
+      </div>
+      <div class="space-y">
+        <textarea id="reverser-input" class="tool-textarea" rows="4" placeholder="Enter text to reverse…"></textarea>
+        <div class="tool-btn-row">
+          <button type="button" class="btn-primary" onclick="ToolsApp.reverseText(false)">Reverse String</button>
+          <button type="button" class="btn-secondary" onclick="ToolsApp.reverseText(true)">Reverse Words</button>
+        </div>
+        <div id="reverser-output" class="tool-output-box" style="display:none;"></div>
+      </div>
+    </section>
+
+    <!-- 16. String Inspector -->
+    <section id="string-inspector" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">🔬</span>
+        <div><div class="tps-title" data-i18n="text.inspector.name">String Inspector</div><div class="tps-desc" data-i18n="text.inspector.desc">Deep analysis: char count, word count, unique chars, most frequent</div></div>
+      </div>
+      <div class="space-y">
+        <textarea id="inspector-input" class="tool-textarea" rows="5" placeholder="Enter text to inspect…" oninput="ToolsApp.inspectString()"></textarea>
+        <div id="inspector-output" class="inspector-grid" style="display:none;"></div>
+      </div>
+    </section>
+
+    <!-- 17. Coin Flip -->
+    <section id="coin-flip" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">🪙</span>
+        <div><div class="tps-title" data-i18n="text.coin.name">Coin Flip</div><div class="tps-desc" data-i18n="text.coin.desc">Flip a coin and track heads/tails count this session</div></div>
+      </div>
+      <div class="space-y">
+        <div class="coin-display" id="coin-face">🪙</div>
+        <button type="button" class="btn-primary" onclick="ToolsApp.flipCoin()" style="margin:0 auto;display:block;min-width:140px;">Flip!</button>
+        <div class="coin-stats">
+          <span>Heads: <strong id="coin-heads">0</strong></span>
+          <span>Tails: <strong id="coin-tails">0</strong></span>
+          <span>Total: <strong id="coin-total">0</strong></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 18. Dice Roller -->
+    <section id="dice-roller" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">🎲</span>
+        <div><div class="tps-title" data-i18n="text.dice.name">Dice Roller</div><div class="tps-desc" data-i18n="text.dice.desc">Roll multiple dice of different types and see total</div></div>
+      </div>
+      <div class="space-y">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
+          <div>
+            <label class="field-label">Number of Dice</label>
+            <select id="dice-count" class="field">
+              <option value="1">1 die</option><option value="2">2 dice</option><option value="3">3 dice</option>
+              <option value="4">4 dice</option><option value="5">5 dice</option><option value="6">6 dice</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-label">Dice Type</label>
+            <select id="dice-type" class="field">
+              <option value="4">d4</option><option value="6" selected>d6</option><option value="8">d8</option>
+              <option value="10">d10</option><option value="12">d12</option><option value="20">d20</option>
+            </select>
+          </div>
+        </div>
+        <button type="button" class="btn-primary" onclick="ToolsApp.rollDice()">Roll!</button>
+        <div id="dice-output" style="display:none;">
+          <div class="dice-grid" id="dice-faces"></div>
+          <div id="dice-total" style="text-align:center;font-size:1.2rem;font-weight:900;color:#a5b4fc;margin-top:.5rem;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 19. Stopwatch -->
+    <section id="stopwatch" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">⏱️</span>
+        <div><div class="tps-title" data-i18n="text.stopwatch.name">Stopwatch</div><div class="tps-desc" data-i18n="text.stopwatch.desc">Precise timer with lap tracking</div></div>
+      </div>
+      <div class="space-y">
+        <div class="stopwatch-display" id="sw-display">00:00:00.000</div>
+        <div class="tool-btn-row" style="justify-content:center;">
+          <button type="button" class="btn-primary" id="sw-start" onclick="ToolsApp.swToggle()">Start</button>
+          <button type="button" class="btn-secondary" onclick="ToolsApp.swLap()">Lap</button>
+          <button type="button" class="btn-secondary" onclick="ToolsApp.swReset()">Reset</button>
+        </div>
+        <div class="lap-list" id="sw-laps"></div>
+      </div>
+    </section>
+
+    <!-- 20. Countdown Timer -->
+    <section id="countdown" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">⏳</span>
+        <div><div class="tps-title" data-i18n="text.countdown.name">Countdown Timer</div><div class="tps-desc" data-i18n="text.countdown.desc">Set a timer with hours, minutes, seconds and visual progress</div></div>
+      </div>
+      <div class="space-y">
+        <div class="countdown-inputs">
+          <div><label class="field-label">Hours</label><input type="number" id="cd-h" class="input-field" value="0" min="0" max="99" /></div>
+          <div><label class="field-label">Minutes</label><input type="number" id="cd-m" class="input-field" value="5" min="0" max="59" /></div>
+          <div><label class="field-label">Seconds</label><input type="number" id="cd-s" class="input-field" value="0" min="0" max="59" /></div>
+        </div>
+        <div class="countdown-display" id="cd-display">00:05:00</div>
+        <div class="countdown-progress"><div class="countdown-bar" id="cd-bar" style="width:100%"></div></div>
+        <div class="tool-btn-row" style="justify-content:center;">
+          <button type="button" class="btn-primary" id="cd-start" onclick="ToolsApp.cdToggle()">Start</button>
+          <button type="button" class="btn-secondary" onclick="ToolsApp.cdReset()">Reset</button>
+        </div>
+        <div id="cd-done" class="tool-result" style="display:none;text-align:center;color:#6ee7b7;font-weight:700;">⏰ Time's up!</div>
+      </div>
+    </section>
+
     <div style="margin-top:2.5rem;text-align:center;font-size:.72rem;color:var(--text-dim);">
       © 2026 SnakeConverter · All processing happens in your browser
     </div>
@@ -738,7 +922,238 @@ const ToolsApp = (() => {
     navigator.clipboard.writeText(text).then(() => celebrate()).catch(() => {});
   }
 
-  return { wordCount, calcAge, calcBMI, calcPct, doCase, genRandom, genPass, genQR, downloadQR, doBase64, dateToUnix, unixToDate, copy, copyRng };
+  /* 11. Morse Code */
+  const MORSE = {
+    'A':'.-','B':'-...','C':'-.-.','D':'-..','E':'.','F':'..-.','G':'--.','H':'....','I':'..','J':'.---',
+    'K':'-.-','L':'.-..','M':'--','N':'-.','O':'---','P':'.--.','Q':'--.-','R':'.-.','S':'...','T':'-',
+    'U':'..-','V':'...-','W':'.--','X':'-..-','Y':'-.--','Z':'--..',
+    '0':'-----','1':'.----','2':'..---','3':'...--','4':'....-','5':'.....','6':'-....','7':'--...','8':'---..','9':'----.',
+    '.':'.-.-.-',',':'--..--','?':'..--..','!':'-.-.--','-':'-....-','/':'-..-.','(':'-.--.',')':"-.--.-",' ':'/'
+  };
+  const MORSE_REV = Object.fromEntries(Object.entries(MORSE).map(([k,v])=>[v,k]));
+  function morseEncode() {
+    const input = document.getElementById('morse-input').value.toUpperCase();
+    const out = input.split('').map(c => MORSE[c] || '?').join(' ');
+    const el = document.getElementById('morse-output');
+    el.innerHTML = '<span class="morse-output">' + out + '</span>';
+    el.style.display = '';
+    celebrate();
+  }
+  function morseDecode() {
+    const input = document.getElementById('morse-input').value.trim();
+    const words = input.split(' / ');
+    const out = words.map(w => w.split(' ').map(t => MORSE_REV[t] || '?').join('')).join(' ');
+    const el = document.getElementById('morse-output');
+    el.textContent = out;
+    el.style.display = '';
+    celebrate();
+  }
+
+  /* 12. Text to Binary */
+  function textToBinary() {
+    const input = document.getElementById('binary-input').value;
+    const out = input.split('').map(c => c.charCodeAt(0).toString(2).padStart(8,'0')).join(' ');
+    const el = document.getElementById('binary-output');
+    el.textContent = out;
+    el.style.display = '';
+    celebrate();
+  }
+  function binaryToText() {
+    const input = document.getElementById('binary-input').value.trim();
+    try {
+      const out = input.split(' ').map(b => String.fromCharCode(parseInt(b,2))).join('');
+      const el = document.getElementById('binary-output');
+      el.textContent = out;
+      el.style.display = '';
+      celebrate();
+    } catch(e) {
+      const el = document.getElementById('binary-output');
+      el.textContent = 'Error: invalid binary input';
+      el.style.display = '';
+    }
+  }
+
+  /* 13. Palindrome */
+  function checkPalindrome() {
+    const input = document.getElementById('palindrome-input').value;
+    const cleaned = input.toLowerCase().replace(/[^a-z0-9]/g,'');
+    const reversed = cleaned.split('').reverse().join('');
+    const isPalin = cleaned === reversed && cleaned.length > 0;
+    const el = document.getElementById('palindrome-output');
+    el.innerHTML = `<div class="palindrome-result">
+      <div class="palindrome-verdict ${isPalin?'palindrome-yes':'palindrome-no'}">${isPalin?'✓ Yes! Palindrome':'✗ Not a Palindrome'}</div>
+      <div class="palindrome-cleaned">Cleaned: "${cleaned}"</div>
+    </div>`;
+    el.style.display = '';
+    if (isPalin) celebrate();
+  }
+
+  /* 14. Dedupe Lines */
+  function dedupeLines() {
+    const input = document.getElementById('dedupe-input').value;
+    const caseSens = document.getElementById('dedupe-case').checked;
+    const lines = input.split('\n');
+    const seen = new Set();
+    const out = lines.filter(l => {
+      const key = caseSens ? l : l.toLowerCase();
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+    const removed = lines.length - out.length;
+    const el = document.getElementById('dedupe-output');
+    el.textContent = out.join('\n') + '\n\n[Removed ' + removed + ' duplicate(s)]';
+    el.style.display = '';
+    celebrate();
+  }
+
+  /* 15. Text Reverser */
+  function reverseText(wordByWord) {
+    const input = document.getElementById('reverser-input').value;
+    const out = wordByWord
+      ? input.split(' ').reverse().join(' ')
+      : input.split('').reverse().join('');
+    const el = document.getElementById('reverser-output');
+    el.textContent = out;
+    el.style.display = '';
+    celebrate();
+  }
+
+  /* 16. String Inspector */
+  function inspectString() {
+    const input = document.getElementById('inspector-input').value;
+    if (!input) { document.getElementById('inspector-output').style.display='none'; return; }
+    const charCounts = {};
+    for (const c of input) charCounts[c] = (charCounts[c]||0)+1;
+    const mostFreq = Object.entries(charCounts).sort((a,b)=>b[1]-a[1])[0];
+    const words = input.trim() ? input.trim().split(/\s+/).length : 0;
+    const lines = input.split('\n').length;
+    const items = [
+      {label:'Characters', val: input.length},
+      {label:'Words', val: words},
+      {label:'Lines', val: lines},
+      {label:'Unique Chars', val: Object.keys(charCounts).length},
+      {label:'Most Frequent', val: mostFreq ? `'${mostFreq[0]}' (${mostFreq[1]}×)` : '—'},
+      {label:'No Spaces', val: input.replace(/\s/g,'').length},
+    ];
+    const el = document.getElementById('inspector-output');
+    el.innerHTML = items.map(i=>`<div class="inspector-item"><div class="inspector-label">${i.label}</div><div class="inspector-val">${i.val}</div></div>`).join('');
+    el.style.display = 'grid';
+  }
+
+  /* 17. Coin Flip */
+  var _coinH=0, _coinT=0;
+  function flipCoin() {
+    const face = document.getElementById('coin-face');
+    face.classList.add('flip');
+    setTimeout(()=>{
+      face.classList.remove('flip');
+      const heads = Math.random()<0.5;
+      if (heads) { face.textContent='🪙'; _coinH++; } else { face.textContent='🌑'; _coinT++; }
+      document.getElementById('coin-heads').textContent = _coinH;
+      document.getElementById('coin-tails').textContent = _coinT;
+      document.getElementById('coin-total').textContent = _coinH+_coinT;
+      if (heads) celebrate();
+    }, 500);
+  }
+
+  /* 18. Dice Roller */
+  const DICE_EMOJI = {4:'🔹',6:'🎲',8:'🔷',10:'🔢',12:'💎',20:'⚔️'};
+  function rollDice() {
+    const count = parseInt(document.getElementById('dice-count').value);
+    const type  = parseInt(document.getElementById('dice-type').value);
+    const rolls = Array.from({length:count}, ()=> Math.floor(Math.random()*type)+1);
+    const total = rolls.reduce((a,b)=>a+b,0);
+    const el = document.getElementById('dice-faces');
+    el.innerHTML = rolls.map(r=>`<div class="die-face">${r}</div>`).join('');
+    document.getElementById('dice-total').textContent = `Total: ${total} (${count}d${type})`;
+    document.getElementById('dice-output').style.display = '';
+    celebrate();
+  }
+
+  /* 19. Stopwatch */
+  var _swRunning=false, _swStart=0, _swElapsed=0, _swLaps=[], _swRaf=null;
+  function _swFormat(ms) {
+    const h=Math.floor(ms/3600000), m=Math.floor(ms/60000)%60, s=Math.floor(ms/1000)%60, ms2=ms%1000;
+    return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')+'.'+String(ms2).padStart(3,'0');
+  }
+  function _swTick() {
+    const el=document.getElementById('sw-display');
+    if (el) el.textContent = _swFormat(_swElapsed+(Date.now()-_swStart));
+    if (_swRunning) _swRaf = requestAnimationFrame(_swTick);
+  }
+  function swToggle() {
+    const btn=document.getElementById('sw-start');
+    if (_swRunning) {
+      _swElapsed += Date.now()-_swStart; _swRunning=false; cancelAnimationFrame(_swRaf);
+      if (btn) btn.textContent='Resume';
+    } else {
+      _swStart=Date.now(); _swRunning=true; _swRaf=requestAnimationFrame(_swTick);
+      if (btn) btn.textContent='Stop';
+    }
+  }
+  function swLap() {
+    if (!_swRunning && _swElapsed===0) return;
+    const t=_swElapsed+(_swRunning?Date.now()-_swStart:0);
+    _swLaps.push(t);
+    const el=document.getElementById('sw-laps');
+    if (el) el.innerHTML=_swLaps.map((v,i)=>`<div class="lap-item"><span>Lap ${i+1}</span><span>${_swFormat(v)}</span></div>`).reverse().join('');
+  }
+  function swReset() {
+    _swRunning=false; cancelAnimationFrame(_swRaf); _swElapsed=0; _swLaps=[];
+    const d=document.getElementById('sw-display'); if(d) d.textContent='00:00:00.000';
+    const btn=document.getElementById('sw-start'); if(btn) btn.textContent='Start';
+    const l=document.getElementById('sw-laps'); if(l) l.innerHTML='';
+  }
+
+  /* 20. Countdown */
+  var _cdRunning=false, _cdTotal=0, _cdLeft=0, _cdInterval=null;
+  function _cdFormat(s) {
+    const h=Math.floor(s/3600), m=Math.floor(s/60)%60, sec=s%60;
+    return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(sec).padStart(2,'0');
+  }
+  function _cdUpdate() {
+    document.getElementById('cd-display').textContent = _cdFormat(_cdLeft);
+    const pct = _cdTotal>0 ? (_cdLeft/_cdTotal*100) : 100;
+    document.getElementById('cd-bar').style.width = pct+'%';
+    if (_cdLeft<=0) {
+      clearInterval(_cdInterval); _cdRunning=false;
+      document.getElementById('cd-start').textContent='Start';
+      document.getElementById('cd-done').style.display='';
+      const oldTitle=document.title;
+      let flash=false;
+      const ti=setInterval(()=>{ document.title=flash?'⏰ TIME\'S UP!':oldTitle; flash=!flash; },600);
+      setTimeout(()=>{ clearInterval(ti); document.title=oldTitle; },10000);
+    }
+  }
+  function cdToggle() {
+    const btn=document.getElementById('cd-start');
+    if (_cdRunning) {
+      clearInterval(_cdInterval); _cdRunning=false; btn.textContent='Resume';
+    } else {
+      if (_cdLeft===0) {
+        const h=parseInt(document.getElementById('cd-h').value)||0;
+        const m=parseInt(document.getElementById('cd-m').value)||0;
+        const s=parseInt(document.getElementById('cd-s').value)||0;
+        _cdTotal=h*3600+m*60+s; _cdLeft=_cdTotal;
+        document.getElementById('cd-done').style.display='none';
+        if (_cdTotal===0) return;
+      }
+      _cdRunning=true; btn.textContent='Pause';
+      _cdInterval=setInterval(()=>{ _cdLeft--; _cdUpdate(); },1000);
+    }
+  }
+  function cdReset() {
+    clearInterval(_cdInterval); _cdRunning=false; _cdLeft=0; _cdTotal=0;
+    document.getElementById('cd-display').textContent='00:00:00';
+    document.getElementById('cd-bar').style.width='100%';
+    document.getElementById('cd-start').textContent='Start';
+    document.getElementById('cd-done').style.display='none';
+  }
+
+  return { wordCount, calcAge, calcBMI, calcPct, doCase, genRandom, genPass, genQR, downloadQR, doBase64, dateToUnix, unixToDate, copy, copyRng,
+    morseEncode, morseDecode, textToBinary, binaryToText, checkPalindrome, dedupeLines, reverseText, inspectString,
+    flipCoin, rollDice, swToggle, swLap, swReset, cdToggle, cdReset };
 })();
 
 /* Initial password */

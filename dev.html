@@ -123,7 +123,13 @@
       <a href="#base"  class="jump-link">01 Base</a>
       <a href="#roman" class="jump-link">Ⅻ Roman</a>
       <a href="#lorem" class="jump-link">✍️ Lorem</a>
-      <a href="#md"    class="jump-link">📝 Markdown</a>
+      <a href="#md"            class="jump-link">📝 Markdown</a>
+      <a href="#css-minifier"  class="jump-link">🗜️ CSS Minify</a>
+      <a href="#json-csv"      class="jump-link">📊 JSON↔CSV</a>
+      <a href="#diff-checker"  class="jump-link">🔍 Diff</a>
+      <a href="#cron-parser"   class="jump-link">⏰ CRON</a>
+      <a href="#jwt-encoder"   class="jump-link">🔐 JWT Enc</a>
+      <a href="#char-diff"     class="jump-link">🔠 Char Diff</a>
     </nav>
 
     <!-- ── JSON Formatter ── -->
@@ -313,6 +319,103 @@
       </div>
     </section>
 
+    <!-- 11. CSS Minifier -->
+    <section id="css-minifier" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">🗜️</span>
+        <div><div class="tps-title" data-i18n="dev.cssmin.name">CSS Minifier</div><div class="tps-desc" data-i18n="dev.cssmin.desc">Minify CSS and see size reduction percentage</div></div>
+      </div>
+      <textarea id="cssmin-in" class="dev-textarea" placeholder="Paste CSS here…"></textarea>
+      <div class="dev-action-row">
+        <button type="button" onclick="cssMinRun()" class="btn-primary" style="flex:1">Minify</button>
+        <button type="button" onclick="copyEl('cssmin-out')" class="btn-secondary">Copy</button>
+      </div>
+      <div id="cssmin-stats" class="minifier-stats" style="display:none;"></div>
+      <div id="cssmin-out" class="dev-output"></div>
+    </section>
+
+    <!-- 12. JSON ↔ CSV -->
+    <section id="json-csv" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">📊</span>
+        <div><div class="tps-title" data-i18n="dev.jsoncsv.name">JSON ↔ CSV</div><div class="tps-desc" data-i18n="dev.jsoncsv.desc">Convert JSON array to CSV or CSV to JSON — auto-detect format</div></div>
+      </div>
+      <textarea id="jcsv-in" class="dev-textarea" placeholder='[{"name":"Alice","age":30}] or CSV…'></textarea>
+      <div class="dev-action-row">
+        <button type="button" onclick="jcsvRun()" class="btn-primary" style="flex:1">Convert</button>
+        <button type="button" onclick="copyEl('jcsv-out')" class="btn-secondary">Copy</button>
+      </div>
+      <div id="jcsv-out" class="dev-output"></div>
+    </section>
+
+    <!-- 13. Diff Checker -->
+    <section id="diff-checker" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">🔍</span>
+        <div><div class="tps-title" data-i18n="dev.diff.name">Diff Checker</div><div class="tps-desc" data-i18n="dev.diff.desc">Highlight added and removed lines between two texts</div></div>
+      </div>
+      <div class="diff-grid">
+        <div>
+          <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.3rem;">Original</div>
+          <textarea id="diff-a" class="dev-textarea" style="min-height:180px;" oninput="diffRun()"></textarea>
+        </div>
+        <div>
+          <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.3rem;">Modified</div>
+          <textarea id="diff-b" class="dev-textarea" style="min-height:180px;" oninput="diffRun()"></textarea>
+        </div>
+      </div>
+      <div id="diff-summary" style="font-size:.75rem;color:var(--text-muted);margin:.4rem 0;"></div>
+      <div id="diff-out" class="diff-output" style="min-height:80px;"></div>
+    </section>
+
+    <!-- 14. CRON Parser -->
+    <section id="cron-parser" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">⏰</span>
+        <div><div class="tps-title" data-i18n="dev.cron.name">CRON Parser</div><div class="tps-desc" data-i18n="dev.cron.desc">Parse cron expressions and show next 5 run times</div></div>
+      </div>
+      <input type="text" id="cron-in" class="input-field" placeholder="e.g. */5 * * * *" value="0 9 * * 1-5" oninput="cronRun()" style="font-family:monospace;margin-bottom:.5rem;" />
+      <div id="cron-result" class="cron-result" style="display:none;">
+        <div id="cron-desc" class="cron-desc"></div>
+        <div id="cron-runs" class="cron-runs"></div>
+      </div>
+    </section>
+
+    <!-- 15. JWT Encoder -->
+    <section id="jwt-encoder" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">🔐</span>
+        <div><div class="tps-title" data-i18n="dev.jwtenc.name">JWT Encoder (HS256)</div><div class="tps-desc" data-i18n="dev.jwtenc.desc">Sign a JWT token with a secret using HS256 (SubtleCrypto)</div></div>
+      </div>
+      <div style="margin-bottom:.5rem;">
+        <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.3rem;">Payload (JSON)</div>
+        <textarea id="jwt-payload" class="dev-textarea" style="min-height:100px;" placeholder='{"sub":"user123","exp":9999999999}'></textarea>
+      </div>
+      <div style="margin-bottom:.6rem;">
+        <div style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.3rem;">Secret</div>
+        <input type="text" id="jwt-secret" class="input-field" placeholder="your-secret-key" value="my-secret" style="font-family:monospace;" />
+      </div>
+      <div class="dev-action-row">
+        <button type="button" onclick="jwtEncRun()" class="btn-primary" style="flex:1">Sign JWT</button>
+        <button type="button" onclick="copyEl('jwt-out-text')" class="btn-secondary">Copy</button>
+      </div>
+      <div id="jwt-out" class="dev-output" style="min-height:60px;"></div>
+      <input type="text" id="jwt-out-text" style="position:absolute;opacity:0;pointer-events:none;" readonly />
+    </section>
+
+    <!-- 16. Char Diff -->
+    <section id="char-diff" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">🔠</span>
+        <div><div class="tps-title" data-i18n="dev.chardiff.name">Character Diff</div><div class="tps-desc" data-i18n="dev.chardiff.desc">Highlight exact character changes between two short strings</div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:.5rem;margin-bottom:.5rem;">
+        <input type="text" id="cdiff-a" class="input-field" placeholder="Original text…" oninput="charDiffRun()" style="font-family:monospace;" />
+        <input type="text" id="cdiff-b" class="input-field" placeholder="Modified text…" oninput="charDiffRun()" style="font-family:monospace;" />
+      </div>
+      <div id="cdiff-out" class="dev-output" style="min-height:50px;font-size:.85rem;line-height:1.8;color:var(--text-primary);"></div>
+    </section>
+
     <div style="margin-top:2.5rem;text-align:center;font-size:.72rem;color:var(--text-dim);">
       © 2026 SnakeConverter · All processing happens in your browser
     </div>
@@ -422,6 +525,164 @@ loremRun();
 function mdRun(){document.getElementById("md-out").innerHTML=DT.mdToHtml(document.getElementById("md-in").value);}
 document.getElementById("md-in").value="# Hello World\n\nThis is a **live** markdown preview.\n\n- Item one\n- Item two\n- Item three\n\n> A blockquote block\n\n`inline code here`\n\n---\n\n[SnakeConverter](https://snakeconverter.dev)";
 mdRun();
+
+/* ── 11. CSS Minifier ── */
+function cssMinRun(){
+  const inp=document.getElementById('cssmin-in').value;
+  if(!inp.trim()){document.getElementById('cssmin-out').textContent='';document.getElementById('cssmin-stats').style.display='none';return;}
+  const minified=inp
+    .replace(/\/\*[\s\S]*?\*\//g,'')
+    .replace(/\s*([{}:;,>~+])\s*/g,'$1')
+    .replace(/;\}/g,'}')
+    .replace(/\n/g,' ')
+    .replace(/\s{2,}/g,' ')
+    .trim();
+  const orig=new Blob([inp]).size, min=new Blob([minified]).size;
+  const pct=(((orig-min)/orig)*100).toFixed(1);
+  document.getElementById('cssmin-out').textContent=minified;
+  document.getElementById('cssmin-stats').innerHTML=`<span class="minifier-stat">Original: <span>${orig} bytes</span></span><span class="minifier-stat">Minified: <span>${min} bytes</span></span><span class="minifier-stat">Saved: <span>${pct}%</span></span>`;
+  document.getElementById('cssmin-stats').style.display='flex';
+}
+
+/* ── 12. JSON ↔ CSV ── */
+function jcsvRun(){
+  const inp=document.getElementById('jcsv-in').value.trim();
+  const out=document.getElementById('jcsv-out');
+  if(!inp){out.textContent='';return;}
+  try{
+    // Try JSON first
+    const parsed=JSON.parse(inp);
+    if(!Array.isArray(parsed)||!parsed.length){out.textContent='Error: Expected a JSON array.';return;}
+    const keys=Object.keys(parsed[0]);
+    const csv=[keys.join(','),...parsed.map(row=>keys.map(k=>{const v=row[k]??'';return typeof v==='string'&&v.includes(',')? '"'+v.replace(/"/g,'""')+'"':v;}).join(','))].join('\n');
+    out.textContent=csv; out.style.color='#86efac';
+  }catch(e){
+    // Try CSV
+    try{
+      const rows=inp.split('\n').map(r=>r.split(','));
+      const headers=rows[0].map(h=>h.trim());
+      const json=rows.slice(1).filter(r=>r.length===headers.length).map(r=>Object.fromEntries(headers.map((h,i)=>[h,r[i].trim()])));
+      out.textContent=JSON.stringify(json,null,2); out.style.color='#86efac';
+    }catch(e2){out.textContent='Error: Could not parse as JSON or CSV.'; out.style.color='#f87171';}
+  }
+}
+
+/* ── 13. Diff ── */
+function diffRun(){
+  const a=document.getElementById('diff-a').value.split('\n');
+  const b=document.getElementById('diff-b').value.split('\n');
+  const aSet=new Set(a), bSet=new Set(b);
+  let added=0,removed=0,lines=[];
+  const maxLen=Math.max(a.length,b.length);
+  // Simple line-by-line diff
+  let ai=0,bi=0;
+  const result=[];
+  while(ai<a.length||bi<b.length){
+    const la=a[ai], lb=b[bi];
+    if(ai>=a.length){result.push({type:'add',val:lb});bi++;added++;}
+    else if(bi>=b.length){result.push({type:'del',val:la});ai++;removed++;}
+    else if(la===lb){result.push({type:'ctx',val:la});ai++;bi++;}
+    else{result.push({type:'del',val:la});ai++;removed++;result.push({type:'add',val:lb});bi++;added++;}
+  }
+  document.getElementById('diff-summary').textContent=`+${added} added  −${removed} removed`;
+  document.getElementById('diff-out').innerHTML=result.map(r=>`<div class="diff-${r.type==='add'?'add':r.type==='del'?'del':'ctx'}">${r.type==='add'?'+ ':r.type==='del'?'− ':'  '}${r.val.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`).join('');
+}
+
+/* ── 14. CRON Parser ── */
+const CRON_DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const CRON_MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+function parseCronField(val,min,max,names){
+  if(val==='*') return null;
+  if(val.startsWith('*/')) return {every:parseInt(val.slice(2))};
+  if(val.includes(',')) return {list:val.split(',').map(v=>parseInt(v))};
+  if(val.includes('-')){const [a,b]=val.split('-');return {range:[parseInt(a),parseInt(b)]};}
+  return {single:parseInt(val)};
+}
+function cronDescribe(parts){
+  const [min,hr,dom,mon,dow]=parts;
+  let desc='Runs ';
+  if(min==='*'&&hr==='*') desc+='every minute';
+  else if(min.startsWith('*/')) desc+=`every ${min.slice(2)} minutes`;
+  else if(hr==='*') desc+=`at minute ${min} of every hour`;
+  else desc+=`at ${hr.padStart(2,'0')}:${min.padStart(2,'0')}`;
+  if(dow!=='*') desc+=` on ${dow.includes('-')?dow.split('-').map(d=>CRON_DAYS[parseInt(d)]).join('–'):dow.split(',').map(d=>CRON_DAYS[parseInt(d)]).join(', ')}`;
+  if(dom!=='*') desc+=` on day ${dom} of the month`;
+  if(mon!=='*') desc+=` in ${CRON_MONTHS[parseInt(mon)-1]||mon}`;
+  return desc;
+}
+function cronNextRuns(parts,count=5){
+  const [minF,hrF,domF,monF,dowF]=parts;
+  const runs=[]; const now=new Date(); now.setSeconds(0,0);
+  const d=new Date(now); d.setMinutes(d.getMinutes()+1);
+  let tries=0;
+  while(runs.length<count&&tries<20000){
+    tries++;
+    const ok=[
+      (minF==='*')||(minF.startsWith('*/')?(d.getMinutes()%parseInt(minF.slice(2))===0):minF.includes(',')?minF.split(',').includes(String(d.getMinutes())):minF.includes('-')?false:(parseInt(minF)===d.getMinutes())),
+      (hrF==='*')||(hrF.startsWith('*/')?(d.getHours()%parseInt(hrF.slice(2))===0):(parseInt(hrF)===d.getHours())),
+      (domF==='*')||(parseInt(domF)===d.getDate()),
+      (monF==='*')||(parseInt(monF)===d.getMonth()+1),
+      (dowF==='*')||(dowF.includes('-')?(()=>{const[a,b]=dowF.split('-').map(Number);const wd=d.getDay();return wd>=a&&wd<=b;})():dowF.split(',').includes(String(d.getDay()))),
+    ];
+    if(ok.every(Boolean)) runs.push(new Date(d));
+    d.setMinutes(d.getMinutes()+1);
+  }
+  return runs;
+}
+function cronRun(){
+  const expr=document.getElementById('cron-in').value.trim();
+  const el=document.getElementById('cron-result');
+  if(!expr){el.style.display='none';return;}
+  const parts=expr.split(/\s+/);
+  if(parts.length<5){document.getElementById('cron-desc').textContent='Invalid CRON expression (need 5 fields)';el.style.display='';return;}
+  document.getElementById('cron-desc').textContent=cronDescribe(parts);
+  const runs=cronNextRuns(parts);
+  document.getElementById('cron-runs').innerHTML=runs.map((r,i)=>`<div class="cron-run-item">Run ${i+1}: ${r.toLocaleString()}</div>`).join('');
+  el.style.display='';
+}
+cronRun();
+
+/* ── 15. JWT Encoder ── */
+async function jwtEncRun(){
+  const payloadStr=document.getElementById('jwt-payload').value.trim();
+  const secret=document.getElementById('jwt-secret').value;
+  const out=document.getElementById('jwt-out');
+  try{
+    const payload=JSON.parse(payloadStr||'{}');
+    const header={alg:'HS256',typ:'JWT'};
+    const b64url=s=>btoa(JSON.stringify(s)).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
+    const headerB64=b64url(header), payloadB64=b64url(payload);
+    const sigInput=headerB64+'.'+payloadB64;
+    const enc=new TextEncoder();
+    const key=await crypto.subtle.importKey('raw',enc.encode(secret),{name:'HMAC',hash:'SHA-256'},false,['sign']);
+    const sig=await crypto.subtle.sign('HMAC',key,enc.encode(sigInput));
+    const sigB64=btoa(String.fromCharCode(...new Uint8Array(sig))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
+    const token=sigInput+'.'+sigB64;
+    document.getElementById('jwt-out-text').value=token;
+    out.innerHTML=`<span class="jwt-header-part jwt-output">${headerB64}</span><span style="color:var(--text-dim)">.</span><span class="jwt-payload-part jwt-output">${payloadB64}</span><span style="color:var(--text-dim)">.</span><span class="jwt-sig-part jwt-output">${sigB64}</span>`;
+    out.style.color='inherit';
+  }catch(e){out.textContent='Error: '+e.message;out.style.color='#f87171';}
+}
+
+/* ── 16. Char Diff ── */
+function charDiffRun(){
+  const a=document.getElementById('cdiff-a').value;
+  const b=document.getElementById('cdiff-b').value;
+  const out=document.getElementById('cdiff-out');
+  if(!a&&!b){out.textContent='';return;}
+  // Levenshtein-based char diff (simple LCS approach)
+  const maxLen=Math.max(a.length,b.length);
+  let result='';
+  let ai=0,bi=0;
+  // Simple greedy character diff
+  while(ai<a.length||bi<b.length){
+    if(ai>=a.length){result+=`<span class="char-add">${b[bi].replace(/&/g,'&amp;').replace(/</g,'&lt;')}</span>`;bi++;}
+    else if(bi>=b.length){result+=`<span class="char-del">${a[ai].replace(/&/g,'&amp;').replace(/</g,'&lt;')}</span>`;ai++;}
+    else if(a[ai]===b[bi]){result+=a[ai].replace(/&/g,'&amp;').replace(/</g,'&lt;');ai++;bi++;}
+    else{result+=`<span class="char-del">${a[ai].replace(/&/g,'&amp;').replace(/</g,'&lt;')}</span><span class="char-add">${b[bi].replace(/&/g,'&amp;').replace(/</g,'&lt;')}</span>`;ai++;bi++;}
+  }
+  out.innerHTML=result||'<span style="color:var(--text-dim)">Strings are identical</span>';
+}
 </script>
 <script src="js/snake-mascot.js"></script>
 <script src="js/snake-tools.js"></script>

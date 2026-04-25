@@ -98,7 +98,10 @@
       <a href="#convert"  class="jump-link">🎨 Color Converter</a>
       <a href="#contrast" class="jump-link">👁️ Contrast Checker</a>
       <a href="#shades"   class="jump-link">🌈 Shade Generator</a>
-      <a href="#gradient" class="jump-link">✨ Gradient Builder</a>
+      <a href="#gradient"   class="jump-link">✨ Gradient Builder</a>
+      <a href="#color-blind" class="jump-link">👁️ Color Blind Sim</a>
+      <a href="#random-palette" class="jump-link">🎨 Random Palette</a>
+      <a href="#tint-shade" class="jump-link">🌓 Tint &amp; Shade</a>
     </nav>
 
     <!-- ── Color Converter ── -->
@@ -226,6 +229,53 @@
       </div>
     </section>
 
+    <!-- Color Blindness Simulator -->
+    <section id="color-blind" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">👁️</span>
+        <div><div class="tps-title" data-i18n="color.blind.name">Color Blindness Simulator</div><div class="tps-desc" data-i18n="color.blind.desc">See how a color appears to people with different color vision types</div></div>
+      </div>
+      <div class="conv-input-row">
+        <input type="color" id="cb-picker" class="color-picker-native" value="#3b82f6" oninput="document.getElementById('cb-in').value=this.value;cbRun()" />
+        <input type="text" id="cb-in" class="input-field" value="#3b82f6" style="flex:1;font-family:monospace" oninput="cbRun()" />
+      </div>
+      <div id="cb-out" class="cb-grid"></div>
+    </section>
+
+    <!-- Random Palette -->
+    <section id="random-palette" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">🎨</span>
+        <div><div class="tps-title" data-i18n="color.palette.name">Random Palette</div><div class="tps-desc" data-i18n="color.palette.desc">Generate 5 harmonious colors — complementary, analogous or triadic</div></div>
+      </div>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.6rem;align-items:center;">
+        <select id="palette-type" class="unit-card-select">
+          <option value="complementary">Complementary</option>
+          <option value="analogous">Analogous</option>
+          <option value="triadic">Triadic</option>
+          <option value="random">Random</option>
+        </select>
+        <button type="button" class="btn-primary" onclick="genPalette()">Generate</button>
+        <button type="button" class="btn-secondary" onclick="copyPaletteCSS()">Copy as CSS Vars</button>
+      </div>
+      <div id="palette-out" class="palette-grid"></div>
+      <div id="palette-css" class="dev-output" style="min-height:0;font-size:.72rem;display:none;margin-top:.5rem;"></div>
+    </section>
+
+    <!-- Tint & Shade Generator -->
+    <section id="tint-shade" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">🌓</span>
+        <div><div class="tps-title" data-i18n="color.tintshade.name">Tint &amp; Shade Generator</div><div class="tps-desc" data-i18n="color.tintshade.desc">9 tints and 9 shades from any base color — click to copy HEX</div></div>
+      </div>
+      <div class="conv-input-row">
+        <input type="color" id="ts-picker" class="color-picker-native" value="#6366f1" oninput="document.getElementById('ts-in').value=this.value;tsRun()" />
+        <input type="text" id="ts-in" class="input-field" value="#6366f1" style="flex:1;font-family:monospace" oninput="tsRun()" />
+      </div>
+      <div style="font-size:.7rem;color:var(--text-dim);margin:.3rem 0;">← Lighter (Tints) — Base — Darker (Shades) →</div>
+      <div id="ts-out" class="tint-shade-grid"></div>
+    </section>
+
     <div style="margin-top:2.5rem;text-align:center;font-size:.72rem;color:var(--text-dim);">
       © 2026 SnakeConverter · All processing happens in your browser
     </div>
@@ -322,6 +372,84 @@ function gradRun() {
   document.getElementById("grad-css").textContent = `background: ${css};`;
 }
 gradRun();
+
+/* ── Color Blindness Simulator ── */
+function hexToRgb(hex){hex=hex.replace('#','');if(hex.length===3)hex=hex.split('').map(c=>c+c).join('');return[parseInt(hex.slice(0,2),16),parseInt(hex.slice(2,4),16),parseInt(hex.slice(4,6),16)];}
+function rgbToHex(r,g,b){return'#'+[r,g,b].map(v=>Math.round(Math.max(0,Math.min(255,v))).toString(16).padStart(2,'0')).join('');}
+const CB_MATRICES={
+  Protanopia:[[0.567,0.433,0],[0.558,0.442,0],[0,0.242,0.758]],
+  Deuteranopia:[[0.625,0.375,0],[0.7,0.3,0],[0,0.3,0.7]],
+  Tritanopia:[[0.95,0.05,0],[0,0.433,0.567],[0,0.475,0.525]],
+  Achromatopsia:[[0.299,0.587,0.114],[0.299,0.587,0.114],[0.299,0.587,0.114]],
+};
+function applyColorMatrix(rgb,matrix){
+  return matrix.map(row=>row[0]*rgb[0]+row[1]*rgb[1]+row[2]*rgb[2]);
+}
+function cbRun(){
+  const hex=document.getElementById('cb-in').value;
+  try{document.getElementById('cb-picker').value=hex;}catch(e){}
+  const rgb=hexToRgb(hex);
+  if(!rgb||rgb.some(isNaN)){return;}
+  const el=document.getElementById('cb-out');
+  const types=[['Normal',null],...Object.entries(CB_MATRICES)];
+  el.innerHTML=types.map(([name,mat])=>{
+    const simRgb=mat?applyColorMatrix(rgb,mat):rgb;
+    const simHex=rgbToHex(...simRgb);
+    return `<div class="cb-cell"><div class="cb-swatch" style="background:${simHex}"></div><div class="cb-label">${name}<br><span style="font-family:monospace;font-size:.6rem;">${simHex}</span></div></div>`;
+  }).join('');
+}
+cbRun();
+
+/* ── Random Palette ── */
+var _palette=[];
+function hslToHex(h,s,l){s/=100;l/=100;const a=s*Math.min(l,1-l);const f=n=>{const k=(n+h/30)%12;const color=l-a*Math.max(Math.min(k-3,9-k,1),-1);return Math.round(255*color).toString(16).padStart(2,'0')};return`#${f(0)}${f(8)}${f(4)}`;}
+function hexToHSL(hex){const[r,g,b]=hexToRgb(hex).map(v=>v/255);const max=Math.max(r,g,b),min=Math.min(r,g,b);let h,s,l=(max+min)/2;if(max===min){h=s=0;}else{const d=max-min;s=l>0.5?d/(2-max-min):d/(max+min);switch(max){case r:h=(g-b)/d+(g<b?6:0);break;case g:h=(b-r)/d+2;break;case b:h=(r-g)/d+4;}h/=6;}return[Math.round(h*360),Math.round(s*100),Math.round(l*100)];}
+function genPalette(){
+  const type=document.getElementById('palette-type').value;
+  const baseH=Math.random()*360|0;
+  const s=60+(Math.random()*20|0), l=45+(Math.random()*15|0);
+  let hues;
+  if(type==='complementary')hues=[baseH,baseH+180,(baseH+30)%360,(baseH+150)%360,(baseH+210)%360];
+  else if(type==='analogous')hues=[baseH,(baseH+30)%360,(baseH-30+360)%360,(baseH+60)%360,(baseH-60+360)%360];
+  else if(type==='triadic')hues=[baseH,(baseH+120)%360,(baseH+240)%360,(baseH+60)%360,(baseH+300)%360];
+  else hues=Array.from({length:5},()=>Math.random()*360|0);
+  _palette=hues.map(h=>({hex:hslToHex(h,s,l),h,s,l}));
+  renderPalette();
+}
+function renderPalette(){
+  const el=document.getElementById('palette-out');
+  const[r,g,b]=hexToRgb(_palette[0]?.hex||'#000');
+  el.innerHTML=_palette.map((p,i)=>{
+    const rgb=hexToRgb(p.hex);
+    return `<div class="palette-cell"><div class="palette-swatch" style="background:${p.hex}" onclick="navigator.clipboard.writeText('${p.hex}').catch(()=>{})" title="Click to copy"></div><div class="palette-info">${p.hex}<br>rgb(${rgb.join(',')})</div></div>`;
+  }).join('');
+  document.getElementById('palette-css').style.display='none';
+}
+function copyPaletteCSS(){
+  if(!_palette.length)genPalette();
+  const css=':root {\n'+_palette.map((p,i)=>`  --color-${i+1}: ${p.hex};`).join('\n')+'\n}';
+  document.getElementById('palette-css').textContent=css;
+  document.getElementById('palette-css').style.display='';
+  navigator.clipboard.writeText(css).catch(()=>{});
+}
+genPalette();
+
+/* ── Tint & Shade Generator ── */
+function tsRun(){
+  const hex=document.getElementById('ts-in').value;
+  try{document.getElementById('ts-picker').value=hex;}catch(e){}
+  try{
+    const hsl=hexToHSL(hex);
+    if(!hsl)return;
+    const [h,s,l]=hsl;
+    const tints=Array.from({length:9},(_,i)=>{const nl=l+(100-l)*(i+1)/10;return hslToHex(h,s,Math.min(95,nl));}).reverse();
+    const shades=Array.from({length:9},(_,i)=>{const nl=l*(9-i)/10;return hslToHex(h,s,Math.max(5,nl));});
+    const all=[...tints,hex,...shades];
+    const el=document.getElementById('ts-out');
+    el.innerHTML=all.map((c,i)=>`<div class="ts-cell"><div class="ts-swatch" style="background:${c}" onclick="navigator.clipboard.writeText('${c}').catch(()=>{})" title="${c}"></div><div class="ts-lbl">${c}</div></div>`).join('');
+  }catch(e){}
+}
+tsRun();
 </script>
 <script src="js/snake-mascot.js"></script>
 <script src="js/snake-tools.js"></script>

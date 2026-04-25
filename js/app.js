@@ -239,7 +239,10 @@
     try {
       await withSnake(excelBtn, async () => {
         const bytes = await Excel.excelFileToPdfBytes(excelFile, { ...enc, landscape: true });
-        U.downloadBlob(bytes, U.baseName(excelFile.name) + ".pdf");
+        const outName = U.baseName(excelFile.name) + ".pdf";
+        U.downloadBlob(bytes, outName);
+        const blob = new Blob([bytes], {type:'application/pdf'});
+        window.uploadAndShare(blob, outName, 'sharePanelExcel', 'shareUrlExcel');
       });
     } catch (e) { console.error(e); alert(e.message || String(e)); }
   });
@@ -264,7 +267,10 @@
       await withSnake(imageBtn, async () => {
         const fit = imageFitInput?.value === "original" ? "original" : "a4";
         const bytes = await Img.imageFileToPdfBytes(imageFile, { ...enc, fit });
-        U.downloadBlob(bytes, U.baseName(imageFile.name) + ".pdf");
+        const outName = U.baseName(imageFile.name) + ".pdf";
+        U.downloadBlob(bytes, outName);
+        const blob = new Blob([bytes], {type:'application/pdf'});
+        window.uploadAndShare(blob, outName, 'sharePanelImage', 'shareUrlImage');
       });
     } catch (e) { console.error(e); alert(e.message || String(e)); }
   });
@@ -334,6 +340,8 @@
       await withSnake(mergeBtn, async () => {
         const bytes = await Merge.mergePdfFiles(mergeFiles, { ...enc, srcPasswords });
         U.downloadBlob(bytes, "merged.pdf");
+        const blob = new Blob([bytes], {type:'application/pdf'});
+        window.uploadAndShare(blob, 'merged.pdf', 'sharePanelMerge', 'shareUrlMerge');
       });
     } catch (e) { console.error(e); alert(e.message || String(e)); }
   });
@@ -366,7 +374,9 @@
     try {
       await withSnake(splitBtn, async () => {
         const blob = await Split.splitPdf(splitFile, mode, rangesText, srcPassword);
-        U.downloadBlob(blob, U.baseName(splitFile.name) + "-split.zip");
+        const outName = U.baseName(splitFile.name) + "-split.zip";
+        U.downloadBlob(blob, outName);
+        window.uploadAndShare(blob, outName, 'sharePanelSplit', 'shareUrlSplit');
       });
     } catch (e) { console.error(e); alert(e.message || String(e)); }
   });
@@ -390,10 +400,38 @@
     try {
       await withSnake(encBtn, async () => {
         const bytes = await Reenc.reencryptPdfFile(encFile, { ...enc, srcPassword });
-        U.downloadBlob(bytes, U.baseName(encFile.name) + "-locked.pdf");
+        const outName = U.baseName(encFile.name) + "-locked.pdf";
+        U.downloadBlob(bytes, outName);
+        const blob = new Blob([bytes], {type:'application/pdf'});
+        window.uploadAndShare(blob, outName, 'sharePanelEncrypt', 'shareUrlEncrypt');
       });
     } catch (e) { console.error(e); alert(e.message || String(e)); }
   });
 
   renderMergeList();
+
+  /* ── Share Link helpers ─────────────────────────────── */
+  window.uploadAndShare = async function(blob, fileName, panelId, inputId) {
+    var panel = document.getElementById(panelId);
+    var input = document.getElementById(inputId);
+    if (!panel || !input) return;
+    panel.style.display = 'block';
+    input.value = 'Uploading…';
+    try {
+      var form = new FormData();
+      form.append('file', blob, fileName);
+      var res = await fetch('https://snakeconverter.com/api/share/upload', { method: 'POST', body: form });
+      var data = await res.json();
+      if (data.url) { input.value = data.url; }
+      else { input.value = 'Upload failed: ' + (data.error || 'Unknown error'); }
+    } catch(e) { input.value = 'Upload failed: ' + e.message; }
+  };
+
+  window.copyShareUrl = function(inputId) {
+    var el = document.getElementById(inputId);
+    if (!el) return;
+    navigator.clipboard.writeText(el.value).catch(function() {
+      el.select(); document.execCommand('copy');
+    });
+  };
 })();
