@@ -556,7 +556,7 @@
       </div>
       <div class="space-y">
         <div class="coin-display" id="coin-face">🪙</div>
-        <button type="button" class="btn-primary" onclick="ToolsApp.flipCoin()" style="margin:0 auto;display:block;min-width:140px;">Flip!</button>
+        <button type="button" class="btn-primary" data-no-snake onclick="ToolsApp.flipCoin()" style="margin:0 auto;display:block;min-width:140px;">Flip!</button>
         <div class="coin-stats">
           <span>Heads: <strong id="coin-heads">0</strong></span>
           <span>Tails: <strong id="coin-tails">0</strong></span>
@@ -588,7 +588,7 @@
             </select>
           </div>
         </div>
-        <button type="button" class="btn-primary" onclick="ToolsApp.rollDice()">Roll!</button>
+        <button type="button" class="btn-primary" data-no-snake onclick="ToolsApp.rollDice()">Roll!</button>
         <div id="dice-output" style="display:none;">
           <div class="dice-grid" id="dice-faces"></div>
           <div id="dice-total" style="text-align:center;font-size:1.2rem;font-weight:900;color:#a5b4fc;margin-top:.5rem;"></div>
@@ -605,7 +605,7 @@
       <div class="space-y">
         <div class="stopwatch-display" id="sw-display">00:00:00.000</div>
         <div class="tool-btn-row" style="justify-content:center;">
-          <button type="button" class="btn-primary" id="sw-start" onclick="ToolsApp.swToggle()">Start</button>
+          <button type="button" class="btn-primary" data-no-snake id="sw-start" onclick="ToolsApp.swToggle()">Start</button>
           <button type="button" class="btn-secondary" onclick="ToolsApp.swLap()">Lap</button>
           <button type="button" class="btn-secondary" onclick="ToolsApp.swReset()">Reset</button>
         </div>
@@ -628,7 +628,7 @@
         <div class="countdown-display" id="cd-display">00:05:00</div>
         <div class="countdown-progress"><div class="countdown-bar" id="cd-bar" style="width:100%"></div></div>
         <div class="tool-btn-row" style="justify-content:center;">
-          <button type="button" class="btn-primary" id="cd-start" onclick="ToolsApp.cdToggle()">Start</button>
+          <button type="button" class="btn-primary" data-no-snake id="cd-start" onclick="ToolsApp.cdToggle()">Start</button>
           <button type="button" class="btn-secondary" onclick="ToolsApp.cdReset()">Reset</button>
         </div>
         <div id="cd-done" class="tool-result" style="display:none;text-align:center;color:#6ee7b7;font-weight:700;">⏰ Time's up!</div>

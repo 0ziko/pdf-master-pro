@@ -55,8 +55,9 @@
       el.addEventListener("input", function () { snake.onFileSelect(); });
     });
 
-    /* Button clicks → full eat+process+spit sequence */
-    document.querySelectorAll(".btn-primary").forEach(function (btn) {
+    /* Button clicks → full eat+process+spit sequence
+       Skip animation for control buttons (data-no-snake) like Start/Stop/Reset/Lap */
+    document.querySelectorAll(".btn-primary:not([data-no-snake])").forEach(function (btn) {
       var origFn = btn.onclick;
       btn.onclick = null;
       btn.addEventListener("click", function () {
