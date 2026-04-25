@@ -39,7 +39,8 @@
   <link rel="preconnect" href="https://www.googletagmanager.com" />
   <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
   <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,600;0,14..32,700;0,14..32,900;1,14..32,300&display=swap" />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,600;0,14..32,700;0,14..32,900;1,14..32,300&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,600;0,14..32,700;0,14..32,900;1,14..32,300&display=swap" /></noscript>
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
@@ -74,7 +75,9 @@
   </script>
 
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="css/app.css" />
+  <style>*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}body{background:#050508;color:#e2e8f0;font-family:Inter,system-ui,-apple-system,sans-serif}</style>
+  <link rel="preload" as="style" href="css/app.css" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="css/app.css" /></noscript>
   <style>
     .dev-textarea { width:100%; min-height:130px; resize:vertical; background:rgba(0,0,0,.25);
       border:1px solid var(--border-subtle); border-radius:.75rem; padding:.7rem .9rem;
