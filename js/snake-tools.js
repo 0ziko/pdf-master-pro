@@ -1,33 +1,33 @@
-/* ── Snake mascot — fully autonomous, zero button dependency ── */
+/* ── Snake mascot — fully autonomous, 10 real canvas animations ── */
 (function () {
 
-  /* ── Captions per animation ─────────────────────────────────── */
+  /* ── Captions ────────────────────────────────────────────────── */
   var CAPTIONS = {
     en: {
-      idle:     "Pick a tool and let's go! 🐍",
-      wave:     "Hey there! 👋",
-      sleep:    "Zzz… just resting… 💤",
-      party:    "Let's gooo! 🎉",
-      think:    "Hmm, what shall I convert next? 🤔",
-      love:     "I love helping you! ❤️",
-      surprise: "Whoa! This is awesome! 😱",
-      flex:     "Strong tools, stronger snake! 💪",
-      music:    "La la la… converting in style 🎵",
-      fire:     "On fire today! 🔥",
-      cool:     "Yeah, I'm kind of a big deal 😎",
+      idle:      "Pick a tool and let's go! 🐍",
+      dance:     "Watch me slither! 🐍💃",
+      rainbow:   "I contain multitudes 🌈",
+      party:     "LET'S GOOOO! 🎉",
+      sleep:     "Zzz… just resting… 💤",
+      stretch:   "Stretching it out~ 🤸",
+      bounce:    "Boing boing boing! 🏀",
+      coil:      "Going in circles… 🌀",
+      heartbeat: "Loving every conversion! ❤️",
+      flip:      "Wheeeee! 🙃",
+      loop:      "Infinity mode: ON ♾️",
     },
     tr: {
-      idle:     "Bir araç seç ve başla! 🐍",
-      wave:     "Merhaba! 👋",
-      sleep:    "Zzz… biraz dinleniyorum… 💤",
-      party:    "Haydi gidelim! 🎉",
-      think:    "Hmm, sırada ne çevireceğiz? 🤔",
-      love:     "Sana yardım etmeyi seviyorum! ❤️",
-      surprise: "Vay be! Harika! 😱",
-      flex:     "Güçlü araçlar, güçlü yılan! 💪",
-      music:    "La la la… dönüştürme modunda 🎵",
-      fire:     "Bugün çok hızlıyım! 🔥",
-      cool:     "Evet, ben bu işin ustasıyım 😎",
+      idle:      "Bir araç seç ve başla! 🐍",
+      dance:     "Dans ediyorum! 🐍💃",
+      rainbow:   "Rengarenk bir yılanim! 🌈",
+      party:     "HADİ GIDELIM! 🎉",
+      sleep:     "Zzz… biraz dinleniyorum… 💤",
+      stretch:   "Gerinme zamanı~ 🤸",
+      bounce:    "Zipla zipla! 🏀",
+      coil:      "Dönüyor dönüyor… 🌀",
+      heartbeat: "Her dönüşümü seviyorum! ❤️",
+      flip:      "Wheeeee! 🙃",
+      loop:      "Sonsuzluk modu: AÇIK ♾️",
     },
   };
 
@@ -42,170 +42,37 @@
     el.textContent = map[key] || map.idle;
   }
 
-  /* ── Emoji pop helper ────────────────────────────────────────── */
-  function popEmoji(emoji) {
-    var el = document.getElementById("snakeChomp");
-    if (!el) return;
-    el.textContent = emoji;
-    el.style.opacity = "1";
-    el.style.transform = "translate(-50%,-50%) scale(1.4)";
-    setTimeout(function () {
-      el.style.opacity = "0";
-      el.style.transform = "translate(-50%,-80%) scale(0.8)";
-    }, 1200);
-  }
-
-  /* ── CSS shake on canvas ─────────────────────────────────────── */
-  function shakeCanvas(canvas) {
-    canvas.style.transition = "transform 0.07s";
-    var seq = ["-6px", "6px", "-5px", "5px", "-3px", "0px"];
-    var i = 0;
-    var iv = setInterval(function () {
-      canvas.style.transform = "translateX(" + seq[i] + ")";
-      i++;
-      if (i >= seq.length) { clearInterval(iv); canvas.style.transform = ""; }
-    }, 70);
-  }
-
-  /* ── CSS bounce on canvas ────────────────────────────────────── */
-  function bounceCanvas(canvas, times) {
-    var count = 0;
-    var iv = setInterval(function () {
-      canvas.style.transform = count % 2 === 0 ? "translateY(-8px)" : "translateY(0)";
-      count++;
-      if (count >= times * 2) { clearInterval(iv); canvas.style.transform = ""; }
-    }, 160);
-  }
-
-  /* ── CSS spin on canvas ──────────────────────────────────────── */
-  function spinCanvas(canvas, deg, ms) {
-    canvas.style.transition = "transform " + ms + "ms ease-in-out";
-    canvas.style.transform = "rotate(" + deg + "deg)";
-    setTimeout(function () {
-      canvas.style.transition = "transform " + ms + "ms ease-in-out";
-      canvas.style.transform = "rotate(0deg)";
-      setTimeout(function () { canvas.style.transition = ""; canvas.style.transform = ""; }, ms);
-    }, ms + 100);
-  }
-
-  /* ── The 10 autonomous animations ───────────────────────────── */
-  var ANIMATIONS = [
-
-    /* 1. Wave hello */
-    function wave(canvas, snake, done) {
-      setCaption("wave");
-      popEmoji("👋");
-      snake.onFileSelect();
-      setTimeout(done, 2200);
-    },
-
-    /* 2. Sleep / nap */
-    function sleep(canvas, snake, done) {
-      setCaption("sleep");
-      popEmoji("💤");
-      canvas.style.transition = "opacity 0.6s";
-      canvas.style.opacity = "0.55";
-      setTimeout(function () {
-        popEmoji("💤");
-        setTimeout(function () {
-          canvas.style.opacity = "1";
-          canvas.style.transition = "";
-          done();
-        }, 2500);
-      }, 800);
-    },
-
-    /* 3. Party */
-    function party(canvas, snake, done) {
-      setCaption("party");
-      popEmoji("🎉");
-      snake.onFileSelect();
-      setTimeout(function () { popEmoji("🎊"); snake.onFileSelect(); }, 700);
-      setTimeout(function () { bounceCanvas(canvas, 3); }, 400);
-      setTimeout(done, 2800);
-    },
-
-    /* 4. Deep thought */
-    function think(canvas, snake, done) {
-      setCaption("think");
-      popEmoji("🤔");
-      setTimeout(function () { popEmoji("💭"); }, 1200);
-      setTimeout(done, 2500);
-    },
-
-    /* 5. Love */
-    function love(canvas, snake, done) {
-      setCaption("love");
-      popEmoji("❤️");
-      snake.onFileSelect();
-      setTimeout(function () { popEmoji("💖"); }, 900);
-      setTimeout(done, 2200);
-    },
-
-    /* 6. Surprise */
-    function surprise(canvas, snake, done) {
-      setCaption("surprise");
-      popEmoji("😱");
-      shakeCanvas(canvas);
-      snake.onFileSelect();
-      setTimeout(done, 2000);
-    },
-
-    /* 7. Flex */
-    function flex(canvas, snake, done) {
-      setCaption("flex");
-      popEmoji("💪");
-      bounceCanvas(canvas, 4);
-      setTimeout(function () { snake.onFileSelect(); }, 300);
-      setTimeout(done, 2500);
-    },
-
-    /* 8. Music */
-    function music(canvas, snake, done) {
-      setCaption("music");
-      popEmoji("🎵");
-      var notes = ["🎵", "🎶", "🎸", "🎵"];
-      notes.forEach(function (n, i) {
-        setTimeout(function () { popEmoji(n); }, i * 600);
-      });
-      setTimeout(function () { bounceCanvas(canvas, 2); }, 200);
-      setTimeout(done, 3000);
-    },
-
-    /* 9. Fire */
-    function fire(canvas, snake, done) {
-      setCaption("fire");
-      popEmoji("🔥");
-      snake.onFileSelect();
-      setTimeout(function () { shakeCanvas(canvas); popEmoji("⚡"); }, 700);
-      setTimeout(done, 2200);
-    },
-
-    /* 10. Cool */
-    function cool(canvas, snake, done) {
-      setCaption("cool");
-      popEmoji("😎");
-      spinCanvas(canvas, 12, 400);
-      setTimeout(function () { snake.onFileSelect(); }, 500);
-      setTimeout(done, 2500);
-    },
+  /* ── The 10 real canvas animations (snake body changes shape) ─ */
+  var ANIM_NAMES = [
+    "dance",      /* 1. Wide sine wave across full canvas             */
+    "rainbow",    /* 2. Normal wave with rotating rainbow gradient    */
+    "party",      /* 3. Chaotic multi-freq wave + rainbow colors      */
+    "sleep",      /* 4. Coils into C-shape, floating Z letters        */
+    "stretch",    /* 5. Extends flat then snaps back                  */
+    "bounce",     /* 6. Gravity bounce along body                     */
+    "coil",       /* 7. Wraps into spinning circle then uncoils       */
+    "heartbeat",  /* 8. Whole body pulses in/out rhythmically         */
+    "flip",       /* 9. Flips upside-down, stays, flips back          */
+    "loop",       /* 10. Figure-8 / infinity path                     */
   ];
 
   /* ── Autonomous scheduler ────────────────────────────────────── */
   var lastAnimIdx = -1;
 
-  function runNext(canvas, snake) {
-    /* Pick a random animation, avoid repeating the last one */
-    var available = ANIMATIONS.map(function (_, i) { return i; })
+  function runNext(snake) {
+    /* Pick random animation, avoid repeating */
+    var available = ANIM_NAMES.map(function (_, i) { return i; })
                               .filter(function (i) { return i !== lastAnimIdx; });
     var idx = available[Math.floor(Math.random() * available.length)];
     lastAnimIdx = idx;
+    var name = ANIM_NAMES[idx];
 
-    ANIMATIONS[idx](canvas, snake, function () {
-      /* After animation finishes, wait 4–8 seconds, then do another */
-      var pause = 4000 + Math.random() * 4000;
+    setCaption(name);
+    snake.playAnimation(name, function () {
       setCaption("idle");
-      setTimeout(function () { runNext(canvas, snake); }, pause);
+      /* 3–6 second pause before next animation */
+      var pause = 3000 + Math.random() * 3000;
+      setTimeout(function () { runNext(snake); }, pause);
     });
   }
 
@@ -215,13 +82,13 @@
     var canvas = document.getElementById("snakeCanvas");
     if (!canvas) return;
 
-    /* Reuse existing instance if index.html already created one */
+    /* Reuse existing instance (index.html may have already created one) */
     var snake = window.snakeMascot || new window.SnakeMascot("snakeCanvas");
     window.snakeMascot = snake;
     setCaption("idle");
 
-    /* Start autonomous loop after 2.5 seconds */
-    setTimeout(function () { runNext(canvas, snake); }, 2500);
+    /* Start autonomous loop after 2 seconds */
+    setTimeout(function () { runNext(snake); }, 2000);
 
     /* Re-apply caption on language switch */
     document.querySelectorAll("[data-lang-btn]").forEach(function (b) {
