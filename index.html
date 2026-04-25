@@ -593,11 +593,14 @@
 
 <script src="js/i18n.js"></script>
 <script src="js/snake-mascot.js"></script>
+<script src="js/snake-tools.js"></script>
 <script>
-/* ── Snake mascot ── */
-const snake = new SnakeMascot("snakeCanvas");
+/* ── Snake mascot (index page hover reactions) ── */
+/* window.snakeMascot is set by snake-tools.js; wait for it */
 document.querySelectorAll(".dir-item").forEach(item => {
-  item.addEventListener("mouseenter", () => snake.onFileSelect());
+  item.addEventListener("mouseenter", () => {
+    if (window.snakeMascot) window.snakeMascot.onFileSelect();
+  });
 });
 
 /* Caption is now handled inside i18n.js apply() via data-i18n attribute */

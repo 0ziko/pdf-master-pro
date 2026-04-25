@@ -210,17 +210,18 @@
   }
 
   /* ── Init ────────────────────────────────────────────────────── */
-  window.addEventListener("load", function () {
+  function init() {
     if (!window.SnakeMascot) return;
     var canvas = document.getElementById("snakeCanvas");
     if (!canvas) return;
 
-    var snake = new window.SnakeMascot("snakeCanvas");
+    /* Reuse existing instance if index.html already created one */
+    var snake = window.snakeMascot || new window.SnakeMascot("snakeCanvas");
     window.snakeMascot = snake;
     setCaption("idle");
 
-    /* Start autonomous loop after 3 seconds */
-    setTimeout(function () { runNext(canvas, snake); }, 3000);
+    /* Start autonomous loop after 2.5 seconds */
+    setTimeout(function () { runNext(canvas, snake); }, 2500);
 
     /* Re-apply caption on language switch */
     document.querySelectorAll("[data-lang-btn]").forEach(function (b) {
@@ -228,6 +229,13 @@
         setTimeout(function () { setCaption("idle"); }, 80);
       });
     });
-  });
+  }
+
+  /* Handle both "already loaded" and "not yet loaded" cases */
+  if (document.readyState === "complete") {
+    init();
+  } else {
+    window.addEventListener("load", init);
+  }
 
 })();
