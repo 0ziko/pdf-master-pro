@@ -12,7 +12,7 @@
 
 ## Tool Categories
 
-### PDF Tools — https://snakeconverter.com/pdf.html
+### PDF Tools — https://snakeconverter.com/pdf
 - Excel to PDF (xlsx, xls, csv — full Unicode/Turkish character support)
 - Image to PDF (PNG, JPEG, WebP, GIF, BMP)
 - Merge PDF (combine multiple PDFs into one)
@@ -20,7 +20,7 @@
 - Encrypt / Decrypt PDF (AES-256 password protection)
 - Share PDF (generate a public shareable link via Cloudflare R2)
 
-### Unit Converters — https://snakeconverter.com/units.html
+### Unit Converters — https://snakeconverter.com/units
 - Length (km, m, cm, mm, ft, in, mi, yd)
 - Weight / Mass (kg, g, lb, oz, ton, stone)
 - Temperature (°C, °F, K, °R)
@@ -35,7 +35,7 @@
 - Shoe Size Converter (US, EU, UK)
 - Typography Units (px, pt, em, rem, vw)
 
-### Calculators — https://snakeconverter.com/calc.html
+### Calculators — https://snakeconverter.com/calc
 - BMI Calculator (Body Mass Index with visual gauge)
 - Age Calculator (exact age from birthdate)
 - Percentage Calculator (X% of Y, increase/decrease)
@@ -49,7 +49,7 @@
 - Quadratic Equation Solver
 - Scientific Calculator
 
-### Text & Utility Tools — https://snakeconverter.com/tools.html
+### Text & Utility Tools — https://snakeconverter.com/tools
 - Word Counter (words, characters, sentences, reading time)
 - Text Case Converter (UPPER, lower, Title, camelCase, snake_case)
 - Base64 Encoder / Decoder
@@ -68,7 +68,7 @@
 - Stopwatch (millisecond precision)
 - Countdown Timer
 
-### Developer Tools — https://snakeconverter.com/dev.html
+### Developer Tools — https://snakeconverter.com/dev
 - JSON Formatter / Validator
 - HTML Encoder / Decoder
 - URL Encoder / Decoder
@@ -81,7 +81,7 @@
 - JWT Encoder / Decoder
 - Character Diff
 
-### Color Tools — https://snakeconverter.com/color.html
+### Color Tools — https://snakeconverter.com/color
 - HEX ↔ RGB ↔ HSL Converter
 - Color Palette Generator
 - Contrast Ratio Checker (WCAG AA/AAA)
@@ -110,9 +110,10 @@ Not currently. All tools are browser-based. A REST API is planned for the Pro ti
 ## Sitemap
 
 - https://snakeconverter.com/ — Home / Tool Directory
-- https://snakeconverter.com/pdf.html — PDF Tools
-- https://snakeconverter.com/tools.html — Text & Utility Tools
-- https://snakeconverter.com/units.html — Unit Converters
-- https://snakeconverter.com/calc.html — Calculators
-- https://snakeconverter.com/dev.html — Developer Tools
-- https://snakeconverter.com/color.html — Color Tools
+- https://snakeconverter.com/pdf — PDF Tools
+- https://snakeconverter.com/tools — Text & Utility Tools
+- https://snakeconverter.com/units — Unit Converters
+- https://snakeconverter.com/calc — Calculators
+- https://snakeconverter.com/dev — Developer Tools
+- https://snakeconverter.com/color — Color Tools
+- https://snakeconverter.com/pricing — Pro Plan & Pricing

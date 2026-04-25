@@ -1,14 +1,20 @@
-/* ── SnakeConverter Analytics + Cookie Consent ──────────────────
-   GA4 only loads AFTER the user accepts cookies.
-   Replace GA_MEASUREMENT_ID with your actual GA4 ID.
-──────────────────────────────────────────────────────────────── */
+/* ── SnakeConverter Analytics + Cookie Consent ────────────────────────
+   HOW TO ACTIVATE:
+   1. Go to https://analytics.google.com
+   2. Create a property for snakeconverter.com
+   3. Copy the Measurement ID (format: G-XXXXXXXXXX)
+   4. Replace the GA_ID value below with your real ID
+   GA4 only loads AFTER the user accepts cookies (GDPR compliant).
+────────────────────────────────────────────────────────────────────── */
 (function () {
   "use strict";
 
-  var GA_ID = "G-XXXXXXXXXX"; /* ← Replace with your GA4 Measurement ID */
+  /* ─── CONFIG — replace with your real values ───────────────────── */
+  var GA_ID       = "G-XXXXXXXXXX"; /* ← YOUR GA4 Measurement ID     */
   var CONSENT_KEY = "sc_cookie_consent";
+  /* ─────────────────────────────────────────────────────────────── */
 
-  /* ── Load GA4 ──────────────────────────────────────────────── */
+  /* ── Load GA4 ──────────────────────────────────────────────────── */
   function loadGA() {
     if (window._gaLoaded) return;
     window._gaLoaded = true;
@@ -21,16 +27,41 @@
     window.dataLayer = window.dataLayer || [];
     window.gtag = function () { window.dataLayer.push(arguments); };
     gtag("js", new Date());
-    gtag("config", GA_ID, { anonymize_ip: true, cookie_flags: "SameSite=None;Secure" });
+    gtag("config", GA_ID, {
+      anonymize_ip: true,
+      cookie_flags: "SameSite=None;Secure",
+      page_title: document.title,
+      page_location: window.location.href
+    });
+
+    /* Track scroll depth milestones */
+    var milestones = [25, 50, 75, 90];
+    var fired = {};
+    window.addEventListener("scroll", function () {
+      var pct = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+      milestones.forEach(function (m) {
+        if (pct >= m && !fired[m]) {
+          fired[m] = true;
+          scTrack("scroll_depth", { depth_percent: m, page: location.pathname });
+        }
+      });
+    }, { passive: true });
   }
 
-  /* ── Track page events (call after loadGA) ─────────────────── */
+  /* ── Public event tracker ─────────────────────────────────────── */
   window.scTrack = function (eventName, params) {
     if (!window.gtag) return;
     gtag("event", eventName, params || {});
   };
 
-  /* ── Consent state ─────────────────────────────────────────── */
+  /* ── Tool-use auto-tracking ─────────────────────────────────────
+     Call scTrackTool("pdf_merge") / scTrackTool("unit_length") etc.
+     from your tool JS files. ──────────────────────────────────── */
+  window.scTrackTool = function (toolId, params) {
+    scTrack("tool_use", Object.assign({ tool_id: toolId }, params || {}));
+  };
+
+  /* ── Consent state ─────────────────────────────────────────────── */
   function getConsent() {
     try { return localStorage.getItem(CONSENT_KEY); } catch (e) { return null; }
   }
@@ -38,10 +69,9 @@
     try { localStorage.setItem(CONSENT_KEY, val); } catch (e) {}
   }
 
-  /* ── Render banner ─────────────────────────────────────────── */
+  /* ── Render banner ─────────────────────────────────────────────── */
   function showBanner() {
     var lang = (document.documentElement.lang || "en").toLowerCase().startsWith("tr") ? "tr" : "en";
-    /* also check PdfMasterI18n for dynamic lang */
     if (window.PdfMasterI18n) lang = window.PdfMasterI18n.getLang();
 
     var txt = {
@@ -71,13 +101,14 @@
       '</div>';
     document.body.appendChild(banner);
 
-    /* Animate in */
     requestAnimationFrame(function () { banner.classList.add("sc-cb-visible"); });
 
     document.getElementById("sc-cb-accept").addEventListener("click", function () {
       setConsent("accepted");
       hideBanner(banner);
       loadGA();
+      /* Notify ads module that consent was granted */
+      document.dispatchEvent(new CustomEvent('sc:consent:accepted'));
     });
     document.getElementById("sc-cb-reject").addEventListener("click", function () {
       setConsent("rejected");
@@ -90,7 +121,7 @@
     setTimeout(function () { banner && banner.parentNode && banner.parentNode.removeChild(banner); }, 400);
   }
 
-  /* ── Inject banner CSS ─────────────────────────────────────── */
+  /* ── Inject banner CSS ─────────────────────────────────────────── */
   function injectStyles() {
     var style = document.createElement("style");
     style.textContent = [
@@ -126,17 +157,15 @@
     document.head.appendChild(style);
   }
 
-  /* ── Boot ──────────────────────────────────────────────────── */
+  /* ── Boot ──────────────────────────────────────────────────────── */
   function boot() {
     injectStyles();
     var consent = getConsent();
     if (consent === "accepted") {
       loadGA();
     } else if (consent === null) {
-      /* First visit — show banner after short delay */
-      setTimeout(showBanner, 1500);
+      setTimeout(showBanner, 1800);
     }
-    /* "rejected" → do nothing */
   }
 
   if (document.readyState === "loading") {
