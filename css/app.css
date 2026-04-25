@@ -685,6 +685,9 @@ body::before {
   background: rgba(255,255,255,0.04);
   color: var(--text-muted);
   font-size: 0.7rem;
+  touch-action: manipulation;   /* eliminates 300ms iOS tap delay */
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
   font-weight: 700;
   letter-spacing: 0.06em;
   cursor: pointer;

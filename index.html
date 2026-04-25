@@ -479,17 +479,7 @@ document.querySelectorAll(".dir-item").forEach(item => {
   item.addEventListener("mouseenter", () => snake.onFileSelect());
 });
 
-/* Re-apply i18n after snake may reset caption */
-document.querySelectorAll("[data-lang-btn]").forEach(btn => {
-  btn.addEventListener("click", () => {
-    requestAnimationFrame(() => {
-      const cap = document.getElementById("snakeCaption");
-      if (cap && cap.dataset.i18n) {
-        cap.textContent = window.PdfMasterI18n.t(cap.dataset.i18n);
-      }
-    });
-  });
-});
+/* Caption is now handled inside i18n.js apply() via data-i18n attribute */
 
 /* ── Search / filter ── */
 function filterDir(query) {

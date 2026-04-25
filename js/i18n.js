@@ -246,53 +246,73 @@
   const STORAGE_KEY = "pmp-lang";
   let currentLang = localStorage.getItem(STORAGE_KEY) || "en";
 
+  /* Cached element lists — built once at init, never re-queried */
+  let _els    = null;   /* [data-i18n]    */
+  let _phEls  = null;   /* [data-i18n-ph] */
+  let _optEls = null;   /* option[data-i18n] */
+  let _btns   = null;   /* [data-lang-btn]  */
+  let _rafPending = false;
+
   function t(key) {
     return (
       (translations[currentLang] && translations[currentLang][key]) ||
-      (translations.en && translations.en[key]) ||
+      (translations.en          && translations.en[key]) ||
       key
     );
   }
 
-  function setLang(lang) {
-    if (!translations[lang]) return;
-    currentLang = lang;
-    localStorage.setItem(STORAGE_KEY, lang);
-    apply();
-    _updateSwitcher();
+  function _buildCache() {
+    _els    = Array.from(document.querySelectorAll("[data-i18n]"));
+    _phEls  = Array.from(document.querySelectorAll("[data-i18n-ph]"));
+    _optEls = Array.from(document.querySelectorAll("option[data-i18n]"));
+    _btns   = Array.from(document.querySelectorAll("[data-lang-btn]"));
   }
 
-  function getLang() {
-    return currentLang;
-  }
-
+  /* Batched DOM write — one rAF per language switch, never blocks the thread */
   function apply() {
-    /* text content */
-    document.querySelectorAll("[data-i18n]").forEach((el) => {
-      el.textContent = t(el.getAttribute("data-i18n"));
-    });
-    /* placeholder */
-    document.querySelectorAll("[data-i18n-ph]").forEach((el) => {
-      el.placeholder = t(el.getAttribute("data-i18n-ph"));
-    });
-    /* option text */
-    document.querySelectorAll("option[data-i18n]").forEach((el) => {
-      el.textContent = t(el.getAttribute("data-i18n"));
+    if (_rafPending) return;
+    _rafPending = true;
+    requestAnimationFrame(function () {
+      _rafPending = false;
+      var i;
+      for (i = 0; i < _els.length;   i++) _els[i].textContent  = t(_els[i].getAttribute("data-i18n"));
+      for (i = 0; i < _phEls.length;  i++) _phEls[i].placeholder = t(_phEls[i].getAttribute("data-i18n-ph"));
+      for (i = 0; i < _optEls.length; i++) _optEls[i].textContent = t(_optEls[i].getAttribute("data-i18n"));
     });
   }
 
   function _updateSwitcher() {
-    document.querySelectorAll("[data-lang-btn]").forEach((btn) => {
-      btn.classList.toggle("lang-active", btn.getAttribute("data-lang-btn") === currentLang);
-    });
+    if (!_btns) return;
+    for (var i = 0; i < _btns.length; i++) {
+      _btns[i].classList.toggle("lang-active", _btns[i].getAttribute("data-lang-btn") === currentLang);
+    }
+  }
+
+  function setLang(lang) {
+    if (!translations[lang] || lang === currentLang) return;
+    currentLang = lang;
+    localStorage.setItem(STORAGE_KEY, lang);
+    _updateSwitcher();
+    apply();
+  }
+
+  function getLang() { return currentLang; }
+
+  function _onLangBtn(e) {
+    /* Fired on both touchend and click — preventDefault stops the 300 ms click delay on iOS */
+    e.preventDefault();
+    setLang(this.getAttribute("data-lang-btn"));
   }
 
   function init() {
+    _buildCache();
     apply();
     _updateSwitcher();
-    document.querySelectorAll("[data-lang-btn]").forEach((btn) => {
-      btn.addEventListener("click", () => setLang(btn.getAttribute("data-lang-btn")));
-    });
+    for (var i = 0; i < _btns.length; i++) {
+      /* touchend fires instantly on mobile, no 300 ms delay */
+      _btns[i].addEventListener("touchend", _onLangBtn, { passive: false });
+      _btns[i].addEventListener("click",    _onLangBtn);
+    }
   }
 
   if (document.readyState === "loading") {
@@ -301,5 +321,5 @@
     init();
   }
 
-  w.PdfMasterI18n = { t, setLang, getLang, apply };
+  w.PdfMasterI18n = { t, setLang, getLang, apply, rebuildCache: _buildCache };
 })(typeof window !== "undefined" ? window : globalThis);
