@@ -475,8 +475,11 @@
     try {
       var form = new FormData();
       form.append('file', blob, fileName);
-      var res = await fetch('https://snakeconverter.com/api/share/upload', { method: 'POST', body: form });
-      var data = await res.json();
+      var res = await fetch('/api/share/upload', { method: 'POST', body: form });
+      var text = await res.text();
+      var data;
+      try { data = JSON.parse(text); }
+      catch (_) { input.value = 'Server error (' + res.status + '). Check R2 binding in Cloudflare Pages.'; return; }
       if (data.url) { input.value = data.url; }
       else { input.value = 'Upload failed: ' + (data.error || 'Unknown error'); }
     } catch(e) { input.value = 'Upload failed: ' + e.message; }
