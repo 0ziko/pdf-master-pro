@@ -58,16 +58,26 @@
   const tabs   = Array.from(document.querySelectorAll("[data-tab]"));
   const panels = Array.from(document.querySelectorAll("[data-panel]"));
 
-  /* Tab title labels for topbar */
-  const TAB_TITLES = {
-    excel:      document.querySelector('[data-i18n="tab.excel"]')?.textContent   || "Excel → PDF",
-    image:      document.querySelector('[data-i18n="tab.image"]')?.textContent   || "Image → PDF",
-    merge:      document.querySelector('[data-i18n="tab.merge"]')?.textContent   || "Merge PDF",
-    split:      document.querySelector('[data-i18n="tab.split"]')?.textContent   || "Split PDF",
-    encrypt:    document.querySelector('[data-i18n="tab.encrypt"]')?.textContent || "Encrypt / Decrypt",
-    share:      document.querySelector('[data-i18n="tab.share"]')?.textContent   || "Share PDF",
-    screenshot: "Screenshot → PDF",
+  /* Static fallbacks for topbar titles — translated text is read live at call time */
+  const TAB_TITLE_KEYS = {
+    excel:      { key: 'tab.excel',   fallback: 'Excel → PDF' },
+    image:      { key: 'tab.image',   fallback: 'Image → PDF' },
+    merge:      { key: 'tab.merge',   fallback: 'Merge PDF' },
+    split:      { key: 'tab.split',   fallback: 'Split PDF' },
+    encrypt:    { key: 'tab.encrypt', fallback: 'Encrypt / Decrypt' },
+    share:      { key: 'tab.share',   fallback: 'Share PDF' },
+    screenshot: { key: null,          fallback: 'Screenshot → PDF' },
   };
+
+  function getTabTitle(id) {
+    var entry = TAB_TITLE_KEYS[id];
+    if (!entry) return id;
+    if (entry.key) {
+      var el = document.querySelector('[data-i18n="' + entry.key + '"]:not(#scTopbarTitle)');
+      if (el && el.textContent.trim()) return el.textContent.trim();
+    }
+    return entry.fallback;
+  }
 
   const VALID_TABS = new Set(['excel', 'image', 'merge', 'split', 'encrypt', 'share', 'screenshot']);
 
@@ -82,14 +92,17 @@
     document.querySelectorAll("[data-panel]").forEach((p) =>
       p.classList.toggle("is-visible", p.getAttribute("data-panel") === id)
     );
-    /* Update topbar title */
+    /* Update topbar title — read translated text live so language changes are respected */
     const titleEl = document.getElementById("scTopbarTitle");
-    if (titleEl) titleEl.textContent = TAB_TITLES[id] || id;
+    if (titleEl) titleEl.textContent = getTabTitle(id);
     /* Show encrypt banner only on encrypt tab */
     const banner = document.getElementById("encryptBanner");
     if (banner) banner.style.display = id === "encrypt" ? "" : "none";
     /* Sync URL hash without pushing a history entry */
     if (history.replaceState) history.replaceState(null, '', '#' + id);
+    /* Reset scroll position so panel content starts at top */
+    const contentEl = document.querySelector('.pdf-content');
+    if (contentEl) contentEl.scrollTop = 0;
   }
 
   /* Event delegation — catches clicks even inside nested spans/icons */
