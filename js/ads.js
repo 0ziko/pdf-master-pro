@@ -17,14 +17,14 @@
 
   /* ─── CONFIG ────────────────────────────────────────────────────── */
   var AD_ENABLED        = true;               /* Set false to disable all ads  */
-  var AD_PROVIDER       = 'ethicalads';       /* 'ethicalads' | 'adsense'      */
+  var AD_PROVIDER       = 'adsense';          /* 'ethicalads' | 'adsense'      */
 
   /* EthicalAds */
   var ETHICAL_PUBLISHER_ID = 'YOUR_PUBLISHER_ID'; /* ← ethicalads.io publisher ID */
 
   /* AdSense */
-  var ADSENSE_CLIENT    = 'ca-pub-XXXXXXXXXXXXXXXX'; /* ← your AdSense pub ID  */
-  var ADSENSE_SLOT      = 'XXXXXXXXXX';              /* ← your Ad slot ID      */
+  var ADSENSE_CLIENT    = 'ca-pub-1033284237916727'; /* snakeconverter.com AdSense  */
+  var ADSENSE_SLOT      = 'XXXXXXXXXX';              /* ← AdSense'den slot ID al    */
   /* ─────────────────────────────────────────────────────────────── */
 
   /* Skip for Pro users */
