@@ -55,9 +55,25 @@
       el.addEventListener("input", function () { snake.onFileSelect(); });
     });
 
-    /* Button clicks → full eat+process+spit sequence
-       Skip animation for control buttons (data-no-snake) like Start/Stop/Reset/Lap */
-    document.querySelectorAll(".btn-primary:not([data-no-snake])").forEach(function (btn) {
+    /* data-snake-instant: fires onclick IMMEDIATELY, then gives snake a non-blocking
+       visual reaction (wiggle + clock caption). No delay, no blocking. */
+    document.querySelectorAll(".btn-primary[data-snake-instant]").forEach(function (btn) {
+      var origFn = btn.onclick;
+      btn.onclick = null;
+      btn.addEventListener("click", function () {
+        if (origFn) origFn.call(btn);          /* ← instant, no wait */
+        requestAnimationFrame(function () {     /* ← visual reaction next frame */
+          if (!snake._busy) {
+            snake.onFileSelect();              /* excited wiggle — fire-and-forget */
+            setCaption("excited");
+            setTimeout(function () { setCaption("idle"); }, 1800);
+          }
+        });
+      });
+    });
+
+    /* Regular convert/generate buttons → full eat+process+spit sequence */
+    document.querySelectorAll(".btn-primary:not([data-snake-instant]):not([data-no-snake])").forEach(function (btn) {
       var origFn = btn.onclick;
       btn.onclick = null;
       btn.addEventListener("click", function () {
