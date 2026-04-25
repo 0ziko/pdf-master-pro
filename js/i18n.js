@@ -2,8 +2,10 @@
 (function (w) {
   const translations = {
     en: {
-      badge:               "Browser based · No server",
-      subtitle:            "Excel · Image · Merge · Split · Encrypt — zero upload",
+      "badge":             "Browser · No Server",
+      "subtitle":          "Excel · Image · Merge · Split · Encrypt — zero upload",
+      "tab.pdftools":      "PDF Tools",
+      "back.hub":          "All Tools",
       "tab.excel":         "Excel → PDF",
       "tab.image":         "Image → PDF",
       "tab.merge":         "Merge",
@@ -310,8 +312,10 @@
       "color.tintshade.name":"Tint & Shade Generator","color.tintshade.desc":"9 tints and 9 shades from any base color",
     },
     tr: {
-      badge:               "Tarayıcı tabanlı · Sunucu yok",
-      subtitle:            "Excel · Görsel · Birleştir · Ayır · Şifrele — sıfır yükleme",
+      "badge":             "Tarayıcı · Sunucu Yok",
+      "subtitle":          "Excel · Görsel · Birleştir · Ayır · Şifrele — sıfır yükleme",
+      "tab.pdftools":      "PDF Araçları",
+      "back.hub":          "Tüm Araçlar",
       "tab.excel":         "Excel → PDF",
       "tab.image":         "Görsel → PDF",
       "tab.merge":         "Birleştir",
