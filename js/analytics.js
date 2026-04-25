@@ -10,7 +10,7 @@
   "use strict";
 
   /* ─── CONFIG — replace with your real values ───────────────────── */
-  var GA_ID       = "G-XXXXXXXXXX"; /* ← YOUR GA4 Measurement ID     */
+  var GA_ID       = "G-X71J1JBJBD"; /* GA4 Measurement ID — snakeconverter.com */
   var CONSENT_KEY = "sc_cookie_consent";
   /* ─────────────────────────────────────────────────────────────── */
 
