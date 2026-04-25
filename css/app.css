@@ -1134,8 +1134,9 @@ input[type="range"] {
 
 /* ── Mobile responsive ───────────────────────────── */
 @media (max-width: 600px) {
-  .app-wrap { padding: .5rem 0; }
-  .main-card { border-radius: .7rem; padding: 1rem .85rem; }
+  html, body { overflow-x: hidden; max-width: 100vw; }
+  .app-wrap { padding: 0; width: 100%; max-width: 100vw; overflow-x: hidden; }
+  .main-card { border-radius: 0; padding: 1rem .85rem; max-width: 100vw; overflow-x: hidden; }
 
   /* Header */
   .page-header { padding: 1rem .85rem .8rem; gap: .5rem; }

@@ -82,41 +82,53 @@
 
     /* ── Mobile overrides ── */
     @media (max-width: 600px) {
-      .main-card { border-radius: 0; }
+      body { overflow-x: hidden; }
+      .main-card { border-radius: 0; width: 100%; max-width: 100%; }
 
-      .hero { padding: 1rem 1rem .9rem; }
-      .hero .site-title { font-size: 1.5rem; }
-      .hero .site-sub   { font-size: .74rem; margin-bottom: .6rem; }
-      .hero .snake-stage canvas { width: 220px !important; height: 80px !important; }
-      .lang-switcher { top: .6rem; right: .8rem; }
+      /* Hero */
+      .hero { padding: .9rem .9rem .8rem; }
+      .hero .site-title { font-size: 1.45rem; }
+      .hero .site-sub   { font-size: .73rem; margin-bottom: .55rem; }
+      .lang-switcher { top: .6rem; right: .75rem; }
       .search-wrap { max-width: 100%; }
 
+      /* Grid: single column — categories stack */
+      .dir-grid { grid-template-columns: 1fr; width: 100%; }
+
       .dir-col {
+        display: block;                              /* plain block, no inner grid */
         border-right: none;
         border-bottom: 1px solid var(--border-subtle);
-        padding: 1rem .9rem 1.1rem;
+        padding: .9rem .9rem 1rem;
+        width: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
       }
       .dir-col:last-child { border-bottom: none; }
+      .dir-cat { min-height: auto; margin-bottom: .65rem; font-size: .62rem; }
 
-      /* Tool items: 2-column sub-grid within each category */
-      .dir-col { display: grid; grid-template-columns: 1fr 1fr; column-gap: .4rem; }
-      .dir-cat, .dir-view-all { grid-column: 1 / -1; }
-
-      .dir-cat { min-height: auto; margin-bottom: .7rem; }
-
-      /* Allow description to wrap — no more text cut-off */
-      .dir-item-desc {
-        white-space: normal;
-        overflow: visible;
-        text-overflow: unset;
-        font-size: .63rem;
+      /* Items: horizontal rows, icon + text side by side */
+      .dir-item {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        padding: .35rem .3rem;
+        font-size: .8rem;
+        width: 100%;
+        box-sizing: border-box;
+        overflow: hidden;
       }
-      .dir-item-name { font-size: .75rem; }
-      .dir-item { padding: .28rem .2rem; font-size: .75rem; align-items: flex-start; }
-      .dir-item-icon { font-size: .85rem; }
-    }
-    @media (max-width: 380px) {
-      .dir-col { grid-template-columns: 1fr; }
+      .dir-item-icon { font-size: .9rem; flex-shrink: 0; }
+      .dir-item-text { display: flex; flex-direction: column; min-width: 0; flex: 1; overflow: hidden; }
+      .dir-item-name { font-size: .78rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .dir-item-desc {
+        font-size: .64rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: var(--text-dim);
+      }
+      .dir-view-all { font-size: .66rem; margin-top: .6rem; }
     }
 
     /* Accent colors per category */
