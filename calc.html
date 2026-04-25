@@ -1656,29 +1656,45 @@ function calSuggest() {
 <script src="js/snake-mascot.js"></script>
 <script src="js/snake-tools.js"></script>
 <script>
-/* ── Focus mode: navigated via hash → show only that tool ── */
+/* ── Sidebar tab navigation: show only the active section ── */
 (function () {
-  var hash = location.hash.slice(1);
   var sections = document.querySelectorAll('.tool-page-section');
-  var nav = document.querySelector('.jump-nav');
-  if (!hash || !nav || !sections.length) return;
-  var target = document.getElementById(hash);
-  if (!target || !target.classList.contains('tool-page-section')) return;
-  sections.forEach(function (s) { if (s !== target) s.style.display = 'none'; });
-  var links = Array.from(nav.querySelectorAll('a.jump-link'));
-  var opts = links.map(function (l) {
-    var id = (l.getAttribute('href') || '').replace('#', '');
-    return '<option value="' + id + '"' + (id === hash ? ' selected' : '') + '>' + l.textContent.trim() + '</option>';
-  }).join('');
-  var bar = document.createElement('div');
-  bar.className = 'focus-bar';
-  bar.innerHTML = '<a href="' + location.pathname + '" class="focus-back"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>All calculators</a><span class="focus-bar-sep"></span><select class="focus-select">' + opts + '</select>';
-  nav.replaceWith(bar);
-  bar.querySelector('.focus-select').addEventListener('change', function () {
-    var id = this.value;
-    sections.forEach(function (s) { s.style.display = s.id === id ? '' : 'none'; });
+  var navLinks = document.querySelectorAll('.sc-sidebar-nav a.jump-link');
+  var topbarTitle = document.getElementById('scTopbarTitle');
+
+  function showSection(id) {
+    sections.forEach(function (s) {
+      s.style.display = s.id === id ? '' : 'none';
+    });
+    navLinks.forEach(function (a) {
+      var linkId = (a.getAttribute('href') || '').replace('#', '');
+      a.classList.toggle('sc-nav-active', linkId === id);
+      if (linkId === id && topbarTitle) {
+        /* Update topbar title from the section header */
+        var titleEl = document.querySelector('#' + id + ' .tps-title');
+        topbarTitle.textContent = titleEl ? titleEl.textContent : a.textContent.trim();
+      }
+    });
     history.replaceState(null, '', '#' + id);
+    /* Scroll content to top */
+    var content = document.querySelector('.sc-content');
+    if (content) content.scrollTop = 0;
+  }
+
+  /* Attach click handlers to sidebar links */
+  navLinks.forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      var id = (a.getAttribute('href') || '').replace('#', '');
+      showSection(id);
+    });
   });
+
+  /* Show correct section on load (hash or first) */
+  var initialHash = location.hash.slice(1);
+  var firstId = sections.length ? sections[0].id : '';
+  var startId = (initialHash && document.getElementById(initialHash)) ? initialHash : firstId;
+  if (startId) showSection(startId);
 })();
 </script>
     </div><!-- /sc-content -->
