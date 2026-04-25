@@ -113,46 +113,61 @@
   </style>
 </head>
 <body>
-<div class="app-wrap">
-  <div class="main-card">
+<div class="sc-tool-layout">
 
-    <!-- ── Header ── -->
-    <header style="text-align:center;margin-bottom:1.5rem;position:relative;">
+  <!-- ══ SIDEBAR ══ -->
+  <aside class="sc-sidebar">
+    <div class="sc-sidebar-logo">
+      <a href="index.html">🐍 SnakeConverter</a>
+    </div>
+
+    <div class="sc-sidebar-mascot">
+      <div class="snake-stage">
+        <div class="snake-chomp-wrap">
+          <canvas id="snakeCanvas"></canvas>
+          <span id="snakeChomp" class="snake-chomp"></span>
+        </div>
+        <p id="snakeCaption" class="snake-caption">Pick a color tool!</p>
+      </div>
+    </div>
+
+    <div class="sc-sidebar-label">Color Tools</div>
+    <nav class="sc-sidebar-nav jump-nav">
+      <a href="#convert"       class="jump-link">🎨 Color Converter</a>
+      <a href="#contrast"      class="jump-link">👁️ Contrast Checker</a>
+      <a href="#shades"        class="jump-link">🌈 Shade Generator</a>
+      <a href="#gradient"      class="jump-link">✨ Gradient Builder</a>
+      <a href="#color-blind"   class="jump-link">👁️ Color Blind Sim</a>
+      <a href="#random-palette" class="jump-link">🎨 Random Palette</a>
+      <a href="#tint-shade"    class="jump-link">🌓 Tint &amp; Shade</a>
+    </nav>
+
+    <div class="sc-sidebar-footer">
+      <a href="index.html" class="sc-back-link">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        All Tools
+      </a>
       <div class="lang-switcher">
         <button type="button" data-lang-btn="en" class="lang-btn lang-active">EN</button>
         <button type="button" data-lang-btn="tr" class="lang-btn">TR</button>
       </div>
-      <a href="index.html" class="hub-back-link">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-        SnakeConverter
-      </a>
-      <div style="display:inline-flex;align-items:center;gap:.4rem;background:rgba(217,119,6,.12);border:1px solid rgba(217,119,6,.3);border-radius:999px;padding:.2rem .85rem;font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#fcd34d;margin-bottom:.9rem;">
-        <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><circle cx="5" cy="5" r="5"/></svg>
-        HEX · RGB · HSL · CMYK · WCAG
-      </div>
-      <h1 class="site-title" style="background:linear-gradient(135deg,#fbbf24,#f472b6,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Color Tools</h1>
-      <p class="site-sub">Convert colors · Check contrast · Generate shades &amp; gradients</p>
-    </header>
+    </div>
+  </aside>
 
-    <!-- ── Snake mascot ── -->
-    <div class="snake-stage" style="margin-bottom:1rem;">
-      <div class="snake-chomp-wrap">
-        <canvas id="snakeCanvas"></canvas>
-        <span id="snakeChomp" class="snake-chomp"></span>
+  <!-- ══ MAIN ══ -->
+  <main class="sc-main">
+    <div class="sc-topbar">
+      <div>
+        <div class="sc-topbar-crumb"><a href="index.html">SnakeConverter</a> › Color Tools</div>
+        <div class="sc-topbar-title" id="scTopbarTitle">Color Tools</div>
       </div>
-      <p id="snakeCaption" class="snake-caption">Pick a tool and let's go! 🐍</p>
+      <div class="sc-topbar-badge">
+        <svg width="6" height="6" viewBox="0 0 10 10" fill="#4ade80"><circle cx="5" cy="5" r="5"/></svg>
+        Browser · No server
+      </div>
     </div>
 
-    <!-- ── Jump Nav ── -->
-    <nav class="jump-nav">
-      <a href="#convert"  class="jump-link">🎨 Color Converter</a>
-      <a href="#contrast" class="jump-link">👁️ Contrast Checker</a>
-      <a href="#shades"   class="jump-link">🌈 Shade Generator</a>
-      <a href="#gradient"   class="jump-link">✨ Gradient Builder</a>
-      <a href="#color-blind" class="jump-link">👁️ Color Blind Sim</a>
-      <a href="#random-palette" class="jump-link">🎨 Random Palette</a>
-      <a href="#tint-shade" class="jump-link">🌓 Tint &amp; Shade</a>
-    </nav>
+    <div class="sc-content">
 
     <!-- ── Color Converter ── -->
     <section id="convert" class="tool-page-section">
@@ -326,21 +341,45 @@
       <div id="ts-out" class="tint-shade-grid"></div>
     </section>
 
-    <div style="margin-top:2.5rem;text-align:center;font-size:.72rem;color:var(--text-dim);">
-      © 2026 SnakeConverter · All processing happens in your browser
-    </div>
-
-  </div>
-</div>
+    </div><!-- /sc-content -->
+  </main><!-- /sc-main -->
+</div><!-- /sc-tool-layout -->
 
 <script defer src="js/i18n.js"></script>
 <script defer src="js/color-tools.js"></script>
 <script>
 const CT = window.ColorTools;
 
-/* ── Hash routing ── */
-const _hash = location.hash.replace("#","");
-if (_hash) requestAnimationFrame(() => { const el=document.getElementById(_hash); if(el) el.scrollIntoView({behavior:"smooth",block:"start"}); });
+/* ── Sidebar tab navigation ── */
+(function () {
+  var sections = document.querySelectorAll('.tool-page-section');
+  var navLinks = document.querySelectorAll('.sc-sidebar-nav a.jump-link');
+  var topbarTitle = document.getElementById('scTopbarTitle');
+  function showSection(id) {
+    sections.forEach(function(s){ s.style.display = s.id === id ? '' : 'none'; });
+    navLinks.forEach(function(a){
+      var linkId = (a.getAttribute('href') || '').replace('#','');
+      a.classList.toggle('sc-nav-active', linkId === id);
+      if (linkId === id && topbarTitle) {
+        var titleEl = document.querySelector('#' + id + ' .tps-title');
+        topbarTitle.textContent = titleEl ? titleEl.textContent : a.textContent.trim();
+      }
+    });
+    history.replaceState(null,'','#'+id);
+    var content = document.querySelector('.sc-content');
+    if (content) content.scrollTop = 0;
+  }
+  navLinks.forEach(function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      showSection(a.getAttribute('href').replace('#',''));
+    });
+  });
+  var startId = (location.hash.slice(1) && document.getElementById(location.hash.slice(1)))
+    ? location.hash.slice(1)
+    : (sections.length ? sections[0].id : '');
+  if (startId) showSection(startId);
+})();
 
 /* ── Color Converter ── */
 let convFrom = "hex";
@@ -503,33 +542,7 @@ tsRun();
 </script>
 <script src="js/snake-mascot.js"></script>
 <script src="js/snake-tools.js"></script>
-<script>
-/* ── Focus mode: navigated via hash → show only that tool ── */
-(function () {
-  var hash = location.hash.slice(1);
-  var sections = document.querySelectorAll('.tool-page-section');
-  var nav = document.querySelector('.jump-nav');
-  if (!hash || !nav || !sections.length) return;
-  var target = document.getElementById(hash);
-  if (!target || !target.classList.contains('tool-page-section')) return;
-  sections.forEach(function (s) { if (s !== target) s.style.display = 'none'; });
-  var links = Array.from(nav.querySelectorAll('a.jump-link'));
-  var opts = links.map(function (l) {
-    var id = (l.getAttribute('href') || '').replace('#', '');
-    return '<option value="' + id + '"' + (id === hash ? ' selected' : '') + '>' + l.textContent.trim() + '</option>';
-  }).join('');
-  var bar = document.createElement('div');
-  bar.className = 'focus-bar';
-  bar.innerHTML = '<a href="' + location.pathname + '" class="focus-back"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>All color tools</a><span class="focus-bar-sep"></span><select class="focus-select">' + opts + '</select>';
-  nav.replaceWith(bar);
-  bar.querySelector('.focus-select').addEventListener('change', function () {
-    var id = this.value;
-    sections.forEach(function (s) { s.style.display = s.id === id ? '' : 'none'; });
-    history.replaceState(null, '', '#' + id);
-  });
-})();
-</script>
-<script defer src="js/seo-content.js"></script>
+<!-- seo-content.js disabled -->
 <script defer src="js/pro.js"></script>
 <script defer src="js/ads.js"></script>
 <script defer src="js/affiliates.js"></script>
