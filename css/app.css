@@ -1018,3 +1018,24 @@ body::before {
   font-size: 0.65rem;
   color: var(--text-muted);
 }
+
+/* ── Focus mode bar (single-tool view) ──────────────── */
+.focus-bar {
+  display: flex; align-items: center; gap: .65rem;
+  margin-bottom: 1.3rem; padding: .48rem .75rem;
+  background: rgba(255,255,255,.05); border: 1px solid var(--border-subtle);
+  border-radius: .7rem;
+}
+.focus-back {
+  display: inline-flex; align-items: center; gap: .28rem;
+  color: var(--text-muted); text-decoration: none; font-size: .77rem;
+  font-weight: 700; white-space: nowrap; transition: color .15s; flex-shrink: 0;
+}
+.focus-back:hover { color: var(--text-primary); }
+.focus-bar-sep { width: 1px; height: 1.1em; background: var(--border-subtle); flex-shrink: 0; }
+.focus-select {
+  flex: 1; min-width: 0; background: transparent; border: none;
+  color: var(--text-primary); font-size: .82rem; font-weight: 600;
+  outline: none; cursor: pointer;
+}
+.focus-select option { background: #0a0a14; }

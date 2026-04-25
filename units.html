@@ -147,13 +147,29 @@
     render();
   });
 
-  /* ── Smooth scroll to hash on load ── */
-  const hash = location.hash.replace("#", "");
-  if (hash) {
-    requestAnimationFrame(() => {
-      const el = document.getElementById(hash);
-      if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
+  /* ── Focus mode: navigated via hash → show only that tool ── */
+  const hash = location.hash.slice(1);
+  const allSections = document.querySelectorAll('.tool-page-section');
+  const jumpNavEl = document.getElementById('jumpNav');
+  if (hash && jumpNavEl && allSections.length) {
+    const target = document.getElementById(hash);
+    if (target && target.classList.contains('tool-page-section')) {
+      allSections.forEach(s => { if (s !== target) s.style.display = 'none'; });
+      const navLinks = Array.from(jumpNavEl.querySelectorAll('a.jump-link'));
+      const opts = navLinks.map(l => {
+        const id = (l.getAttribute('href') || '').replace('#', '');
+        return `<option value="${id}"${id === hash ? ' selected' : ''}>${l.textContent.trim()}</option>`;
+      }).join('');
+      const bar = document.createElement('div');
+      bar.className = 'focus-bar';
+      bar.innerHTML = `<a href="${location.pathname}" class="focus-back"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>All converters</a><span class="focus-bar-sep"></span><select class="focus-select">${opts}</select>`;
+      jumpNavEl.replaceWith(bar);
+      bar.querySelector('.focus-select').addEventListener('change', function () {
+        const id = this.value;
+        allSections.forEach(s => { s.style.display = s.id === id ? '' : 'none'; });
+        history.replaceState(null, '', '#' + id);
+      });
+    }
   }
 })();
 </script>

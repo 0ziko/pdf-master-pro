@@ -79,9 +79,12 @@
     }
     .dir-item.hidden { display: none; }
     .dir-item-icon { font-size: .95rem; flex-shrink: 0; margin-top: .05rem; }
-    .dir-item-text { display: flex; flex-direction: column; }
+    .dir-item-text { display: flex; flex-direction: column; min-width: 0; }
     .dir-item-name { font-weight: 700; font-size: .79rem; color: var(--text-primary); }
-    .dir-item-desc { font-size: .68rem; color: var(--text-dim); line-height: 1.3; }
+    .dir-item-desc {
+      font-size: .67rem; color: var(--text-dim); line-height: 1.3;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
 
     /* "View all" link at bottom of column */
     .dir-view-all {

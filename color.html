@@ -291,6 +291,31 @@ function gradRun() {
   document.getElementById("grad-css").textContent = `background: ${css};`;
 }
 gradRun();
+
+/* ── Focus mode: navigated via hash → show only that tool ── */
+(function () {
+  var hash = location.hash.slice(1);
+  var sections = document.querySelectorAll('.tool-page-section');
+  var nav = document.querySelector('.jump-nav');
+  if (!hash || !nav || !sections.length) return;
+  var target = document.getElementById(hash);
+  if (!target || !target.classList.contains('tool-page-section')) return;
+  sections.forEach(function (s) { if (s !== target) s.style.display = 'none'; });
+  var links = Array.from(nav.querySelectorAll('a.jump-link'));
+  var opts = links.map(function (l) {
+    var id = (l.getAttribute('href') || '').replace('#', '');
+    return '<option value="' + id + '"' + (id === hash ? ' selected' : '') + '>' + l.textContent.trim() + '</option>';
+  }).join('');
+  var bar = document.createElement('div');
+  bar.className = 'focus-bar';
+  bar.innerHTML = '<a href="' + location.pathname + '" class="focus-back"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>All color tools</a><span class="focus-bar-sep"></span><select class="focus-select">' + opts + '</select>';
+  nav.replaceWith(bar);
+  bar.querySelector('.focus-select').addEventListener('change', function () {
+    var id = this.value;
+    sections.forEach(function (s) { s.style.display = s.id === id ? '' : 'none'; });
+    history.replaceState(null, '', '#' + id);
+  });
+})();
 </script>
 </body>
 </html>
