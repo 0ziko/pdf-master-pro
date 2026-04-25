@@ -171,11 +171,13 @@
         background: rgba(130,80,255,.08);
         color: #c4b5fd;
       }
-      .pdf-nav-item.active {
+      .pdf-nav-item.active,
+      .pdf-nav-item[data-active="true"] {
         background: rgba(130,80,255,.14);
         color: #d4c5ff; font-weight: 600;
       }
-      .pdf-nav-item.active::before {
+      .pdf-nav-item.active::before,
+      .pdf-nav-item[data-active="true"]::before {
         content: ""; position: absolute;
         left: 0; top: 0; bottom: 0; width: 3px;
         background: #8250ff; border-radius: 0 3px 3px 0;
@@ -185,10 +187,12 @@
         display: flex; align-items: center; justify-content: center;
         background: rgba(255,255,255,.05); font-size: 15px; flex-shrink: 0;
       }
-      .pdf-nav-item.active .pdf-nav-icon { background: rgba(130,80,255,.2); }
+      .pdf-nav-item.active .pdf-nav-icon,
+      .pdf-nav-item[data-active="true"] .pdf-nav-icon { background: rgba(130,80,255,.2); }
       .pdf-nav-name { font-size: 12.5px; font-weight: 600; line-height: 1.2; }
       .pdf-nav-hint { font-size: 10px; color: #3d3d5c; margin-top: 1px; }
-      .pdf-nav-item.active .pdf-nav-hint { color: #6b4fa8; }
+      .pdf-nav-item.active .pdf-nav-hint,
+      .pdf-nav-item[data-active="true"] .pdf-nav-hint { color: #6b4fa8; }
 
       /* Sidebar footer */
       .pdf-sidebar-footer {
@@ -343,12 +347,14 @@
           touch-action: manipulation;
           -webkit-tap-highlight-color: transparent;
         }
-        .pdf-nav-item.active {
+        .pdf-nav-item.active,
+        .pdf-nav-item[data-active="true"] {
           background: rgba(130,80,255,.22);
           border-color: #8250ff;
           color: #ddd6fe;
         }
-        .pdf-nav-item.active::before { display: none; }
+        .pdf-nav-item.active::before,
+        .pdf-nav-item[data-active="true"]::before { display: none; }
         .pdf-nav-hint { display: none; }
         .pdf-nav-icon { font-size: 1rem; }
 
@@ -383,7 +389,7 @@
 
       <!-- Nav items wrapped for mobile horizontal scroll -->
       <div class="pdf-nav-items-row">
-      <button type="button" data-tab="excel" class="pdf-nav-item active">
+      <button type="button" data-tab="excel" class="pdf-nav-item active" data-active="true">
         <span class="pdf-nav-icon">📊</span>
         <div>
           <div class="pdf-nav-name" data-i18n="tab.excel">Excel → PDF</div>

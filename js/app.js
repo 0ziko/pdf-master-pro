@@ -72,11 +72,11 @@
 
   function switchTab(id) {
     if (!VALID_TABS.has(id)) id = 'excel';
-    /* Re-query every call so newly-added or lazily-inserted elements are captured */
+    /* Re-query every call — use data-active attribute as source of truth */
     document.querySelectorAll("[data-tab]").forEach((t) => {
       const match = t.getAttribute("data-tab") === id;
-      t.classList.toggle("tab-active", match);
-      t.classList.toggle("active",     match);
+      t.setAttribute("data-active", match ? "true" : "false");
+      t.classList.toggle("active", match);
     });
     document.querySelectorAll("[data-panel]").forEach((p) =>
       p.classList.toggle("is-visible", p.getAttribute("data-panel") === id)
@@ -91,8 +91,10 @@
     if (history.replaceState) history.replaceState(null, '', '#' + id);
   }
 
-  tabs.forEach((tab) => {
-    tab.addEventListener("click", () => switchTab(tab.getAttribute("data-tab")));
+  /* Event delegation — catches clicks even inside nested spans/icons */
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-tab]");
+    if (btn) switchTab(btn.getAttribute("data-tab"));
   });
 
   /* Activate tab from URL hash on page load */

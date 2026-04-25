@@ -136,21 +136,16 @@ body::before {
 
 .snake-stage canvas {
   display: block;
-  filter: drop-shadow(0 6px 18px rgba(34,197,94,0.25)) drop-shadow(0 2px 8px rgba(0,0,0,0.45));
+  background: transparent;
+  filter: drop-shadow(0 4px 16px rgba(34,197,94,0.3)) drop-shadow(0 2px 8px rgba(0,0,0,0.4));
 }
 
-/* ── Snake mascot image (replaces canvas after snake-mascot.js loads) ─ */
+/* Legacy img class (no longer used but kept for safety) */
 .snake-img {
-  width: 150px;
-  height: 150px;
-  object-fit: contain;
-  display: block;
-  margin: 0 auto;
-  transform-origin: center bottom;
-  filter: drop-shadow(0 8px 24px rgba(34,197,94,0.35)) drop-shadow(0 3px 10px rgba(0,0,0,0.5));
-  image-rendering: auto;
-  -webkit-user-drag: none;
-  user-select: none;
+  width: 150px; height: 150px;
+  object-fit: contain; display: block; margin: 0 auto;
+  background: transparent;
+  -webkit-user-drag: none; user-select: none;
 }
 
 /* CHOMP! pop-up text */
@@ -353,6 +348,8 @@ body::before {
   background: rgba(124,58,237,0.07);
   transform: translateY(-1px);
 }
+/* Prevent child nodes from intercepting drag events so .dropzone gets them */
+.dropzone > * { pointer-events: none; }
 
 .drop-icon {
   width: 52px; height: 52px;
