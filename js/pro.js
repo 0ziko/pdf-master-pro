@@ -17,12 +17,24 @@
   'use strict';
 
   /* ─── CONFIG ────────────────────────────────────────────────────── */
-  var STRIPE_LINK       = 'https://buy.stripe.com/REPLACE_WITH_YOUR_STRIPE_LINK';
+  var PRO_ENABLED       = false;           /* Set true to activate Pro plan UI & limits */
+  var STRIPE_LINK_BASE  = 'https://buy.stripe.com/REPLACE_WITH_YOUR_STRIPE_LINK';
+  var SUCCESS_URL       = 'https://snakeconverter.com/pro-success.html?sc_pro=1&session_id={CHECKOUT_SESSION_ID}';
+  /* Full link with success URL appended for Stripe Payment Links */
+  var STRIPE_LINK       = STRIPE_LINK_BASE + '?success_url=' + encodeURIComponent(SUCCESS_URL);
   var FREE_PDF_LIMIT    = 10;   /* PDF operations per day (free tier) */
   var USAGE_KEY         = 'sc_usage';
   var PRO_KEY           = 'sc_pro';
-  var PRO_TOKEN_KEY     = 'sc_pro_token'; /* optional JWT for validation */
+  var PRO_TOKEN_KEY     = 'sc_pro_token';
   /* ─────────────────────────────────────────────────────────────── */
+
+  /* Bail out early — Pro plan disabled */
+  if (!PRO_ENABLED) {
+    window.scCheckPdfLimit = function () { return true; };
+    window.scRecordPdfUse  = function () {};
+    window.scIsPro         = function () { return false; };
+    return;
+  }
 
   /* ── Pro status helpers ─────────────────────────────────────────── */
   function isPro() {

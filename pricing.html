@@ -168,8 +168,6 @@
         <li><span class="feat-icon feat-yes">✓</span> Developer & color tools</li>
         <li><span class="feat-icon feat-yes">✓</span> Turkish / English UI</li>
         <li><span class="feat-icon feat-yes">✓</span> PDF share link (7 days)</li>
-        <li><span class="feat-icon feat-no">–</span> 10 PDF operations / day limit</li>
-        <li><span class="feat-icon feat-no">–</span> Files limited to 10 MB</li>
         <li><span class="feat-icon feat-no">–</span> Ads shown</li>
         <li><span class="feat-icon feat-no">–</span> Priority support</li>
       </ul>
@@ -177,9 +175,9 @@
     </div>
 
     <!-- Pro -->
-    <div class="plan-card featured">
-      <div class="plan-badge">⚡ MOST POPULAR</div>
-      <div class="plan-name">🚀 Pro</div>
+    <div class="plan-card featured" style="opacity:.85;">
+      <div class="plan-badge">🚀 COMING SOON</div>
+      <div class="plan-name">⚡ Pro</div>
       <div class="plan-price">$5.99 <span>/ month</span></div>
       <div class="plan-desc">Unlimited tools, no ads, batch processing and priority support.</div>
       <ul class="plan-features">
@@ -193,14 +191,11 @@
         <li><span class="feat-icon feat-yes">✓</span> Early access to new tools</li>
         <li><span class="feat-icon feat-yes">✓</span> Cancel anytime</li>
       </ul>
-      <!-- Replace href with your Stripe Payment Link -->
-      <a href="https://buy.stripe.com/REPLACE_WITH_YOUR_STRIPE_LINK" target="_blank" rel="noopener"
-         class="btn-plan btn-pro" id="pro-cta-btn"
-         onclick="if(window.scTrack)scTrack('upgrade_click',{source:'pricing_page'})">
-        Get Pro — $5.99/month →
-      </a>
+      <button class="btn-plan btn-pro" disabled style="cursor:not-allowed;opacity:.6;">
+        Coming Soon
+      </button>
       <p style="text-align:center;font-size:12px;color:#4b5563;margin-top:8px;">
-        Secure payment via Stripe · Cancel anytime
+        We'll notify you when Pro launches
       </p>
     </div>
 
@@ -272,18 +267,6 @@
 <script src="js/analytics.js"></script>
 <script>
   /* Waitlist form */
-  document.getElementById("waitlist-form").addEventListener("submit", function (e) {
-    e.preventDefault();
-    var email = document.getElementById("waitlist-email").value;
-    /* Store locally — replace with API call when backend is ready */
-    var list = JSON.parse(localStorage.getItem("sc_waitlist") || "[]");
-    if (!list.includes(email)) list.push(email);
-    localStorage.setItem("sc_waitlist", JSON.stringify(list));
-    document.getElementById("waitlist-form").style.display = "none";
-    document.getElementById("waitlist-ok").style.display = "block";
-    if (window.scTrack) scTrack("waitlist_signup", { email_domain: email.split("@")[1] });
-  });
-
   /* FAQ accordion */
   document.querySelectorAll(".faq-q").forEach(function (q) {
     q.addEventListener("click", function () {

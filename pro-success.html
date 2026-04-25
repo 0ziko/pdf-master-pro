@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to Pro — SnakeConverter</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(ellipse at 50% 0%, #1a1040 0%, #0d0b18 60%);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: #e2e8f0;
+      padding: 1.5rem;
+    }
+
+    .card {
+      background: linear-gradient(160deg, #1e1b2e, #12101e);
+      border: 1px solid rgba(139,92,246,.35);
+      border-radius: 1.5rem;
+      padding: 2.5rem 2rem;
+      max-width: 480px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 32px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.04);
+    }
+
+    .crown { font-size: 3.5rem; margin-bottom: .75rem; animation: pulse 2s ease-in-out infinite; }
+    @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+
+    h1 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #a78bfa, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: .5rem;
+    }
+
+    .subtitle {
+      color: #94a3b8;
+      font-size: .9rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .features {
+      background: rgba(139,92,246,.07);
+      border: 1px solid rgba(139,92,246,.15);
+      border-radius: 1rem;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.75rem;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      gap: .6rem;
+    }
+    .feat {
+      font-size: .88rem;
+      color: #a5f3c4;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+    .feat::before { content: '✓'; color: #34d399; font-weight: 700; flex-shrink: 0; }
+
+    .cta {
+      display: block;
+      background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: .9rem 1.5rem;
+      border-radius: .875rem;
+      text-decoration: none;
+      transition: filter .15s, transform .15s;
+      margin-bottom: .5rem;
+    }
+    .cta:hover { filter: brightness(1.12); transform: translateY(-1px); }
+
+    .note {
+      font-size: .72rem;
+      color: #4b5563;
+      margin-top: .75rem;
+    }
+
+    /* Error state */
+    .error-msg {
+      display: none;
+      background: rgba(239,68,68,.1);
+      border: 1px solid rgba(239,68,68,.25);
+      border-radius: .75rem;
+      padding: .75rem 1rem;
+      color: #fca5a5;
+      font-size: .85rem;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="card" id="card">
+    <div class="crown" id="crown">👑</div>
+    <h1 id="title">Activating Pro…</h1>
+    <p class="subtitle" id="subtitle">Please wait a moment.</p>
+    <div class="error-msg" id="errMsg">
+      Something went wrong activating your Pro status.
+      Please <a href="mailto:support@snakeconverter.com" style="color:#f87171">contact support</a>
+      with your Stripe receipt.
+    </div>
+    <div class="features" id="features" style="display:none">
+      <div class="feat">Unlimited PDF operations</div>
+      <div class="feat">Files up to 100 MB</div>
+      <div class="feat">No ads</div>
+      <div class="feat">Batch processing</div>
+      <div class="feat">Priority support</div>
+    </div>
+    <a href="/" class="cta" id="ctaBtn" style="display:none">Go to SnakeConverter →</a>
+    <p class="note" id="noteText"></p>
+  </div>
+
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+
+      /* Stripe redirects here with ?sc_pro=1&session_id=cs_xxx */
+      var proParam    = params.get('sc_pro');
+      var sessionId   = params.get('session_id');
+
+      function activate() {
+        try {
+          localStorage.setItem('sc_pro', 'true');
+          if (sessionId) localStorage.setItem('sc_pro_session', sessionId);
+          localStorage.setItem('sc_pro_since', new Date().toISOString());
+        } catch (e) {}
+
+        document.getElementById('crown').textContent   = '👑';
+        document.getElementById('title').textContent   = 'Welcome to Pro!';
+        document.getElementById('subtitle').textContent =
+          'Your Pro plan is now active on this device. Thank you for your support!';
+        document.getElementById('features').style.display = 'flex';
+        document.getElementById('ctaBtn').style.display   = 'block';
+        document.getElementById('noteText').textContent   =
+          'Pro is stored locally. On a new device, contact support@snakeconverter.com to reactivate.';
+
+        /* Track upgrade conversion */
+        if (window.gtag) {
+          gtag('event', 'purchase', { currency: 'USD', value: 5.99, transaction_id: sessionId || 'unknown' });
+        }
+      }
+
+      function showError() {
+        document.getElementById('crown').textContent   = '⚠️';
+        document.getElementById('title').textContent   = 'Activation Issue';
+        document.getElementById('subtitle').textContent = 'We couldn\'t confirm your payment automatically.';
+        document.getElementById('errMsg').style.display = 'block';
+        document.getElementById('ctaBtn').style.display = 'block';
+        document.getElementById('ctaBtn').textContent  = 'Back to Home';
+      }
+
+      /* Auto-activate after a short animation delay */
+      setTimeout(function () {
+        if (proParam === '1' || sessionId) {
+          activate();
+        } else {
+          showError();
+        }
+      }, 1200);
+    })();
+  </script>
+  <script src="js/analytics.js" defer></script>
+</body>
+</html>
