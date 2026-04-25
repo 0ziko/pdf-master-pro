@@ -500,22 +500,24 @@
       /* ── Hide desktop-only elements ── */
       .idx-sidebar-footer  { display: none; }
 
-      /* ── Snake mascot: smaller on mobile, centered below header ── */
+      /* ── Snake mascot: full-width strip on mobile ── */
       .idx-snake-wrap {
         display: flex;
         flex-direction: column;
         align-items: center;
-        padding: 6px 0 2px;
-        gap: 2px;
+        padding: 10px 0 6px;
+        gap: 4px;
+        width: 100%;
       }
       .idx-snake-wrap svg,
       .idx-snake-wrap canvas {
-        width: 88px !important;
-        height: 84px !important;
+        width: 100% !important;
+        max-width: 340px !important;
+        height: 120px !important;
       }
       .idx-snake-wrap p {
-        font-size: .62rem;
-        opacity: .7;
+        font-size: .65rem;
+        opacity: .8;
         margin: 0;
       }
 

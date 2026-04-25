@@ -1,4 +1,4 @@
-/* ── SnakeMascot v5 — SVG vector snake, CSS animations ─────────── */
+/* ── SnakeMascot v6 — Pro SVG snake, lush 3-D body + expressive face ─ */
 (function (w) {
   'use strict';
 
@@ -7,278 +7,408 @@
     var st = document.createElement('style');
     st.id  = '__snkCSS__';
     st.textContent = `
+      /* ── Idle float ── */
       #snakeMascotWrap {
-        transform-origin: 80px 155px;
-        animation: snkFloat 3.2s ease-in-out infinite;
+        transform-origin: 95px 160px;
+        animation: snkFloat 3.4s ease-in-out infinite;
       }
       @keyframes snkFloat {
-        0%,100% { transform: translateY(0)   rotate(0deg); }
-        35%     { transform: translateY(-7px) rotate(-1.5deg); }
-        70%     { transform: translateY(-9px) rotate(1.5deg); }
+        0%,100% { transform: translateY(0)    rotate(0deg);    }
+        35%     { transform: translateY(-8px)  rotate(-1.2deg); }
+        70%     { transform: translateY(-10px) rotate(1.2deg);  }
       }
 
+      /* ── Tongue flick ── */
       #snakeTongue {
-        transform-origin: 57px 33px;
-        animation: snkTongue 3.8s ease-in-out infinite;
+        transform-origin: 40px 25px;
+        animation: snkTongue 4.2s ease-in-out infinite;
       }
       @keyframes snkTongue {
-        0%,55%,100% { opacity:0; transform:scaleY(0); }
-        60%,88%     { opacity:1; transform:scaleY(1); }
+        0%,50%,100% { opacity:0; transform:scaleY(0) scaleX(0); }
+        56%,90%     { opacity:1; transform:scaleY(1) scaleX(1); }
       }
 
-      /* ── Named animations (applied via JS class) ── */
+      /* ── Pupil micro-look-around (idle life) ── */
+      #smPupilL, #smPupilR {
+        animation: snkPupilIdle 5.5s ease-in-out infinite;
+      }
+      #smPupilR { animation-delay: .3s; }
+      @keyframes snkPupilIdle {
+        0%,40%,100% { transform: translate(0,0);         }
+        50%,90%     { transform: translate(1.5px,-1px);  }
+        70%         { transform: translate(-1px,1.5px);  }
+      }
+
+      /* ── Named animations ── */
 
       .snk-dance {
-        animation: snkDance 3.6s ease-in-out !important;
-        transform-origin: 80px 155px;
+        animation: snkDance 3.8s ease-in-out !important;
+        transform-origin: 95px 160px;
       }
       @keyframes snkDance {
-        0%         { transform:rotate(0deg)  translateX(0);    }
-        12%        { transform:rotate(-16deg)translateX(-18px); }
-        28%        { transform:rotate(16deg) translateX(18px);  }
-        44%        { transform:rotate(-12deg)translateX(-12px); }
-        60%        { transform:rotate(12deg) translateX(12px);  }
-        75%        { transform:rotate(-5deg) translateX(-5px);  }
-        90%        { transform:rotate(5deg)  translateX(5px);   }
-        100%       { transform:rotate(0deg)  translateX(0);    }
+        0%    { transform:rotate(0deg)   translateX(0);    }
+        10%   { transform:rotate(-18deg) translateX(-20px); }
+        25%   { transform:rotate(18deg)  translateX(20px);  }
+        40%   { transform:rotate(-13deg) translateX(-14px); }
+        55%   { transform:rotate(13deg)  translateX(14px);  }
+        70%   { transform:rotate(-6deg)  translateX(-6px);  }
+        85%   { transform:rotate(6deg)   translateX(6px);   }
+        100%  { transform:rotate(0deg)   translateX(0);    }
       }
 
-      .snk-rainbow { animation: snkRainbow 4s linear !important; }
+      .snk-rainbow { animation: snkRainbow 4.2s linear !important; }
       @keyframes snkRainbow {
-        0%   { filter: hue-rotate(0deg)   saturate(1.2) brightness(1);   }
-        25%  { filter: hue-rotate(90deg)  saturate(1.8) brightness(1.15);}
-        50%  { filter: hue-rotate(180deg) saturate(2.2) brightness(1.1); }
-        75%  { filter: hue-rotate(270deg) saturate(1.8) brightness(1.15);}
-        100% { filter: hue-rotate(360deg) saturate(1.2) brightness(1);   }
+        0%   { filter: hue-rotate(0deg)   saturate(1.3) brightness(1.05); }
+        25%  { filter: hue-rotate(90deg)  saturate(2)   brightness(1.2);  }
+        50%  { filter: hue-rotate(180deg) saturate(2.4) brightness(1.15); }
+        75%  { filter: hue-rotate(270deg) saturate(2)   brightness(1.2);  }
+        100% { filter: hue-rotate(360deg) saturate(1.3) brightness(1.05); }
       }
 
       .snk-bounce {
-        animation: snkBounce 2.8s cubic-bezier(.36,.07,.19,.97) !important;
-        transform-origin: 80px 155px;
+        animation: snkBounce 2.9s cubic-bezier(.36,.07,.19,.97) !important;
+        transform-origin: 95px 160px;
       }
       @keyframes snkBounce {
         0%   { transform:translateY(0)    scaleX(1)    scaleY(1);    }
-        18%  { transform:translateY(-42px)scaleX(0.88) scaleY(1.12); }
-        33%  { transform:translateY(0)    scaleX(1.18) scaleY(0.82); }
-        48%  { transform:translateY(-24px)scaleX(0.93) scaleY(1.07); }
+        18%  { transform:translateY(-46px)scaleX(0.86) scaleY(1.14); }
+        33%  { transform:translateY(0)    scaleX(1.2)  scaleY(0.8);  }
+        48%  { transform:translateY(-26px)scaleX(0.92) scaleY(1.08); }
         62%  { transform:translateY(0)    scaleX(1.1)  scaleY(0.9);  }
-        76%  { transform:translateY(-10px)scaleX(0.97) scaleY(1.03); }
+        76%  { transform:translateY(-11px)scaleX(0.97) scaleY(1.03); }
         88%  { transform:translateY(0)    scaleX(1.04) scaleY(0.96); }
         100% { transform:translateY(0)    scaleX(1)    scaleY(1);    }
       }
 
       .snk-spin {
-        animation: snkSpin 3s ease-in-out !important;
-        transform-origin: 80px 80px;
+        animation: snkSpin 3.2s ease-in-out !important;
+        transform-origin: 95px 80px;
       }
       @keyframes snkSpin {
         0%   { transform:rotate(0deg);   }
-        70%  { transform:rotate(375deg); }
-        85%  { transform:rotate(350deg); }
+        70%  { transform:rotate(378deg); }
+        85%  { transform:rotate(352deg); }
         100% { transform:rotate(360deg); }
       }
 
       .snk-wave {
-        animation: snkWave 4s ease-in-out !important;
-        transform-origin: 80px 155px;
+        animation: snkWave 4.2s ease-in-out !important;
+        transform-origin: 95px 160px;
       }
       @keyframes snkWave {
-        0%   { transform:translateX(0)    skewY(0deg); }
-        14%  { transform:translateX(-20px)skewY(-6deg);}
-        28%  { transform:translateX(20px) skewY(6deg); }
-        42%  { transform:translateX(-16px)skewY(-5deg);}
-        56%  { transform:translateX(16px) skewY(5deg); }
-        70%  { transform:translateX(-8px) skewY(-2deg);}
-        84%  { transform:translateX(8px)  skewY(2deg); }
-        100% { transform:translateX(0)    skewY(0deg); }
+        0%   { transform:translateX(0)    skewY(0deg);  }
+        14%  { transform:translateX(-22px)skewY(-7deg); }
+        28%  { transform:translateX(22px) skewY(7deg);  }
+        42%  { transform:translateX(-17px)skewY(-5deg); }
+        56%  { transform:translateX(17px) skewY(5deg);  }
+        70%  { transform:translateX(-8px) skewY(-2deg); }
+        84%  { transform:translateX(8px)  skewY(2deg);  }
+        100% { transform:translateX(0)    skewY(0deg);  }
       }
 
       .snk-happy {
-        animation: snkHappy 3.2s ease-in-out !important;
-        transform-origin: 80px 155px;
+        animation: snkHappy 3.4s ease-in-out !important;
+        transform-origin: 95px 160px;
       }
       @keyframes snkHappy {
-        0%,100%{ transform:scale(1) translateY(0);     filter:brightness(1);    }
-        18%    { transform:scale(1.13)translateY(-8px); filter:brightness(1.25); }
-        32%    { transform:scale(0.96)translateY(0);    filter:brightness(1);    }
-        52%    { transform:scale(1.1) translateY(-6px); filter:brightness(1.2);  }
-        68%    { transform:scale(0.98)translateY(0);    filter:brightness(1);    }
-        82%    { transform:scale(1.05)translateY(-3px); filter:brightness(1.12); }
+        0%,100%{ transform:scale(1)    translateY(0);    filter:brightness(1);    }
+        18%    { transform:scale(1.14) translateY(-9px); filter:brightness(1.28); }
+        32%    { transform:scale(0.96) translateY(0);    filter:brightness(1);    }
+        52%    { transform:scale(1.11) translateY(-7px); filter:brightness(1.22); }
+        68%    { transform:scale(0.98) translateY(0);    filter:brightness(1);    }
+        82%    { transform:scale(1.06) translateY(-4px); filter:brightness(1.12); }
       }
 
       .snk-stretch {
-        animation: snkStretch 3.2s ease-in-out !important;
-        transform-origin: 80px 155px;
+        animation: snkStretch 3.4s ease-in-out !important;
+        transform-origin: 95px 160px;
       }
       @keyframes snkStretch {
         0%   { transform:scaleY(1)    scaleX(1);    }
-        22%  { transform:scaleY(1.55) scaleX(0.78); }
-        42%  { transform:scaleY(1.6)  scaleX(0.76); }
-        58%  { transform:scaleY(0.82) scaleX(1.22); }
-        74%  { transform:scaleY(1.1)  scaleX(0.94); }
-        88%  { transform:scaleY(0.97) scaleX(1.03); }
+        22%  { transform:scaleY(1.6)  scaleX(0.75); }
+        42%  { transform:scaleY(1.65) scaleX(0.73); }
+        58%  { transform:scaleY(0.8)  scaleX(1.25); }
+        74%  { transform:scaleY(1.1)  scaleX(0.93); }
         100% { transform:scaleY(1)    scaleX(1);    }
       }
 
       .snk-sleep {
-        animation: snkSleep 5s ease-in-out !important;
-        transform-origin: 80px 155px;
+        animation: snkSleep 5.2s ease-in-out !important;
+        transform-origin: 95px 160px;
       }
       @keyframes snkSleep {
-        0%   { transform:translateY(0)   rotate(0deg);  filter:brightness(1);    }
-        20%  { transform:translateY(8px) rotate(-5deg); filter:brightness(0.82); }
-        40%  { transform:translateY(14px)rotate(-8deg); filter:brightness(0.65); }
-        60%  { transform:translateY(14px)rotate(-8deg); filter:brightness(0.62); }
-        80%  { transform:translateY(8px) rotate(-4deg); filter:brightness(0.8);  }
-        100% { transform:translateY(0)   rotate(0deg);  filter:brightness(1);    }
+        0%   { transform:translateY(0)    rotate(0deg);  filter:brightness(1);    }
+        20%  { transform:translateY(9px)  rotate(-6deg); filter:brightness(0.8);  }
+        40%  { transform:translateY(16px) rotate(-9deg); filter:brightness(0.6);  }
+        60%  { transform:translateY(16px) rotate(-9deg); filter:brightness(0.58); }
+        80%  { transform:translateY(9px)  rotate(-4deg); filter:brightness(0.78); }
+        100% { transform:translateY(0)    rotate(0deg);  filter:brightness(1);    }
       }
 
       .snk-wink {
-        animation: snkWink 2.6s ease-in-out !important;
-        transform-origin: 80px 155px;
+        animation: snkWink 2.8s ease-in-out !important;
+        transform-origin: 95px 160px;
       }
       @keyframes snkWink {
-        0%,100%{ transform:translateY(0) scaleX(1); }
-        20%    { transform:translateY(-6px) scaleX(1.05); }
-        40%    { transform:translateY(0) scaleX(1); }
+        0%,100%{ transform:translateY(0)  scaleX(1);    }
+        20%    { transform:translateY(-7px) scaleX(1.06); }
+        40%    { transform:translateY(0)  scaleX(1);    }
       }
 
-      /* Eye lid overlays */
+      /* ── Eye lids ── */
       .eye-lid {
         transform-origin: center;
         transform: scaleY(0);
-        transition: transform 0.15s;
+        transition: transform .15s;
       }
-      .snk-sleep .eye-lid { animation: snkLidClose 5s ease-in-out; }
+      .snk-sleep .eye-lid { animation: snkLidClose 5.2s ease-in-out; }
       @keyframes snkLidClose {
         0%,18%  { transform:scaleY(0); }
         28%,100%{ transform:scaleY(1); }
       }
-      .snk-wink #smEyeRLid { animation: snkWinkLid 2.6s ease-in-out; }
+      .snk-wink #smEyeRLid { animation: snkWinkLid 2.8s ease-in-out; }
       @keyframes snkWinkLid {
-        0%,38%,80%,100%{ transform:scaleY(0); }
-        45%,72%        { transform:scaleY(1); }
+        0%,38%,82%,100%{ transform:scaleY(0); }
+        46%,74%        { transform:scaleY(1); }
       }
 
-      /* Happy smile teeth reveal */
-      .snk-happy #smTeeth { animation: snkTeeth 3.2s ease-in-out; }
+      /* ── Happy teeth reveal ── */
+      .snk-happy #smTeeth { animation: snkTeeth 3.4s ease-in-out; }
       @keyframes snkTeeth {
-        0%,15%,85%,100% { opacity:0; }
-        25%,75%         { opacity:1; }
+        0%,15%,85%,100%{ opacity:0; }
+        25%,75%        { opacity:1; }
+      }
+
+      /* ── Blush appear on happy ── */
+      .snk-happy #smBlushL,
+      .snk-happy #smBlushR { animation: snkBlush 3.4s ease-in-out; }
+      @keyframes snkBlush {
+        0%,12%,88%,100%{ opacity:0; }
+        22%,78%        { opacity:0.55; }
       }
     `;
     document.head.appendChild(st);
   }
 
-  /* ── Build SVG markup ───────────────────────────────────────────── */
+  /* ── Build SVG ──────────────────────────────────────────────────── */
   function buildSVG() {
-    var p = 'M 82,150 C 22,140 8,108 34,92 C 60,76 112,74 108,48 C 104,22 65,10 57,6';
-    var hx = 57, hy = 6, hr = 27;
-    var er = hr * 0.295;
-    var elx = hx - hr*0.375, ely = hy - hr*0.1;
-    var erx = hx + hr*0.375, ery = hy - hr*0.1;
+    /* Body path — tail bottom-right → head upper-left (nice S-curve) */
+    var p   = 'M 190,165 C 140,152 38,148 28,112 C 18,76 108,60 100,34 C 92,8 44,0 36,-8';
+    var sw  = 30;     /* body stroke width (mid layer) */
+    var hx  = 36,  hy = -8,  hr = 31;          /* head centre + radius */
+    var er  = hr * 0.31;                         /* eye radius */
+    var elx = hx - hr*0.35, ely = hy - hr*0.12; /* left eye */
+    var erx = hx + hr*0.35, ery = hy - hr*0.12; /* right eye */
+    var brow_y = ely - er*1.4;                   /* eyebrow y baseline */
 
     return [
       '<svg id="snakeSVG" xmlns="http://www.w3.org/2000/svg"',
-      ' viewBox="-5 -28 170 186" width="160" height="158"',
-      ' style="display:block;overflow:visible;filter:drop-shadow(0 6px 18px rgba(34,197,94,.28)) drop-shadow(0 2px 8px rgba(0,0,0,.35))">',
+      ' viewBox="-8 -48 215 225" width="210" height="196"',
+      ' style="display:block;overflow:visible;',
+        'filter:drop-shadow(0 8px 22px rgba(39,174,96,.35)) drop-shadow(0 2px 10px rgba(0,0,0,.4))"',
+      ' aria-label="Snake mascot">',
 
       '<defs>',
-        '<linearGradient id="smBG" x1="0%" y1="0%" x2="100%" y2="100%">',
-          '<stop offset="0%"   stop-color="#81C784"/>',
-          '<stop offset="48%"  stop-color="#43A047"/>',
-          '<stop offset="100%" stop-color="#2E7D32"/>',
+        /* Body gradient: dark-to-vivid green from bottom to top */
+        '<linearGradient id="smBdyG" x1="100%" y1="100%" x2="0%" y2="0%">',
+          '<stop offset="0%"   stop-color="#145A32"/>',
+          '<stop offset="30%"  stop-color="#1E8449"/>',
+          '<stop offset="65%"  stop-color="#27AE60"/>',
+          '<stop offset="100%" stop-color="#58D68D"/>',
         '</linearGradient>',
-        '<radialGradient id="smHG" cx="33%" cy="28%" r="62%">',
-          '<stop offset="0%"   stop-color="#A5D6A7"/>',
-          '<stop offset="42%"  stop-color="#66BB6A"/>',
-          '<stop offset="100%" stop-color="#2E7D32"/>',
+
+        /* Body highlight stripe: white-to-transparent */
+        '<linearGradient id="smHilG" x1="0%" y1="0%" x2="0%" y2="100%">',
+          '<stop offset="0%"   stop-color="rgba(255,255,255,.55)"/>',
+          '<stop offset="100%" stop-color="rgba(255,255,255,.0)"/>',
+        '</linearGradient>',
+
+        /* Head radial gradient: bright top-left → dark bottom-right */
+        '<radialGradient id="smHdG" cx="30%" cy="26%" r="70%">',
+          '<stop offset="0%"   stop-color="#82E0AA"/>',
+          '<stop offset="38%"  stop-color="#27AE60"/>',
+          '<stop offset="76%"  stop-color="#1E8449"/>',
+          '<stop offset="100%" stop-color="#145A32"/>',
         '</radialGradient>',
-        '<radialGradient id="smEW" cx="32%" cy="28%" r="68%">',
+
+        /* Eye white: subtle gradient */
+        '<radialGradient id="smEwG" cx="28%" cy="24%" r="72%">',
           '<stop offset="0%"   stop-color="#ffffff"/>',
-          '<stop offset="100%" stop-color="#ddeeff"/>',
+          '<stop offset="100%" stop-color="#d5edf8"/>',
         '</radialGradient>',
-        '<radialGradient id="smEI" cx="30%" cy="28%" r="65%">',
-          '<stop offset="0%"   stop-color="#64B5F6"/>',
-          '<stop offset="100%" stop-color="#1565C0"/>',
+
+        /* Iris gradient: teal/blue vivid */
+        '<radialGradient id="smIrisG" cx="28%" cy="26%" r="72%">',
+          '<stop offset="0%"   stop-color="#48C9B0"/>',
+          '<stop offset="45%"  stop-color="#1A9D8E"/>',
+          '<stop offset="100%" stop-color="#0E6655"/>',
         '</radialGradient>',
+
+        /* Scale texture pattern */
+        '<pattern id="smScales" x="0" y="0" width="18" height="12" patternUnits="userSpaceOnUse"',
+          ' patternTransform="rotate(0)">',
+          '<ellipse cx="9" cy="6" rx="7.5" ry="4.5"',
+            ' fill="none" stroke="rgba(0,0,0,.11)" stroke-width="1.1"/>',
+        '</pattern>',
+
+        /* Drop-shadow filter for head */
+        '<filter id="smHdSh" x="-30%" y="-30%" width="160%" height="160%">',
+          '<feDropShadow dx="2" dy="4" stdDeviation="4" flood-color="#0D5016" flood-opacity=".45"/>',
+        '</filter>',
+
+        /* Glow filter for body */
+        '<filter id="smBdyGlow" x="-20%" y="-20%" width="140%" height="140%">',
+          '<feGaussianBlur stdDeviation="5" result="b"/>',
+          '<feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>',
+        '</filter>',
       '</defs>',
 
       '<g id="snakeMascotWrap">',
 
-        /* ── body ── */
-        /* outline */
-        '<path d="'+p+'" stroke="#1B5E20" stroke-width="33" stroke-linecap="round" fill="none" opacity=".5"/>',
-        /* main fill */
-        '<path d="'+p+'" stroke="url(#smBG)" stroke-width="28" stroke-linecap="round" fill="none"/>',
-        /* belly stripe */
-        '<path d="'+p+'" stroke="#C8E6C9" stroke-width="9" stroke-linecap="round" fill="none" opacity=".22"/>',
-        /* top highlight */
-        '<path d="'+p+'" stroke="rgba(255,255,255,.26)" stroke-width="11" stroke-linecap="round" fill="none"/>',
-        /* scale dots */
-        '<path d="'+p+'" stroke="rgba(0,0,0,.07)" stroke-width="28" stroke-linecap="round" fill="none"',
-          ' stroke-dasharray="4 10" stroke-dashoffset="3"/>',
+        /* ── Body (5 layers for 3-D tube illusion) ── */
 
-        /* ── head ── */
-        '<g id="smHead" style="transform-origin:'+hx+'px '+hy+'px">',
-          /* shadow */
-          '<circle cx="'+(hx+2)+'" cy="'+(hy+4)+'" r="'+hr+'" fill="#1B5E20" opacity=".28"/>',
-          /* head ball */
-          '<circle cx="'+hx+'" cy="'+hy+'" r="'+hr+'" fill="url(#smHG)" stroke="#1B5E20" stroke-width="1.5"/>',
-          /* face belly patch */
-          '<ellipse cx="'+hx+'" cy="'+(hy+hr*.28)+'" rx="'+(hr*.56)+'" ry="'+(hr*.42)+'" fill="#C8E6C9" opacity=".52"/>',
-          /* shine */
-          '<ellipse cx="'+(hx-hr*.25)+'" cy="'+(hy-hr*.3)+'" rx="'+(hr*.2)+'" ry="'+(hr*.12)+'"',
-            ' fill="rgba(255,255,255,.45)" transform="rotate(-28 '+hx+' '+hy+')"/>',
+        /* Layer 1: deep shadow/outline */
+        '<path d="'+p+'" stroke="#0D3B20" stroke-width="'+(sw+9)+'"',
+          ' stroke-linecap="round" fill="none" opacity=".55"/>',
 
-          /* left eye */
+        /* Layer 2: dark mid-tone edge */
+        '<path d="'+p+'" stroke="#145A32" stroke-width="'+(sw+4)+'"',
+          ' stroke-linecap="round" fill="none"/>',
+
+        /* Layer 3: main body colour */
+        '<path d="'+p+'" stroke="url(#smBdyG)" stroke-width="'+sw+'"',
+          ' stroke-linecap="round" fill="none"/>',
+
+        /* Layer 4: scale texture overlay */
+        '<path d="'+p+'" stroke="url(#smScales)" stroke-width="'+(sw-2)+'"',
+          ' stroke-linecap="round" fill="none"/>',
+
+        /* Layer 5: belly/centre shimmer */
+        '<path d="'+p+'" stroke="rgba(162,221,180,.30)" stroke-width="'+(sw*0.45|0)+'"',
+          ' stroke-linecap="round" fill="none"/>',
+
+        /* Layer 6: top specular highlight */
+        '<path d="'+p+'" stroke="rgba(255,255,255,.28)" stroke-width="'+(sw*0.28|0)+'"',
+          ' stroke-linecap="round" fill="none"/>',
+
+        /* ── Tail rattler tip ── */
+        '<ellipse cx="192" cy="164" rx="9" ry="6"',
+          ' fill="#145A32" stroke="#0D3B20" stroke-width="1.5" opacity=".85"/>',
+        '<ellipse cx="192" cy="164" rx="5.5" ry="3.5" fill="#27AE60" opacity=".7"/>',
+
+        /* ── Head ── */
+        '<g id="smHead" filter="url(#smHdSh)"',
+          ' style="transform-origin:'+hx+'px '+hy+'px">',
+
+          /* Head sphere */
+          '<circle cx="'+hx+'" cy="'+hy+'" r="'+hr+'"',
+            ' fill="url(#smHdG)" stroke="#0D3B20" stroke-width="1.8"/>',
+
+          /* Face belly patch (lighter area gives dimensional feel) */
+          '<ellipse cx="'+hx+'" cy="'+(hy+hr*0.26)+'"',
+            ' rx="'+(hr*0.54)+'" ry="'+(hr*0.40)+'"',
+            ' fill="#A9DFBF" opacity=".40"/>',
+
+          /* Primary specular shine (top-left glint) */
+          '<ellipse cx="'+(hx-hr*0.26)+'" cy="'+(hy-hr*0.32)+'"',
+            ' rx="'+(hr*0.22)+'" ry="'+(hr*0.13)+'"',
+            ' fill="rgba(255,255,255,.52)" transform="rotate(-30 '+hx+' '+hy+')"/>',
+          /* Secondary micro-glint */
+          '<circle cx="'+(hx-hr*0.08)+'" cy="'+(hy-hr*0.18)+'"',
+            ' r="'+(hr*0.07)+'" fill="rgba(255,255,255,.38)"/>',
+
+          /* ── Left eyebrow ── */
+          '<path d="M '+(elx-er*1.0)+','+(brow_y+1.5)+' Q '+elx+','+(brow_y-3)+' '+(elx+er*1.0)+','+(brow_y+1.5)+'"',
+            ' stroke="#0D3B20" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".8"/>',
+
+          /* ── Right eyebrow ── */
+          '<path d="M '+(erx-er*1.0)+','+(brow_y+1.5)+' Q '+erx+','+(brow_y-3)+' '+(erx+er*1.0)+','+(brow_y+1.5)+'"',
+            ' stroke="#0D3B20" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".8"/>',
+
+          /* ── Left eye ── */
           '<g id="smEyeL" style="transform-origin:'+elx+'px '+ely+'px">',
-            '<circle cx="'+elx+'" cy="'+ely+'" r="'+er+'" fill="url(#smEW)" stroke="#1B5E20" stroke-width=".9"/>',
-            '<circle cx="'+(elx+er*.2)+'" cy="'+(ely+er*.18)+'" r="'+(er*.63)+'" fill="url(#smEI)"/>',
-            '<circle cx="'+(elx+er*.32)+'" cy="'+(ely+er*.28)+'" r="'+(er*.35)+'" fill="#0D1117"/>',
-            '<circle cx="'+(elx+er*.04)+'" cy="'+(ely-er*.12)+'" r="'+(er*.18)+'" fill="rgba(255,255,255,.92)"/>',
+            /* Sclera with subtle rim */
+            '<circle cx="'+elx+'" cy="'+ely+'" r="'+er+'"',
+              ' fill="url(#smEwG)" stroke="#0D3B20" stroke-width="1"/>',
+            /* Iris */
+            '<circle cx="'+(elx+er*0.12)+'" cy="'+(ely+er*0.12)+'" r="'+(er*0.70)+'"',
+              ' fill="url(#smIrisG)"/>',
+            /* Pupil */
+            '<circle id="smPupilL" cx="'+(elx+er*0.28)+'" cy="'+(ely+er*0.22)+'" r="'+(er*0.34)+'"',
+              ' fill="#050e05"/>',
+            /* Catchlight 1 (main) */
+            '<circle cx="'+(elx-er*0.05)+'" cy="'+(ely-er*0.18)+'" r="'+(er*0.20)+'"',
+              ' fill="rgba(255,255,255,.95)"/>',
+            /* Catchlight 2 (small secondary) */
+            '<circle cx="'+(elx+er*0.28)+'" cy="'+(ely+er*0.42)+'" r="'+(er*0.10)+'"',
+              ' fill="rgba(255,255,255,.60)"/>',
+            /* Eyelid */
             '<rect class="eye-lid" id="smEyeLLid"',
               ' x="'+(elx-er)+'" y="'+(ely-er)+'" width="'+(er*2)+'" height="'+(er*2)+'"',
-              ' rx="'+er+'" fill="#4CAF50"',
+              ' rx="'+er+'" fill="#27AE60"',
               ' style="transform-origin:'+elx+'px '+ely+'px"/>',
           '</g>',
 
-          /* right eye */
+          /* ── Right eye ── */
           '<g id="smEyeR" style="transform-origin:'+erx+'px '+ery+'px">',
-            '<circle cx="'+erx+'" cy="'+ery+'" r="'+er+'" fill="url(#smEW)" stroke="#1B5E20" stroke-width=".9"/>',
-            '<circle cx="'+(erx+er*.2)+'" cy="'+(ery+er*.18)+'" r="'+(er*.63)+'" fill="url(#smEI)"/>',
-            '<circle cx="'+(erx+er*.32)+'" cy="'+(ery+er*.28)+'" r="'+(er*.35)+'" fill="#0D1117"/>',
-            '<circle cx="'+(erx+er*.04)+'" cy="'+(ery-er*.12)+'" r="'+(er*.18)+'" fill="rgba(255,255,255,.92)"/>',
+            '<circle cx="'+erx+'" cy="'+ery+'" r="'+er+'"',
+              ' fill="url(#smEwG)" stroke="#0D3B20" stroke-width="1"/>',
+            '<circle cx="'+(erx+er*0.12)+'" cy="'+(ery+er*0.12)+'" r="'+(er*0.70)+'"',
+              ' fill="url(#smIrisG)"/>',
+            '<circle id="smPupilR" cx="'+(erx+er*0.28)+'" cy="'+(ery+er*0.22)+'" r="'+(er*0.34)+'"',
+              ' fill="#050e05"/>',
+            '<circle cx="'+(erx-er*0.05)+'" cy="'+(ery-er*0.18)+'" r="'+(er*0.20)+'"',
+              ' fill="rgba(255,255,255,.95)"/>',
+            '<circle cx="'+(erx+er*0.28)+'" cy="'+(ery+er*0.42)+'" r="'+(er*0.10)+'"',
+              ' fill="rgba(255,255,255,.60)"/>',
             '<rect class="eye-lid" id="smEyeRLid"',
               ' x="'+(erx-er)+'" y="'+(ery-er)+'" width="'+(er*2)+'" height="'+(er*2)+'"',
-              ' rx="'+er+'" fill="#4CAF50"',
+              ' rx="'+er+'" fill="#27AE60"',
               ' style="transform-origin:'+erx+'px '+ery+'px"/>',
           '</g>',
 
-          /* smile */
-          '<path id="smSmile" d="M '+(hx-8)+','+(hy+hr*.4)+' Q '+hx+','+(hy+hr*.72)+' '+(hx+8)+','+(hy+hr*.4)+'"',
-            ' stroke="#1B5E20" stroke-width="2.2" fill="none" stroke-linecap="round"/>',
-          /* happy teeth (hidden by default) */
+          /* ── Cheek blush (hidden; shown on happy) ── */
+          '<ellipse id="smBlushL" cx="'+(elx-er*0.5)+'" cy="'+(ely+er*1.5)+'"',
+            ' rx="'+(er*1.1)+'" ry="'+(er*0.6)+'"',
+            ' fill="rgba(255,100,100,.42)" opacity="0"/>',
+          '<ellipse id="smBlushR" cx="'+(erx+er*0.5)+'" cy="'+(ery+er*1.5)+'"',
+            ' rx="'+(er*1.1)+'" ry="'+(er*0.6)+'"',
+            ' fill="rgba(255,100,100,.42)" opacity="0"/>',
+
+          /* ── Smile ── */
+          '<path id="smSmile"',
+            ' d="M '+(hx-9)+','+(hy+hr*0.38)+' Q '+hx+','+(hy+hr*0.70)+' '+(hx+9)+','+(hy+hr*0.38)+'"',
+            ' stroke="#0D3B20" stroke-width="2.4" fill="none" stroke-linecap="round"/>',
+
+          /* ── Happy teeth (revealed via CSS) ── */
           '<g id="smTeeth" opacity="0">',
-            '<path d="M '+(hx-10)+','+(hy+hr*.46)+' Q '+hx+','+(hy+hr*.78)+' '+(hx+10)+','+(hy+hr*.46)+'"',
-              ' stroke="#1B5E20" stroke-width="10" fill="none" stroke-linecap="round"/>',
-            '<path d="M '+(hx-10)+','+(hy+hr*.46)+' Q '+hx+','+(hy+hr*.78)+' '+(hx+10)+','+(hy+hr*.46)+'"',
-              ' stroke="white" stroke-width="7" fill="none" stroke-linecap="round"',
-              ' stroke-dasharray="4 3" stroke-dashoffset="0"/>',
+            '<path d="M '+(hx-11)+','+(hy+hr*0.42)+' Q '+hx+','+(hy+hr*0.75)+' '+(hx+11)+','+(hy+hr*0.42)+'"',
+              ' stroke="#0D3B20" stroke-width="11" fill="none" stroke-linecap="round"/>',
+            '<path d="M '+(hx-11)+','+(hy+hr*0.42)+' Q '+hx+','+(hy+hr*0.75)+' '+(hx+11)+','+(hy+hr*0.42)+'"',
+              ' stroke="white" stroke-width="8" fill="none" stroke-linecap="round"',
+              ' stroke-dasharray="5 3"/>',
           '</g>',
 
-          /* nostrils */
-          '<circle cx="'+(hx-4)+'" cy="'+(hy+hr*.55)+'" r="1.5" fill="rgba(0,0,0,.35)"/>',
-          '<circle cx="'+(hx+4)+'" cy="'+(hy+hr*.55)+'" r="1.5" fill="rgba(0,0,0,.35)"/>',
+          /* ── Nostrils ── */
+          '<ellipse cx="'+(hx-4)+'" cy="'+(hy+hr*0.53)+'" rx="2.2" ry="1.5"',
+            ' fill="rgba(0,0,0,.38)"/>',
+          '<ellipse cx="'+(hx+4)+'" cy="'+(hy+hr*0.53)+'" rx="2.2" ry="1.5"',
+            ' fill="rgba(0,0,0,.38)"/>',
 
-          /* tongue */
+          /* ── Tongue ── */
           '<g id="snakeTongue">',
-            '<line x1="'+hx+'" y1="'+(hy+hr+1)+'" x2="'+hx+'" y2="'+(hy+hr+11)+'"',
-              ' stroke="#E91E63" stroke-width="2.6" stroke-linecap="round"/>',
-            '<line x1="'+hx+'" y1="'+(hy+hr+11)+'" x2="'+(hx-5)+'" y2="'+(hy+hr+18)+'"',
-              ' stroke="#E91E63" stroke-width="2" stroke-linecap="round"/>',
-            '<line x1="'+hx+'" y1="'+(hy+hr+11)+'" x2="'+(hx+5)+'" y2="'+(hy+hr+18)+'"',
-              ' stroke="#E91E63" stroke-width="2" stroke-linecap="round"/>',
+            /* Stem */
+            '<path d="M '+hx+','+(hy+hr+1)+' L '+hx+','+(hy+hr+13)+'"',
+              ' stroke="#C0392B" stroke-width="3.2" stroke-linecap="round"/>',
+            /* Fork left */
+            '<path d="M '+hx+','+(hy+hr+13)+' L '+(hx-7)+','+(hy+hr+22)+'"',
+              ' stroke="#C0392B" stroke-width="2.4" stroke-linecap="round"/>',
+            /* Fork right */
+            '<path d="M '+hx+','+(hy+hr+13)+' L '+(hx+7)+','+(hy+hr+22)+'"',
+              ' stroke="#C0392B" stroke-width="2.4" stroke-linecap="round"/>',
+            /* Tongue tips (small circles for realism) */
+            '<circle cx="'+(hx-7)+'" cy="'+(hy+hr+22)+'" r="2.5" fill="#C0392B"/>',
+            '<circle cx="'+(hx+7)+'" cy="'+(hy+hr+22)+'" r="2.5" fill="#C0392B"/>',
           '</g>',
 
         '</g>', /* /smHead */
@@ -288,23 +418,25 @@
     ].join('');
   }
 
-  /* ── Animation list & durations ─────────────────────────────────── */
+  /* ── Animation registry ─────────────────────────────────────────── */
   var ANIMS = ['idle','dance','rainbow','bounce','spin','wave','happy','stretch','sleep','wink'];
-  var DUR   = {idle:0, dance:3600, rainbow:4000, bounce:2800, spin:3000,
-               wave:4000, happy:3200, stretch:3200, sleep:5000, wink:2600};
+  var DUR   = {idle:0, dance:3800, rainbow:4200, bounce:2900, spin:3200,
+               wave:4200, happy:3400, stretch:3400, sleep:5200, wink:2800};
 
   /* ── Constructor ─────────────────────────────────────────────────── */
   function SnakeMascot(canvasId) {
-    /* Find the placeholder (canvas or old img) */
     var placeholder = document.getElementById(canvasId) ||
                       document.getElementById('snakeImg') ||
                       document.getElementById('snakeSVG');
     if (!placeholder) return;
 
-    /* If SVG already exists, just reuse it */
-    if (placeholder.id === 'snakeSVG') { this._wrap = document.getElementById('snakeMascotWrap'); return; }
+    /* If already an SVG, reuse */
+    if (placeholder.id === 'snakeSVG') {
+      this._wrap = document.getElementById('snakeMascotWrap');
+      return;
+    }
 
-    /* Build and inject SVG */
+    /* Build and inject SVG, replacing the placeholder element */
     var tmp = document.createElement('div');
     tmp.innerHTML = buildSVG();
     var svg = tmp.firstChild;
@@ -318,9 +450,8 @@
     var wrap = this._wrap;
     if (!wrap) { if (cb) cb(); return; }
 
-    /* Remove previous animation class */
     if (_cur) wrap.classList.remove('snk-' + _cur);
-    void wrap.offsetWidth; /* reflow to restart CSS animation */
+    void wrap.offsetWidth; /* force reflow to restart CSS animation */
 
     _cur = (ANIMS.indexOf(name) >= 0) ? name : 'idle';
     if (_cur !== 'idle') wrap.classList.add('snk-' + _cur);
