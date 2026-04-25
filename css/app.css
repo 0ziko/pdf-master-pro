@@ -1131,3 +1131,44 @@ input[type="range"] {
   background: #12121e;
   color: #f0eeff;
 }
+
+/* ── Mobile responsive ───────────────────────────── */
+@media (max-width: 600px) {
+  .app-wrap { padding: .5rem 0; }
+  .main-card { border-radius: .7rem; padding: 1rem .85rem; }
+
+  /* Header */
+  .page-header { padding: 1rem .85rem .8rem; gap: .5rem; }
+  .page-header h1 { font-size: 1.3rem; }
+  .page-badge { font-size: .65rem; padding: .2rem .5rem; }
+  .lang-switcher { gap: .25rem; }
+  .lang-btn { font-size: .7rem; padding: .22rem .55rem; }
+
+  /* Tool sections */
+  .tool-page-section { margin-bottom: 1.2rem; padding: 1rem .85rem; }
+  .tps-header { gap: .55rem; margin-bottom: .9rem; }
+  .tps-icon { font-size: 1.4rem; }
+  .tps-title { font-size: .95rem; }
+  .tps-desc { font-size: .73rem; }
+  .tps-body { gap: .6rem; }
+
+  /* Buttons */
+  .btn-primary, .btn-secondary { font-size: .8rem; padding: .55rem .9rem; }
+
+  /* Grid layouts inside tools — stack to single column */
+  .tps-body .grid { grid-template-columns: 1fr !important; }
+  .tps-body .flex.gap-2 { flex-direction: column; }
+
+  /* Result boxes */
+  .result-box { font-size: .78rem; padding: .65rem .75rem; }
+
+  /* Focus bar */
+  .focus-bar { flex-wrap: wrap; gap: .4rem; padding: .4rem .6rem; }
+  .focus-back { font-size: .72rem; }
+  .focus-select { font-size: .75rem; }
+
+  /* Snake stage */
+  .snake-stage { padding: .5rem 0; }
+  .snake-stage canvas { width: 240px !important; height: 88px !important; }
+  .snake-caption { font-size: .72rem; }
+}

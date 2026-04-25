@@ -61,7 +61,7 @@
       border-top: 1px solid var(--border-subtle);
     }
     @media (max-width: 900px) { .dir-grid { grid-template-columns: repeat(3, 1fr); } }
-    @media (max-width: 540px) { .dir-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .dir-grid { grid-template-columns: 1fr; } }
 
     /* ── Directory column ── */
     .dir-col {
@@ -79,6 +79,45 @@
       min-height: 2.6rem;
     }
     .dir-cat-icon { font-size: .95rem; flex-shrink: 0; margin-top: .06rem; }
+
+    /* ── Mobile overrides ── */
+    @media (max-width: 600px) {
+      .main-card { border-radius: 0; }
+
+      .hero { padding: 1rem 1rem .9rem; }
+      .hero .site-title { font-size: 1.5rem; }
+      .hero .site-sub   { font-size: .74rem; margin-bottom: .6rem; }
+      .hero .snake-stage canvas { width: 220px !important; height: 80px !important; }
+      .lang-switcher { top: .6rem; right: .8rem; }
+      .search-wrap { max-width: 100%; }
+
+      .dir-col {
+        border-right: none;
+        border-bottom: 1px solid var(--border-subtle);
+        padding: 1rem .9rem 1.1rem;
+      }
+      .dir-col:last-child { border-bottom: none; }
+
+      /* Tool items: 2-column sub-grid within each category */
+      .dir-col { display: grid; grid-template-columns: 1fr 1fr; column-gap: .4rem; }
+      .dir-cat, .dir-view-all { grid-column: 1 / -1; }
+
+      .dir-cat { min-height: auto; margin-bottom: .7rem; }
+
+      /* Allow description to wrap — no more text cut-off */
+      .dir-item-desc {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+        font-size: .63rem;
+      }
+      .dir-item-name { font-size: .75rem; }
+      .dir-item { padding: .28rem .2rem; font-size: .75rem; align-items: flex-start; }
+      .dir-item-icon { font-size: .85rem; }
+    }
+    @media (max-width: 380px) {
+      .dir-col { grid-template-columns: 1fr; }
+    }
 
     /* Accent colors per category */
     .cat-pdf   { color: #a78bfa; border-color: #7c3aed; }
