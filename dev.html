@@ -81,6 +81,15 @@
       <p class="site-sub">10 tools — JSON, Hash, UUID, Regex, URL, HTML, Base, Roman, Lorem &amp; Markdown</p>
     </header>
 
+    <!-- ── Snake mascot ── -->
+    <div class="snake-stage" style="margin-bottom:1rem;">
+      <div class="snake-chomp-wrap">
+        <canvas id="snakeCanvas"></canvas>
+        <span id="snakeChomp" class="snake-chomp"></span>
+      </div>
+      <p id="snakeCaption" class="snake-caption">Pick a tool and let's go! 🐍</p>
+    </div>
+
     <!-- ── Jump Nav ── -->
     <nav class="jump-nav">
       <a href="#json"  class="jump-link">{ } JSON</a>
@@ -391,7 +400,10 @@ loremRun();
 function mdRun(){document.getElementById("md-out").innerHTML=DT.mdToHtml(document.getElementById("md-in").value);}
 document.getElementById("md-in").value="# Hello World\n\nThis is a **live** markdown preview.\n\n- Item one\n- Item two\n- Item three\n\n> A blockquote block\n\n`inline code here`\n\n---\n\n[SnakeConverter](https://snakeconverter.dev)";
 mdRun();
-
+</script>
+<script src="js/snake-mascot.js"></script>
+<script src="js/snake-tools.js"></script>
+<script>
 /* ── Focus mode: navigated via hash → show only that tool ── */
 (function () {
   var hash = location.hash.slice(1);

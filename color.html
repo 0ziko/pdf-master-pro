@@ -62,6 +62,15 @@
       <p class="site-sub">Convert colors · Check contrast · Generate shades &amp; gradients</p>
     </header>
 
+    <!-- ── Snake mascot ── -->
+    <div class="snake-stage" style="margin-bottom:1rem;">
+      <div class="snake-chomp-wrap">
+        <canvas id="snakeCanvas"></canvas>
+        <span id="snakeChomp" class="snake-chomp"></span>
+      </div>
+      <p id="snakeCaption" class="snake-caption">Pick a tool and let's go! 🐍</p>
+    </div>
+
     <!-- ── Jump Nav ── -->
     <nav class="jump-nav">
       <a href="#convert"  class="jump-link">🎨 Color Converter</a>
@@ -291,7 +300,10 @@ function gradRun() {
   document.getElementById("grad-css").textContent = `background: ${css};`;
 }
 gradRun();
-
+</script>
+<script src="js/snake-mascot.js"></script>
+<script src="js/snake-tools.js"></script>
+<script>
 /* ── Focus mode: navigated via hash → show only that tool ── */
 (function () {
   var hash = location.hash.slice(1);

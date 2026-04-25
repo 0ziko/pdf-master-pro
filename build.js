@@ -78,6 +78,7 @@ const JS_FILES = [
   "js/pdf-split.js",
   "js/pdf-reencrypt.js",
   "js/snake-mascot.js",
+  "js/snake-tools.js",
   "js/app.js",
   "js/tools.js",
   "js/units.js",

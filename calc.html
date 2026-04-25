@@ -57,6 +57,15 @@
       <p class="site-sub">11 calculators — finance, health &amp; everyday use, all in your browser</p>
     </header>
 
+    <!-- ── Snake mascot ── -->
+    <div class="snake-stage" style="margin-bottom:1rem;">
+      <div class="snake-chomp-wrap">
+        <canvas id="snakeCanvas"></canvas>
+        <span id="snakeChomp" class="snake-chomp"></span>
+      </div>
+      <p id="snakeCaption" class="snake-caption">Pick a tool and let's go! 🐍</p>
+    </div>
+
     <!-- ── Jump Nav ── -->
     <nav class="jump-nav">
       <a href="#discount" class="jump-link">🏷️ Discount</a>
@@ -429,7 +438,10 @@ function doDue() {
   if (!r) return errMsg("due-result");
   showResult("due-result", ri("Due Date",r.dueDate) + ri("Days Remaining",r.daysLeft+" days") + ri("Weeks Pregnant",r.weeksPregn+" wk") + ri("Trimester",r.trimester));
 }
-
+</script>
+<script src="js/snake-mascot.js"></script>
+<script src="js/snake-tools.js"></script>
+<script>
 /* ── Focus mode: navigated via hash → show only that tool ── */
 (function () {
   var hash = location.hash.slice(1);

@@ -67,6 +67,7 @@
       "viewall.calc":      "All calculators →",
       "viewall.color":     "All color tools →",
       "index.footer":      "© 2026 SnakeConverter · All tools run in your browser",
+      "index.caption":     "Pick a tool and let's go! 🐍",
       /* ── Directory tool names & descs ── */
       "pdf.excel.name":"Excel → PDF","pdf.excel.desc":"xlsx, xls, csv with full Unicode",
       "pdf.image.name":"Image → PDF","pdf.image.desc":"PNG, JPEG, WebP, GIF, BMP",
@@ -186,6 +187,7 @@
       "viewall.calc":      "Tüm hesap makineleri →",
       "viewall.color":     "Tüm renk araçları →",
       "index.footer":      "© 2026 SnakeConverter · Tüm araçlar tarayıcında çalışır",
+      "index.caption":     "Bir araç seç ve başla! 🐍",
       /* ── Directory tool names & descs ── */
       "pdf.excel.name":"Excel → PDF","pdf.excel.desc":"xlsx, xls, csv — tam Unicode desteği",
       "pdf.image.name":"Görsel → PDF","pdf.image.desc":"PNG, JPEG, WebP, GIF, BMP",

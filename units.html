@@ -55,6 +55,15 @@
       <p class="site-sub">11 categories · 90+ units — click any result to copy</p>
     </header>
 
+    <!-- ── Snake mascot ── -->
+    <div class="snake-stage" style="margin-bottom:1rem;">
+      <div class="snake-chomp-wrap">
+        <canvas id="snakeCanvas"></canvas>
+        <span id="snakeChomp" class="snake-chomp"></span>
+      </div>
+      <p id="snakeCaption" class="snake-caption">Pick a tool and let's go! 🐍</p>
+    </div>
+
     <!-- ── Jump Nav (all categories, wrapping) ── -->
     <nav class="jump-nav" id="jumpNav"></nav>
 
@@ -173,5 +182,7 @@
   }
 })();
 </script>
+<script src="js/snake-mascot.js"></script>
+<script src="js/snake-tools.js"></script>
 </body>
 </html>
