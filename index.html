@@ -33,6 +33,12 @@
   <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1033284237916727" crossorigin="anonymous"></script>
 
+  <!-- Performance hints -->
+  <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
+  <link rel="preconnect" href="https://www.googletagmanager.com" />
+  <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 
@@ -1441,7 +1447,7 @@ document.addEventListener('mouseover', function(e) {
 
 /* ── Newsletter / analytics ── */
 </script>
-<script src="js/analytics.js"></script>
+<script defer src="js/analytics.js"></script>
 <script>
 var nlForm = document.getElementById("nl-form");
 if (nlForm) {
