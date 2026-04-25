@@ -486,10 +486,28 @@
   };
 
   window.copyShareUrl = function(inputId) {
-    var el = document.getElementById(inputId);
+    var el  = document.getElementById(inputId);
     if (!el) return;
-    navigator.clipboard.writeText(el.value).catch(function() {
-      el.select(); document.execCommand('copy');
-    });
+    var btn = el.parentElement && el.parentElement.querySelector('button');
+    var originalText = btn ? btn.textContent : '';
+
+    function onCopied() {
+      if (btn) {
+        btn.textContent = '✅ Kopyalandı!';
+        btn.style.color = '#4ade80';
+        setTimeout(function() {
+          btn.textContent = originalText;
+          btn.style.color = '';
+        }, 2000);
+      }
+    }
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(el.value).then(onCopied).catch(function() {
+        el.select(); document.execCommand('copy'); onCopied();
+      });
+    } else {
+      el.select(); document.execCommand('copy'); onCopied();
+    }
   };
 })();
