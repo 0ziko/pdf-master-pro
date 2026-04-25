@@ -675,15 +675,15 @@
       <div class="tps-header">
         <span class="tps-icon">🔥</span>
         <div>
-          <div class="tps-title">Calorie Robot</div>
-          <div class="tps-desc">Track daily meals by hour · BMR · Exercise · Food suggestions by meal type</div>
+          <div class="tps-title" data-i18n="tool.calories.name">Calorie Robot</div>
+          <div class="tps-desc" data-i18n="tool.calories.desc">Track daily meals by hour · BMR · Exercise · Food suggestions by meal type</div>
         </div>
       </div>
 
       <!-- Mode tabs -->
       <div class="cal-mode-tabs">
-        <button class="cal-mode-btn active" onclick="calSwitchMode('track',this)">📋 Daily Tracker</button>
-        <button class="cal-mode-btn" onclick="calSwitchMode('suggest',this)">💡 Food Suggestions</button>
+        <button class="cal-mode-btn active" onclick="calSwitchMode('track',this)" data-i18n="cal.mode.track">📋 Daily Tracker</button>
+        <button class="cal-mode-btn" onclick="calSwitchMode('suggest',this)" data-i18n="cal.mode.suggest">💡 Food Suggestions</button>
       </div>
 
       <!-- ══ TRACKER MODE ══ -->
@@ -691,41 +691,41 @@
 
         <!-- BMR / Personal Info -->
         <div class="cal-card">
-          <h3>👤 Personal Info & Calorie Need</h3>
+          <h3 data-i18n="cal.personal.title">👤 Personal Info & Calorie Need</h3>
           <div class="cal-grid-4">
             <div class="cal-field">
-              <label>Gender</label>
+              <label data-i18n="cal.field.gender">Gender</label>
               <select id="cal-gender">
-                <option value="male">♂ Male</option>
-                <option value="female">♀ Female</option>
+                <option value="male" data-i18n="cal.gender.male">♂ Male</option>
+                <option value="female" data-i18n="cal.gender.female">♀ Female</option>
               </select>
             </div>
             <div class="cal-field">
-              <label>Age (yrs)</label>
-              <input type="number" id="cal-age" placeholder="30" min="10" max="120">
+              <label data-i18n="cal.field.age">Age (yrs)</label>
+              <input type="number" id="cal-age" data-i18n-ph="cal.field.age" placeholder="30" min="10" max="120">
             </div>
             <div class="cal-field">
-              <label>Weight (kg)</label>
-              <input type="number" id="cal-weight" placeholder="70" min="20" max="300">
+              <label data-i18n="cal.field.weight">Weight (kg)</label>
+              <input type="number" id="cal-weight" data-i18n-ph="cal.field.weight" placeholder="70" min="20" max="300">
             </div>
             <div class="cal-field">
-              <label>Height (cm)</label>
-              <input type="number" id="cal-height" placeholder="170" min="100" max="250">
+              <label data-i18n="cal.field.height">Height (cm)</label>
+              <input type="number" id="cal-height" data-i18n-ph="cal.field.height" placeholder="170" min="100" max="250">
             </div>
           </div>
           <div class="cal-grid-2" style="margin-top:10px">
             <div class="cal-field">
-              <label>Activity Level</label>
+              <label data-i18n="cal.field.activity">Activity Level</label>
               <select id="cal-activity">
-                <option value="1.2">😴 Sedentary (desk job, no exercise)</option>
-                <option value="1.375">🚶 Light (1–3 days/week)</option>
-                <option value="1.55" selected>🏃 Moderate (3–5 days/week)</option>
-                <option value="1.725">💪 Active (6–7 days/week)</option>
-                <option value="1.9">🏋️ Very Active (athlete / 2x/day)</option>
+                <option value="1.2" data-i18n="cal.activity.sed">😴 Sedentary (desk job, no exercise)</option>
+                <option value="1.375" data-i18n="cal.activity.light">🚶 Light (1–3 days/week)</option>
+                <option value="1.55" selected data-i18n="cal.activity.mod">🏃 Moderate (3–5 days/week)</option>
+                <option value="1.725" data-i18n="cal.activity.active">💪 Active (6–7 days/week)</option>
+                <option value="1.9" data-i18n="cal.activity.very">🏋️ Very Active (athlete / 2x/day)</option>
               </select>
             </div>
             <div class="cal-field" style="display:flex;align-items:flex-end;">
-              <button class="cal-btn cal-btn-primary" style="width:100%" onclick="calCalcBMR()">Calculate My Calorie Need</button>
+              <button class="cal-btn cal-btn-primary" style="width:100%" onclick="calCalcBMR()" data-i18n="cal.btn.bmr">Calculate My Calorie Need</button>
             </div>
           </div>
           <div id="cal-bmr-result" class="cal-bmr-result" style="display:none"></div>
@@ -733,58 +733,58 @@
 
         <!-- Meals -->
         <div class="cal-card">
-          <h3>🍽️ Today's Food Log</h3>
+          <h3 data-i18n="cal.meals.title">🍽️ Today's Food Log</h3>
           <!-- Breakfast -->
           <div class="cal-meal-section">
             <div class="cal-meal-header">
-              <span>🌅 Breakfast <small>06:00 – 10:00</small></span>
+              <span><span data-i18n="cal.meal.breakfast">🌅 Breakfast</span> <small data-i18n="cal.meal.breakfast.time">06:00 – 10:00</small></span>
               <span class="cal-meal-calories" id="kcal-breakfast">0 kcal</span>
-              <button class="cal-btn-sm" onclick="calAddRow('breakfast')">+ Add food</button>
+              <button class="cal-btn-sm" onclick="calAddRow('breakfast')" data-i18n="cal.btn.addfood">+ Add food</button>
             </div>
             <div id="meal-breakfast"></div>
           </div>
           <!-- Morning Snack -->
           <div class="cal-meal-section">
             <div class="cal-meal-header">
-              <span>☕ Morning Snack <small>10:00 – 12:00</small></span>
+              <span><span data-i18n="cal.meal.msnack">☕ Morning Snack</span> <small data-i18n="cal.meal.msnack.time">10:00 – 12:00</small></span>
               <span class="cal-meal-calories" id="kcal-msnack">0 kcal</span>
-              <button class="cal-btn-sm" onclick="calAddRow('msnack')">+ Add food</button>
+              <button class="cal-btn-sm" onclick="calAddRow('msnack')" data-i18n="cal.btn.addfood">+ Add food</button>
             </div>
             <div id="meal-msnack"></div>
           </div>
           <!-- Lunch -->
           <div class="cal-meal-section">
             <div class="cal-meal-header">
-              <span>☀️ Lunch <small>12:00 – 14:00</small></span>
+              <span><span data-i18n="cal.meal.lunch">☀️ Lunch</span> <small data-i18n="cal.meal.lunch.time">12:00 – 14:00</small></span>
               <span class="cal-meal-calories" id="kcal-lunch">0 kcal</span>
-              <button class="cal-btn-sm" onclick="calAddRow('lunch')">+ Add food</button>
+              <button class="cal-btn-sm" onclick="calAddRow('lunch')" data-i18n="cal.btn.addfood">+ Add food</button>
             </div>
             <div id="meal-lunch"></div>
           </div>
           <!-- Afternoon Snack -->
           <div class="cal-meal-section">
             <div class="cal-meal-header">
-              <span>🍎 Afternoon Snack <small>15:00 – 17:00</small></span>
+              <span><span data-i18n="cal.meal.asnack">🍎 Afternoon Snack</span> <small data-i18n="cal.meal.asnack.time">15:00 – 17:00</small></span>
               <span class="cal-meal-calories" id="kcal-asnack">0 kcal</span>
-              <button class="cal-btn-sm" onclick="calAddRow('asnack')">+ Add food</button>
+              <button class="cal-btn-sm" onclick="calAddRow('asnack')" data-i18n="cal.btn.addfood">+ Add food</button>
             </div>
             <div id="meal-asnack"></div>
           </div>
           <!-- Dinner -->
           <div class="cal-meal-section">
             <div class="cal-meal-header">
-              <span>🌙 Dinner <small>18:00 – 21:00</small></span>
+              <span><span data-i18n="cal.meal.dinner">🌙 Dinner</span> <small data-i18n="cal.meal.dinner.time">18:00 – 21:00</small></span>
               <span class="cal-meal-calories" id="kcal-dinner">0 kcal</span>
-              <button class="cal-btn-sm" onclick="calAddRow('dinner')">+ Add food</button>
+              <button class="cal-btn-sm" onclick="calAddRow('dinner')" data-i18n="cal.btn.addfood">+ Add food</button>
             </div>
             <div id="meal-dinner"></div>
           </div>
           <!-- Late Snack -->
           <div class="cal-meal-section">
             <div class="cal-meal-header">
-              <span>🌜 Late Snack <small>21:00 – 23:00</small></span>
+              <span><span data-i18n="cal.meal.lsnack">🌜 Late Snack</span> <small data-i18n="cal.meal.lsnack.time">21:00 – 23:00</small></span>
               <span class="cal-meal-calories" id="kcal-lsnack">0 kcal</span>
-              <button class="cal-btn-sm" onclick="calAddRow('lsnack')">+ Add food</button>
+              <button class="cal-btn-sm" onclick="calAddRow('lsnack')" data-i18n="cal.btn.addfood">+ Add food</button>
             </div>
             <div id="meal-lsnack"></div>
           </div>
@@ -792,50 +792,50 @@
 
         <!-- Exercise -->
         <div class="cal-card">
-          <h3>🏋️ Exercise Log</h3>
+          <h3 data-i18n="cal.exercise.title">🏋️ Exercise Log</h3>
           <div class="cal-exercise-add">
             <select id="cal-ex-type" style="flex:2">
-              <option value="walking">🚶 Walking (moderate)</option>
-              <option value="jogging">🏃 Jogging</option>
-              <option value="running">🏃 Running (fast)</option>
-              <option value="cycling">🚴 Cycling</option>
-              <option value="swimming">🏊 Swimming</option>
-              <option value="gym">🏋️ Weight Training</option>
-              <option value="yoga">🧘 Yoga / Stretching</option>
-              <option value="hiit">⚡ HIIT</option>
-              <option value="football">⚽ Football / Soccer</option>
-              <option value="basketball">🏀 Basketball</option>
-              <option value="tennis">🎾 Tennis</option>
-              <option value="dancing">💃 Dancing</option>
-              <option value="stairclimb">🪜 Stair Climbing</option>
-              <option value="custom">✏️ Custom (enter kcal/hr below)</option>
+              <option value="walking" data-i18n="cal.ex.walking">🚶 Walking (moderate)</option>
+              <option value="jogging" data-i18n="cal.ex.jogging">🏃 Jogging</option>
+              <option value="running" data-i18n="cal.ex.running">🏃 Running (fast)</option>
+              <option value="cycling" data-i18n="cal.ex.cycling">🚴 Cycling</option>
+              <option value="swimming" data-i18n="cal.ex.swimming">🏊 Swimming</option>
+              <option value="gym" data-i18n="cal.ex.gym">🏋️ Weight Training</option>
+              <option value="yoga" data-i18n="cal.ex.yoga">🧘 Yoga / Stretching</option>
+              <option value="hiit" data-i18n="cal.ex.hiit">⚡ HIIT</option>
+              <option value="football" data-i18n="cal.ex.football">⚽ Football / Soccer</option>
+              <option value="basketball" data-i18n="cal.ex.basketball">🏀 Basketball</option>
+              <option value="tennis" data-i18n="cal.ex.tennis">🎾 Tennis</option>
+              <option value="dancing" data-i18n="cal.ex.dancing">💃 Dancing</option>
+              <option value="stairclimb" data-i18n="cal.ex.stairclimb">🪜 Stair Climbing</option>
+              <option value="custom" data-i18n="cal.ex.custom">✏️ Custom (enter kcal/hr below)</option>
             </select>
-            <input type="number" id="cal-ex-min" placeholder="Minutes" min="1" max="480" style="flex:1;min-width:80px">
-            <input type="number" id="cal-ex-custom" placeholder="kcal/hr (custom only)" min="1" style="flex:1;min-width:90px">
-            <button class="cal-btn cal-btn-primary" onclick="calAddExercise()">Add</button>
+            <input type="number" id="cal-ex-min" data-i18n-ph="cal.ph.minutes" placeholder="Minutes" min="1" max="480" style="flex:1;min-width:80px">
+            <input type="number" id="cal-ex-custom" data-i18n-ph="cal.ph.kcalhr" placeholder="kcal/hr (custom only)" min="1" style="flex:1;min-width:90px">
+            <button class="cal-btn cal-btn-primary" onclick="calAddExercise()" data-i18n="cal.btn.addex">Add</button>
           </div>
           <div id="cal-ex-list"></div>
         </div>
 
         <!-- Summary -->
         <div class="cal-card">
-          <h3>📊 Daily Summary</h3>
+          <h3 data-i18n="cal.summary.title">📊 Daily Summary</h3>
           <div class="cal-summary-grid">
             <div class="cal-summary-item">
               <div class="cal-summary-val" id="sum-eaten">0</div>
-              <div class="cal-summary-label">kcal Eaten</div>
+              <div class="cal-summary-label" data-i18n="cal.summary.eaten">kcal Eaten</div>
             </div>
             <div class="cal-summary-item">
               <div class="cal-summary-val" id="sum-burned" style="color:#f97316">0</div>
-              <div class="cal-summary-label">kcal Burned</div>
+              <div class="cal-summary-label" data-i18n="cal.summary.burned">kcal Burned</div>
             </div>
             <div class="cal-summary-item">
               <div class="cal-summary-val" id="sum-need" style="color:#818cf8">—</div>
-              <div class="cal-summary-label">Daily Need</div>
+              <div class="cal-summary-label" data-i18n="cal.summary.need">Daily Need</div>
             </div>
             <div class="cal-summary-item net" id="sum-net-box">
               <div class="cal-summary-val" id="sum-net">0</div>
-              <div class="cal-summary-label">Net Balance</div>
+              <div class="cal-summary-label" data-i18n="cal.summary.net">Net Balance</div>
             </div>
           </div>
           <div id="cal-advice" style="margin-top:12px"></div>
@@ -845,28 +845,28 @@
       <!-- ══ SUGGEST MODE ══ -->
       <div id="cal-suggest" style="display:none">
         <div class="cal-card">
-          <h3>💡 Food Suggestions by Calorie Target</h3>
-          <p style="font-size:.75rem;color:#9ca3af;margin-bottom:14px">
+          <h3 data-i18n="cal.suggest.title">💡 Food Suggestions by Calorie Target</h3>
+          <p style="font-size:.75rem;color:#9ca3af;margin-bottom:14px" data-i18n="cal.suggest.desc">
             Tell me your calorie target and which meal — I'll suggest foods fitting that budget, grouped by meal-appropriate options.
           </p>
           <div class="cal-grid-3">
             <div class="cal-field">
-              <label>Target Calories (kcal)</label>
+              <label data-i18n="cal.suggest.label.cal">Target Calories (kcal)</label>
               <input type="number" id="sug-cal" placeholder="500" min="50" max="3000">
             </div>
             <div class="cal-field">
-              <label>Meal</label>
+              <label data-i18n="cal.suggest.label.meal">Meal</label>
               <select id="sug-meal">
-                <option value="breakfast">🌅 Breakfast</option>
-                <option value="msnack">☕ Morning Snack</option>
-                <option value="lunch">☀️ Lunch</option>
-                <option value="asnack">🍎 Afternoon Snack</option>
-                <option value="dinner">🌙 Dinner</option>
-                <option value="lsnack">🌜 Late Snack</option>
+                <option value="breakfast" data-i18n="cal.meal.breakfast">🌅 Breakfast</option>
+                <option value="msnack" data-i18n="cal.meal.msnack">☕ Morning Snack</option>
+                <option value="lunch" data-i18n="cal.meal.lunch">☀️ Lunch</option>
+                <option value="asnack" data-i18n="cal.meal.asnack">🍎 Afternoon Snack</option>
+                <option value="dinner" data-i18n="cal.meal.dinner">🌙 Dinner</option>
+                <option value="lsnack" data-i18n="cal.meal.lsnack">🌜 Late Snack</option>
               </select>
             </div>
             <div class="cal-field" style="display:flex;align-items:flex-end;">
-              <button class="cal-btn cal-btn-primary" style="width:100%" onclick="calSuggest()">Get Suggestions</button>
+              <button class="cal-btn cal-btn-primary" style="width:100%" onclick="calSuggest()" data-i18n="cal.btn.suggest">Get Suggestions</button>
             </div>
           </div>
           <div id="sug-output"></div>
@@ -1295,6 +1295,10 @@ var calTDEE = 0;
 var calExerciseList = [];
 var calFoodRows = { breakfast:[], msnack:[], lunch:[], asnack:[], dinner:[], lsnack:[] };
 
+function _t(key) {
+  return (window.PdfMasterI18n && window.PdfMasterI18n.t) ? window.PdfMasterI18n.t(key) : key;
+}
+
 function calSwitchMode(mode, btn) {
   document.querySelectorAll('.cal-mode-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
@@ -1309,7 +1313,7 @@ function calCalcBMR() {
   const weight   = parseFloat(document.getElementById('cal-weight').value);
   const height   = parseFloat(document.getElementById('cal-height').value);
   const activity = parseFloat(document.getElementById('cal-activity').value);
-  if (!age || !weight || !height) { alert('Please fill in age, weight and height.'); return; }
+  if (!age || !weight || !height) { alert(_t('cal.btn.bmr')); return; }
   calUserWeight = weight;
   const bmr = gender === 'male'
     ? 10 * weight + 6.25 * height - 5 * age + 5
@@ -1321,10 +1325,10 @@ function calCalcBMR() {
   const resEl = document.getElementById('cal-bmr-result');
   resEl.style.display = 'flex';
   resEl.innerHTML = [
-    `<div class="cal-bmr-chip"><strong>${Math.round(bmr)}</strong>BMR (kcal/day)</div>`,
-    `<div class="cal-bmr-chip"><strong>${tdee}</strong>Maintain Weight</div>`,
-    `<div class="cal-bmr-chip"><strong>${lose}</strong>Lose (−0.5kg/wk)</div>`,
-    `<div class="cal-bmr-chip"><strong>${gain}</strong>Gain (+0.5kg/wk)</div>`,
+    `<div class="cal-bmr-chip"><strong>${Math.round(bmr)}</strong>${_t('cal.bmr.label')}</div>`,
+    `<div class="cal-bmr-chip"><strong>${tdee}</strong>${_t('cal.bmr.maintain')}</div>`,
+    `<div class="cal-bmr-chip"><strong>${lose}</strong>${_t('cal.bmr.lose')}</div>`,
+    `<div class="cal-bmr-chip"><strong>${gain}</strong>${_t('cal.bmr.gain')}</div>`,
   ].join('');
   document.getElementById('sum-need').textContent = tdee;
   calUpdateSummary();
@@ -1343,10 +1347,10 @@ function calAddRow(meal) {
   ).join('');
   div.innerHTML = `
     <select onchange="calRowChange('${meal}','${rowId}')">
-      <option value="">— Select food —</option>
+      <option value="">${_t('cal.food.select')}</option>
       ${opts}
     </select>
-    <input type="number" placeholder="Amount (g/ml)" min="1" max="5000"
+    <input type="number" placeholder="${_t('cal.ph.amount')}" min="1" max="5000"
       oninput="calRowChange('${meal}','${rowId}')" value="">
     <div class="cal-food-cal" id="${rowId}_kcal">0 kcal</div>
     <button class="cal-remove-btn" onclick="calRemoveRow('${meal}','${rowId}')">✕</button>
@@ -1383,11 +1387,11 @@ function calAddExercise() {
   const type = document.getElementById('cal-ex-type').value;
   const min  = parseFloat(document.getElementById('cal-ex-min').value);
   const customKcal = parseFloat(document.getElementById('cal-ex-custom').value);
-  if (!min || min <= 0) { alert('Enter exercise duration in minutes.'); return; }
+  if (!min || min <= 0) { alert(_t('cal.ph.minutes')); return; }
   const ex = CAL_EX[type];
   let kcalPerHr;
   if (type === 'custom') {
-    if (!customKcal) { alert('Enter kcal/hr for custom exercise.'); return; }
+    if (!customKcal) { alert(_t('cal.ph.kcalhr')); return; }
     kcalPerHr = customKcal;
   } else {
     kcalPerHr = ex.met * calUserWeight * 1.0;
@@ -1444,19 +1448,19 @@ function calUpdateSummary() {
     if (diff < -600) {
       netBox.classList.add('deficit'); netBox.classList.remove('net');
       adv.className = 'cal-advice warn';
-      adv.textContent = `⚠️ You are ${Math.abs(diff)} kcal below your daily need. Consider eating a bit more to avoid nutrient deficiency.`;
+      adv.textContent = '⚠️ ' + _t('cal.advice.deficit').replace('{n}', Math.abs(diff));
     } else if (diff < 0) {
       netBox.classList.remove('deficit'); netBox.classList.add('net');
       adv.className = 'cal-advice ok';
-      adv.textContent = `✅ Great! You are ${Math.abs(diff)} kcal below your maintenance — a healthy calorie deficit for weight loss.`;
+      adv.textContent = '✅ ' + _t('cal.advice.ok').replace('{n}', Math.abs(diff));
     } else if (diff < 300) {
       netBox.classList.remove('deficit'); netBox.classList.add('net');
       adv.className = 'cal-advice ok';
-      adv.textContent = `✅ You are close to your maintenance calories. Good for weight maintenance.`;
+      adv.textContent = '✅ ' + _t('cal.advice.maintain');
     } else {
       netBox.classList.remove('net'); netBox.classList.add('deficit');
       adv.className = 'cal-advice over';
-      adv.textContent = `⚠️ You are ${diff} kcal over your daily need. This may lead to weight gain over time.`;
+      adv.textContent = '⚠️ ' + _t('cal.advice.over').replace('{n}', diff);
     }
     adv.style.display = '';
   }
@@ -1466,7 +1470,7 @@ function calUpdateSummary() {
 function calSuggest() {
   const target = parseFloat(document.getElementById('sug-cal').value);
   const meal   = document.getElementById('sug-meal').value;
-  if (!target || target < 50) { alert('Enter a calorie target (at least 50 kcal).'); return; }
+  if (!target || target < 50) { alert(_t('cal.suggest.label.cal')); return; }
   const foods = CAL_FOODS[meal] || [];
   const out = document.getElementById('sug-output');
   out.innerHTML = '';
@@ -1489,7 +1493,7 @@ function calSuggest() {
   /* Single food suggestions */
   const h1 = document.createElement('div');
   h1.className = 'sug-section-title';
-  h1.textContent = '🎯 Single Food — adjusted to your calorie target';
+  h1.textContent = _t('cal.suggest.single');
   out.appendChild(h1);
   exact.slice(0, 6).forEach(item => {
     const div = document.createElement('div');
@@ -1509,7 +1513,7 @@ function calSuggest() {
   const h2 = document.createElement('div');
   h2.className = 'sug-section-title';
   h2.style.marginTop = '18px';
-  h2.textContent = '🍽️ Meal Combos — typical portions close to your target';
+  h2.textContent = _t('cal.suggest.combo');
   out.appendChild(h2);
 
   const typicalItems = foods.map(f => ({ food: f, portion: f.p, kcal: Math.round(f.c * f.p / 100) }));
@@ -1526,7 +1530,7 @@ function calSuggest() {
   if (!found.length) {
     const p = document.createElement('p');
     p.style.cssText = 'color:#9ca3af;font-size:.75rem;margin-top:6px';
-    p.textContent = 'No typical combo found within ±30% of your target. Try adjusting the target.';
+    p.textContent = _t('cal.suggest.nocombo');
     out.appendChild(p);
   } else {
     found.forEach(c => {
