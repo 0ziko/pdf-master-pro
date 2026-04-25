@@ -95,14 +95,35 @@
   const tabs   = Array.from(document.querySelectorAll("[data-tab]"));
   const panels = Array.from(document.querySelectorAll("[data-panel]"));
 
-  tabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      const id = tab.getAttribute("data-tab");
-      tabs.forEach((t2) => t2.classList.toggle("tab-active", t2 === tab));
-      panels.forEach((p) =>
-        p.classList.toggle("is-visible", p.getAttribute("data-panel") === id)
-      );
+  /* Tab title labels for topbar */
+  const TAB_TITLES = {
+    excel:   document.querySelector('[data-i18n="tab.excel"]')?.textContent   || "Excel → PDF",
+    image:   document.querySelector('[data-i18n="tab.image"]')?.textContent   || "Image → PDF",
+    merge:   document.querySelector('[data-i18n="tab.merge"]')?.textContent   || "Merge PDF",
+    split:   document.querySelector('[data-i18n="tab.split"]')?.textContent   || "Split PDF",
+    encrypt: document.querySelector('[data-i18n="tab.encrypt"]')?.textContent || "Encrypt / Decrypt",
+  };
+
+  function switchTab(id) {
+    /* Update nav items — supports both .tab-btn (old) and .sc-nav-item (new sidebar) */
+    tabs.forEach((t) => {
+      t.classList.toggle("tab-active", t.getAttribute("data-tab") === id);
+      t.classList.toggle("active",     t.getAttribute("data-tab") === id);
     });
+    /* Show / hide panels */
+    panels.forEach((p) =>
+      p.classList.toggle("is-visible", p.getAttribute("data-panel") === id)
+    );
+    /* Update topbar title */
+    const titleEl = document.getElementById("scTopbarTitle");
+    if (titleEl) titleEl.textContent = TAB_TITLES[id] || id;
+    /* Show encrypt banner only on encrypt tab */
+    const banner = document.getElementById("encryptBanner");
+    if (banner) banner.style.display = id === "encrypt" ? "" : "none";
+  }
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => switchTab(tab.getAttribute("data-tab")));
   });
 
   /* ── Encrypt banner ────────────────────────────────── */
