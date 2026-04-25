@@ -102,9 +102,13 @@
     merge:   document.querySelector('[data-i18n="tab.merge"]')?.textContent   || "Merge PDF",
     split:   document.querySelector('[data-i18n="tab.split"]')?.textContent   || "Split PDF",
     encrypt: document.querySelector('[data-i18n="tab.encrypt"]')?.textContent || "Encrypt / Decrypt",
+    share:   document.querySelector('[data-i18n="tab.share"]')?.textContent   || "Share PDF",
   };
 
+  const VALID_TABS = new Set(['excel', 'image', 'merge', 'split', 'encrypt', 'share']);
+
   function switchTab(id) {
+    if (!VALID_TABS.has(id)) id = 'excel';
     /* Update nav items — supports tab-btn, sc-nav-item, pdf-nav-item */
     tabs.forEach((t) => {
       const match = t.getAttribute("data-tab") === id;
@@ -121,11 +125,19 @@
     /* Show encrypt banner only on encrypt tab */
     const banner = document.getElementById("encryptBanner");
     if (banner) banner.style.display = id === "encrypt" ? "" : "none";
+    /* Sync URL hash without pushing a history entry */
+    if (history.replaceState) history.replaceState(null, '', '#' + id);
   }
 
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => switchTab(tab.getAttribute("data-tab")));
   });
+
+  /* Activate tab from URL hash on page load */
+  (function () {
+    const hash = location.hash ? location.hash.slice(1) : 'excel';
+    switchTab(VALID_TABS.has(hash) ? hash : 'excel');
+  })();
 
   /* ── Encrypt banner ────────────────────────────────── */
   const encryptCheck  = document.getElementById("globalEncrypt");
@@ -431,6 +443,44 @@
   });
 
   renderMergeList();
+
+  /* ── Share PDF (standalone panel) ──────────────────── */
+  (function () {
+    const drop     = document.getElementById('shareDrop');
+    const input    = document.getElementById('shareInput');
+    const statusEl = document.getElementById('shareStatus');
+    const statusTx = document.getElementById('shareStatusText');
+    const runBtn   = document.getElementById('shareRun');
+    if (!drop || !runBtn) return;
+
+    let shareFile = null;
+
+    function setShareFile(file) {
+      if (!file || file.type !== 'application/pdf') return;
+      shareFile = file;
+      statusTx.textContent = file.name;
+      statusEl.style.display = 'flex';
+    }
+
+    drop.addEventListener('click', () => input && input.click());
+    input && input.addEventListener('change', () => { if (input.files[0]) setShareFile(input.files[0]); });
+    drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('drag-over'); });
+    drop.addEventListener('dragleave', () => drop.classList.remove('drag-over'));
+    drop.addEventListener('drop', e => {
+      e.preventDefault();
+      drop.classList.remove('drag-over');
+      const f = e.dataTransfer.files[0];
+      if (f) setShareFile(f);
+    });
+
+    runBtn.addEventListener('click', async () => {
+      if (!shareFile) return alert('Please select a PDF to share.');
+      await withSnake(runBtn, async () => {
+        const blob = new Blob([await shareFile.arrayBuffer()], { type: 'application/pdf' });
+        window.uploadAndShare(blob, shareFile.name, 'sharePanelDirect', 'shareUrlDirect');
+      });
+    });
+  })();
 
   /* ── Share Link helpers ─────────────────────────────── */
   window.uploadAndShare = async function(blob, fileName, panelId, inputId) {
