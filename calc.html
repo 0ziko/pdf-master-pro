@@ -592,7 +592,7 @@
     <section id="currency" class="tool-page-section">
       <div class="tps-header">
         <span class="tps-icon">💱</span>
-        <div><div class="tps-title" data-i18n="calc.currency.name">Currency Converter</div><div class="tps-desc" data-i18n="calc.currency.desc">Approximate static rates — USD, EUR, GBP, TRY, JPY and more</div></div>
+        <div><div class="tps-title" data-i18n="calc.currency.name">Currency Converter</div><div class="tps-desc">Live rates · European Central Bank · <span id="fx-rate-status">Loading…</span></div></div>
       </div>
       <div class="calc-form">
         <div><label class="calc-label">Amount</label><input type="number" id="cur-amount" class="input-field" placeholder="100" value="100" /></div>
@@ -1121,17 +1121,81 @@ function doNumToWords() {
   el.style.display='flex';
 }
 
-/* ── 17. Currency ── */
-const RATES={USD:1,EUR:0.92,GBP:0.79,TRY:32.5,JPY:149.5,CHF:0.89,CAD:1.36,AUD:1.53,CNY:7.24,INR:83.2,AED:3.67,SAR:3.75};
-function doCurrency() {
-  const amt=parseFloat(document.getElementById('cur-amount').value);
-  const from=document.getElementById('cur-from').value, to=document.getElementById('cur-to').value;
-  if (isNaN(amt)) return errMsg('cur-result','Enter a valid amount.');
-  const result=amt/RATES[from]*RATES[to];
-  const el=document.getElementById('cur-result');
-  el.innerHTML=`<div class="currency-result">${amt.toFixed(2)} ${from} = <strong>${result.toFixed(4)} ${to}</strong></div><div class="currency-note">⚠ Rates are approximate, updated periodically. Not for financial decisions.</div>`;
-  el.style.display='';
+/* ── 17. Currency — live rates via Frankfurter (ECB data) ── */
+var _fxRates = null;
+var _fxCacheKey = 'sc_fx_rates';
+var _fxCacheTTL = 3600000; /* 1 hour */
+
+function _fxLoadRates(callback) {
+  /* Check localStorage cache first */
+  try {
+    var cached = JSON.parse(localStorage.getItem(_fxCacheKey) || 'null');
+    if (cached && cached.rates && (Date.now() - cached.ts) < _fxCacheTTL) {
+      _fxRates = cached.rates;
+      return callback(null, _fxRates);
+    }
+  } catch(e) {}
+
+  /* Fetch live rates from Frankfurter (European Central Bank) */
+  var el = document.getElementById('cur-result');
+  if (el) { el.style.display = ''; el.innerHTML = '<div class="currency-note">⏳ Fetching live rates…</div>'; }
+
+  fetch('https://api.frankfurter.app/latest?from=USD')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var rates = data.rates || {};
+      rates.USD = 1;
+      /* AED and SAR not in ECB data — use fixed pegs */
+      if (!rates.AED) rates.AED = 3.6725;
+      if (!rates.SAR) rates.SAR = 3.75;
+      _fxRates = rates;
+      try {
+        localStorage.setItem(_fxCacheKey, JSON.stringify({ rates: rates, ts: Date.now() }));
+      } catch(e) {}
+      callback(null, rates);
+    })
+    .catch(function(err) {
+      /* Fallback to static rates if API fails */
+      _fxRates = {USD:1,EUR:0.92,GBP:0.79,TRY:38.5,JPY:154,CHF:0.9,CAD:1.38,AUD:1.56,CNY:7.25,INR:83.5,AED:3.6725,SAR:3.75};
+      callback('offline', _fxRates);
+    });
 }
+
+function doCurrency() {
+  var amt = parseFloat(document.getElementById('cur-amount').value);
+  var from = document.getElementById('cur-from').value;
+  var to   = document.getElementById('cur-to').value;
+  if (isNaN(amt)) return errMsg('cur-result', 'Enter a valid amount.');
+
+  _fxLoadRates(function(err, rates) {
+    if (!rates[from] || !rates[to]) return errMsg('cur-result', 'Currency not supported.');
+    var result = amt / rates[from] * rates[to];
+    var el = document.getElementById('cur-result');
+    var source = err === 'offline'
+      ? '⚠ Offline — using approximate rates.'
+      : '✓ Live rate · European Central Bank · Updates every hour';
+    el.innerHTML = '<div class="currency-result">' + amt.toFixed(2) + ' ' + from +
+      ' = <strong>' + result.toFixed(4) + ' ' + to + '</strong></div>' +
+      '<div class="currency-note">' + source + '</div>';
+    el.style.display = '';
+  });
+}
+
+/* Pre-load FX rates when currency section is visible */
+document.addEventListener('DOMContentLoaded', function() {
+  var statusEl = document.getElementById('fx-rate-status');
+  _fxLoadRates(function(err, rates) {
+    if (!statusEl) return;
+    if (err === 'offline') {
+      statusEl.textContent = 'Offline — approximate rates';
+      statusEl.style.color = '#f59e0b';
+    } else {
+      var now = new Date();
+      statusEl.textContent = 'Updated ' + now.getHours() + ':' + String(now.getMinutes()).padStart(2,'0');
+      statusEl.style.color = '#34d399';
+    }
+  });
+});
 
 /* ── 18. Quadratic ── */
 function doQuadratic() {
