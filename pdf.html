@@ -109,6 +109,9 @@
         color: #f0eeff;
       }
 
+      /* Desktop: nav items row is transparent passthrough */
+      .pdf-nav-items-row { display: contents; }
+
       /* ── SIDEBAR ─────────────────────────────────────────── */
       .pdf-sidebar {
         width: 220px;
@@ -280,20 +283,80 @@
       @media (max-width: 700px) {
         html, body { overflow: auto; height: auto; }
         .pdf-layout { flex-direction: column; height: auto; min-height: 100vh; }
+
+        /* Sidebar → sticky top bar */
         .pdf-sidebar {
-          width: 100%; flex-direction: row; flex-wrap: wrap;
-          overflow-x: auto; border-right: none;
-          border-bottom: 1px solid rgba(130,80,255,.15);
+          width: 100%;
+          height: auto;
+          max-height: none;
+          flex-direction: column;
+          overflow: visible;
+          border-right: none;
+          border-bottom: 1px solid rgba(130,80,255,.18);
+          position: sticky;
+          top: 0;
+          z-index: 150;
+          background: #0f0f1c;
         }
-        .pdf-sidebar-logo { border-bottom: none; padding: 10px 14px; }
+        .pdf-sidebar-logo {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 11px 16px 8px;
+          border-bottom: none;
+        }
+        .pdf-lang { display: flex !important; gap: 4px; }
         .pdf-sidebar-mascot { display: none; }
         .pdf-nav-label { display: none; }
-        .pdf-sidebar-footer { flex-direction: row; margin-top: 0; border-top: none; padding: 8px 10px; }
-        .pdf-nav-item { padding: 7px 10px; border-radius: 8px; flex-shrink: 0; }
+
+        /* Horizontal scrollable tool pills */
+        .pdf-sidebar > .pdf-nav-item,
+        .pdf-sidebar-nav { display: flex; }
+        .pdf-sidebar {
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+        }
+
+        /* Wrap nav items in a flex row */
+        .pdf-nav-items-row {
+          display: flex;
+          flex-direction: row;
+          overflow-x: auto;
+          padding: 0 12px 10px;
+          gap: 7px;
+          scrollbar-width: none;
+          -webkit-overflow-scrolling: touch;
+        }
+        .pdf-nav-items-row::-webkit-scrollbar { display: none; }
+
+        .pdf-nav-item {
+          padding: 7px 14px;
+          border-radius: 20px;
+          flex-shrink: 0;
+          width: auto;
+          border: 1px solid rgba(130,80,255,.22);
+          background: rgba(255,255,255,.03);
+          font-size: .73rem;
+          font-weight: 600;
+          color: #a0a0b8;
+          gap: 6px;
+          touch-action: manipulation;
+          -webkit-tap-highlight-color: transparent;
+        }
+        .pdf-nav-item.active {
+          background: rgba(130,80,255,.22);
+          border-color: #8250ff;
+          color: #ddd6fe;
+        }
         .pdf-nav-item.active::before { display: none; }
         .pdf-nav-hint { display: none; }
+        .pdf-nav-icon { font-size: 1rem; }
+
+        .pdf-sidebar-footer { display: none; }
         .pdf-main { overflow: visible; }
         .pdf-content { overflow: visible; max-width: 100%; padding: 14px; }
+        .pdf-topbar { padding: 10px 14px; flex-wrap: wrap; gap: 5px; }
+        .pdf-topbar-title { font-size: .9rem; }
       }
     </style>
   </head>
@@ -318,6 +381,8 @@
 
       <div class="pdf-nav-label" data-i18n="tab.pdftools">PDF Tools</div>
 
+      <!-- Nav items wrapped for mobile horizontal scroll -->
+      <div class="pdf-nav-items-row">
       <button type="button" data-tab="excel" class="pdf-nav-item active">
         <span class="pdf-nav-icon">📊</span>
         <div>
@@ -360,6 +425,7 @@
           <div class="pdf-nav-hint" data-i18n="tab.share.hint">Public shareable link</div>
         </div>
       </button>
+      </div><!-- /pdf-nav-items-row -->
 
       <div class="pdf-sidebar-footer">
         <a href="index.html" class="pdf-back-link">
@@ -630,6 +696,7 @@
   <script src="js/pdf-split.js"></script>
   <script src="js/pdf-reencrypt.js"></script>
   <script src="js/snake-mascot.js"></script>
+  <script src="js/snake-tools.js"></script>
   <script src="js/app.js"></script>
   <script src="js/analytics.js"></script>
   </body>

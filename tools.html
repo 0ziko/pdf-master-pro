@@ -720,8 +720,7 @@ tabs.forEach(tab => {
 /* ── Age: cap max date to today ── */
 document.getElementById("age-input").max = new Date().toISOString().split("T")[0];
 
-/* ── Init snake ── */
-const snake = new SnakeMascot("snakeCanvas");
+/* snake-tools.js will init SnakeMascot automatically */
 
 /* ── Live Unix clock ── */
 function tickClock() {
@@ -1217,7 +1216,6 @@ ToolsApp.genPass();
   });
 })();
 </script>
-<script src="js/snake-mascot.js"></script>
 <script src="js/snake-tools.js"></script>
 <script src="js/i18n.js"></script>
 <script src="js/analytics.js"></script>

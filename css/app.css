@@ -139,6 +139,20 @@ body::before {
   filter: drop-shadow(0 6px 18px rgba(34,197,94,0.25)) drop-shadow(0 2px 8px rgba(0,0,0,0.45));
 }
 
+/* ── Snake mascot image (replaces canvas after snake-mascot.js loads) ─ */
+.snake-img {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+  transform-origin: center bottom;
+  filter: drop-shadow(0 8px 24px rgba(34,197,94,0.35)) drop-shadow(0 3px 10px rgba(0,0,0,0.5));
+  image-rendering: auto;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
 /* CHOMP! pop-up text */
 .snake-chomp {
   position: absolute;
@@ -1173,7 +1187,8 @@ input[type="range"] {
 
   /* Snake stage */
   .snake-stage { padding: .5rem 0; }
-  .snake-stage canvas { width: 240px !important; height: 88px !important; }
+  .snake-stage canvas { width: 120px !important; height: 88px !important; }
+  .snake-img { width: 110px !important; height: 110px !important; }
   .snake-caption { font-size: .72rem; }
 }
 
@@ -1603,40 +1618,78 @@ input[type="range"] {
 @media (max-width: 768px) {
   .sc-layout { flex-direction: column; }
 
+  /* Sidebar → sticky top nav strip */
   .sc-sidebar {
     width: 100%;
     height: auto;
-    position: static;
+    max-height: none;
+    position: sticky;
+    top: 0;
+    z-index: 150;
     border-right: none;
-    border-bottom: 1px solid rgba(130,80,255,.15);
+    border-bottom: 1px solid rgba(130,80,255,.18);
+    background: #10101e;
+    overflow: visible;
   }
   .sc-sidebar-mascot { display: none; }
 
-  /* Horizontal scrollable nav on mobile */
+  /* Logo bar: compact, lang switcher visible */
+  .sc-sidebar-logo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    border-bottom: none;
+  }
+  .sc-sidebar-logo .lang-switcher { display: flex; gap: 4px; }
+
+  /* Horizontal scrollable nav pills */
   .sc-sidebar-nav-scroll {
     display: flex;
     overflow-x: auto;
-    padding: 8px 12px;
-    gap: 6px;
+    padding: 0 12px 10px;
+    gap: 7px;
     scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
   }
   .sc-sidebar-nav-scroll::-webkit-scrollbar { display: none; }
 
+  /* Pill-style nav items */
   .sc-nav-item {
-    padding: 8px 14px;
-    border-radius: 8px;
+    padding: 7px 14px;
+    border-radius: 20px;
     white-space: nowrap;
     flex-shrink: 0;
     width: auto;
+    border: 1px solid rgba(130,80,255,.2);
+    background: rgba(255,255,255,.03);
+    font-size: .73rem;
+    font-weight: 600;
+    color: #a0a0b8;
+    gap: 6px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .sc-nav-item.active {
+    background: rgba(130,80,255,.22);
+    border-color: #8250ff;
+    color: #ddd6fe;
   }
   .sc-nav-item.active::before { display: none; }
-  .sc-nav-desc { display: none; }
+  .sc-nav-desc    { display: none; }
   .sc-nav-section { display: none; }
   .sc-sidebar-footer { display: none; }
-  .sc-sidebar-logo { border-bottom: none; }
 
-  .sc-content { padding: 16px; }
-  .sc-topbar { padding: 12px 16px; }
+  .sc-content {
+    padding: 14px 14px 32px;
+    overflow: visible;
+  }
+  .sc-topbar {
+    padding: 10px 16px;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .sc-topbar-title { font-size: .9rem; }
 }
 
 /* ── Tool page jump nav — mobile ────────────────────────── */

@@ -79,10 +79,8 @@
   /* ── Init ────────────────────────────────────────────────────── */
   function init() {
     if (!window.SnakeMascot) return;
-    var canvas = document.getElementById("snakeCanvas");
-    if (!canvas) return;
 
-    /* Reuse existing instance (index.html may have already created one) */
+    /* Reuse existing instance or create fresh one */
     var snake = window.snakeMascot || new window.SnakeMascot("snakeCanvas");
     window.snakeMascot = snake;
     setCaption("idle");
