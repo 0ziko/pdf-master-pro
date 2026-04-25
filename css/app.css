@@ -821,6 +821,19 @@ select:focus {
 input::placeholder,
 textarea::placeholder { color: var(--text-dim); }
 
+/* Native <option> dark theme — prevents white-on-white in dropdown lists */
+option {
+  background-color: #12121e;
+  color: #f0eeff;
+}
+option:checked {
+  background-color: #8250ff;
+  color: #fff;
+}
+option:hover {
+  background-color: #1e1a3a;
+}
+
 /* color picker keeps native look */
 input[type="color"] {
   width: 52px; height: 38px; padding: 2px;
@@ -1114,4 +1127,7 @@ input[type="range"] {
   color: var(--text-primary); font-size: .82rem; font-weight: 600;
   outline: none; cursor: pointer;
 }
-.focus-select option { background: #0a0a14; }
+.focus-select option {
+  background: #12121e;
+  color: #f0eeff;
+}
