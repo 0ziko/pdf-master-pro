@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pricing — SnakeConverter Free Online Tools</title>
+  <meta name="description" content="SnakeConverter is free forever. 50+ browser-based tools with no account, no upload, no limits. Pro plan coming soon with API access, history, and more." />
+  <meta name="keywords" content="snakeconverter pricing, free online tools, free pdf converter, free unit converter" />
+  <link rel="canonical" href="https://snakeconverter.com/pricing.html" />
+  <meta property="og:type"        content="website" />
+  <meta property="og:url"         content="https://snakeconverter.com/pricing.html" />
+  <meta property="og:title"       content="Pricing — SnakeConverter" />
+  <meta property="og:description" content="Free forever. Pro plan coming soon." />
+  <meta property="og:image"       content="https://snakeconverter.com/og-image.png" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "url": "https://snakeconverter.com/pricing.html",
+    "name": "Pricing — SnakeConverter",
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home",    "item": "https://snakeconverter.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Pricing", "item": "https://snakeconverter.com/pricing.html" }
+      ]
+    }
+  }
+  </script>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/app.css" />
+  <style>
+    :root { --accent: #8250ff; --accent2: #6030e0; }
+
+    body { background: #0d0d1a; color: #f0eeff; font-family: system-ui, sans-serif; }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .plan-card {
+      background: linear-gradient(145deg, #12121e, #1a1a2e);
+      border: 1px solid rgba(130,80,255,.2);
+      border-radius: 20px;
+      padding: 36px 32px;
+      position: relative;
+      transition: transform .25s, box-shadow .25s;
+    }
+    .plan-card:hover { transform: translateY(-4px); box-shadow: 0 20px 50px rgba(130,80,255,.18); }
+
+    .plan-card.featured {
+      border-color: rgba(130,80,255,.6);
+      background: linear-gradient(145deg, #18103a, #1e1545);
+    }
+    .plan-badge {
+      position: absolute;
+      top: -14px; left: 50%; transform: translateX(-50%);
+      background: linear-gradient(135deg, #8250ff, #6030e0);
+      color: #fff; font-size: 11px; font-weight: 700;
+      padding: 4px 16px; border-radius: 99px;
+      letter-spacing: .06em; white-space: nowrap;
+    }
+
+    .plan-name  { font-size: 22px; font-weight: 700; color: #f0eeff; margin-bottom: 6px; }
+    .plan-price { font-size: 48px; font-weight: 800; color: #8250ff; line-height: 1; margin: 18px 0 6px; }
+    .plan-price span { font-size: 18px; font-weight: 500; color: #6b7280; }
+    .plan-desc  { font-size: 14px; color: #9ca3af; margin-bottom: 28px; min-height: 42px; }
+
+    .plan-features { list-style: none; padding: 0; margin: 0 0 32px; display: flex; flex-direction: column; gap: 12px; }
+    .plan-features li { display: flex; align-items: center; gap: 10px; font-size: 14px; color: #d1d5db; }
+    .feat-icon { width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 11px; }
+    .feat-yes  { background: rgba(74,222,128,.15); color: #4ade80; }
+    .feat-no   { background: rgba(107,114,128,.12); color: #6b7280; }
+
+    .btn-plan {
+      display: block; width: 100%; text-align: center;
+      padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 700;
+      cursor: pointer; text-decoration: none; transition: all .2s;
+      border: none;
+    }
+    .btn-free {
+      background: transparent;
+      color: #8250ff;
+      border: 2px solid rgba(130,80,255,.5);
+    }
+    .btn-free:hover { border-color: #8250ff; background: rgba(130,80,255,.08); }
+
+    .btn-pro {
+      background: linear-gradient(135deg, #8250ff, #6030e0);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(130,80,255,.35);
+    }
+    .btn-pro:hover { filter: brightness(1.12); box-shadow: 0 8px 30px rgba(130,80,255,.5); }
+
+    .compare-table {
+      width: 100%; max-width: 720px; margin: 60px auto 0;
+      border-collapse: collapse; font-size: 14px;
+    }
+    .compare-table th { color: #8250ff; font-weight: 700; padding: 12px 16px; text-align: left; border-bottom: 1px solid rgba(130,80,255,.2); }
+    .compare-table td { padding: 12px 16px; color: #d1d5db; border-bottom: 1px solid rgba(255,255,255,.05); }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table .chk-yes { color: #4ade80; font-size: 16px; }
+    .compare-table .chk-no  { color: #4b5563; font-size: 16px; }
+
+    .faq-item { border-bottom: 1px solid rgba(255,255,255,.07); padding: 20px 0; }
+    .faq-q { font-size: 15px; font-weight: 600; color: #e9d5ff; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+    .faq-a { font-size: 14px; color: #9ca3af; margin-top: 10px; line-height: 1.6; display: none; }
+    .faq-item.open .faq-a { display: block; }
+    .faq-item.open .faq-arrow { transform: rotate(180deg); }
+    .faq-arrow { transition: transform .2s; font-size: 18px; color: #8250ff; }
+
+    @media (max-width: 600px) {
+      .plan-card { padding: 28px 20px; }
+      .plan-price { font-size: 38px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Nav -->
+<header style="border-bottom:1px solid rgba(130,80,255,.15); padding:14px 24px; display:flex; align-items:center; justify-content:space-between; max-width:1100px; margin:0 auto;">
+  <a href="index.html" style="display:flex; align-items:center; gap:10px; text-decoration:none;">
+    <span style="font-size:22px;">🐍</span>
+    <span style="font-weight:800; font-size:18px; color:#8250ff;">SnakeConverter</span>
+  </a>
+  <nav style="display:flex; gap:20px; align-items:center;">
+    <a href="index.html"   style="color:#9ca3af; font-size:14px; text-decoration:none;">Tools</a>
+    <a href="pdf.html"     style="color:#9ca3af; font-size:14px; text-decoration:none;">PDF</a>
+    <a href="pricing.html" style="color:#8250ff; font-size:14px; font-weight:600; text-decoration:none;">Pricing</a>
+  </nav>
+</header>
+
+<!-- Hero -->
+<section style="text-align:center; padding:72px 24px 48px;">
+  <div style="display:inline-block; background:rgba(130,80,255,.12); border:1px solid rgba(130,80,255,.3); border-radius:99px; padding:6px 18px; font-size:13px; color:#c4b5fd; margin-bottom:20px;">
+    Simple, transparent pricing
+  </div>
+  <h1 style="font-size:clamp(32px,5vw,56px); font-weight:900; margin-bottom:16px; background:linear-gradient(135deg,#e9d5ff,#8250ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;">
+    Free forever.<br>Pro when you need more.
+  </h1>
+  <p style="font-size:17px; color:#9ca3af; max-width:500px; margin:0 auto;">
+    Every tool is free with no account required. Pro unlocks history, API access, and team features.
+  </p>
+</section>
+
+<!-- Pricing Cards -->
+<section style="padding:0 24px 80px;">
+  <div class="pricing-grid">
+
+    <!-- Free -->
+    <div class="plan-card">
+      <div class="plan-name">🆓 Free</div>
+      <div class="plan-price">$0 <span>/ forever</span></div>
+      <div class="plan-desc">All tools, no account needed. Your files never leave your device.</div>
+      <ul class="plan-features">
+        <li><span class="feat-icon feat-yes">✓</span> 50+ browser-based tools</li>
+        <li><span class="feat-icon feat-yes">✓</span> PDF merge, split, encrypt</li>
+        <li><span class="feat-icon feat-yes">✓</span> Unit converters & calculators</li>
+        <li><span class="feat-icon feat-yes">✓</span> Developer & color tools</li>
+        <li><span class="feat-icon feat-yes">✓</span> Turkish / English UI</li>
+        <li><span class="feat-icon feat-yes">✓</span> PDF share link (7 days)</li>
+        <li><span class="feat-icon feat-no">–</span> Conversion history</li>
+        <li><span class="feat-icon feat-no">–</span> REST API access</li>
+        <li><span class="feat-icon feat-no">–</span> Team workspace</li>
+        <li><span class="feat-icon feat-no">–</span> Priority support</li>
+      </ul>
+      <a href="index.html" class="btn-plan btn-free">Start for Free →</a>
+    </div>
+
+    <!-- Pro -->
+    <div class="plan-card featured">
+      <div class="plan-badge">⚡ COMING SOON</div>
+      <div class="plan-name">🚀 Pro</div>
+      <div class="plan-price">$9 <span>/ month</span></div>
+      <div class="plan-desc">For power users and teams who need more control and integrations.</div>
+      <ul class="plan-features">
+        <li><span class="feat-icon feat-yes">✓</span> Everything in Free</li>
+        <li><span class="feat-icon feat-yes">✓</span> Unlimited PDF share (30 days)</li>
+        <li><span class="feat-icon feat-yes">✓</span> Conversion history (90 days)</li>
+        <li><span class="feat-icon feat-yes">✓</span> REST API (1000 calls/month)</li>
+        <li><span class="feat-icon feat-yes">✓</span> Batch processing</li>
+        <li><span class="feat-icon feat-yes">✓</span> Custom watermark removal</li>
+        <li><span class="feat-icon feat-yes">✓</span> Team workspace (up to 5 users)</li>
+        <li><span class="feat-icon feat-yes">✓</span> Priority email support</li>
+        <li><span class="feat-icon feat-yes">✓</span> Early access to new tools</li>
+        <li><span class="feat-icon feat-yes">✓</span> No ads (ever)</li>
+      </ul>
+      <!-- Waitlist form -->
+      <form id="waitlist-form" style="display:flex; gap:8px; margin-bottom:12px;">
+        <input type="email" id="waitlist-email" placeholder="your@email.com"
+          style="flex:1; padding:10px 14px; border-radius:10px; border:1px solid rgba(130,80,255,.4);
+                 background:#0d0d1a; color:#f0eeff; font-size:14px; outline:none;" required />
+        <button type="submit" class="btn-plan btn-pro" style="width:auto; padding:10px 16px; white-space:nowrap;">
+          Notify me
+        </button>
+      </form>
+      <p id="waitlist-ok" style="display:none; color:#4ade80; font-size:13px; text-align:center; margin-top:8px;">
+        🎉 You're on the list! We'll email you when Pro launches.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+<!-- Comparison Table -->
+<section style="padding:0 24px 80px;">
+  <h2 style="text-align:center; font-size:26px; font-weight:800; color:#e9d5ff; margin-bottom:40px;">Full Feature Comparison</h2>
+  <div style="overflow-x:auto;">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th style="width:50%">Feature</th>
+          <th style="text-align:center;">Free</th>
+          <th style="text-align:center;">Pro</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>All 50+ tools</td><td class="chk-yes" style="text-align:center;">✓</td><td class="chk-yes" style="text-align:center;">✓</td></tr>
+        <tr><td>No account required</td><td class="chk-yes" style="text-align:center;">✓</td><td class="chk-yes" style="text-align:center;">✓</td></tr>
+        <tr><td>Files processed in browser</td><td class="chk-yes" style="text-align:center;">✓</td><td class="chk-yes" style="text-align:center;">✓</td></tr>
+        <tr><td>PDF share link</td><td style="text-align:center; color:#9ca3af;">7 days</td><td style="text-align:center; color:#9ca3af;">30 days</td></tr>
+        <tr><td>Conversion history</td><td class="chk-no" style="text-align:center;">–</td><td class="chk-yes" style="text-align:center;">✓ 90 days</td></tr>
+        <tr><td>REST API</td><td class="chk-no" style="text-align:center;">–</td><td style="text-align:center; color:#9ca3af;">1000 req/mo</td></tr>
+        <tr><td>Batch processing</td><td class="chk-no" style="text-align:center;">–</td><td class="chk-yes" style="text-align:center;">✓</td></tr>
+        <tr><td>Team workspace</td><td class="chk-no" style="text-align:center;">–</td><td style="text-align:center; color:#9ca3af;">up to 5 users</td></tr>
+        <tr><td>Priority support</td><td class="chk-no" style="text-align:center;">–</td><td class="chk-yes" style="text-align:center;">✓</td></tr>
+        <tr><td>Early access</td><td class="chk-no" style="text-align:center;">–</td><td class="chk-yes" style="text-align:center;">✓</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section style="padding:0 24px 100px; max-width:720px; margin:0 auto;">
+  <h2 style="text-align:center; font-size:26px; font-weight:800; color:#e9d5ff; margin-bottom:40px;">Frequently Asked Questions</h2>
+
+  <div class="faq-item">
+    <div class="faq-q">Is SnakeConverter really free? <span class="faq-arrow">▾</span></div>
+    <div class="faq-a">Yes, all 50+ tools are completely free with no time limit, no account, and no credit card. We'll always keep a generous free tier.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">When will Pro launch? <span class="faq-arrow">▾</span></div>
+    <div class="faq-a">We're actively working on it. Join the waitlist above and you'll be the first to know — and get a founding member discount.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">Do you store my files? <span class="faq-arrow">▾</span></div>
+    <div class="faq-a">No. All file processing happens entirely in your browser. Nothing is uploaded to our servers unless you explicitly use the PDF Share feature, which stores files encrypted in Cloudflare R2 and deletes them automatically after 7 days (30 days for Pro).</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">What payment methods will Pro accept? <span class="faq-arrow">▾</span></div>
+    <div class="faq-a">We'll accept all major credit and debit cards, and PayPal, via Stripe's secure checkout. No payment data ever touches our servers.</div>
+  </div>
+  <div class="faq-item">
+    <div class="faq-q">Can I cancel Pro anytime? <span class="faq-arrow">▾</span></div>
+    <div class="faq-a">Absolutely. Cancel any time from your account settings and you won't be charged again. You keep Pro access until the end of your billing period.</div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer style="border-top:1px solid rgba(255,255,255,.07); padding:24px; text-align:center; color:#4b5563; font-size:13px;">
+  <span>© 2026 SnakeConverter &mdash;</span>
+  <a href="index.html"   style="color:#6b7280; text-decoration:none; margin:0 8px;">Tools</a>
+  <a href="pricing.html" style="color:#8250ff; text-decoration:none; margin:0 8px;">Pricing</a>
+  <a href="pdf.html"     style="color:#6b7280; text-decoration:none; margin:0 8px;">PDF</a>
+</footer>
+
+<script src="js/analytics.js"></script>
+<script>
+  /* Waitlist form */
+  document.getElementById("waitlist-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var email = document.getElementById("waitlist-email").value;
+    /* Store locally — replace with API call when backend is ready */
+    var list = JSON.parse(localStorage.getItem("sc_waitlist") || "[]");
+    if (!list.includes(email)) list.push(email);
+    localStorage.setItem("sc_waitlist", JSON.stringify(list));
+    document.getElementById("waitlist-form").style.display = "none";
+    document.getElementById("waitlist-ok").style.display = "block";
+    if (window.scTrack) scTrack("waitlist_signup", { email_domain: email.split("@")[1] });
+  });
+
+  /* FAQ accordion */
+  document.querySelectorAll(".faq-q").forEach(function (q) {
+    q.addEventListener("click", function () {
+      var item = q.closest(".faq-item");
+      var wasOpen = item.classList.contains("open");
+      document.querySelectorAll(".faq-item").forEach(function (i) { i.classList.remove("open"); });
+      if (!wasOpen) item.classList.add("open");
+    });
+  });
+</script>
+</body>
+</html>

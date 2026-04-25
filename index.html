@@ -27,6 +27,76 @@
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://snakeconverter.com/#website",
+        "url": "https://snakeconverter.com/",
+        "name": "SnakeConverter",
+        "description": "50+ free online tools — PDF converter, unit converter, calculator, developer tools and color tools. No signup required.",
+        "inLanguage": ["en", "tr"],
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://snakeconverter.com/?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://snakeconverter.com/#organization",
+        "name": "SnakeConverter",
+        "url": "https://snakeconverter.com/",
+        "logo": "https://snakeconverter.com/favicon.svg",
+        "sameAs": []
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://snakeconverter.com/#webpage",
+        "url": "https://snakeconverter.com/",
+        "name": "SnakeConverter — Free Online Tools & Converters",
+        "isPartOf": { "@id": "https://snakeconverter.com/#website" },
+        "about": { "@id": "https://snakeconverter.com/#organization" },
+        "description": "50+ free browser-based tools: PDF, unit converters, calculators, developer utilities and color tools.",
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://snakeconverter.com/" }
+          ]
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is SnakeConverter free?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes, all 50+ tools are completely free with no account or signup required." }
+          },
+          {
+            "@type": "Question",
+            "name": "Does SnakeConverter upload my files to a server?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. All processing happens locally in your browser. Your files never leave your device (except the optional PDF Share feature which uses encrypted Cloudflare R2 storage and expires in 7 days)." }
+          },
+          {
+            "@type": "Question",
+            "name": "Does SnakeConverter support Turkish characters in PDFs?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. All PDF tools embed the DejaVu Sans Unicode font to ensure correct rendering of Turkish, Arabic, Greek, and other special characters." }
+          },
+          {
+            "@type": "Question",
+            "name": "What browsers does SnakeConverter support?",
+            "acceptedAnswer": { "@type": "Answer", "text": "SnakeConverter works in any modern browser including Chrome, Firefox, Safari, and Edge. No plugins or extensions are required." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="css/app.css" />
   <style>
@@ -584,8 +654,32 @@
 
     </div><!-- /dir-grid -->
 
-    <div class="dir-footer" data-i18n="index.footer">
-      © 2026 SnakeConverter · All tools run in your browser
+    <!-- Email capture -->
+    <div style="text-align:center; padding:28px 20px 12px; border-top:1px solid rgba(130,80,255,.1);">
+      <p style="font-size:13px; color:#9ca3af; margin-bottom:12px;" data-i18n="index.newsletter">
+        🚀 Get notified when new tools drop — no spam, unsubscribe anytime.
+      </p>
+      <form id="nl-form" style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap; max-width:420px; margin:0 auto;">
+        <input type="email" id="nl-email" placeholder="your@email.com" required
+          style="flex:1; min-width:200px; padding:9px 14px; border-radius:10px;
+                 border:1px solid rgba(130,80,255,.35); background:#12121e;
+                 color:#f0eeff; font-size:14px; outline:none;" />
+        <button type="submit"
+          style="padding:9px 18px; border-radius:10px; border:none; cursor:pointer;
+                 background:linear-gradient(135deg,#8250ff,#6030e0); color:#fff;
+                 font-size:13px; font-weight:700; white-space:nowrap;">
+          Notify me ✓
+        </button>
+      </form>
+      <p id="nl-ok" style="display:none; color:#4ade80; font-size:13px; margin-top:10px;">
+        🎉 You're in! We'll keep you posted.
+      </p>
+    </div>
+
+    <div class="dir-footer">
+      <span data-i18n="index.footer">© 2026 SnakeConverter · All tools run in your browser</span>
+      &nbsp;·&nbsp;
+      <a href="pricing.html" style="color:#8250ff; text-decoration:none; font-size:0.7rem;">Pricing</a>
     </div>
 
   </div><!-- /main-card -->
@@ -620,6 +714,23 @@ function filterDir(query) {
     });
     col.classList.toggle("hidden", !colVisible && !!q);
     if (colVisible) anyVisible = true;
+  });
+}
+</script>
+<script src="js/analytics.js"></script>
+<script>
+/* Newsletter form */
+var nlForm = document.getElementById("nl-form");
+if (nlForm) {
+  nlForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var email = document.getElementById("nl-email").value;
+    var list = JSON.parse(localStorage.getItem("sc_newsletter") || "[]");
+    if (!list.includes(email)) list.push(email);
+    localStorage.setItem("sc_newsletter", JSON.stringify(list));
+    nlForm.style.display = "none";
+    document.getElementById("nl-ok").style.display = "block";
+    if (window.scTrack) scTrack("newsletter_signup", { email_domain: email.split("@")[1] });
   });
 }
 </script>

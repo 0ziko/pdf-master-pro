@@ -1,0 +1,118 @@
+# SnakeConverter
+
+> SnakeConverter is a free, privacy-first browser-based utility platform with 50+ tools for PDF manipulation, unit conversion, text processing, developer utilities, calculators, and color tools. No file uploads to servers, no accounts required — everything runs client-side in the browser.
+
+## About
+
+- **URL**: https://snakeconverter.com
+- **Language**: English and Turkish (TR/EN switcher on every page)
+- **Mascot**: A friendly animated snake that plays autonomous canvas animations
+- **License**: Free to use, all processing happens in the user's browser
+- **Tech**: Vanilla JavaScript, Tailwind CSS, jsPDF, PDF.js, Cloudflare Pages
+
+## Tool Categories
+
+### PDF Tools — https://snakeconverter.com/pdf.html
+- Excel to PDF (xlsx, xls, csv — full Unicode/Turkish character support)
+- Image to PDF (PNG, JPEG, WebP, GIF, BMP)
+- Merge PDF (combine multiple PDFs into one)
+- Split PDF (extract pages or custom ranges)
+- Encrypt / Decrypt PDF (AES-256 password protection)
+- Share PDF (generate a public shareable link via Cloudflare R2)
+
+### Unit Converters — https://snakeconverter.com/units.html
+- Length (km, m, cm, mm, ft, in, mi, yd)
+- Weight / Mass (kg, g, lb, oz, ton, stone)
+- Temperature (°C, °F, K, °R)
+- Area (m², km², ft², acre, hectare)
+- Volume (L, mL, gallon, cup, fluid oz)
+- Speed (km/h, mph, m/s, knot, Mach)
+- Data Storage (B, KB, MB, GB, TB, PB)
+- Time / Duration (ms, s, min, hour, day, week, month, year)
+- Energy (J, kJ, kcal, kWh, BTU)
+- Pressure (Pa, bar, psi, atm, mmHg)
+- Cooking Measurements (cups, tbsp, tsp, mL)
+- Shoe Size Converter (US, EU, UK)
+- Typography Units (px, pt, em, rem, vw)
+
+### Calculators — https://snakeconverter.com/calc.html
+- BMI Calculator (Body Mass Index with visual gauge)
+- Age Calculator (exact age from birthdate)
+- Percentage Calculator (X% of Y, increase/decrease)
+- Loan / EMI Calculator
+- Currency Converter (live rates via open API)
+- Date Difference Calculator
+- Time Zone Converter
+- Statistics Calculator (mean, median, mode, std dev)
+- Aspect Ratio Calculator
+- Number to Words (English)
+- Quadratic Equation Solver
+- Scientific Calculator
+
+### Text & Utility Tools — https://snakeconverter.com/tools.html
+- Word Counter (words, characters, sentences, reading time)
+- Text Case Converter (UPPER, lower, Title, camelCase, snake_case)
+- Base64 Encoder / Decoder
+- QR Code Generator (download as PNG)
+- Password Generator (strength meter, custom rules)
+- Random Number Generator (range, count, unique)
+- Unix Timestamp Converter
+- Morse Code Encoder / Decoder
+- Text ↔ Binary Converter
+- Palindrome Checker
+- Duplicate Line Remover
+- Text Reverser
+- String Inspector (char codes, Unicode info)
+- Coin Flip simulator
+- Dice Roller (1–6 sides, multiple dice)
+- Stopwatch (millisecond precision)
+- Countdown Timer
+
+### Developer Tools — https://snakeconverter.com/dev.html
+- JSON Formatter / Validator
+- HTML Encoder / Decoder
+- URL Encoder / Decoder
+- Regex Tester
+- Color Picker / Converter
+- CSS Minifier
+- JSON ↔ CSV Converter
+- Diff Checker (line-by-line text comparison)
+- CRON Expression Parser
+- JWT Encoder / Decoder
+- Character Diff
+
+### Color Tools — https://snakeconverter.com/color.html
+- HEX ↔ RGB ↔ HSL Converter
+- Color Palette Generator
+- Contrast Ratio Checker (WCAG AA/AAA)
+- Gradient Builder
+- Color Blindness Simulator
+- Random Palette Generator
+- Tint & Shade Generator
+
+## Frequently Asked Questions
+
+**Is SnakeConverter free?**
+Yes, all tools are 100% free with no account required.
+
+**Do you store uploaded files?**
+No. All processing happens locally in your browser. Files never leave your device (except PDF Share, which uses Cloudflare R2 and expires in 7 days).
+
+**Does it support Turkish characters?**
+Yes. All PDF tools embed the DejaVu Sans font to ensure correct rendering of Turkish, Arabic, Greek, and other Unicode characters.
+
+**What browsers are supported?**
+Any modern browser: Chrome, Firefox, Safari, Edge. No plugins required.
+
+**Is there an API?**
+Not currently. All tools are browser-based. A REST API is planned for the Pro tier.
+
+## Sitemap
+
+- https://snakeconverter.com/ — Home / Tool Directory
+- https://snakeconverter.com/pdf.html — PDF Tools
+- https://snakeconverter.com/tools.html — Text & Utility Tools
+- https://snakeconverter.com/units.html — Unit Converters
+- https://snakeconverter.com/calc.html — Calculators
+- https://snakeconverter.com/dev.html — Developer Tools
+- https://snakeconverter.com/color.html — Color Tools
