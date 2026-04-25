@@ -127,11 +127,11 @@
       </div>
 
       <h1 class="site-title">SnakeConverter</h1>
-      <p class="site-sub">50+ free browser tools — zero uploads, zero servers</p>
+      <p class="site-sub" data-i18n="index.sub">50+ free browser tools — zero uploads, zero servers</p>
 
       <div class="search-wrap">
         <svg class="search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" class="search-input" placeholder="Search tools…" oninput="filterDir(this.value)" />
+        <input type="text" class="search-input" data-i18n-ph="index.search" placeholder="Search tools…" oninput="filterDir(this.value)" />
       </div>
     </div>
 
@@ -141,7 +141,7 @@
       <!-- ── PDF Tools ── -->
       <div class="dir-col" data-col="pdf">
         <div class="dir-cat cat-pdf">
-          <span class="dir-cat-icon">📄</span> PDF Tools
+          <span class="dir-cat-icon">📄</span><span data-i18n="cat.pdf">PDF Tools</span>
         </div>
         <a href="pdf.html#excel"   class="dir-item" data-search="excel spreadsheet xls csv convert pdf">
           <span class="dir-item-icon">📊</span>
@@ -163,13 +163,13 @@
           <span class="dir-item-icon">🔒</span>
           <span class="dir-item-text"><span class="dir-item-name">Encrypt / Decrypt</span><span class="dir-item-desc">Password-protect or unlock PDFs</span></span>
         </a>
-        <a href="pdf.html" class="dir-view-all">All PDF tools →</a>
+        <a href="pdf.html" class="dir-view-all" data-i18n="viewall.pdf">All PDF tools →</a>
       </div>
 
       <!-- ── Unit Converters ── -->
       <div class="dir-col" data-col="units">
         <div class="dir-cat cat-units">
-          <span class="dir-cat-icon">📏</span> Unit Converters
+          <span class="dir-cat-icon">📏</span><span data-i18n="cat.units">Unit Converters</span>
         </div>
         <a href="units.html#length"      class="dir-item" data-search="length distance km miles feet inches meter">
           <span class="dir-item-icon">📏</span>
@@ -215,13 +215,13 @@
           <span class="dir-item-icon">⛽</span>
           <span class="dir-item-text"><span class="dir-item-name">Fuel Efficiency</span><span class="dir-item-desc">L/100km, km/L, MPG</span></span>
         </a>
-        <a href="units.html" class="dir-view-all">All unit converters →</a>
+        <a href="units.html" class="dir-view-all" data-i18n="viewall.units">All unit converters →</a>
       </div>
 
       <!-- ── Text & Utility Tools ── -->
       <div class="dir-col" data-col="text">
         <div class="dir-cat cat-text">
-          <span class="dir-cat-icon">✍️</span> Text &amp; Utility
+          <span class="dir-cat-icon">✍️</span><span data-i18n="cat.text">Text &amp; Utility</span>
         </div>
         <a href="tools.html#words"   class="dir-item" data-search="word count character sentence paragraph reading time">
           <span class="dir-item-icon">📊</span>
@@ -263,13 +263,13 @@
           <span class="dir-item-icon">⏱</span>
           <span class="dir-item-text"><span class="dir-item-name">Unix Timestamp</span><span class="dir-item-desc">Live epoch clock · Date conversion</span></span>
         </a>
-        <a href="tools.html" class="dir-view-all">All utility tools →</a>
+        <a href="tools.html" class="dir-view-all" data-i18n="viewall.text">All utility tools →</a>
       </div>
 
       <!-- ── Developer Tools ── -->
       <div class="dir-col" data-col="dev">
         <div class="dir-cat cat-dev">
-          <span class="dir-cat-icon">💻</span> Developer
+          <span class="dir-cat-icon">💻</span><span data-i18n="cat.dev">Developer</span>
         </div>
         <a href="dev.html#json"  class="dir-item" data-search="json formatter validator minify beautify">
           <span class="dir-item-icon">{ }</span>
@@ -311,13 +311,13 @@
           <span class="dir-item-icon">📝</span>
           <span class="dir-item-text"><span class="dir-item-name">Markdown Preview</span><span class="dir-item-desc">Live side-by-side MD rendering</span></span>
         </a>
-        <a href="dev.html" class="dir-view-all">All dev tools →</a>
+        <a href="dev.html" class="dir-view-all" data-i18n="viewall.dev">All dev tools →</a>
       </div>
 
       <!-- ── Calculators + Color ── -->
       <div class="dir-col" data-col="calc">
         <div class="dir-cat cat-calc">
-          <span class="dir-cat-icon">🧮</span> Calculators
+          <span class="dir-cat-icon">🧮</span><span data-i18n="cat.calc">Calculators</span>
         </div>
         <a href="calc.html#discount" class="dir-item" data-search="discount calculator sale price percentage off">
           <span class="dir-item-icon">🏷️</span>
@@ -360,13 +360,13 @@
           <span class="dir-item-text"><span class="dir-item-name">Pregnancy Due Date</span><span class="dir-item-desc">LMP + 280 days (Naegele's rule)</span></span>
         </a>
 
-        <a href="calc.html" class="dir-view-all">All calculators →</a>
+        <a href="calc.html" class="dir-view-all" data-i18n="viewall.calc">All calculators →</a>
       </div>
 
       <!-- ── Color Tools ── -->
       <div class="dir-col" data-col="color">
         <div class="dir-cat cat-color">
-          <span class="dir-cat-icon">🎨</span> Color Tools
+          <span class="dir-cat-icon">🎨</span><span data-i18n="cat.color">Color Tools</span>
         </div>
         <a href="color.html#convert"  class="dir-item" data-search="hex rgb hsl cmyk color converter">
           <span class="dir-item-icon">🎨</span>
@@ -384,13 +384,13 @@
           <span class="dir-item-icon">✨</span>
           <span class="dir-item-text"><span class="dir-item-name">Gradient Builder</span><span class="dir-item-desc">Linear/radial CSS gradients</span></span>
         </a>
-        <a href="color.html" class="dir-view-all">All color tools →</a>
+        <a href="color.html" class="dir-view-all" data-i18n="viewall.color">All color tools →</a>
       </div>
 
     </div><!-- /dir-grid -->
 
-    <div class="dir-footer">
-      © 2026 SnakeConverter &nbsp;·&nbsp; All processing happens in your browser · Zero uploads · Zero servers
+    <div class="dir-footer" data-i18n="index.footer">
+      © 2026 SnakeConverter · All tools run in your browser
     </div>
 
   </div><!-- /main-card -->
