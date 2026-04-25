@@ -134,19 +134,17 @@ body::before {
   display: inline-block;
 }
 
-.snake-stage canvas {
+/* Snake stage — hosts the SVG mascot */
+.snake-stage svg, .snake-stage canvas {
   display: block;
   background: transparent;
-  filter: drop-shadow(0 4px 16px rgba(34,197,94,0.3)) drop-shadow(0 2px 8px rgba(0,0,0,0.4));
+  margin: 0 auto;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
-/* Legacy img class (no longer used but kept for safety) */
-.snake-img {
-  width: 150px; height: 150px;
-  object-fit: contain; display: block; margin: 0 auto;
-  background: transparent;
-  -webkit-user-drag: none; user-select: none;
-}
+/* Legacy img (unused) */
+.snake-img { display: none; }
 
 /* CHOMP! pop-up text */
 .snake-chomp {
