@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://snakeconverter.pages.dev/sitemap.xml
+Sitemap: https://snakeconverter.com/sitemap.xml
