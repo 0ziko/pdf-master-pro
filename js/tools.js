@@ -54,8 +54,7 @@
     if (nextBday <= now) nextBday.setFullYear(nextBday.getFullYear() + 1);
     const daysToNext = Math.ceil((nextBday - now) / 86400000);
 
-    const DAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-    return { years, months, days, totalDays, totalWeeks, totalHours, daysToNext, bornOn: DAYS[birth.getDay()] };
+    return { years, months, days, totalDays, totalWeeks, totalHours, daysToNext, bornDow: birth.getDay() };
   }
 
   /* ══════════════════════════════════════════════
@@ -65,17 +64,17 @@
     const h   = heightCm / 100;
     const bmi = weightKg / (h * h);
 
-    let cat, color;
-    if      (bmi < 18.5) { cat = "Underweight"; color = "#60a5fa"; }
-    else if (bmi < 25)   { cat = "Normal";       color = "#4ade80"; }
-    else if (bmi < 30)   { cat = "Overweight";   color = "#fbbf24"; }
-    else                 { cat = "Obese";         color = "#f87171"; }
+    let catKey, color;
+    if      (bmi < 18.5) { catKey = "under"; color = "#60a5fa"; }
+    else if (bmi < 25)   { catKey = "normal"; color = "#4ade80"; }
+    else if (bmi < 30)   { catKey = "over";   color = "#fbbf24"; }
+    else                 { catKey = "obese";  color = "#f87171"; }
 
     const minNormal = (18.5 * h * h).toFixed(1);
     const maxNormal = (24.9 * h * h).toFixed(1);
     const pct = Math.min(100, Math.max(0, ((bmi - 10) / (45 - 10)) * 100));
 
-    return { bmi: bmi.toFixed(1), cat, color, minNormal, maxNormal, pct };
+    return { bmi: bmi.toFixed(1), catKey, color, minNormal, maxNormal, pct };
   }
 
   /* ══════════════════════════════════════════════
@@ -124,9 +123,9 @@
      6. RANDOM NUMBER GENERATOR
   ══════════════════════════════════════════════ */
   function randomNums(min, max, count, unique, sorted) {
-    if (min > max) throw new Error("Min cannot be greater than Max.");
+    if (min > max) throw new Error("i18n:err.rng.minmax");
     if (unique && (max - min + 1) < count)
-      throw new Error(`Only ${max - min + 1} unique values exist in [${min}, ${max}].`);
+      throw new Error("i18n:err.rng.uniq|" + (max - min + 1) + "|" + min + "|" + max);
 
     const arr = [];
     if (unique) {
@@ -170,10 +169,10 @@
     if (/[a-z]/.test(pwd))        score++;
     if (/[0-9]/.test(pwd))        score++;
     if (/[^A-Za-z0-9]/.test(pwd)) score++;
-    if (score <= 2) return { label: "Weak",        pct: 20,  color: "#f87171" };
-    if (score <= 4) return { label: "Medium",      pct: 50,  color: "#fbbf24" };
-    if (score <= 5) return { label: "Strong",      pct: 75,  color: "#4ade80" };
-    return                { label: "Very Strong",  pct: 100, color: "#22d3ee" };
+    if (score <= 2) return { strength: 1, pct: 20,  color: "#f87171" };
+    if (score <= 4) return { strength: 2, pct: 50,  color: "#fbbf24" };
+    if (score <= 5) return { strength: 3, pct: 75,  color: "#4ade80" };
+    return                { strength: 4, pct: 100, color: "#22d3ee" };
   }
 
   /* ══════════════════════════════════════════════
@@ -181,8 +180,8 @@
   ══════════════════════════════════════════════ */
   async function renderQR(canvasId, text, opts) {
     const canvas = document.getElementById(canvasId);
-    if (!canvas || !w.QRCode) throw new Error("QR library not loaded.");
-    if (!text.trim()) throw new Error("Enter text or URL first.");
+    if (!canvas || !w.QRCode) throw new Error("i18n:err.qr.nolib");
+    if (!text.trim()) throw new Error("i18n:err.qr.empty");
     await w.QRCode.toCanvas(canvas, text, {
       width:            opts.size || 256,
       errorCorrectionLevel: opts.ecl || "M",
@@ -195,11 +194,11 @@
   ══════════════════════════════════════════════ */
   function b64encode(str) {
     try   { return btoa(unescape(encodeURIComponent(str))); }
-    catch (e) { throw new Error("Encoding failed: " + e.message); }
+    catch (e) { throw new Error("i18n:err.b64.encode"); }
   }
   function b64decode(str) {
     try   { return decodeURIComponent(escape(atob(str.trim()))); }
-    catch (e) { throw new Error("Invalid Base64 string."); }
+    catch (e) { throw new Error("i18n:err.b64.bad"); }
   }
 
   /* ══════════════════════════════════════════════
@@ -209,13 +208,13 @@
 
   function dateToUnix(dateStr) {
     const d = new Date(dateStr);
-    if (isNaN(d)) throw new Error("Invalid date / time.");
+    if (isNaN(d)) throw new Error("i18n:err.unix.date");
     return Math.floor(d.getTime() / 1000);
   }
 
   function unixToDate(ts) {
     const n = Number(ts);
-    if (!Number.isFinite(n)) throw new Error("Invalid timestamp.");
+    if (!Number.isFinite(n)) throw new Error("i18n:err.unix.ts");
     const d = new Date(n * 1000);
     return {
       iso:   d.toISOString(),

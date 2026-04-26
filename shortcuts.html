@@ -15,10 +15,18 @@
       font-size:.8rem;font-weight:700;cursor:pointer;transition:all .15s}
     .kbs-tab.active{background:var(--accent-dim);border-color:var(--border);color:var(--accent-light)}
     .kbs-search{width:100%;padding:.5rem .75rem;border-radius:8px;border:1px solid var(--border-subtle);background:var(--surface);color:var(--text-primary);font-size:.85rem;margin-bottom:.75rem}
-    .kbs-list{max-height:min(50vh,420px);overflow-y:auto;border:1px solid var(--border-subtle);border-radius:10px}
-    .kbs-row{display:flex;justify-content:space-between;gap:12px;padding:10px 12px;border-bottom:1px solid var(--border-subtle);font-size:.8rem;align-items:flex-start}
+    .kbs-list{max-height:min(88vh,960px);min-height: min(50vh, 420px); overflow-y:auto;border:1px solid var(--border-subtle);border-radius:10px}
+    @media (min-width: 900px) {
+      .kbs-list{ display:grid; grid-template-columns:1fr 1fr; }
+      .kbs-row{ border-bottom:1px solid var(--border-subtle); border-right:1px solid var(--border-subtle); }
+      .kbs-row:nth-child(2n){ border-right:none; }
+    }
+    .kbs-row{display:flex;justify-content:space-between;gap:12px;padding:9px 12px 9px 14px;border-bottom:1px solid var(--border-subtle);font-size:.78rem;align-items:flex-start}
     .kbs-row:last-child{border-bottom:none}
-    .kbs-keys{flex:0 0 140px;font-family:ui-monospace,monospace;font-weight:700;color:var(--accent-light)}
+    @media (min-width: 900px) {
+      .kbs-list .kbs-row:nth-last-child(-n+2) { border-bottom: none; }
+    }
+    .kbs-keys{flex:0 0 150px;font-family:ui-monospace,monospace;font-weight:700;color:var(--accent-light)}
     .kbs-desc{color:var(--text-muted);flex:1}
     @media(max-width:520px){.kbs-row{flex-direction:column}.kbs-keys{flex:none}}
   </style>
@@ -45,11 +53,11 @@
 <main>
 <div class="lp-wrap">
   <section class="lp-hero">
-    <h1 class="lp-h1">Excel &amp; <span class="accent">PowerPoint</span> Shortcuts</h1>
+    <h1 class="lp-h1" data-i18n="kbs.pagetitle">Excel &amp; PowerPoint Shortcuts</h1>
     <p class="lp-hero-sub" data-i18n="kbs.hero">Search and download Microsoft Excel and PowerPoint keyboard shortcuts.</p>
     <div class="lp-trust">✓ Free · No signup · <span data-i18n="aip.tip">Browser only</span></div>
   </section>
-  <section class="lp-tool-box">
+  <section class="lp-tool-box" style="max-width: 1100px; margin: 0 auto">
     <div class="kbs-tabs" role="tablist">
       <button type="button" class="kbs-tab active" id="kbsTabX" data-kbs="x" data-i18n="kbs.excel.name">Excel</button>
       <button type="button" class="kbs-tab" id="kbsTabP" data-kbs="p" data-i18n="kbs.ppt.name">PowerPoint</button>
@@ -65,29 +73,102 @@
 <footer class="lp-footer" style="margin-top:48px;padding:24px;text-align:center;font-size:12px;color:var(--text-dim)">
   <a href="index.html">SnakeConverter</a>
 </footer>
+<script src="js/i18n.js"></script>
 <script>
 (function(){
   var KBS_EXCEL = [
-    ['Ctrl+N','New workbook'],['Ctrl+O','Open'],['Ctrl+S','Save'],['Ctrl+P','Print'],['Ctrl+C','Copy'],['Ctrl+X','Cut'],['Ctrl+V','Paste'],
-    ['Ctrl+Z','Undo'],['Ctrl+Y / F4','Redo / Repeat action'],['Ctrl+F','Find & Replace (Find tab)'],['Ctrl+H','Find & Replace (Replace)'],
-    ['Ctrl+T','Create table from range'],['Ctrl+Shift+L','Toggle filters'],['Ctrl+;','Insert today’s date'],['Ctrl+Shift+;','Insert current time'],
-    ['Ctrl+1','Format cells dialog'],['F2','Edit active cell'],['Ctrl+Arrow','Jump to region edge'],['Ctrl+Shift+Arrow','Select to region edge'],
-    ['Ctrl+Space','Select column'],['Shift+Space','Select row'],['Ctrl+A','Select all (used range)'],['Ctrl+D','Fill down from cell above'],
-    ['Ctrl+R','Fill right from cell left'],['Alt+=','AutoSum selected cells'],['F4','Lock reference in formula (while editing)'],
-    ['Ctrl+`','Show formulas'],['F9','Recalculate (manual calc mode)'],['Ctrl+PageUp / PageDown','Previous / next sheet'],
-    ['Shift+F11','New worksheet'],['Ctrl+B','Bold'],['Ctrl+I','Italic'],['Ctrl+U','Underline']
+    ['Ctrl+N','New workbook'],['Ctrl+O','Open'],['Ctrl+S','Save'],['Ctrl+Shift+S','Save as'],['Ctrl+P','Print'],
+    ['Ctrl+W','Close workbook'],['Ctrl+C','Copy'],['Ctrl+X','Cut'],['Ctrl+V','Paste'],['Ctrl+Shift+V','Paste special'],
+    ['Ctrl+Z','Undo'],['Ctrl+Y / F4','Redo / repeat action'],['F4 (in cell ref)','Cycle absolute/relative ref'],
+    ['Ctrl+F','Find (Find tab)'],['Ctrl+H','Find and replace (Replace)'],['Ctrl+G','Go To'],['Ctrl+;','Insert today’s date'],
+    ['Ctrl+Shift+;','Insert current time'],['Ctrl+1','Format cells dialog'],['F2','Edit active cell'],
+    ['Ctrl+Arrow','Jump to region edge (with data)'],['Ctrl+Shift+Arrow','Select to region edge'],
+    ['Ctrl+Space','Select entire column'],['Shift+Space','Select entire row'],['Ctrl+A','Select all (used area)'],
+    ['Ctrl+D','Fill down from cell above'],['Ctrl+R','Fill right from cell left'],['Ctrl+Enter','Fill selection with entry'],
+    ['Alt+=','AutoSum (selected cells)'],['F9','Recalculate (when manual)'],['Ctrl+`','Show formulas in sheet'],
+    ['Ctrl+PageUp / PageDown','Previous / next worksheet'],['Shift+F11','New worksheet (insert)'],['F11','Create chart (selection)'],
+    ['Ctrl+T','Create table (from range)'],['Ctrl+Shift+L','Toggle filter on/off'],['Ctrl+Shift+_ (underline key)','Remove outline (group)'],
+    ['Ctrl+8','Toggle outline symbols'],['Ctrl+9','Hide rows (selection)'],['Ctrl+0 (zero)','Hide columns (selection)'],
+    ['Ctrl+Shift+9','Unhide rows'],['Ctrl+Shift+0','Unhide columns'],['Alt+H O R','Row height (Ribbon path)'],
+    ['Ctrl+Shift+1','Number format: decimal'],['Ctrl+Shift+3','Date format d-mmm-yy'],['Ctrl+Shift+4','Currency format'],
+    ['Ctrl+Shift+5','Percentage format'],['Ctrl+5','Strikethrough (toggle)'],['Ctrl+B','Bold'],['Ctrl+I','Italic'],['Ctrl+U','Underline'],
+    ['Ctrl+K','Insert hyperlink'],['Ctrl+Z then Ctrl+Y','Common undo/redo stack'],['F12','Save as (legacy)'],
+    ['Ctrl+Home','A1 in active sheet'],['Ctrl+End','Last used cell in sheet'],
+    ['Shift+F3','Insert function (formula bar)'],['Ctrl+Shift+U','Expand/collapse formula bar']
   ];
+  var KBS_EXCEL_TR = KBS_EXCEL.map(function (r) { return [r[0], r[1]]; });
+  /* Turkish descriptions — aligned with KBS_EXCEL by index */
+  (function() {
+    var d = [
+      'Yeni çalışma kitabı','Aç','Kaydet','Farklı kaydet','Yazdır','Çalışma kitabını kapat',
+      'Kopyala','Kes','Yapıştır','Özel yapıştır',
+      'Geri al / Yinele / tekrar','Yinele (Formül: mutlak/ göreli referans)','(Hücrede) A1, $A$1, A$1… döngüsü',
+      'Bul (Bul sekmesi)','Bul ve değiştir','Git','Bugünün tarihini ekle',
+      'Şu anki saati ekle','Hücreleri biçimlendir','Aktif hücreyi düzenle',
+      'Veri bloğu kenarına atla (Ctrl+Yön)','Bloğun kenarına kadar seç',
+      'Sütunun tümünü seç','Satırın tümünü seç','Kullanılan alanı seç',
+      'Aşağı doldur (üst hücre)','Sağa doldur (sol hücre)','Seçime girilen değeri doldur',
+      'Otomatik toplam (Otomatik toplam)','Yeniden hesapla (elle hesap)','Formülleri göster',
+      'Önceki / sonraki sayfa (sekme)','Yeni sayfa (ekle)','Grafik oluştur (seçimden)',
+      'Tablo oluştur (aralıktan)','Filtreyi aç/kapat (Başlık)','Dış çizgiyi kaldır (grup)',
+      'Ana hat sembollerini aç/kapat','Satırları gizle (seçim)','Sütunları gizle (seçim)',
+      'Satırların gizlenmesini aç','Sütunların gizlenmesini aç','Satır yüksekliği (Şerit yolu; İng. menü)','Sayı: ondalık',
+      'Tarih biçimi d-mmm-yy','Para birimi biçimi','Yüzde biçimi','Üstü çizili (aç/kapat)','Kalın','İtalik','Altı çiz','Köprü ekle',
+      'Yaygın geri al / yinele','Farklı kaydet (eski)','Aktif sayfada A1',
+      'Sayfadaki son kullanılan hücre','Fonksiyon ekle (formül çubuğu)','Formül çubuğunu genişlet/daralt'
+    ];
+    for (var i = 0; i < d.length; i++) if (KBS_EXCEL_TR[i]) KBS_EXCEL_TR[i][1] = d[i];
+  })();
+
   var KBS_PPT = [
-    ['Ctrl+N','New presentation'],['Ctrl+O','Open'],['Ctrl+S','Save'],['Ctrl+P','Print'],['Ctrl+C','Copy'],['Ctrl+X','Cut'],['Ctrl+V','Paste'],
-    ['Ctrl+Z','Undo'],['Ctrl+Y / F4','Redo / Repeat'],['Ctrl+D','Duplicate object'],['Ctrl+G','Group objects'],['Ctrl+Shift+G','Ungroup'],
-    ['F5 / Ctrl+G','Go to slide'],['F5 (slideshow)','Start from beginning (when not editing text)'],
-    ['Shift+F5','Start from current slide (slideshow)'],['Esc','End slideshow (presenter)'],['B','Black screen in slideshow (presenter)'],
-    ['W','White screen in slideshow (presenter)'],['N / PageDown / Right / Space','Next slide (slideshow)'],['P / PageUp / Left','Previous slide (slideshow)'],
-    ['F2','Edit text in shape'],['Ctrl+M','New slide (layout default)'],['Ctrl+Shift+> / <','Increase / decrease font size (selection)'],
-    ['Ctrl+Shift+Enter','Line break in same text box'],['Ctrl+B','Bold'],['Ctrl+I','Italic'],['Ctrl+U','Underline'],['F6','Next pane']
+    ['Ctrl+N','New presentation'],['Ctrl+O','Open'],['Ctrl+S','Save'],['Ctrl+Shift+S','Save as'],['Ctrl+P','Print'],
+    ['Ctrl+W / Ctrl+F4','Close presentation'],['Ctrl+C','Copy'],['Ctrl+X','Cut'],['Ctrl+V','Paste'],['Ctrl+Shift+C','Copy formatting'],
+    ['Ctrl+Shift+V','Paste formatting'],['Ctrl+Z','Undo'],['Ctrl+Y / F4','Redo / repeat'],['Ctrl+D','Duplicate (selection)'],
+    ['Ctrl+G / F5 (Go to)','Group / Go to dialog / slide sorter (context)'],
+    ['Ctrl+Shift+G','Ungroup'],['F5','From beginning (slideshow) when not editing text'],
+    ['Shift+F5','From current slide (slideshow)'],['Esc','End slideshow (presenter)'],
+    ['B / W / ,','Black / white screen in slideshow (presenter)'],
+    ['N / PageDown / → / Space / Enter','Next slide (slideshow)'],['P / PageUp / ← / Backspace','Previous (slideshow)'],
+    ['1+Enter (digit)','Go to slide # (slideshow)'],['Ctrl+Home','First slide in outline'],['Ctrl+End','Last slide in outline'],
+    ['F2','Edit text in object'],['Tab / Shift+Tab','Next / previous object (selection order)'],
+    ['Ctrl+M','New slide (default layout)'],['Ctrl+Shift+> / <','Increase / decrease font (selection)'],
+    ['Ctrl+B / I / U','Bold / italic / underline'],['Ctrl+Shift+Enter','Line break in same text box'],
+    ['Ctrl+G then Alt+1…','Align and distribute (Ribbon)'],['Shift+F3','Change case of selected text (some builds)'],
+    ['Ctrl+Equal','Subscript (some builds)'],['Ctrl+Shift+Plus','Superscript (some builds)'],
+    ['F6','Next pane'],['Shift+F4','Last Find action (in find dialog)'],
+    ['Ctrl+S (again)','Quick save reminder — keep saving often!']
   ];
+  var KBS_PPT_TR = KBS_PPT.map(function (r) { return [r[0], r[1]]; });
+  (function() {
+    var d = [
+      'Yeni sunu','Aç','Kaydet','Farklı kaydet','Yazdır',
+      'Sunuyu kapat',
+      'Kopyala','Kes','Yapıştır','Biçimi kopyala',
+      'Biçimi yapıştır','Geri al','Yinele / tekrar','Çoğalt (seçim)',
+      'Grup / Git (bağlama) — Git ile slayt atla',
+      'Grubu çöz',
+      'Baştan başlat (slayt gösterisi, metin dışındayken)','Mevcut slayttan başlat (gösteri)',
+      'Slayt gösterisini bitir (sunucu)','Siyah / beyaz ekran (gösteri)',
+      'Sonraki slayt (gösteri)','Önceki slayt (gösteri)',
+      'Slayta git # (gösteri) (rakam+Enter)','Taslakta ilk slayt','Taslakta son slayt',
+      'Nesnede metin düzenle','Sonraki / önceki nesne (sekme sırası)','Yeni slayt (varsayılan yerleşim)',
+      'Yazı boyu artır / azalt (seçim)','Kalın / italik / altı çiz',
+      'Aynı kutu içinde satır sonu', 'Hizala ve dağıt (Şerit; İng. menü — Ctrl+G)', 'Seçili metnin büyük/küçük harfi (sürüme bağlı)','Altbir simge (sürüme bağlı)','Üstsimge (sürüme bağlı)','Sonraki bölme','Son Bul işlemi (Bul)','Sık kaydet!'
+    ];
+    for (var i = 0; i < d.length; i++) if (KBS_PPT_TR[i]) KBS_PPT_TR[i][1] = d[i];
+  })();
+
   var mode = 'x';
-  function list(){
+  function lang() {
+    try {
+      if (window.PdfMasterI18n && window.PdfMasterI18n.getLang) return window.PdfMasterI18n.getLang();
+    } catch (e) {}
+    return 'en';
+  }
+  function list() {
+    if (lang() === 'tr') {
+      return mode === 'x' ? KBS_EXCEL_TR : KBS_PPT_TR;
+    }
     return mode==='x' ? KBS_EXCEL : KBS_PPT;
   }
   function render(){
@@ -108,16 +189,20 @@
     mode = 'p'; this.classList.add('active'); document.getElementById('kbsTabX').classList.remove('active'); render();
   });
   document.getElementById('kbsDl').addEventListener('click', function(){
-    var s = (mode==='x' ? 'EXCEL' : 'POWERPOINT') + ' keyboard shortcuts (SnakeConverter)\n\n';
+    var s = (mode==='x' ? 'EXCEL' : 'POWERPOINT') + ' — SnakeConverter\n\n';
     list().forEach(function(p){ s += p[0] + ' — ' + p[1] + '\n'; });
     var a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob([s],{type:'text/plain;charset=utf-8'}));
     a.download = (mode==='x' ? 'excel' : 'powerpoint') + '-shortcuts.txt';
     a.click();
   });
-  render();
+  document.addEventListener('langchange', render);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', render);
+  } else {
+    render();
+  }
 })();
 </script>
-<script src="js/i18n.js"></script>
 </body>
 </html>

@@ -66,9 +66,9 @@
     split:      { key: 'tab.split',   fallback: 'Split PDF' },
     encrypt:    { key: 'tab.encrypt', fallback: 'Encrypt / Decrypt' },
     share:      { key: 'tab.share',   fallback: 'Share PDF' },
-    screenshot: { key: null, fallback: 'Screenshot → PDF' },
-    compress:   { key: null, fallback: 'PDF Compressor' },
-    ocr:        { key: null, fallback: 'PDF OCR' },
+    screenshot: { key: 'pdf.screenshot.name', fallback: 'Screenshot → PDF' },
+    compress:   { key: 'tool.pdfcompress.name', fallback: 'PDF Compressor' },
+    ocr:        { key: 'pdf.ocr.h1', fallback: 'PDF OCR' },
   };
 
   function getTabTitle(id) {
@@ -203,6 +203,8 @@
       refreshBtnLabels();
       renderMergeList();
       _setCaption("idle");
+      const h = location.hash && location.hash.slice(1);
+      if (h && VALID_TABS.has(h)) switchTab(h);
     };
   }
 

@@ -124,11 +124,11 @@
           <canvas id="snakeCanvas"></canvas>
           <span id="snakeChomp" class="snake-chomp"></span>
         </div>
-        <p id="snakeCaption" class="snake-caption">Pick a converter!</p>
+        <p id="snakeCaption" class="snake-caption" data-i18n="mascot.pickconv">Pick a converter!</p>
       </div>
     </div>
 
-    <div class="sc-sidebar-label">Unit Converters</div>
+    <div class="sc-sidebar-label" data-i18n="hub.units.h1">Unit Converters</div>
     <!-- Jump nav is populated by JS -->
     <nav class="sc-sidebar-nav jump-nav" id="jumpNav"></nav>
 
@@ -148,12 +148,12 @@
   <main class="sc-main">
     <div class="sc-topbar">
       <div>
-        <div class="sc-topbar-crumb"><a href="index.html">SnakeConverter</a> › Unit Converters</div>
-        <div class="sc-topbar-title" id="scTopbarTitle">Unit Converters</div>
+        <div class="sc-topbar-crumb"><a href="index.html">SnakeConverter</a> › <span data-i18n="hub.units.h1">Unit Converters</span></div>
+        <div class="sc-topbar-title" id="scTopbarTitle" data-i18n="hub.units.h1">Unit Converters</div>
       </div>
       <div class="sc-topbar-badge">
         <svg width="6" height="6" viewBox="0 0 10 10" fill="#4ade80"><circle cx="5" cy="5" r="5"/></svg>
-        Browser · No server
+        <span data-i18n="badge">Browser · No server</span>
       </div>
     </div>
 
@@ -182,17 +182,17 @@
         <div><div class="tps-title" data-i18n="units.cooking.name">Cooking Measurements</div><div class="tps-desc" data-i18n="units.cooking.desc">Cups, tbsp, tsp, ml, liters, fl oz, pints, quarts, gallons</div></div>
       </div>
       <div class="unit-input-row">
-        <input type="number" id="cook-val" class="input-field" value="1" placeholder="Value…" oninput="cookingConvert()" />
+        <input type="number" id="cook-val" class="input-field" value="1" data-i18n-ph="unit.val.ph" placeholder="Value…" oninput="cookingConvert()" />
         <select id="cook-from" class="unit-card-select" onchange="cookingConvert()">
-          <option value="cup">Cup</option>
-          <option value="tbsp">Tablespoon</option>
-          <option value="tsp">Teaspoon</option>
-          <option value="ml">Milliliter (ml)</option>
-          <option value="l">Liter (L)</option>
-          <option value="floz">Fluid Ounce (fl oz)</option>
-          <option value="pint">Pint</option>
-          <option value="quart">Quart</option>
-          <option value="gallon">Gallon</option>
+          <option value="cup" data-i18n="cook.cup">Cup</option>
+          <option value="tbsp" data-i18n="cook.tbsp">Tablespoon</option>
+          <option value="tsp" data-i18n="cook.tsp">Teaspoon</option>
+          <option value="ml" data-i18n="cook.ml">Milliliter (ml)</option>
+          <option value="l" data-i18n="cook.l">Liter (L)</option>
+          <option value="floz" data-i18n="cook.floz">Fluid Ounce (fl oz)</option>
+          <option value="pint" data-i18n="cook.pint">Pint</option>
+          <option value="quart" data-i18n="cook.quart">Quart</option>
+          <option value="gallon" data-i18n="cook.gallon">Gallon</option>
         </select>
       </div>
       <div id="cook-out" class="cooking-grid"></div>
@@ -401,13 +401,13 @@
         </select>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem;">
-        <div><label class="field-label" style="font-size:.7rem;">Base font (px)</label><input type="number" id="typo-base" class="input-field" value="16" oninput="typoConvert()" /></div>
-        <div><label class="field-label" style="font-size:.7rem;">Viewport width (px)</label><input type="number" id="typo-vw" class="input-field" value="1440" oninput="typoConvert()" /></div>
+        <div><label class="field-label" style="font-size:.7rem;" data-i18n="typo.lbl.base">Base font (px)</label><input type="number" id="typo-base" class="input-field" value="16" oninput="typoConvert()" /></div>
+        <div><label class="field-label" style="font-size:.7rem;" data-i18n="typo.lbl.vw">Viewport width (px)</label><input type="number" id="typo-vw" class="input-field" value="1440" oninput="typoConvert()" /></div>
       </div>
       <div id="typo-out" class="typo-grid"></div>
     </section>
 
-    <div class="copied-flash" id="copiedFlash">Copied!</div>
+    <div class="copied-flash" id="copiedFlash" data-i18n="msg.copied">Copied!</div>
 
     </div><!-- /sc-content -->
   </main><!-- /sc-main -->
@@ -422,125 +422,159 @@
   const container = document.getElementById("unitsContainer");
   const flash     = document.getElementById("copiedFlash");
 
-  function copyVal(val) {
-    navigator.clipboard.writeText(val).catch(() => {});
-    flash.classList.add("show");
-    clearTimeout(flash._t);
-    flash._t = setTimeout(() => flash.classList.remove("show"), 1600);
+  const CAT_I18N = {
+    length: "unit.length.name", weight: "unit.weight.name", temperature: "unit.temp.name",
+    area: "unit.area.name", volume: "unit.volume.name", speed: "unit.speed.name",
+    data: "unit.data.name", time: "unit.time.name", energy: "unit.energy.name",
+    pressure: "unit.pressure.name", fuel: "unit.fuel.name"
+  };
+  const EXTRA_NAV = { cooking: "units.cooking.name", "shoe-size": "units.shoe.name", "clothing-size": "units.clothing.name", typography: "units.typo.name" };
+  const EXTRA_ICO = { cooking: "🍳", "shoe-size": "👟", "clothing-size": "👕", typography: "🔤" };
+
+  function t(k) { return window.PdfMasterI18n ? window.PdfMasterI18n.t(k) : k; }
+
+  function unitLabel(catId, unit) {
+    const key = "u." + catId + "." + unit.id;
+    const s = t(key);
+    return s !== key ? s : unit.label;
   }
 
-  Object.entries(CATS).forEach(([catId, cat]) => {
-    /* ── Jump nav link ── */
-    const a = document.createElement("a");
-    a.href = "#" + catId;
-    a.className = "jump-link";
-    a.textContent = (cat.icon ? cat.icon + " " : "") + cat.label;
-    jumpNav.appendChild(a);
+  function catTitle(catId) {
+    const key = CAT_I18N[catId];
+    return key ? t(key) : CATS[catId].label;
+  }
 
-    /* ── Category card ── */
-    const sec = document.createElement("section");
-    sec.id = catId;
-    sec.className = "tool-page-section";
+  function copyVal(val) {
+    navigator.clipboard.writeText(val).catch(function () {});
+    flash.classList.add("show");
+    clearTimeout(flash._t);
+    flash._t = setTimeout(function () { flash.classList.remove("show"); }, 1600);
+  }
 
-    const unitOptions = cat.units.map(u =>
-      `<option value="${u.id}">${u.label} (${u.sym})</option>`
-    ).join("");
+  function buildUnitSections() {
+    jumpNav.innerHTML = "";
+    container.innerHTML = "";
+    var ph = t("unit.val.ph");
+    Object.entries(CATS).forEach(function (entry) {
+      var catId = entry[0], cat = entry[1];
+      var a = document.createElement("a");
+      a.href = "#" + catId;
+      a.className = "jump-link";
+      a.textContent = (cat.icon ? cat.icon + " " : "") + catTitle(catId);
+      jumpNav.appendChild(a);
 
-    sec.innerHTML = `
-      <div class="tps-header">
-        <span class="tps-icon">${cat.icon || "📐"}</span>
-        <div>
-          <div class="tps-title">${cat.label}</div>
-          <div class="tps-desc">${cat.units.map(u => u.sym).join("  ·  ")}</div>
-        </div>
-      </div>
-      <div class="unit-input-row">
-        <input type="number" class="input-field u-val" value="1" placeholder="Value…" />
-        <select class="unit-card-select u-from">${unitOptions}</select>
-      </div>
-      <div class="unit-results u-results"></div>
-    `;
-    container.appendChild(sec);
+      var sec = document.createElement("section");
+      sec.id = catId;
+      sec.className = "tool-page-section";
 
-    /* ── Wire events ── */
-    const valEl  = sec.querySelector(".u-val");
-    const fromEl = sec.querySelector(".u-from");
-    const resEl  = sec.querySelector(".u-results");
+      var unitOptions = cat.units.map(function (u) {
+        return "<option value=\"" + u.id + "\">" + unitLabel(catId, u) + " (" + u.sym + ")</option>";
+      }).join("");
 
-    function render() {
-      const val  = parseFloat(valEl.value);
-      const from = fromEl.value;
-      const rows = convertAll(catId, val, from);
-      resEl.innerHTML = rows.map(r => `
-        <div class="unit-result-item${r.isFrom ? " is-from" : ""}" title="Click to copy">
-          <div class="unit-result-label">
-            <span>${r.label}</span>
-            <span class="unit-result-sym">${r.sym}</span>
-          </div>
-          <div class="unit-result-val">${isNaN(val) ? "—" : r.result}</div>
-        </div>
-      `).join("");
-      resEl.querySelectorAll(".unit-result-item").forEach((item, i) => {
-        item.addEventListener("click", () => copyVal(rows[i].result));
-      });
-    }
+      sec.innerHTML = [
+        "<div class=\"tps-header\">",
+        "<span class=\"tps-icon\">" + (cat.icon || "📐") + "</span>",
+        "<div><div class=\"tps-title\">" + catTitle(catId) + "</div>",
+        "<div class=\"tps-desc\">" + cat.units.map(function (u) { return u.sym; }).join("  ·  ") + "</div></div></div>",
+        "<div class=\"unit-input-row\">",
+        "<input type=\"number\" class=\"input-field u-val\" value=\"1\" placeholder=\"" + ph.replace(/"/g, "&quot;") + "\" />",
+        "<select class=\"unit-card-select u-from\">" + unitOptions + "</select></div>",
+        "<div class=\"unit-results u-results\"></div>"
+      ].join("");
 
-    valEl.addEventListener("input", render);
-    fromEl.addEventListener("change", render);
-    render();
-  });
+      container.appendChild(sec);
 
-  /* Add custom tool links to jump nav */
-  ['cooking','shoe-size','clothing-size','typography'].forEach(id=>{
-    const a=document.createElement('a');
-    a.href='#'+id; a.className='jump-link';
-    const icons={cooking:'🍳',['shoe-size']:'👟',['clothing-size']:'👕',typography:'🔤'};
-    const labels={cooking:'Cooking',['shoe-size']:'Shoe Size',['clothing-size']:'Clothing Size',typography:'Typography'};
-    a.textContent=(icons[id]||'')+(icons[id]?' ':'')+labels[id];
-    jumpNav.appendChild(a);
-  });
+      var valEl = sec.querySelector(".u-val");
+      var fromEl = sec.querySelector(".u-from");
+      var resEl = sec.querySelector(".u-results");
 
-  /* ── Sidebar tab navigation (runs after all sections are built) ── */
-  (function () {
-    const topbarTitle = document.getElementById('scTopbarTitle');
-    function showSection(id) {
-      document.querySelectorAll('.tool-page-section').forEach(s => { s.style.display = s.id === id ? '' : 'none'; });
-      document.querySelectorAll('#jumpNav a.jump-link').forEach(a => {
-        const linkId = (a.getAttribute('href') || '').replace('#','');
-        a.classList.toggle('sc-nav-active', linkId === id);
-        if (linkId === id && topbarTitle) {
-          const titleEl = document.querySelector('#' + id + ' .tps-title');
-          topbarTitle.textContent = titleEl ? titleEl.textContent : a.textContent.trim();
-        }
-      });
-      history.replaceState(null,'','#'+id);
-      const content = document.querySelector('.sc-content');
-      if (content) content.scrollTop = 0;
-    }
-    document.getElementById('jumpNav').addEventListener('click', function(e){
-      const a = e.target.closest('a.jump-link');
-      if (!a) return;
-      e.preventDefault();
-      showSection(a.getAttribute('href').replace('#',''));
+      function render() {
+        var val = parseFloat(valEl.value);
+        var from = fromEl.value;
+        var rows = convertAll(catId, val, from);
+        resEl.innerHTML = rows.map(function (r) {
+          return "<div class=\"unit-result-item" + (r.isFrom ? " is-from" : "") + "\">" +
+            "<div class=\"unit-result-label\"><span>" + unitLabel(catId, r) + "</span><span class=\"unit-result-sym\">" + r.sym + "</span></div>" +
+            "<div class=\"unit-result-val\">" + (isNaN(val) ? "—" : r.result) + "</div></div>";
+        }).join("");
+        resEl.querySelectorAll(".unit-result-item").forEach(function (item, i) {
+          item.addEventListener("click", function () { copyVal(rows[i].result); });
+        });
+      }
+
+      valEl.addEventListener("input", render);
+      fromEl.addEventListener("change", render);
+      render();
     });
-    const startId = (location.hash.slice(1) && document.getElementById(location.hash.slice(1)))
-      ? location.hash.slice(1)
-      : (document.querySelector('.tool-page-section') || {}).id || '';
-    if (startId) showSection(startId);
-  })();
+
+    Object.keys(EXTRA_NAV).forEach(function (id) {
+      var a = document.createElement("a");
+      a.href = "#" + id;
+      a.className = "jump-link";
+      a.textContent = (EXTRA_ICO[id] || "") + (EXTRA_ICO[id] ? " " : "") + t(EXTRA_NAV[id]);
+      jumpNav.appendChild(a);
+    });
+
+    if (window.PdfMasterI18n && window.PdfMasterI18n.rebuildCache) window.PdfMasterI18n.rebuildCache();
+    if (window.PdfMasterI18n && window.PdfMasterI18n.apply) window.PdfMasterI18n.apply();
+  }
+
+  const topbarTitle = document.getElementById("scTopbarTitle");
+
+  function showSection(id) {
+    if (!id || !document.getElementById(id)) return;
+    document.querySelectorAll(".tool-page-section").forEach(function (s) {
+      s.style.display = s.id === id ? "" : "none";
+    });
+    document.querySelectorAll("#jumpNav a.jump-link").forEach(function (a) {
+      const linkId = (a.getAttribute("href") || "").replace("#", "");
+      a.classList.toggle("sc-nav-active", linkId === id);
+      if (linkId === id && topbarTitle) {
+        const titleEl = document.querySelector("#" + id + " .tps-title");
+        topbarTitle.textContent = titleEl ? titleEl.textContent : a.textContent.trim();
+      }
+    });
+    if (history.replaceState) history.replaceState(null, "", "#" + id);
+    const content = document.querySelector(".sc-content");
+    if (content) content.scrollTop = 0;
+  }
+
+  buildUnitSections();
+
+  document.addEventListener("langchange", function () {
+    var id = (location.hash || "").replace("#", "");
+    if (!id || !document.getElementById(id)) {
+      id = (document.querySelector("#unitsContainer .tool-page-section") || { id: "length" }).id;
+    }
+    buildUnitSections();
+    showSection(id);
+  });
+
+  document.getElementById("jumpNav").addEventListener("click", function (e) {
+    const a = e.target.closest("a.jump-link");
+    if (!a) return;
+    e.preventDefault();
+    showSection(a.getAttribute("href").replace("#", ""));
+  });
+  const startId = (location.hash.slice(1) && document.getElementById(location.hash.slice(1)))
+    ? location.hash.slice(1)
+    : (document.querySelector(".tool-page-section") || {}).id || "";
+  if (startId) showSection(startId);
 })();
 
 /* ── Cooking Measurements ── */
 const COOK_TO_ML={cup:236.588,tbsp:14.787,tsp:4.929,ml:1,l:1000,floz:29.574,pint:473.176,quart:946.353,gallon:3785.41};
-const COOK_LABELS={cup:'Cup',tbsp:'Tablespoon',tsp:'Teaspoon',ml:'Milliliter',l:'Liter',floz:'Fluid Ounce',pint:'Pint',quart:'Quart',gallon:'Gallon'};
+function _ut(k) { return window.PdfMasterI18n ? window.PdfMasterI18n.t(k) : k; }
+function _cookLbl(k) { const x = _ut('cook.'+k); return x === 'cook.'+k ? k : x; }
 function cookingConvert() {
   const val=parseFloat(document.getElementById('cook-val').value)||0;
   const from=document.getElementById('cook-from').value;
   const ml=val*COOK_TO_ML[from];
   const el=document.getElementById('cook-out');
-  el.innerHTML=Object.entries(COOK_TO_ML).map(([k,v])=>`<div class="cooking-item"><div class="cooking-label">${COOK_LABELS[k]}</div><div class="cooking-val">${k===from?'★ '+val.toFixed(4):+(ml/v).toFixed(5)}</div></div>`).join('');
+  el.innerHTML=Object.entries(COOK_TO_ML).map(([k,v])=>`<div class="cooking-item"><div class="cooking-label">${_cookLbl(k)}</div><div class="cooking-val">${k===from?'★ '+val.toFixed(4):+(ml/v).toFixed(5)}</div></div>`).join('');
 }
 cookingConvert();
+document.addEventListener('langchange', function(){ cookingConvert(); });
 
 /* ── Shoe Size Converter ── */
 const SHOE_DATA=[
@@ -556,9 +590,11 @@ function shoeSizeConvert() {
   const from=document.getElementById('shoe-from').value;
   const row=SHOE_DATA.find(r=>r[from]===val)||SHOE_DATA.reduce((a,b)=>Math.abs(b[from]-val)<Math.abs(a[from]-val)?b:a);
   const el=document.getElementById('shoe-out');
-  el.innerHTML=`<table class="shoe-table"><thead><tr><th>EU</th><th>US Men</th><th>US Women</th><th>UK</th><th>CM</th></tr></thead><tbody>${SHOE_DATA.map(r=>`<tr${r===row?' class="highlight"':''}><td>${r.eu}</td><td>${r.usm}</td><td>${r.usw}</td><td>${r.uk}</td><td>${r.cm}</td></tr>`).join('')}</tbody></table>`;
+  const h = (k)=>_ut(k);
+  el.innerHTML=`<table class="shoe-table"><thead><tr><th>${h('shoe.th.eu')}</th><th>${h('shoe.th.usm')}</th><th>${h('shoe.th.usw')}</th><th>${h('shoe.th.uk')}</th><th>${h('shoe.th.cm')}</th></tr></thead><tbody>${SHOE_DATA.map(r=>`<tr${r===row?' class="highlight"':''}><td>${r.eu}</td><td>${r.usm}</td><td>${r.usw}</td><td>${r.uk}</td><td>${r.cm}</td></tr>`).join('')}</tbody></table>`;
 }
 shoeSizeConvert();
+document.addEventListener('langchange', function(){ shoeSizeConvert(); });
 
 /* ── Typography Units ── */
 function typoConvert() {

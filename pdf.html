@@ -417,35 +417,35 @@
         <span class="pdf-nav-icon">📊</span>
         <div>
           <div class="pdf-nav-name" data-i18n="tab.excel">Excel → PDF</div>
-          <div class="pdf-nav-hint">xlsx · xls · csv</div>
+          <div class="pdf-nav-hint" data-i18n="tab.excel.hint">xlsx · xls · csv</div>
         </div>
       </button>
       <button type="button" data-tab="image" class="pdf-nav-item">
         <span class="pdf-nav-icon">🖼️</span>
         <div>
           <div class="pdf-nav-name" data-i18n="tab.image">Image → PDF</div>
-          <div class="pdf-nav-hint">PNG · JPEG · WebP</div>
+          <div class="pdf-nav-hint" data-i18n="tab.image.hint">PNG · JPEG · WebP</div>
         </div>
       </button>
       <button type="button" data-tab="merge" class="pdf-nav-item">
         <span class="pdf-nav-icon">📂</span>
         <div>
           <div class="pdf-nav-name" data-i18n="tab.merge">Merge PDF</div>
-          <div class="pdf-nav-hint">Combine multiple PDFs</div>
+          <div class="pdf-nav-hint" data-i18n="tab.merge.hint">Combine multiple PDFs</div>
         </div>
       </button>
       <button type="button" data-tab="split" class="pdf-nav-item">
         <span class="pdf-nav-icon">✂️</span>
         <div>
           <div class="pdf-nav-name" data-i18n="tab.split">Split PDF</div>
-          <div class="pdf-nav-hint">Extract pages → ZIP</div>
+          <div class="pdf-nav-hint" data-i18n="tab.split.hint">Extract pages → ZIP</div>
         </div>
       </button>
       <button type="button" data-tab="encrypt" class="pdf-nav-item">
         <span class="pdf-nav-icon">🔒</span>
         <div>
           <div class="pdf-nav-name" data-i18n="tab.encrypt">Encrypt / Decrypt</div>
-          <div class="pdf-nav-hint">AES-256 protection</div>
+          <div class="pdf-nav-hint" data-i18n="tab.encrypt.hint">AES-256 protection</div>
         </div>
       </button>
       <button type="button" data-tab="share" class="pdf-nav-item">
@@ -458,22 +458,22 @@
       <button type="button" data-tab="screenshot" class="pdf-nav-item">
         <span class="pdf-nav-icon">📸</span>
         <div>
-          <div class="pdf-nav-name">Screenshot → PDF</div>
-          <div class="pdf-nav-hint">Images to PDF instantly</div>
+          <div class="pdf-nav-name" data-i18n="pdf.screenshot.name">Screenshot → PDF</div>
+          <div class="pdf-nav-hint" data-i18n="tab.screenshot.hint">One image per page, instant PDF</div>
         </div>
       </button>
       <button type="button" data-tab="compress" class="pdf-nav-item">
         <span class="pdf-nav-icon">🗜️</span>
         <div>
-          <div class="pdf-nav-name">PDF Compressor</div>
-          <div class="pdf-nav-hint">Reduce file size instantly</div>
+          <div class="pdf-nav-name" data-i18n="tool.pdfcompress.name">PDF Compressor</div>
+          <div class="pdf-nav-hint" data-i18n="tab.compress.hint">Reduce file size in-browser</div>
         </div>
       </button>
       <button type="button" data-tab="ocr" class="pdf-nav-item">
         <span class="pdf-nav-icon">🔍</span>
         <div>
-          <div class="pdf-nav-name">PDF OCR</div>
-          <div class="pdf-nav-hint">Extract text from images/PDFs</div>
+          <div class="pdf-nav-name" data-i18n="tool.pdfocr.name">PDF OCR</div>
+          <div class="pdf-nav-hint" data-i18n="tab.ocr.hint">Scanned PDFs & images</div>
         </div>
       </button>
       </div><!-- /pdf-nav-items-row -->
@@ -545,7 +545,7 @@
             <div class="pdf-tool-card-ico">📊</div>
             <div>
               <div class="pdf-tool-card-title" data-i18n="tab.excel">Excel → PDF</div>
-              <div class="pdf-tool-card-desc">xlsx · xls · csv — full Unicode &amp; Turkish support</div>
+              <div class="pdf-tool-card-desc" data-i18n="pdf.excel.sub">xlsx · xls · csv — full Unicode &amp; Turkish support</div>
             </div>
           </div>
           <div class="space-y">
@@ -564,7 +564,7 @@
               <span data-i18n="excel.btn">Download PDF</span>
             </button>
             <div class="share-panel" id="sharePanelExcel" style="display:none;">
-              <div class="share-url-row"><input class="input-field share-url-input" id="shareUrlExcel" readonly /><button class="btn-secondary btn-sm" onclick="copyShareUrl('shareUrlExcel')">📋 Copy</button></div>
+              <div class="share-url-row"><input class="input-field share-url-input" id="shareUrlExcel" readonly /><button class="btn-secondary btn-sm" onclick="copyShareUrl('shareUrlExcel')">📋 <span data-i18n="btn.copy">Copy</span></button></div>
               <p class="share-expire-note">🔗 <span data-i18n="share.expire">Link expires in 7 days</span></p>
             </div>
           </div>
@@ -576,7 +576,7 @@
             <div class="pdf-tool-card-ico">🖼️</div>
             <div>
               <div class="pdf-tool-card-title" data-i18n="tab.image">Image → PDF</div>
-              <div class="pdf-tool-card-desc">PNG · JPEG · WebP · GIF · BMP</div>
+              <div class="pdf-tool-card-desc" data-i18n="pdf.image.sub">PNG · JPEG · WebP · GIF · BMP</div>
             </div>
           </div>
           <div class="space-y">
@@ -600,7 +600,7 @@
               <span data-i18n="image.btn">Download PDF</span>
             </button>
             <div class="share-panel" id="sharePanelImage" style="display:none;">
-              <div class="share-url-row"><input class="input-field share-url-input" id="shareUrlImage" readonly /><button class="btn-secondary btn-sm" onclick="copyShareUrl('shareUrlImage')">📋 Copy</button></div>
+              <div class="share-url-row"><input class="input-field share-url-input" id="shareUrlImage" readonly /><button class="btn-secondary btn-sm" onclick="copyShareUrl('shareUrlImage')">📋 <span data-i18n="btn.copy">Copy</span></button></div>
               <p class="share-expire-note">🔗 <span data-i18n="share.expire">Link expires in 7 days</span></p>
             </div>
           </div>
@@ -628,7 +628,7 @@
             <button type="button" id="mergeClear" class="btn-ghost"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg><span data-i18n="merge.clear">Clear list</span></button>
             <button type="button" id="mergeRun" class="btn-primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span data-i18n="merge.btn">Download Merged PDF</span></button>
             <div class="share-panel" id="sharePanelMerge" style="display:none;">
-              <div class="share-url-row"><input class="input-field share-url-input" id="shareUrlMerge" readonly /><button class="btn-secondary btn-sm" onclick="copyShareUrl('shareUrlMerge')">📋 Copy</button></div>
+              <div class="share-url-row"><input class="input-field share-url-input" id="shareUrlMerge" readonly /><button class="btn-secondary btn-sm" onclick="copyShareUrl('shareUrlMerge')">📋 <span data-i18n="btn.copy">Copy</span></button></div>
               <p class="share-expire-note">🔗 <span data-i18n="share.expire">Link expires in 7 days</span></p>
             </div>
           </div>
@@ -656,7 +656,7 @@
             <div id="splitRangesRow" style="display:none;"><label class="field-label" for="splitRanges" data-i18n="split.ranges.label">Ranges</label><input type="text" id="splitRanges" data-i18n-ph="split.ranges.ph" placeholder="e.g. 1-3,5,8-10" class="field" /><p class="notice" style="margin-top:.4rem;" data-i18n="split.ranges.note">Page numbers start at 1. Separate with commas.</p></div>
             <button type="button" id="splitRun" class="btn-primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span data-i18n="split.btn">Download ZIP</span></button>
             <div class="share-panel" id="sharePanelSplit" style="display:none;">
-              <div class="share-url-row"><input class="input-field share-url-input" id="shareUrlSplit" readonly /><button class="btn-secondary btn-sm" onclick="copyShareUrl('shareUrlSplit')">📋 Copy</button></div>
+              <div class="share-url-row"><input class="input-field share-url-input" id="shareUrlSplit" readonly /><button class="btn-secondary btn-sm" onclick="copyShareUrl('shareUrlSplit')">📋 <span data-i18n="btn.copy">Copy</span></button></div>
               <p class="share-expire-note">🔗 <span data-i18n="share.expire">Link expires in 7 days</span></p>
             </div>
           </div>
@@ -668,7 +668,7 @@
             <div class="pdf-tool-card-ico">🔒</div>
             <div>
               <div class="pdf-tool-card-title" data-i18n="tab.encrypt">Encrypt / Decrypt PDF</div>
-              <div class="pdf-tool-card-desc">AES-256 password protection</div>
+              <div class="pdf-tool-card-desc" data-i18n="pdf.encrypt.sub">Lock or remove password — AES-256</div>
             </div>
           </div>
           <div class="space-y">
@@ -682,7 +682,7 @@
             </div>
             <button type="button" id="encRun" class="btn-primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg><span data-i18n="enc.btn">Download Encrypted PDF</span></button>
             <div class="share-panel" id="sharePanelEncrypt" style="display:none;">
-              <div class="share-url-row"><input class="input-field share-url-input" id="shareUrlEncrypt" readonly /><button class="btn-secondary btn-sm" onclick="copyShareUrl('shareUrlEncrypt')">📋 Copy</button></div>
+              <div class="share-url-row"><input class="input-field share-url-input" id="shareUrlEncrypt" readonly /><button class="btn-secondary btn-sm" onclick="copyShareUrl('shareUrlEncrypt')">📋 <span data-i18n="btn.copy">Copy</span></button></div>
               <p class="share-expire-note">🔗 <span data-i18n="share.expire">Link expires in 7 days</span></p>
             </div>
           </div>
@@ -720,7 +720,7 @@
             <div class="share-panel" id="sharePanelDirect" style="display:none;">
               <div class="share-url-row">
                 <input class="input-field share-url-input" id="shareUrlDirect" readonly />
-                <button class="btn-secondary btn-sm" onclick="copyShareUrl('shareUrlDirect')">📋 Copy</button>
+                <button class="btn-secondary btn-sm" onclick="copyShareUrl('shareUrlDirect')">📋 <span data-i18n="btn.copy">Copy</span></button>
               </div>
               <p class="share-expire-note">🔗 <span data-i18n="share.expire">Link expires in 7 days</span></p>
             </div>
@@ -732,8 +732,8 @@
           <div style="display:flex;align-items:flex-start;gap:.75rem;margin-bottom:.75rem">
             <span style="font-size:1.5rem">📸</span>
             <div>
-              <div class="pdf-tool-card-title">Screenshot → PDF</div>
-              <div class="pdf-tool-card-desc">Select one or more images — combine them into a single PDF, one image per page</div>
+              <div class="pdf-tool-card-title" data-i18n="ss.title">Screenshot → PDF</div>
+              <div class="pdf-tool-card-desc" data-i18n="ss.sub">Select one or more images — combine them into a single PDF, one image per page</div>
             </div>
           </div>
 
@@ -744,26 +744,26 @@
                 ondrop="event.preventDefault();this.classList.remove('drag-over');ssHandleFiles(event.dataTransfer.files)">
               <input type="file" id="ssInput" accept="image/*" multiple class="hidden" onchange="ssHandleFiles(this.files)">
               <span class="dropzone-icon">📸</span>
-              <p class="drop-title">Drop images here or click to select</p>
-              <p class="drop-sub">PNG · JPG · WebP — multiple files supported</p>
+              <p class="drop-title" data-i18n="ss.drop.t">Drop images here or click to select</p>
+              <p class="drop-sub" data-i18n="ss.drop.s">PNG · JPG · WebP — multiple files supported</p>
             </div>
             <div id="ssFileList" style="margin-top:.7rem;display:flex;flex-wrap:wrap;gap:.4rem"></div>
             <div style="margin-top:.8rem;display:flex;gap:.6rem;align-items:center;flex-wrap:wrap">
-              <label style="font-size:.72rem;color:var(--text-muted)">Page size:</label>
+              <label style="font-size:.72rem;color:var(--text-muted)" data-i18n="ss.size">Page size:</label>
               <select id="ssPageSize" class="calc-select" style="width:auto">
-                <option value="a4">A4</option>
-                <option value="letter">Letter</option>
-                <option value="fit">Fit to image</option>
+                <option value="a4" data-i18n="ss.opt.a4">A4</option>
+                <option value="letter" data-i18n="ss.opt.letter">Letter</option>
+                <option value="fit" data-i18n="ss.opt.fit">Fit to image</option>
               </select>
-              <label style="font-size:.72rem;color:var(--text-muted)">Orientation:</label>
+              <label style="font-size:.72rem;color:var(--text-muted)" data-i18n="ss.ori">Orientation:</label>
               <select id="ssOrientation" class="calc-select" style="width:auto">
-                <option value="portrait">Portrait</option>
-                <option value="landscape">Landscape</option>
+                <option value="portrait" data-i18n="ss.portrait">Portrait</option>
+                <option value="landscape" data-i18n="ss.landscape">Landscape</option>
               </select>
             </div>
             <button type="button" id="ssRun" class="btn-primary" style="margin-top:.9rem;width:100%" onclick="ssGenerate()" disabled>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              Generate PDF
+              <span data-i18n="ss.btn">Generate PDF</span>
             </button>
             <div id="ssStatus" style="margin-top:.6rem;font-size:.75rem;color:var(--text-muted);text-align:center"></div>
           </div>
@@ -774,8 +774,8 @@
           <div class="pdf-tool-card-hdr">
             <div class="pdf-tool-card-ico">🗜️</div>
             <div>
-              <div class="pdf-tool-card-title">PDF Compressor</div>
-              <div class="pdf-tool-card-desc">Reduce PDF file size — browser-only, nothing uploaded</div>
+              <div class="pdf-tool-card-title" data-i18n="tool.pdfcompress.name">PDF Compressor</div>
+              <div class="pdf-tool-card-desc" data-i18n="pdf.cmp.sub">Reduce PDF file size — browser-only, nothing uploaded</div>
             </div>
           </div>
 
@@ -791,8 +791,8 @@
                   <polyline points="14 2 14 8 20 8"/>
                 </svg>
               </div>
-              <p class="drop-title">Drag PDF here or click to select</p>
-              <p class="drop-sub">Works entirely in your browser — files stay private</p>
+              <p class="drop-title" data-i18n="pdf.cmp.drop.t">Drag PDF here or click to select</p>
+              <p class="drop-sub" data-i18n="pdf.cmp.drop.s">Works entirely in your browser — files stay private</p>
               <div id="cmpFileStatus" class="drop-selected" style="display:none">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                 <span id="cmpFileName"></span>
@@ -801,20 +801,20 @@
 
             <!-- Quality selector -->
             <div style="margin-top:.5rem">
-              <p style="font-size:.72rem;color:var(--text-muted);margin-bottom:.5rem">Compression level</p>
+              <p style="font-size:.72rem;color:var(--text-muted);margin-bottom:.5rem" data-i18n="pdf.cmp.lvl">Compression level</p>
               <div style="display:flex;gap:.5rem;flex-wrap:wrap" id="cmpQualityBtns">
-                <button type="button" onclick="cmpSetQ('low')"    id="cmpQLow"    class="btn-secondary" style="flex:1;min-width:80px">🔴 Low quality<br><span style="font-size:.65rem;color:var(--text-muted)">Smallest file</span></button>
-                <button type="button" onclick="cmpSetQ('medium')" id="cmpQMedium" class="btn-primary"   style="flex:1;min-width:80px">🟡 Medium<br><span style="font-size:.65rem;opacity:.8">Balanced</span></button>
-                <button type="button" onclick="cmpSetQ('high')"   id="cmpQHigh"   class="btn-secondary" style="flex:1;min-width:80px">🟢 High quality<br><span style="font-size:.65rem;color:var(--text-muted)">Larger file</span></button>
+                <button type="button" onclick="cmpSetQ('low')"    id="cmpQLow"    class="btn-secondary" style="flex:1;min-width:80px">🔴 <span data-i18n="pdf.cmp.lowbtn">Lower quality</span><br><span style="font-size:.65rem;color:var(--text-muted)" data-i18n="pdf.cmp.low">Smaller file</span></button>
+                <button type="button" onclick="cmpSetQ('medium')" id="cmpQMedium" class="btn-primary"   style="flex:1;min-width:80px">🟡 <span data-i18n="pdf.cmp.midbtn">Medium</span><br><span style="font-size:.65rem;opacity:.8" data-i18n="pdf.cmp.mid">Balanced</span></button>
+                <button type="button" onclick="cmpSetQ('high')"   id="cmpQHigh"   class="btn-secondary" style="flex:1;min-width:80px">🟢 <span data-i18n="pdf.cmp.highbtn">Higher quality</span><br><span style="font-size:.65rem;color:var(--text-muted)" data-i18n="pdf.cmp.high">Larger file</span></button>
               </div>
             </div>
 
             <!-- Stats -->
             <div id="cmpStats" style="display:none;background:rgba(130,80,255,.08);border:1px solid rgba(130,80,255,.2);border-radius:10px;padding:12px 16px;font-size:.78rem">
               <div style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap">
-                <span>📄 Original: <strong id="cmpOrigSize">—</strong></span>
-                <span>🗜️ Compressed: <strong id="cmpNewSize">—</strong></span>
-                <span>✂️ Saved: <strong id="cmpSaved" style="color:#4ade80">—</strong></span>
+                <span>📄 <span data-i18n="pdf.cmp.stat.o">Original</span>: <strong id="cmpOrigSize">—</strong></span>
+                <span>🗜️ <span data-i18n="pdf.cmp.stat.c">Compressed</span>: <strong id="cmpNewSize">—</strong></span>
+                <span>✂️ <span data-i18n="pdf.cmp.stat.s">Saved</span>: <strong id="cmpSaved" style="color:#4ade80">—</strong></span>
               </div>
               <div id="cmpBarWrap" style="margin-top:8px;height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden">
                 <div id="cmpBar" style="height:100%;background:linear-gradient(90deg,#8250ff,#a070ff);width:0%;transition:width .4s ease;border-radius:3px"></div>
@@ -822,11 +822,11 @@
             </div>
 
             <!-- Progress -->
-            <div id="cmpProgress" style="display:none;font-size:.78rem;color:var(--text-muted);text-align:center">Processing page <span id="cmpPg">0</span> of <span id="cmpTotal">0</span>…</div>
+            <div id="cmpProgress" style="display:none;font-size:.78rem;color:var(--text-muted);text-align:center"><span id="cmpProgText"></span></div>
 
             <button type="button" id="cmpRun" class="btn-primary" onclick="cmpRun()" disabled>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              Compress & Download PDF
+              <span data-i18n="pdf.cmp.btn">Compress & Download PDF</span>
             </button>
             <p id="cmpMsg" style="font-size:.75rem;color:var(--text-muted);text-align:center;min-height:1.2em"></p>
           </div>
@@ -837,8 +837,8 @@
           <div class="pdf-tool-card-hdr">
             <div class="pdf-tool-card-ico">🔍</div>
             <div>
-              <div class="pdf-tool-card-title">PDF / Image OCR</div>
-              <div class="pdf-tool-card-desc">Extract readable text from scanned PDFs and images — browser-only, powered by Tesseract.js</div>
+              <div class="pdf-tool-card-title" data-i18n="pdf.ocr.h1">PDF / Image OCR</div>
+              <div class="pdf-tool-card-desc" data-i18n="pdf.ocr.sub">Extract readable text from scanned PDFs and images — browser-only, powered by Tesseract.js</div>
             </div>
           </div>
 
@@ -846,24 +846,24 @@
             <!-- Info banner -->
             <div style="background:rgba(130,80,255,.08);border:1px solid rgba(130,80,255,.2);border-radius:10px;padding:10px 14px;font-size:.74rem;color:var(--text-muted);display:flex;gap:.5rem;align-items:flex-start">
               <span>ℹ️</span>
-              <span>First run downloads the Tesseract language model (~10 MB). Everything runs in your browser — no file is uploaded.</span>
+              <span data-i18n="pdf.ocr.info">First run downloads the Tesseract language model (~10 MB). Everything runs in your browser — no file is uploaded.</span>
             </div>
 
             <!-- Language selector -->
             <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
-              <label style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted)">Language</label>
+              <label style="font-size:.68rem;font-weight:700;letter-spacing:.04em;color:var(--text-muted)" data-i18n="pdf.ocr.langlbl">OCR language</label>
               <select id="ocrLang" class="input-field" style="max-width:170px;font-size:.78rem;padding:.28rem .6rem">
-                <option value="eng">English</option>
-                <option value="tur">Turkish</option>
-                <option value="deu">German</option>
-                <option value="fra">French</option>
-                <option value="spa">Spanish</option>
-                <option value="ita">Italian</option>
-                <option value="por">Portuguese</option>
-                <option value="rus">Russian</option>
-                <option value="ara">Arabic</option>
-                <option value="chi_sim">Chinese (Simplified)</option>
-                <option value="jpn">Japanese</option>
+                <option value="eng" data-i18n="ocr.lang.eng">English</option>
+                <option value="tur" data-i18n="ocr.lang.tur">Turkish</option>
+                <option value="deu" data-i18n="ocr.lang.deu">German</option>
+                <option value="fra" data-i18n="ocr.lang.fra">French</option>
+                <option value="spa" data-i18n="ocr.lang.spa">Spanish</option>
+                <option value="ita" data-i18n="ocr.lang.ita">Italian</option>
+                <option value="por" data-i18n="ocr.lang.por">Portuguese</option>
+                <option value="rus" data-i18n="ocr.lang.rus">Russian</option>
+                <option value="ara" data-i18n="ocr.lang.ara">Arabic</option>
+                <option value="chi_sim" data-i18n="ocr.lang.chi_sim">Chinese (Simplified)</option>
+                <option value="jpn" data-i18n="ocr.lang.jpn">Japanese</option>
               </select>
             </div>
 
@@ -879,8 +879,8 @@
                   <polyline points="14 2 14 8 20 8"/>
                 </svg>
               </div>
-              <p class="drop-title">Drag PDF or image here</p>
-              <p class="drop-sub">PDF · PNG · JPG · TIFF · BMP · WebP</p>
+              <p class="drop-title" data-i18n="pdf.ocr.drop.t">Drag PDF or image here</p>
+              <p class="drop-sub" data-i18n="pdf.ocr.drop.s">PDF · PNG · JPG · TIFF · BMP · WebP</p>
               <div id="ocrFileStatus" class="drop-selected" style="display:none">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
                 <span id="ocrFileName"></span>
@@ -900,21 +900,21 @@
 
             <button type="button" id="ocrRunBtn" class="btn-primary" onclick="ocrRun()" disabled>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-              Extract Text (OCR)
+              <span data-i18n="pdf.ocr.btn">Extract Text (OCR)</span>
             </button>
 
             <!-- Output -->
             <div id="ocrOutWrap" style="display:none">
               <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem">
-                <span style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted)">Extracted Text</span>
+                <span style="font-size:.68rem;font-weight:700;letter-spacing:.04em;color:var(--text-muted)" data-i18n="pdf.ocr.outlbl">Extracted Text</span>
                 <div style="display:flex;gap:.4rem">
-                  <button type="button" onclick="ocrCopy()" class="btn-secondary" style="font-size:.72rem;padding:.25rem .7rem">📋 Copy</button>
+                  <button type="button" onclick="ocrCopy()" class="btn-secondary" style="font-size:.72rem;padding:.25rem .7rem">📋 <span data-i18n="btn.copy">Copy</span></button>
                   <button type="button" onclick="ocrDownload()" class="btn-secondary" style="font-size:.72rem;padding:.25rem .7rem">⬇ .txt</button>
                 </div>
               </div>
               <textarea id="ocrOut" class="dev-textarea" style="min-height:200px;font-size:.8rem;line-height:1.6;resize:vertical;" readonly></textarea>
               <div style="font-size:.68rem;color:var(--text-muted);margin-top:.3rem">
-                Confidence: <strong id="ocrConf">—</strong> &nbsp;|&nbsp; Characters: <strong id="ocrChars">—</strong>
+                <span data-i18n="pdf.ocr.conf">Avg. confidence</span>: <strong id="ocrConf">—</strong> &nbsp;|&nbsp; <span data-i18n="pdf.ocr.chars">Non-space characters</span>: <strong id="ocrChars">—</strong>
               </div>
             </div>
           </div>
@@ -925,6 +925,7 @@
   </div><!-- /pdf-layout -->
 
   <script>
+    function _t(k) { return (window.PdfMasterI18n && window.PdfMasterI18n.t) ? window.PdfMasterI18n.t(k) : k; }
     document.getElementById("imageFitA4").addEventListener("change", function () { document.getElementById("imageFit").value = "a4"; });
     document.getElementById("imageFitOrig").addEventListener("change", function () { document.getElementById("imageFit").value = "original"; });
 
@@ -955,7 +956,7 @@
       try {
         /* Lazy-load Tesseract.js */
         if (!window.Tesseract) {
-          statusEl.textContent = 'Loading Tesseract.js…';
+          statusEl.textContent = _t('msg.loading.tess');
           await new Promise(function(res, rej) {
             var s = document.createElement('script');
             s.src = 'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';
@@ -965,13 +966,13 @@
         }
 
         var lang = document.getElementById('ocrLang').value;
-        statusEl.textContent = 'Initializing OCR engine…';
+        statusEl.textContent = _t('msg.ocr.init');
         pctEl.textContent = '0%';
 
         /* For PDF files, render first page via PDF.js then OCR it */
         var imageToOcr = _ocrFile;
         if (_ocrFile.type === 'application/pdf' || _ocrFile.name.toLowerCase().endsWith('.pdf')) {
-          statusEl.textContent = 'Rendering PDF pages…';
+          statusEl.textContent = _t('msg.ocr.render');
           var pdfData = await _ocrFile.arrayBuffer();
           var pdfDoc  = await pdfjsLib.getDocument({ data: pdfData }).promise;
           var numPages = pdfDoc.numPages;
@@ -979,7 +980,7 @@
           var ctx = canvas.getContext('2d');
           var allText = '';
           for (var p = 1; p <= numPages; p++) {
-            statusEl.textContent = 'OCR page ' + p + '/' + numPages + '…';
+            statusEl.textContent = _t('msg.ocr.page').replace('{n}', p).replace('{d}', numPages);
             var page = await pdfDoc.getPage(p);
             var vp = page.getViewport({ scale: 2.0 });
             canvas.width = vp.width; canvas.height = vp.height;
@@ -1020,10 +1021,10 @@
 
         pctEl.textContent = '100%';
         barEl.style.width = '100%';
-        statusEl.textContent = '✓ Done!';
+        statusEl.textContent = '✓ ' + _t('msg.ocr.done');
         document.getElementById('ocrOutWrap').style.display = '';
       } catch(err) {
-        statusEl.textContent = '✗ Error: ' + err.message;
+        statusEl.textContent = '✗ ' + _t('msg.error.prefix') + ': ' + err.message;
         console.error('OCR error:', err);
       }
       btn.disabled = false;
@@ -1033,10 +1034,11 @@
       var text = document.getElementById('ocrOut').value;
       if (!text) return;
       navigator.clipboard.writeText(text).then(function() {
-        var btn = event.target.closest('button');
-        var orig = btn.textContent;
-        btn.textContent = '✓ Copied!';
-        setTimeout(function(){ btn.textContent = orig; }, 1500);
+        var btn = (typeof event !== 'undefined' && event.target) ? event.target.closest('button') : null;
+        if (!btn) return;
+        var orig = btn.innerHTML;
+        btn.innerHTML = '✓ ' + _t('msg.copied');
+        setTimeout(function(){ btn.innerHTML = orig; if (window.PdfMasterI18n && window.PdfMasterI18n.apply) window.PdfMasterI18n.apply(); }, 1500);
       });
     }
 
@@ -1071,9 +1073,9 @@
 
     function cmpSetQ(q) {
       _cmpQuality = q;
-      ['Low','Medium','High'].forEach(function(n) {
-        var btn = document.getElementById('cmpQ' + n);
-        if (btn) btn.className = (n.toLowerCase() === q) ? 'btn-primary' : 'btn-secondary';
+      [['low','cmpQLow'],['medium','cmpQMedium'],['high','cmpQHigh']].forEach(function(p) {
+        var btn = document.getElementById(p[1]);
+        if (btn) btn.className = (p[0] === q) ? 'btn-primary' : 'btn-secondary';
       });
     }
 
@@ -1082,8 +1084,9 @@
       var btn = document.getElementById('cmpRun');
       var msg = document.getElementById('cmpMsg');
       var prog = document.getElementById('cmpProgress');
+      var cmpProgText = document.getElementById('cmpProgText');
       btn.disabled = true;
-      msg.textContent = 'Loading PDF…';
+      msg.textContent = _t('msg.cmp.load');
       prog.style.display = '';
 
       try {
@@ -1093,14 +1096,12 @@
         /* Render pages with PDF.js */
         var pdfJS = await pdfjsLib.getDocument({ data: origBytes }).promise;
         var numPages = pdfJS.numPages;
-        document.getElementById('cmpTotal').textContent = numPages;
 
         var { PDFDocument } = window.PDFLib;
         var outDoc = await PDFDocument.create();
 
         for (var i = 1; i <= numPages; i++) {
-          document.getElementById('cmpPg').textContent = i;
-          msg.textContent = 'Processing page ' + i + '/' + numPages + '…';
+          if (cmpProgText) cmpProgText.textContent = _t('msg.cmp.page').replace('{n}', i).replace('{d}', numPages);
 
           var page = await pdfJS.getPage(i);
           var vp = page.getViewport({ scale: preset.scale });
@@ -1118,7 +1119,7 @@
           pdfPage.drawImage(jpgImg, { x: 0, y: 0, width: vp.width, height: vp.height });
         }
 
-        msg.textContent = 'Saving…';
+        msg.textContent = _t('msg.cmp.save');
         var outBytes = await outDoc.save({ useObjectStreams: true });
         prog.style.display = 'none';
 
@@ -1128,7 +1129,7 @@
         var savedPct = (((1 - outBytes.byteLength / _cmpFile.size) * 100)).toFixed(0);
         document.getElementById('cmpOrigSize').textContent = origMB + ' MB';
         document.getElementById('cmpNewSize').textContent  = newMB + ' MB';
-        document.getElementById('cmpSaved').textContent    = savedPct + '% smaller';
+        document.getElementById('cmpSaved').textContent    = _t('msg.cmp.saved').replace('{p}', savedPct);
         document.getElementById('cmpBar').style.width = Math.max(0, savedPct) + '%';
         document.getElementById('cmpStats').style.display = '';
 
@@ -1141,10 +1142,10 @@
         a.click();
         URL.revokeObjectURL(url);
 
-        msg.textContent = '✓ Done! File downloaded.';
+        msg.textContent = '✓ ' + _t('msg.cmp.ok');
       } catch (err) {
         prog.style.display = 'none';
-        msg.textContent = '✗ Error: ' + err.message;
+        msg.textContent = '✗ ' + _t('msg.error.prefix') + ': ' + err.message;
         console.error(err);
       }
       btn.disabled = false;
@@ -1168,7 +1169,7 @@
         '</div>';
       }).join('');
       document.getElementById('ssRun').disabled = _ssFiles.length === 0;
-      document.getElementById('ssStatus').textContent = _ssFiles.length ? _ssFiles.length + ' image(s) selected' : '';
+      document.getElementById('ssStatus').textContent = _ssFiles.length ? _t('ss.nimg').replace('{n}', _ssFiles.length) : '';
     }
 
     function ssRemove(idx) { _ssFiles.splice(idx,1); ssRenderList(); }
@@ -1177,7 +1178,7 @@
       if (!_ssFiles.length) return;
       var btn = document.getElementById('ssRun');
       var status = document.getElementById('ssStatus');
-      btn.disabled = true; status.textContent = 'Generating PDF…';
+      btn.disabled = true; status.textContent = _t('ss.gen');
 
       try {
         var pageSize = document.getElementById('ssPageSize').value;
@@ -1202,7 +1203,7 @@
 
         var doc = null;
         for (var i = 0; i < _ssFiles.length; i++) {
-          status.textContent = 'Processing image ' + (i+1) + '/' + _ssFiles.length + '…';
+          status.textContent = _t('ss.work').replace('{i}', i+1).replace('{n}', _ssFiles.length);
           var src = await new Promise(function(res){
             var reader = new FileReader();
             reader.onload = function(e){ res(e.target.result); };
@@ -1233,10 +1234,10 @@
         }
 
         doc.save('screenshots.pdf');
-        status.textContent = '✓ PDF downloaded!';
-        setTimeout(function(){ status.textContent = _ssFiles.length + ' image(s) selected'; }, 3000);
+        status.textContent = '✓ ' + _t('ss.ok');
+        setTimeout(function(){ status.textContent = _ssFiles.length ? _t('ss.nimg').replace('{n}', _ssFiles.length) : ''; }, 3000);
       } catch(err) {
-        status.textContent = '✗ Error: ' + err.message;
+        status.textContent = '✗ ' + _t('msg.error.prefix') + ': ' + err.message;
         console.error(err);
       }
       btn.disabled = false;

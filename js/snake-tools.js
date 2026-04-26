@@ -5,6 +5,7 @@
   var CAPTIONS = {
     en: {
       idle:      "Pick a tool and let's go! 🐍",
+      idleTools: "Pick a utility tool! 🐍",
       dance:     "Watch me slither! 🐍💃",
       rainbow:   "I contain multitudes 🌈",
       party:     "LET'S GOOOO! 🎉",
@@ -18,6 +19,7 @@
     },
     tr: {
       idle:      "Bir araç seç ve başla! 🐍",
+      idleTools: "Yardımcı bir araç seç! 🐍",
       dance:     "Dans ediyorum! 🐍💃",
       rainbow:   "Rengarenk bir yılanim! 🌈",
       party:     "HADİ GIDELIM! 🎉",
@@ -35,11 +37,18 @@
     return window.PdfMasterI18n ? window.PdfMasterI18n.getLang() : "en";
   }
 
+  function isToolsPage() {
+    return /tools\.html/i.test(String(location.pathname || "")) || /\/tools\/?$/.test(String(location.pathname || ""));
+  }
   function setCaption(key) {
     var el = document.getElementById("snakeCaption");
     if (!el) return;
     var map = CAPTIONS[getLang()] || CAPTIONS.en;
-    el.textContent = map[key] || map.idle;
+    if (key === "idle" && isToolsPage() && map.idleTools) {
+      el.textContent = map.idleTools;
+      return;
+    }
+    el.textContent = map[key] || (isToolsPage() && map.idleTools ? map.idleTools : map.idle);
   }
 
   /* ── The 10 real canvas animations (snake body changes shape) ─ */
