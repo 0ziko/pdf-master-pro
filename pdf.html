@@ -226,6 +226,7 @@
       .pdf-back-link:hover { color: #8250ff; }
       .pdf-lang { display: flex; gap: 4px; }
       .pdf-lang .lang-btn { font-size: 10px; padding: 3px 9px; }
+      .pdf-logo-lang { display: none; }
 
       /* ── MAIN ────────────────────────────────────────────── */
       .pdf-main {
@@ -327,6 +328,8 @@
           border-bottom: none;
         }
         .pdf-lang { display: flex !important; gap: 4px; }
+        .pdf-logo-lang { display: flex !important; gap: 4px; }
+        .pdf-logo-lang .lang-btn { font-size: 10px; padding: 3px 9px; }
         .pdf-sidebar-mascot { display: none; }
         .pdf-nav-label { display: none; }
 
@@ -392,6 +395,10 @@
 
       <div class="pdf-sidebar-logo">
         <a href="index.html">🐍 SnakeConverter</a>
+        <div class="lang-switcher pdf-logo-lang">
+          <button type="button" data-lang-btn="en" class="lang-btn lang-active">EN</button>
+          <button type="button" data-lang-btn="tr" class="lang-btn">TR</button>
+        </div>
       </div>
 
       <div class="pdf-sidebar-mascot snake-stage">
