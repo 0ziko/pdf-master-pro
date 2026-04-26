@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Color Palette Generator Online Free | SnakeConverter</title>
+
+  <meta name="description" content="Generate beautiful color palettes online free — complementary, analogous, triadic, and random palettes. Copy HEX, RGB codes instantly. No signup required." />
+  <meta name="keywords" content="color palette generator, color scheme generator, color palette online, complementary colors, analogous colors, color picker tool" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <link rel="canonical" href="https://snakeconverter.com/color-palette-generator" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://snakeconverter.com/color-palette-generator" />
+  <meta property="og:title" content="Color Palette Generator Online Free | SnakeConverter" />
+  <meta property="og:description" content="Generate beautiful color palettes — complementary, analogous, triadic & more. Copy HEX/RGB codes instantly. Free, no signup." />
+  <meta property="og:image" content="https://snakeconverter.com/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Color Palette Generator Online Free | SnakeConverter" />
+  <meta name="twitter:description" content="Generate color palettes instantly. Free, no signup, browser-only." />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "url": "https://snakeconverter.com/color-palette-generator",
+        "name": "Color Palette Generator Online Free",
+        "description": "Generate beautiful color palettes online free — complementary, analogous, triadic, and random palettes. Copy HEX, RGB codes instantly.",
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://snakeconverter.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Color Tools", "item": "https://snakeconverter.com/color" },
+            { "@type": "ListItem", "position": 3, "name": "Color Palette Generator", "item": "https://snakeconverter.com/color-palette-generator" }
+          ]
+        }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "Color Palette Generator",
+        "url": "https://snakeconverter.com/color-palette-generator",
+        "applicationCategory": "DesignApplication",
+        "operatingSystem": "Any (Web Browser)",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is a color palette?",
+            "acceptedAnswer": { "@type": "Answer", "text": "A color palette is a curated set of colors used together in design projects. A well-chosen palette creates visual harmony and consistency across websites, apps, branding, and artwork." }
+          },
+          {
+            "@type": "Question",
+            "name": "What are color harmonies?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Color harmonies are rules for combining colors in visually pleasing ways. Common harmonies include complementary (opposite colors on the color wheel), analogous (adjacent colors), and triadic (three equally spaced colors)." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I export the palette?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. You can copy individual HEX or RGB codes by clicking any swatch, copy all HEX codes at once, or export the entire palette as CSS custom properties (CSS variables) ready to paste into your stylesheet." }
+          },
+          {
+            "@type": "Question",
+            "name": "Is this tool free?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes, completely free. No signup, no account, no watermarks. The color palette generator works entirely in your browser with no data sent to any server." }
+          },
+          {
+            "@type": "Question",
+            "name": "What color formats does it support?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The tool displays and copies colors in HEX format (e.g. #8250ff) and RGB format (e.g. rgb(130, 80, 255)). CSS variable export uses HEX values." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1033284237916727" crossorigin="anonymous"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,600;0,14..32,700;0,14..32,900&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,700;0,14..32,900&display=swap" /></noscript>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+  <link rel="stylesheet" href="css/lp.css" />
+  <!-- Analytics -->
+  <script defer src="js/analytics.js"></script>
+
+  <style>
+    .pal-swatches {
+      display: flex;
+      gap: .5rem;
+      margin: .5rem 0;
+    }
+    .pal-swatch {
+      flex: 1;
+      min-width: 80px;
+      cursor: pointer;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform .15s;
+      position: relative;
+    }
+    .pal-swatch:hover { transform: scale(1.04); }
+    .pal-swatch-color {
+      min-height: 100px;
+      width: 100%;
+    }
+    .pal-swatch-info {
+      padding: .45rem .5rem .5rem;
+      background: var(--card-bg, #1e1e2e);
+      font-size: .7rem;
+      line-height: 1.5;
+    }
+    .pal-swatch-hex {
+      font-weight: 700;
+      font-size: .75rem;
+      letter-spacing: .02em;
+    }
+    .pal-swatch-rgb {
+      color: var(--text-muted, #888);
+      font-size: .65rem;
+    }
+    .pal-swatch-lock {
+      position: absolute;
+      top: .4rem;
+      right: .4rem;
+      background: rgba(0,0,0,.45);
+      border: none;
+      border-radius: 6px;
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: .85rem;
+      transition: background .15s;
+      line-height: 1;
+    }
+    .pal-swatch-lock:hover { background: rgba(0,0,0,.7); }
+    .pal-swatch-lock.locked { background: rgba(130,80,255,.75); }
+    .pal-copied-toast {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(2rem);
+      background: var(--accent, #8250ff);
+      color: #fff;
+      padding: .5rem 1.25rem;
+      border-radius: 999px;
+      font-size: .82rem;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s, transform .2s;
+      z-index: 9999;
+    }
+    .pal-copied-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    .pal-controls {
+      display: flex;
+      gap: .6rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .pal-harmony-select {
+      flex: 1;
+      min-width: 170px;
+      padding: .5rem .75rem;
+      background: var(--input-bg, #2a2a3e);
+      border: 1px solid var(--border, #383854);
+      border-radius: 8px;
+      color: var(--text, #e0e0f0);
+      font-size: .85rem;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right .65rem center;
+      padding-right: 2rem;
+    }
+    .pal-harmony-select:focus {
+      outline: none;
+      border-color: var(--accent, #8250ff);
+    }
+    .pal-color-row {
+      display: flex;
+      gap: .6rem;
+      align-items: center;
+    }
+    .pal-color-input {
+      width: 48px;
+      height: 38px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      padding: 2px;
+      background: transparent;
+    }
+    .pal-hex-input {
+      flex: 1;
+      max-width: 130px;
+      padding: .5rem .75rem;
+      background: var(--input-bg, #2a2a3e);
+      border: 1px solid var(--border, #383854);
+      border-radius: 8px;
+      color: var(--text, #e0e0f0);
+      font-size: .85rem;
+      font-family: monospace;
+    }
+    .pal-hex-input:focus {
+      outline: none;
+      border-color: var(--accent, #8250ff);
+    }
+    .pal-action-row {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ HEADER ══════════════════════════════════════════════ -->
+<header class="lp-header">
+  <div class="lp-header-inner">
+    <a href="/" class="lp-logo">
+      <span class="lp-logo-snake">🐍</span>
+      <span>SnakeConverter</span>
+    </a>
+    <nav class="lp-header-nav">
+      <a href="/color">Color Tools</a>
+      <a href="/image">Image Tools</a>
+      <a href="/">All Tools</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<div class="lp-wrap">
+
+  <!-- ══ HERO ════════════════════════════════════════════ -->
+  <section class="lp-hero">
+    <h1 class="lp-h1">Color Palette <span class="accent">Generator</span></h1>
+    <p class="lp-hero-sub">Generate beautiful color palettes — complementary, analogous, triadic & more. Copy HEX and RGB codes instantly.</p>
+    <div class="lp-trust">✓ Free · No signup · Browser-only · Instant results</div>
+  </section>
+
+  <!-- ══ TOOL AREA ════════════════════════════════════════ -->
+  <section class="lp-tool-box">
+    <div class="space-y">
+
+      <!-- Base color + harmony -->
+      <div>
+        <div class="field-label" style="margin-bottom:.5rem">Base Color</div>
+        <div class="pal-color-row">
+          <input type="color" id="palBase" value="#8250ff" class="pal-color-input"
+            oninput="palSyncHex(this.value)" />
+          <input type="text" id="palHexInput" value="#8250ff" maxlength="7"
+            class="pal-hex-input" placeholder="#8250ff"
+            oninput="palHexTyped(this.value)"
+            onblur="palHexBlur()" />
+          <div style="flex:1"></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="field-label" style="margin-bottom:.5rem">Harmony Type</div>
+        <div class="pal-controls">
+          <select id="palHarmony" class="pal-harmony-select">
+            <option value="complementary">Complementary</option>
+            <option value="analogous" selected>Analogous</option>
+            <option value="triadic">Triadic</option>
+            <option value="split">Split-Complementary</option>
+            <option value="monochromatic">Monochromatic</option>
+            <option value="random">Random</option>
+          </select>
+          <button type="button" id="palGenBtn" class="btn-primary" onclick="palGenerate()" style="white-space:nowrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><path d="M12 3v3m0 12v3M3 12h3m12 0h3M5.636 5.636l2.122 2.122m8.484 8.484 2.122 2.122M5.636 18.364l2.122-2.122m8.484-8.484 2.122-2.122"/></svg>
+            Generate Palette
+          </button>
+        </div>
+      </div>
+
+      <!-- Palette swatches -->
+      <div>
+        <div class="field-label" style="margin-bottom:.35rem">
+          Your Palette
+          <span style="font-size:.7rem;color:var(--text-muted);font-weight:400;margin-left:.5rem">Click swatch to copy • 🔒 to lock</span>
+        </div>
+        <div class="pal-swatches" id="palSwatches">
+          <!-- Swatches injected by JS -->
+        </div>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="pal-action-row">
+        <button type="button" class="btn-secondary" onclick="palCopyAllHex()" style="flex:1;min-width:140px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Copy All HEX
+        </button>
+        <button type="button" class="btn-secondary" onclick="palExportCSS()" style="flex:1;min-width:160px">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Export CSS Variables
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ FEATURES ═════════════════════════════════════════ -->
+  <section class="lp-section">
+    <div class="lp-section-badge">Why use this tool</div>
+    <h2 class="lp-section-title">Fast, Free & Powerful Color Palette Generator</h2>
+    <div class="lp-features">
+      <div class="lp-feature">
+        <div class="lp-feature-ico">🎨</div>
+        <div class="lp-feature-text">
+          <strong>5 Harmony Modes</strong>
+          <span>Complementary, analogous, triadic, split-complementary &amp; monochromatic harmonies.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">🎲</div>
+        <div class="lp-feature-text">
+          <strong>Random Palette</strong>
+          <span>Instant random color generation for when you need fresh inspiration fast.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">📋</div>
+        <div class="lp-feature-text">
+          <strong>Copy HEX / RGB</strong>
+          <span>Click any swatch to instantly copy its HEX or RGB code to your clipboard.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">🔒</div>
+        <div class="lp-feature-text">
+          <strong>Lock Colors</strong>
+          <span>Lock any swatch you love and regenerate only the remaining colors.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">📄</div>
+        <div class="lp-feature-text">
+          <strong>Export CSS</strong>
+          <span>Copy the full palette as CSS custom properties — paste directly into your stylesheet.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">🌐</div>
+        <div class="lp-feature-text">
+          <strong>Browser-Only</strong>
+          <span>No signup, no upload, 100% free — everything runs locally in your browser.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="lp-divider"></div>
+
+  <!-- ══ HOW TO USE ════════════════════════════════════════ -->
+  <section class="lp-section">
+    <div class="lp-section-badge">How it works</div>
+    <h2 class="lp-section-title">Generate a Color Palette in 3 Simple Steps</h2>
+    <div class="lp-steps">
+      <div class="lp-step">
+        <div class="lp-step-num">1</div>
+        <div class="lp-step-text">
+          <strong>Pick a base color</strong>
+          <span>Use the color picker to choose any base color, or type a HEX code directly into the text field.</span>
+        </div>
+      </div>
+      <div class="lp-step">
+        <div class="lp-step-num">2</div>
+        <div class="lp-step-text">
+          <strong>Choose a harmony type</strong>
+          <span>Select from complementary, analogous, triadic, split-complementary, monochromatic, or random palette modes.</span>
+        </div>
+      </div>
+      <div class="lp-step">
+        <div class="lp-step-num">3</div>
+        <div class="lp-step-text">
+          <strong>Copy or export your palette</strong>
+          <span>Click Generate, then click any swatch to copy its HEX code. Use the lock icon to keep a color when regenerating.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="lp-divider"></div>
+
+  <!-- ══ FAQ ══════════════════════════════════════════════ -->
+  <section class="lp-section">
+    <div class="lp-section-badge">FAQ</div>
+    <h2 class="lp-section-title">Frequently Asked Questions</h2>
+    <div class="lp-faq">
+      <details class="lp-faq-item" open>
+        <summary>What is a color palette?</summary>
+        <div class="lp-faq-body">A color palette is a carefully chosen set of colors used together in a design project. Good palettes create visual harmony and brand consistency. They are used in websites, apps, logos, presentations, illustrations, and any creative work that needs a cohesive visual identity.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>What are color harmonies?</summary>
+        <div class="lp-faq-body">Color harmonies are rules for combining colors in visually pleasing ways, based on their positions on the color wheel. <strong>Complementary</strong> colors sit directly opposite each other (high contrast). <strong>Analogous</strong> colors are adjacent (soft, natural look). <strong>Triadic</strong> colors are equally spaced (vibrant, balanced). <strong>Split-complementary</strong> uses one color plus two adjacent to its complement. <strong>Monochromatic</strong> uses a single hue at different lightness levels.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>Can I export the palette?</summary>
+        <div class="lp-faq-body">Yes. Click any swatch to copy its HEX code, or use <strong>Copy All HEX</strong> to copy every color at once. The <strong>Export CSS Variables</strong> button copies the palette as <code>:root { --color-1: #hex; ... }</code> CSS custom properties — ready to paste directly into your stylesheet.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>Is this tool free?</summary>
+        <div class="lp-faq-body">Yes, completely free. No account required, no watermarks, no usage limits. The color palette generator runs <strong>entirely in your browser</strong> — no data is ever sent to any server. Use it as many times as you like.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>What color formats does it support?</summary>
+        <div class="lp-faq-body">Each swatch displays its color in <strong>HEX</strong> format (e.g. <code>#8250ff</code>) and <strong>RGB</strong> format (e.g. <code>rgb(130, 80, 255)</code>). Clicking a swatch copies the HEX code. The CSS Variables export also uses HEX values. Internally, the harmony calculations are performed in HSL for accuracy.</div>
+      </details>
+    </div>
+  </section>
+
+  <div class="lp-divider"></div>
+
+  <!-- ══ RELATED TOOLS ═════════════════════════════════════ -->
+  <section class="lp-section">
+    <div class="lp-section-badge">Related tools</div>
+    <h2 class="lp-section-title">More Color &amp; Creative Tools</h2>
+    <div class="lp-related-grid">
+      <a href="/color#random-palette" class="lp-related-card">
+        <span class="lp-related-ico">🎲</span>
+        <div><div class="lp-related-name">Random Palette</div><div class="lp-related-desc">Instant random color palette</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/color#shades" class="lp-related-card">
+        <span class="lp-related-ico">🌗</span>
+        <div><div class="lp-related-name">Tint &amp; Shade Generator</div><div class="lp-related-desc">Lighten or darken any color</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/color#hsl" class="lp-related-card">
+        <span class="lp-related-ico">🎨</span>
+        <div><div class="lp-related-name">HSL Color Picker</div><div class="lp-related-desc">Pick colors by hue, saturation, lightness</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/tools#qr" class="lp-related-card">
+        <span class="lp-related-ico">📱</span>
+        <div><div class="lp-related-name">QR Code Generator</div><div class="lp-related-desc">Create QR codes instantly</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/image" class="lp-related-card">
+        <span class="lp-related-ico">🖼️</span>
+        <div><div class="lp-related-name">Image Tools</div><div class="lp-related-desc">Resize, convert &amp; optimize images</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/tools#base64" class="lp-related-card">
+        <span class="lp-related-ico">🔡</span>
+        <div><div class="lp-related-name">Base64 Encoder</div><div class="lp-related-desc">Encode &amp; decode Base64 strings</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<!-- ══ FOOTER ══════════════════════════════════════════════ -->
+<footer class="lp-footer">
+  <div class="lp-wrap">
+    <div class="lp-footer-links">
+      <a href="/">All Tools</a>
+      <a href="/pdf">PDF Tools</a>
+      <a href="/image">Image Tools</a>
+      <a href="/dev">Developer Tools</a>
+      <a href="/tools">Utility Tools</a>
+    </div>
+    <p>© 2026 SnakeConverter · Free, no signup, works in browser</p>
+  </div>
+</footer>
+
+<!-- ══ TOAST ════════════════════════════════════════════════ -->
+<div class="pal-copied-toast" id="palToast">Copied!</div>
+
+<script>
+/* ══════════════════════════════════════════════════════════
+   Color Palette Generator — Inline Logic
+   HEX ↔ HSL ↔ RGB conversion + harmony algorithms
+══════════════════════════════════════════════════════════ */
+
+/* ── Conversion helpers ── */
+function hexToRgb(hex) {
+  hex = hex.replace(/^#/, '');
+  if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+  var n = parseInt(hex, 16);
+  return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 };
+}
+
+function rgbToHsl(r, g, b) {
+  r /= 255; g /= 255; b /= 255;
+  var max = Math.max(r, g, b), min = Math.min(r, g, b);
+  var h, s, l = (max + min) / 2;
+  if (max === min) {
+    h = s = 0;
+  } else {
+    var d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+      case g: h = ((b - r) / d + 2) / 6; break;
+      case b: h = ((r - g) / d + 4) / 6; break;
+    }
+  }
+  return { h: h * 360, s: s * 100, l: l * 100 };
+}
+
+function hslToRgb(h, s, l) {
+  h = ((h % 360) + 360) % 360;
+  s /= 100; l /= 100;
+  var c = (1 - Math.abs(2 * l - 1)) * s;
+  var x = c * (1 - Math.abs((h / 60) % 2 - 1));
+  var m = l - c / 2;
+  var r, g, b;
+  if      (h < 60)  { r=c; g=x; b=0; }
+  else if (h < 120) { r=x; g=c; b=0; }
+  else if (h < 180) { r=0; g=c; b=x; }
+  else if (h < 240) { r=0; g=x; b=c; }
+  else if (h < 300) { r=x; g=0; b=c; }
+  else              { r=c; g=0; b=x; }
+  return {
+    r: Math.round((r + m) * 255),
+    g: Math.round((g + m) * 255),
+    b: Math.round((b + m) * 255)
+  };
+}
+
+function rgbToHex(r, g, b) {
+  return '#' + [r, g, b].map(function(v) {
+    return ('0' + Math.max(0, Math.min(255, v)).toString(16)).slice(-2);
+  }).join('');
+}
+
+function hslToHex(h, s, l) {
+  var rgb = hslToRgb(h, s, l);
+  return rgbToHex(rgb.r, rgb.g, rgb.b);
+}
+
+function hexToHsl(hex) {
+  var rgb = hexToRgb(hex);
+  return rgbToHsl(rgb.r, rgb.g, rgb.b);
+}
+
+function rgbStr(hex) {
+  var c = hexToRgb(hex);
+  return 'rgb(' + c.r + ', ' + c.g + ', ' + c.b + ')';
+}
+
+/* ── Harmony generators ── */
+function genComplementary(hsl) {
+  var h = hsl.h, s = hsl.s, l = hsl.l;
+  var ch = (h + 180) % 360;
+  return [
+    hslToHex(h,  s,   l),
+    hslToHex(h,  Math.max(s - 15, 20), Math.min(l + 20, 85)),
+    hslToHex(h,  Math.max(s - 25, 15), Math.max(l - 20, 15)),
+    hslToHex(ch, s,   l),
+    hslToHex(ch, Math.max(s - 15, 20), Math.min(l + 18, 85))
+  ];
+}
+
+function genAnalogous(hsl) {
+  var h = hsl.h, s = hsl.s, l = hsl.l;
+  return [
+    hslToHex(h - 30, s, l),
+    hslToHex(h - 15, s, l),
+    hslToHex(h,      s, l),
+    hslToHex(h + 15, s, l),
+    hslToHex(h + 30, s, l)
+  ];
+}
+
+function genTriadic(hsl) {
+  var h = hsl.h, s = hsl.s, l = hsl.l;
+  return [
+    hslToHex(h,       s,   l),
+    hslToHex(h,       Math.max(s - 20, 20), Math.min(l + 22, 85)),
+    hslToHex(h + 120, s,   l),
+    hslToHex(h + 120, Math.max(s - 20, 20), Math.min(l + 22, 85)),
+    hslToHex(h + 240, s,   l)
+  ];
+}
+
+function genSplit(hsl) {
+  var h = hsl.h, s = hsl.s, l = hsl.l;
+  return [
+    hslToHex(h,       s,   l),
+    hslToHex(h,       Math.max(s - 20, 20), Math.min(l + 22, 85)),
+    hslToHex(h + 150, s,   l),
+    hslToHex(h + 150, Math.max(s - 15, 20), Math.min(l + 18, 85)),
+    hslToHex(h + 210, s,   l)
+  ];
+}
+
+function genMonochromatic(hsl) {
+  var h = hsl.h, s = hsl.s;
+  return [20, 35, 50, 65, 80].map(function(lv) {
+    return hslToHex(h, s, lv);
+  });
+}
+
+function genRandom() {
+  var colors = [];
+  var baseH = Math.random() * 360;
+  for (var i = 0; i < 5; i++) {
+    var h = (baseH + i * (360 / 5) + (Math.random() * 30 - 15) + 360) % 360;
+    var s = 40 + Math.random() * 45;
+    var l = 30 + Math.random() * 40;
+    colors.push(hslToHex(h, s, l));
+  }
+  return colors;
+}
+
+/* ── State ── */
+var _palColors  = ['#8250ff','#bf80ff','#d4a0ff','#5200cc','#9966ff'];
+var _palLocked  = [false, false, false, false, false];
+
+/* ── Sync controls ── */
+function palSyncHex(hex) {
+  document.getElementById('palHexInput').value = hex;
+}
+
+function palHexTyped(val) {
+  if (/^#[0-9a-fA-F]{6}$/.test(val)) {
+    document.getElementById('palBase').value = val;
+  }
+}
+
+function palHexBlur() {
+  var val = document.getElementById('palHexInput').value.trim();
+  if (!/^#/.test(val)) val = '#' + val;
+  if (/^#[0-9a-fA-F]{6}$/.test(val)) {
+    document.getElementById('palBase').value = val;
+    document.getElementById('palHexInput').value = val;
+  } else {
+    document.getElementById('palHexInput').value = document.getElementById('palBase').value;
+  }
+}
+
+/* ── Generate ── */
+function palGenerate() {
+  var hex = document.getElementById('palBase').value;
+  var harmony = document.getElementById('palHarmony').value;
+  var hsl = hexToHsl(hex);
+  var newColors;
+
+  if (harmony === 'complementary')  newColors = genComplementary(hsl);
+  else if (harmony === 'analogous') newColors = genAnalogous(hsl);
+  else if (harmony === 'triadic')   newColors = genTriadic(hsl);
+  else if (harmony === 'split')     newColors = genSplit(hsl);
+  else if (harmony === 'monochromatic') newColors = genMonochromatic(hsl);
+  else                              newColors = genRandom();
+
+  for (var i = 0; i < 5; i++) {
+    if (!_palLocked[i]) _palColors[i] = newColors[i];
+  }
+  palRender();
+}
+
+/* ── Render swatches ── */
+function palRender() {
+  var container = document.getElementById('palSwatches');
+  container.innerHTML = '';
+  _palColors.forEach(function(hex, i) {
+    var rgb = rgbStr(hex);
+    var swatch = document.createElement('div');
+    swatch.className = 'pal-swatch';
+    swatch.title = 'Click to copy HEX';
+    swatch.onclick = function() { palCopy(hex); };
+
+    var colorDiv = document.createElement('div');
+    colorDiv.className = 'pal-swatch-color';
+    colorDiv.style.background = hex;
+
+    var lockBtn = document.createElement('button');
+    lockBtn.className = 'pal-swatch-lock' + (_palLocked[i] ? ' locked' : '');
+    lockBtn.title = _palLocked[i] ? 'Unlock this color' : 'Lock this color';
+    lockBtn.textContent = _palLocked[i] ? '🔒' : '🔓';
+    lockBtn.onclick = (function(idx) {
+      return function(e) {
+        e.stopPropagation();
+        _palLocked[idx] = !_palLocked[idx];
+        palRender();
+      };
+    })(i);
+
+    colorDiv.appendChild(lockBtn);
+
+    var info = document.createElement('div');
+    info.className = 'pal-swatch-info';
+
+    var hexLabel = document.createElement('div');
+    hexLabel.className = 'pal-swatch-hex';
+    hexLabel.textContent = hex.toUpperCase();
+
+    var rgbLabel = document.createElement('div');
+    rgbLabel.className = 'pal-swatch-rgb';
+    rgbLabel.textContent = rgb;
+
+    info.appendChild(hexLabel);
+    info.appendChild(rgbLabel);
+    swatch.appendChild(colorDiv);
+    swatch.appendChild(info);
+    container.appendChild(swatch);
+  });
+}
+
+/* ── Copy helpers ── */
+function palCopy(text) {
+  navigator.clipboard.writeText(text).then(function() {
+    palShowToast('Copied ' + text.toUpperCase() + '!');
+  }).catch(function() {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    palShowToast('Copied ' + text.toUpperCase() + '!');
+  });
+}
+
+function palCopyAllHex() {
+  palCopy(_palColors.map(function(c) { return c.toUpperCase(); }).join(', '));
+}
+
+function palExportCSS() {
+  var lines = [':root {'];
+  _palColors.forEach(function(hex, i) {
+    lines.push('  --color-' + (i + 1) + ': ' + hex.toUpperCase() + ';');
+  });
+  lines.push('}');
+  palCopy(lines.join('\n'));
+  palShowToast('CSS variables copied!');
+}
+
+/* ── Toast ── */
+var _palToastTimer = null;
+function palShowToast(msg) {
+  var t = document.getElementById('palToast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(_palToastTimer);
+  _palToastTimer = setTimeout(function() { t.classList.remove('show'); }, 2000);
+}
+
+/* ── Init ── */
+palGenerate();
+</script>
+</body>
+</html>

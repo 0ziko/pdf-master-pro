@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Free Invoice Generator Online — Create &amp; Download PDF Invoice | SnakeConverter</title>
+
+  <meta name="description" content="Create professional invoices online free — add line items, tax, discount, and download as PDF. No signup, no account, works entirely in your browser." />
+  <meta name="keywords" content="invoice generator free, create invoice online, invoice maker, pdf invoice generator, free invoice template, online invoice creator" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <link rel="canonical" href="https://snakeconverter.com/invoice-generator" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://snakeconverter.com/invoice-generator" />
+  <meta property="og:title" content="Free Invoice Generator Online — Create &amp; Download PDF Invoice" />
+  <meta property="og:description" content="Create professional invoices online free — add line items, tax, discount, and download as PDF. No signup, no account, works entirely in your browser." />
+  <meta property="og:image" content="https://snakeconverter.com/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Free Invoice Generator Online | SnakeConverter" />
+  <meta name="twitter:description" content="Create professional invoices free — tax, discount, multi-currency. Print or save as PDF instantly." />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "url": "https://snakeconverter.com/invoice-generator",
+        "name": "Free Invoice Generator Online — Create & Download PDF Invoice",
+        "description": "Create professional invoices online free — add line items, tax, discount, and download as PDF. No signup, no account, works entirely in your browser.",
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://snakeconverter.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Finance Tools", "item": "https://snakeconverter.com/tools" },
+            { "@type": "ListItem", "position": 3, "name": "Invoice Generator", "item": "https://snakeconverter.com/invoice-generator" }
+          ]
+        }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "Free Invoice Generator",
+        "url": "https://snakeconverter.com/invoice-generator",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Any (Web Browser)",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Can I save the invoice as PDF?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. Click 'Print / Save as PDF' to open your browser's print dialog, then choose 'Save as PDF' as the destination." }
+          },
+          {
+            "@type": "Question",
+            "name": "Is my invoice data stored anywhere?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. Everything stays in your browser. No data is ever sent to any server — your invoice details are 100% private." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I add tax and discount?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. The invoice generator has both a tax rate (%) field and a discount percentage field. Totals are calculated automatically in real time." }
+          },
+          {
+            "@type": "Question",
+            "name": "What currencies are supported?",
+            "acceptedAnswer": { "@type": "Answer", "text": "USD, EUR, GBP, TRY, JPY, and CAD are supported. Select your currency from the dropdown and all amounts will display the correct symbol." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I reuse the invoice?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Currently each session is fresh. Use the browser print dialog to save the invoice as a PDF for your records, then fill in new details for the next invoice." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1033284237916727" crossorigin="anonymous"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,600;0,14..32,700;0,14..32,900&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,700;0,14..32,900&display=swap" /></noscript>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+  <link rel="stylesheet" href="css/lp.css" />
+
+  <style>
+    .inv-grid-2 { display:grid;grid-template-columns:1fr 1fr;gap:.6rem; }
+    @media(max-width:560px){.inv-grid-2{grid-template-columns:1fr;}}
+    .inv-label { font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#9ca3af;display:block;margin-bottom:.22rem; }
+    .inv-section-title { font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#9ca3af;margin:1rem 0 .5rem;border-bottom:1px solid rgba(255,255,255,.08);padding-bottom:.35rem; }
+    .inv-item-row { display:grid;grid-template-columns:2fr 70px 90px 30px;gap:.4rem;align-items:end;margin-bottom:.35rem; }
+    .inv-item-row label { font-size:.6rem;font-weight:700;color:#6b7280;text-transform:uppercase; }
+    .inv-total-row { display:flex;justify-content:flex-end; }
+    .inv-total-table { font-size:.82rem; }
+    .inv-total-table td { padding:.22rem .6rem;color:#e8e4ff; }
+    .inv-total-table td:last-child { text-align:right;font-weight:700;color:#a5b4fc; }
+    .inv-grand { font-size:1.05rem!important;color:#fff!important;border-top:1px solid rgba(255,255,255,.1);padding-top:.4rem!important; }
+    .pm-icon-btn { background:none;border:1px solid rgba(255,255,255,.1);color:#9ca3af;border-radius:6px;cursor:pointer;padding:.25rem .4rem;font-size:.8rem;transition:all .15s; }
+    .pm-icon-btn:hover { color:#f87171;border-color:#f87171; }
+  </style>
+
+  <!-- Analytics -->
+  <script defer src="js/analytics.js"></script>
+</head>
+<body>
+
+<!-- ══ HEADER ══════════════════════════════════════════════ -->
+<header class="lp-header">
+  <div class="lp-header-inner">
+    <a href="/" class="lp-logo">
+      <span class="lp-logo-snake">🐍</span>
+      <span>SnakeConverter</span>
+    </a>
+    <nav class="lp-header-nav">
+      <a href="/tools">Finance Tools</a>
+      <a href="/calc">Calculators</a>
+      <a href="/">All Tools</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<div class="lp-wrap">
+
+  <!-- ══ HERO ════════════════════════════════════════════ -->
+  <section class="lp-hero">
+    <h1 class="lp-h1">Free Invoice <span class="accent">Generator</span></h1>
+    <p class="lp-hero-sub">Create professional invoices online free — add line items, tax, discount, and download as PDF. No signup, no account, works entirely in your browser.</p>
+    <div class="lp-trust">✓ Free · No signup · Works in browser · 100% private</div>
+  </section>
+
+  <!-- ══ TOOL AREA ════════════════════════════════════════ -->
+  <section class="lp-tool-box">
+    <div class="space-y">
+
+      <div class="inv-grid-2">
+        <div>
+          <div class="inv-section-title">Your Company</div>
+          <div style="display:flex;flex-direction:column;gap:.45rem">
+            <div><label class="inv-label">Company / Your Name</label><input type="text" id="invFrom" class="input-field" placeholder="Acme Inc." /></div>
+            <div><label class="inv-label">Address</label><input type="text" id="invFromAddr" class="input-field" placeholder="123 Main St, City" /></div>
+            <div><label class="inv-label">Email</label><input type="text" id="invFromEmail" class="input-field" placeholder="hello@company.com" /></div>
+          </div>
+        </div>
+        <div>
+          <div class="inv-section-title">Bill To</div>
+          <div style="display:flex;flex-direction:column;gap:.45rem">
+            <div><label class="inv-label">Client Name</label><input type="text" id="invTo" class="input-field" placeholder="Client Corp." /></div>
+            <div><label class="inv-label">Address</label><input type="text" id="invToAddr" class="input-field" placeholder="456 Client Ave, City" /></div>
+            <div><label class="inv-label">Email</label><input type="text" id="invToEmail" class="input-field" placeholder="client@example.com" /></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="inv-grid-2" style="margin-top:.6rem">
+        <div><label class="inv-label">Invoice #</label><input type="text" id="invNum" class="input-field" value="INV-001" /></div>
+        <div><label class="inv-label">Date</label><input type="date" id="invDate" class="input-field" /></div>
+        <div><label class="inv-label">Due Date</label><input type="date" id="invDue" class="input-field" /></div>
+        <div><label class="inv-label">Currency</label>
+          <select id="invCur" class="input-field">
+            <option value="USD">USD $</option><option value="EUR">EUR €</option><option value="GBP">GBP £</option>
+            <option value="TRY">TRY ₺</option><option value="JPY">JPY ¥</option><option value="CAD">CAD $</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="inv-section-title">Line Items</div>
+      <div id="invItems"></div>
+      <button class="btn-secondary" onclick="invAddRow()" style="font-size:.75rem;padding:.35rem .8rem;margin-top:.3rem">+ Add Item</button>
+
+      <div class="inv-grid-2" style="margin-top:.8rem">
+        <div><label class="inv-label">Tax (%)</label><input type="number" id="invTax" class="input-field" value="0" min="0" max="100" step="0.1" oninput="invCalc()" /></div>
+        <div><label class="inv-label">Discount (%)</label><input type="number" id="invDisc" class="input-field" value="0" min="0" max="100" step="0.1" oninput="invCalc()" /></div>
+      </div>
+
+      <div class="inv-total-row" style="margin-top:.8rem">
+        <table class="inv-total-table">
+          <tr><td>Subtotal</td><td id="invSubtotal">—</td></tr>
+          <tr><td>Discount</td><td id="invDiscAmt">—</td></tr>
+          <tr><td>Tax</td><td id="invTaxAmt">—</td></tr>
+          <tr class="inv-grand"><td><strong>Total</strong></td><td id="invTotal"><strong>—</strong></td></tr>
+        </table>
+      </div>
+
+      <div style="margin-top:.6rem"><label class="inv-label">Notes / Payment Terms</label><textarea id="invNotes" class="input-field" rows="2" placeholder="Payment due within 30 days. Thank you!"></textarea></div>
+
+      <div style="display:flex;gap:.5rem;margin-top:1rem;flex-wrap:wrap">
+        <button class="btn-primary" onclick="invPrint()" style="flex:1">🖨️ Print / Save as PDF</button>
+        <button class="btn-secondary" onclick="invReset()">↺ Reset</button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ FEATURES ═════════════════════════════════════════ -->
+  <section class="lp-section">
+    <div class="lp-section-badge">Why use this tool</div>
+    <h2 class="lp-section-title">Professional Invoices, Free &amp; Instant</h2>
+    <div class="lp-features">
+      <div class="lp-feature">
+        <div class="lp-feature-ico">📄</div>
+        <div class="lp-feature-text">
+          <strong>Professional Layout</strong>
+          <span>Clean invoice that looks great printed — company info, client details, itemized table, and totals.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">🧮</div>
+        <div class="lp-feature-text">
+          <strong>Auto-Calculate</strong>
+          <span>Tax, discount, and totals calculated instantly as you type — no manual math needed.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">🖨️</div>
+        <div class="lp-feature-text">
+          <strong>Print / PDF</strong>
+          <span>Open browser print dialog to save as PDF in one click. Works in Chrome, Safari, Firefox, and Edge.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">💱</div>
+        <div class="lp-feature-text">
+          <strong>Multi-Currency</strong>
+          <span>USD, EUR, GBP, TRY, JPY, CAD supported — select your currency and all amounts update automatically.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">➕</div>
+        <div class="lp-feature-text">
+          <strong>Unlimited Items</strong>
+          <span>Add as many line items as needed. Remove any row with one click. No limits.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">🔒</div>
+        <div class="lp-feature-text">
+          <strong>100% Private</strong>
+          <span>No data sent to any server. Your invoice stays entirely on your device — completely secure.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="lp-divider"></div>
+
+  <!-- ══ HOW TO USE ════════════════════════════════════════ -->
+  <section class="lp-section">
+    <div class="lp-section-badge">How it works</div>
+    <h2 class="lp-section-title">Create an Invoice in 3 Simple Steps</h2>
+    <div class="lp-steps">
+      <div class="lp-step">
+        <div class="lp-step-num">1</div>
+        <div class="lp-step-text">
+          <strong>Fill in your company info and client details</strong>
+          <span>Enter your company name, address, and email at the top. Then add your client's name, address, and contact info in the "Bill To" section.</span>
+        </div>
+      </div>
+      <div class="lp-step">
+        <div class="lp-step-num">2</div>
+        <div class="lp-step-text">
+          <strong>Add line items with description, quantity, and unit price</strong>
+          <span>Fill in each service or product row. Add as many rows as you need with the "+ Add Item" button. Set your tax rate and discount percentage — totals update in real time.</span>
+        </div>
+      </div>
+      <div class="lp-step">
+        <div class="lp-step-num">3</div>
+        <div class="lp-step-text">
+          <strong>Click "Print / Save as PDF" to open the print dialog and save as PDF</strong>
+          <span>Your browser will open the print dialog. Choose "Save as PDF" as the destination to download a clean, print-ready invoice.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="lp-divider"></div>
+
+  <!-- ══ FAQ ══════════════════════════════════════════════ -->
+  <section class="lp-section">
+    <div class="lp-section-badge">FAQ</div>
+    <h2 class="lp-section-title">Frequently Asked Questions</h2>
+    <div class="lp-faq">
+      <details class="lp-faq-item" open>
+        <summary>Can I save the invoice as PDF?</summary>
+        <div class="lp-faq-body">Yes. Click the <strong>Print / Save as PDF</strong> button to open your browser's print dialog. In the destination dropdown, select <strong>Save as PDF</strong> and click Save. Works in Chrome, Edge, Firefox, and Safari.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>Is my invoice data stored anywhere?</summary>
+        <div class="lp-faq-body">No. Everything stays entirely in your browser. No data is ever sent to any server — your invoice details, client information, and amounts are <strong>100% private</strong> on your device.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>Can I add tax and discount?</summary>
+        <div class="lp-faq-body">Yes. The invoice generator has both a <strong>tax rate (%)</strong> field and a <strong>discount percentage</strong> field. Enter the values and the subtotal, discount amount, tax amount, and grand total are calculated automatically in real time.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>What currencies are supported?</summary>
+        <div class="lp-faq-body">Six currencies are supported: <strong>USD ($), EUR (€), GBP (£), TRY (₺), JPY (¥), and CAD (CA$)</strong>. Select your currency from the dropdown and all amounts will display the correct symbol on both the form and the printed invoice.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>Can I reuse the invoice?</summary>
+        <div class="lp-faq-body">Currently each session starts fresh. Use the browser print dialog to <strong>save the invoice as a PDF</strong> for your records. Then click Reset to clear the form and fill in new details for your next invoice.</div>
+      </details>
+    </div>
+  </section>
+
+  <div class="lp-divider"></div>
+
+  <!-- ══ RELATED TOOLS ═════════════════════════════════════ -->
+  <section class="lp-section">
+    <div class="lp-section-badge">Related tools</div>
+    <h2 class="lp-section-title">More Useful Tools</h2>
+    <div class="lp-related-grid">
+      <a href="/tools#passmanager" class="lp-related-card">
+        <span class="lp-related-ico">🔑</span>
+        <div><div class="lp-related-name">Password Manager</div><div class="lp-related-desc">Store passwords locally</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/loan-calculator" class="lp-related-card">
+        <span class="lp-related-ico">🏦</span>
+        <div><div class="lp-related-name">Loan Calculator</div><div class="lp-related-desc">Monthly payment & amortization</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/tools#percent" class="lp-related-card">
+        <span class="lp-related-ico">%</span>
+        <div><div class="lp-related-name">Percentage Calculator</div><div class="lp-related-desc">Quick percent calculations</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/tools#words" class="lp-related-card">
+        <span class="lp-related-ico">📝</span>
+        <div><div class="lp-related-name">Word Counter</div><div class="lp-related-desc">Count words and characters</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/password-generator" class="lp-related-card">
+        <span class="lp-related-ico">🔐</span>
+        <div><div class="lp-related-name">Password Generator</div><div class="lp-related-desc">Strong secure passwords</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/tools#raffle" class="lp-related-card">
+        <span class="lp-related-ico">🎰</span>
+        <div><div class="lp-related-name">Raffle / Draw</div><div class="lp-related-desc">Random winner picker</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<!-- ══ FOOTER ══════════════════════════════════════════════ -->
+<footer class="lp-footer">
+  <div class="lp-wrap">
+    <div class="lp-footer-links">
+      <a href="/">All Tools</a>
+      <a href="/pdf">PDF Tools</a>
+      <a href="/image">Image Tools</a>
+      <a href="/dev">Developer Tools</a>
+      <a href="/tools">Utility Tools</a>
+    </div>
+    <p>© 2026 SnakeConverter · Free, no signup, works in browser</p>
+  </div>
+</footer>
+
+<script>
+var _invRows = [];
+(function(){
+  var today = new Date();
+  var due = new Date(today); due.setDate(due.getDate()+30);
+  var fmt = function(d){ return d.toISOString().split('T')[0]; };
+  document.getElementById('invDate').value = fmt(today);
+  document.getElementById('invDue').value  = fmt(due);
+  invAddRow(); invAddRow(); invAddRow();
+})();
+
+function invAddRow() {
+  var idx = _invRows.length;
+  _invRows.push({desc:'', qty:1, price:0});
+  var container = document.getElementById('invItems');
+  var row = document.createElement('div');
+  row.className = 'inv-item-row';
+  row.dataset.idx = idx;
+  row.innerHTML =
+    '<div>' + (idx===0?'<label class="inv-label">Description</label>':'') +
+      '<input type="text" class="input-field inv-desc" placeholder="Service / Product" oninput="invCalc()" /></div>' +
+    '<div>' + (idx===0?'<label class="inv-label">Qty</label>':'') +
+      '<input type="number" class="input-field inv-qty" value="1" min="0" oninput="invCalc()" /></div>' +
+    '<div>' + (idx===0?'<label class="inv-label">Unit Price</label>':'') +
+      '<input type="number" class="input-field inv-price" value="0" min="0" step="0.01" oninput="invCalc()" /></div>' +
+    '<button class="pm-icon-btn" onclick="invRemoveRow(this)" style="align-self:center;margin-top:' + (idx===0?'18px':'0') + '">✕</button>';
+  container.appendChild(row);
+  invCalc();
+}
+
+function invRemoveRow(btn) {
+  btn.parentElement.remove(); invCalc();
+}
+
+function invCalc() {
+  var cur = document.getElementById('invCur').value;
+  var sym = {USD:'$',EUR:'€',GBP:'£',TRY:'₺',JPY:'¥',CAD:'CA$'}[cur] || cur + ' ';
+  var subtotal = 0;
+  document.querySelectorAll('#invItems .inv-item-row').forEach(function(row){
+    var qty   = parseFloat(row.querySelector('.inv-qty').value)   || 0;
+    var price = parseFloat(row.querySelector('.inv-price').value) || 0;
+    subtotal += qty * price;
+  });
+  var disc = parseFloat(document.getElementById('invDisc').value) || 0;
+  var tax  = parseFloat(document.getElementById('invTax').value)  || 0;
+  var discAmt = subtotal * disc / 100;
+  var taxAmt  = (subtotal - discAmt) * tax / 100;
+  var total   = subtotal - discAmt + taxAmt;
+  var f = function(n){ return sym + n.toFixed(2); };
+  document.getElementById('invSubtotal').textContent = f(subtotal);
+  document.getElementById('invDiscAmt').textContent  = disc > 0 ? '-' + f(discAmt) : '—';
+  document.getElementById('invTaxAmt').textContent   = tax  > 0 ? f(taxAmt) : '—';
+  document.getElementById('invTotal').innerHTML = '<strong>' + f(total) + '</strong>';
+}
+
+function invPrint() {
+  var cur = document.getElementById('invCur').value;
+  var sym = {USD:'$',EUR:'€',GBP:'£',TRY:'₺',JPY:'¥',CAD:'CA$'}[cur] || cur+' ';
+  var rows = [];
+  var subtotal = 0;
+  document.querySelectorAll('#invItems .inv-item-row').forEach(function(row){
+    var desc  = row.querySelector('.inv-desc').value  || '—';
+    var qty   = parseFloat(row.querySelector('.inv-qty').value)   || 0;
+    var price = parseFloat(row.querySelector('.inv-price').value) || 0;
+    var amt   = qty * price;
+    subtotal += amt;
+    if (desc !== '—' || amt) rows.push({desc:desc,qty:qty,price:price,amt:amt});
+  });
+  var disc = parseFloat(document.getElementById('invDisc').value)||0;
+  var tax  = parseFloat(document.getElementById('invTax').value)||0;
+  var discAmt = subtotal*disc/100, taxAmt=(subtotal-discAmt)*tax/100, total=subtotal-discAmt+taxAmt;
+  var f = function(n){ return sym+n.toFixed(2); };
+  var win = window.open('','_blank');
+  win.document.write('<!DOCTYPE html><html><head><title>Invoice</title>' +
+    '<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;padding:40px;color:#111;font-size:13px}' +
+    'h1{font-size:28px;font-weight:900;color:#6366f1;margin-bottom:4px}.inv-header{display:flex;justify-content:space-between;margin-bottom:28px}' +
+    '.inv-from,.inv-to{flex:1}.inv-from{margin-right:20px}.inv-meta{text-align:right;font-size:12px;color:#555}' +
+    '.inv-meta b{font-size:14px;display:block;color:#111;margin-bottom:2px}' +
+    'table{width:100%;border-collapse:collapse;margin:20px 0}th{background:#f3f4f6;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.05em;padding:8px 10px;text-align:left}' +
+    'td{padding:8px 10px;border-bottom:1px solid #e5e7eb}.totals-table{width:240px;margin-left:auto}.totals-table td{border:none;padding:4px 10px}' +
+    '.grand td{font-size:15px;font-weight:700;border-top:2px solid #6366f1;padding-top:8px}.notes{margin-top:20px;font-size:12px;color:#555;border-top:1px solid #e5e7eb;padding-top:12px}' +
+    '@media print{body{padding:20px}}</style></head><body>' +
+    '<div class="inv-header">' +
+      '<div class="inv-from"><h1>INVOICE</h1><b style="font-size:15px;font-weight:700;margin-top:6px;display:block">' + (document.getElementById('invFrom').value||'Your Company') + '</b>' +
+        '<div style="color:#555;font-size:12px">' + (document.getElementById('invFromAddr').value||'') + '</div>' +
+        '<div style="color:#555;font-size:12px">' + (document.getElementById('invFromEmail').value||'') + '</div></div>' +
+      '<div class="inv-meta"><div><b>Bill To</b>' + (document.getElementById('invTo').value||'Client') + '<br>' +
+        (document.getElementById('invToAddr').value||'') + '<br>' + (document.getElementById('invToEmail').value||'') + '</div>' +
+        '<div style="margin-top:10px"><b>Invoice #</b>' + document.getElementById('invNum').value + '</div>' +
+        '<div><b>Date</b>' + document.getElementById('invDate').value + '</div>' +
+        '<div><b>Due</b>' + document.getElementById('invDue').value + '</div></div>' +
+    '</div>' +
+    '<table><thead><tr><th>Description</th><th>Qty</th><th>Unit Price</th><th>Amount</th></tr></thead><tbody>' +
+    rows.map(function(r){ return '<tr><td>'+r.desc+'</td><td>'+r.qty+'</td><td>'+f(r.price)+'</td><td>'+f(r.amt)+'</td></tr>'; }).join('') +
+    '</tbody></table>' +
+    '<table class="totals-table"><tbody>' +
+    '<tr><td>Subtotal</td><td>'+f(subtotal)+'</td></tr>' +
+    (disc>0?'<tr><td>Discount ('+disc+'%)</td><td>-'+f(discAmt)+'</td></tr>':'')+
+    (tax>0?'<tr><td>Tax ('+tax+'%)</td><td>'+f(taxAmt)+'</td></tr>':'')+
+    '<tr class="grand"><td>Total</td><td>'+f(total)+'</td></tr></tbody></table>' +
+    (document.getElementById('invNotes').value ? '<div class="notes"><b>Notes:</b> '+document.getElementById('invNotes').value+'</div>':'') +
+    '</body></html>');
+  win.document.close();
+  setTimeout(function(){ win.print(); }, 400);
+}
+
+function invReset() {
+  ['invFrom','invFromAddr','invFromEmail','invTo','invToAddr','invToEmail','invNotes'].forEach(function(id){ document.getElementById(id).value=''; });
+  document.getElementById('invNum').value='INV-001';
+  document.getElementById('invTax').value='0';
+  document.getElementById('invDisc').value='0';
+  document.getElementById('invItems').innerHTML='';
+  _invRows=[];
+  invAddRow(); invAddRow(); invAddRow();
+}
+</script>
+</body>
+</html>

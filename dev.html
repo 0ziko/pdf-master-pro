@@ -172,6 +172,7 @@
       <a href="#jwt-encoder"   class="jump-link">🔐 JWT</a>
       <a href="#sql-formatter" class="jump-link">🗄️ SQL Format</a>
       <a href="#char-diff"     class="jump-link">🔠 Char Diff</a>
+      <a href="#code-formatter" class="jump-link">✨ Code Format</a>
     </nav>
 
     <div class="sc-sidebar-footer">
@@ -464,7 +465,7 @@
     <section id="jwt-encoder" class="tool-page-section">
       <div class="tps-header">
         <span class="tps-icon">🔐</span>
-        <div><div class="tps-title">JWT Encoder / Decoder</div><div class="tps-desc">Sign, decode and validate JWT tokens (HS256) — browser-only</div></div>
+        <div><div class="tps-title" data-i18n="dev.jwtenc.name">JWT Encoder / Decoder</div><div class="tps-desc" data-i18n="dev.jwtenc.desc">Sign, decode and validate JWT tokens (HS256) — browser-only</div></div>
       </div>
 
       <!-- Sub-tabs -->
@@ -530,7 +531,7 @@
     <section id="sql-formatter" class="tool-page-section">
       <div class="tps-header">
         <span class="tps-icon">🗄️</span>
-        <div><div class="tps-title">SQL Formatter</div><div class="tps-desc">Beautify & format SQL queries — MySQL, PostgreSQL, SQLite, Standard SQL</div></div>
+        <div><div class="tps-title" data-i18n="dev.sql.name">SQL Formatter</div><div class="tps-desc" data-i18n="dev.sql.desc">Beautify & format SQL queries — MySQL, PostgreSQL, SQLite, Standard SQL</div></div>
       </div>
       <div style="margin-bottom:.5rem;display:flex;gap:.5rem;flex-wrap:wrap;align-items:center">
         <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);">Dialect</div>
@@ -570,6 +571,140 @@
         <input type="text" id="cdiff-b" class="input-field" placeholder="Modified text…" oninput="charDiffRun()" style="font-family:monospace;" />
       </div>
       <div id="cdiff-out" class="dev-output" style="min-height:50px;font-size:.85rem;line-height:1.8;color:var(--text-primary);"></div>
+    </section>
+
+    <!-- 17. Code Formatter -->
+    <section id="code-formatter" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">✨</span>
+        <div><div class="tps-title" data-i18n="dev.codefmt.name">Code Formatter</div><div class="tps-desc" data-i18n="dev.codefmt.desc">Beautify JS, HTML, CSS, JSON and SQL — copy or download formatted code</div></div>
+      </div>
+      <div style="display:flex;gap:.5rem;align-items:center;margin-bottom:.6rem;flex-wrap:wrap">
+        <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);">Language</div>
+        <select id="cfLang" class="input-field" style="max-width:150px;font-size:.78rem;padding:.28rem .6rem" onchange="cfAuto()">
+          <option value="js">JavaScript</option>
+          <option value="json">JSON</option>
+          <option value="html">HTML</option>
+          <option value="css">CSS</option>
+          <option value="sql">SQL</option>
+        </select>
+        <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-left:.5rem">Indent</div>
+        <select id="cfIndent" class="input-field" style="max-width:100px;font-size:.78rem;padding:.28rem .6rem">
+          <option value="2">2 spaces</option>
+          <option value="4">4 spaces</option>
+          <option value="tab">Tab</option>
+        </select>
+      </div>
+      <textarea id="cfInput" class="dev-textarea" style="min-height:160px;font-size:.78rem;" placeholder="Paste your code here…"></textarea>
+      <div class="dev-action-row" style="margin-top:.5rem">
+        <button type="button" onclick="cfFormat()" class="btn-primary" style="flex:1">✨ Format</button>
+        <button type="button" onclick="cfCopy()" class="btn-secondary">📋 Copy</button>
+        <button type="button" onclick="cfDownload()" class="btn-secondary">⬇ Save</button>
+        <button type="button" onclick="document.getElementById('cfInput').value='';document.getElementById('cfOutput').value=''" class="btn-secondary">✕</button>
+      </div>
+      <div id="cfStatus" style="font-size:.72rem;color:var(--text-muted);margin:.3rem 0;min-height:1.2em;"></div>
+      <textarea id="cfOutput" class="dev-textarea" style="min-height:160px;font-size:.78rem;" readonly placeholder="Formatted output appears here…"></textarea>
+      <script>
+      (function(){
+        /* ── JSON formatter ── */
+        function fmtJson(code, indent){ return JSON.stringify(JSON.parse(code), null, indent); }
+        /* ── Simple JS/CSS/HTML indenter ── */
+        function fmtHtml(code, indentStr){
+          var lines = code.replace(/>\s*</g, '>\n<').split('\n');
+          var depth = 0, out = [];
+          var voidTags = /^<(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)/i;
+          lines.forEach(function(line){
+            line = line.trim();
+            if (!line) return;
+            if (/^<\//.test(line)) depth = Math.max(0, depth - 1);
+            out.push(indentStr.repeat(depth) + line);
+            if (/^<[^\/!?]/.test(line) && !voidTags.test(line) && !line.endsWith('/>') && !/<\//.test(line)) depth++;
+          });
+          return out.join('\n');
+        }
+        function fmtCss(code, indentStr){
+          return code
+            .replace(/\s*\{\s*/g, ' {\n' + indentStr)
+            .replace(/;\s*/g, ';\n' + indentStr)
+            .replace(/\s*\}\s*/g, '\n}\n')
+            .replace(new RegExp(indentStr + '\\}', 'g'), '}')
+            .split('\n').filter(function(l){ return l.trim(); }).join('\n');
+        }
+        function fmtJs(code, indentStr){
+          /* re-indent braces/brackets — lightweight formatter */
+          var depth = 0, out = [], inStr = false, strChar = '';
+          var lines = code.split('\n');
+          lines.forEach(function(rawLine){
+            var line = rawLine.trim();
+            if (!line) { out.push(''); return; }
+            var opens = 0, closes = 0;
+            for (var i = 0; i < line.length; i++){
+              var c = line[i];
+              if (!inStr && (c === '"' || c === "'" || c === '`')) { inStr = true; strChar = c; }
+              else if (inStr && c === strChar && (i === 0 || line[i-1] !== '\\')) { inStr = false; }
+              else if (!inStr) {
+                if (c === '{' || c === '[' || c === '(') opens++;
+                else if (c === '}' || c === ']' || c === ')') closes++;
+              }
+            }
+            if (closes > opens) depth = Math.max(0, depth - (closes - opens));
+            out.push(indentStr.repeat(depth) + line);
+            if (opens > closes) depth += opens - closes;
+          });
+          return out.join('\n');
+        }
+        function fmtSql(code, indentStr){
+          if (window.sqlFormatter) {
+            try { return window.sqlFormatter.format(code, {language:'sql',tabWidth:indentStr==='\t'?1:indentStr.length,useTabs:indentStr==='\t',keywordCase:'upper'}); } catch(e){}
+          }
+          var kw = /\b(SELECT|FROM|WHERE|JOIN|LEFT|RIGHT|INNER|OUTER|ON|AND|OR|NOT|INSERT|INTO|VALUES|UPDATE|SET|DELETE|CREATE|TABLE|DROP|ALTER|ADD|COLUMN|GROUP BY|ORDER BY|HAVING|LIMIT|OFFSET|UNION|AS|DISTINCT)\b/gi;
+          return code.replace(kw, function(m){ return m.toUpperCase(); });
+        }
+
+        function getIndent(val){ return val === 'tab' ? '\t' : ' '.repeat(Number(val)); }
+
+        window.cfFormat = function(){
+          var code = document.getElementById('cfInput').value;
+          var lang = document.getElementById('cfLang').value;
+          var indent = getIndent(document.getElementById('cfIndent').value);
+          var status = document.getElementById('cfStatus');
+          var out = document.getElementById('cfOutput');
+          if (!code.trim()){ status.textContent = 'Paste some code first.'; return; }
+          try {
+            var result;
+            if (lang === 'json') result = fmtJson(code, indent);
+            else if (lang === 'html') result = fmtHtml(code, indent);
+            else if (lang === 'css') result = fmtCss(code, indent);
+            else if (lang === 'sql') result = fmtSql(code, indent);
+            else result = fmtJs(code, indent);
+            out.value = result;
+            status.textContent = '✓ Formatted ' + result.split('\n').length + ' lines.';
+          } catch(e){ status.textContent = '✗ Error: ' + e.message; }
+        };
+
+        window.cfAuto = function(){ if (document.getElementById('cfInput').value) cfFormat(); };
+
+        window.cfCopy = function(){
+          var text = document.getElementById('cfOutput').value;
+          if (!text) return;
+          navigator.clipboard.writeText(text).then(function(){
+            document.getElementById('cfStatus').textContent = '✓ Copied to clipboard!';
+            setTimeout(function(){ document.getElementById('cfStatus').textContent = ''; }, 1500);
+          });
+        };
+
+        window.cfDownload = function(){
+          var text = document.getElementById('cfOutput').value;
+          var lang = document.getElementById('cfLang').value;
+          var exts = {js:'js',json:'json',html:'html',css:'css',sql:'sql'};
+          var blob = new Blob([text], { type: 'text/plain' });
+          var a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = 'formatted.' + (exts[lang] || 'txt');
+          a.click();
+        };
+      })();
+      </script>
     </section>
 
     </div><!-- /sc-content -->

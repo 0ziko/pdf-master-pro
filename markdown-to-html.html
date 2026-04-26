@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Markdown to HTML Converter Online Free | SnakeConverter</title>
+
+  <meta name="description" content="Convert Markdown to HTML online free — live preview, copy HTML code or download. No signup, works in browser, 100% private." />
+  <meta name="keywords" content="markdown to html, markdown converter online, md to html, markdown editor online, markdown preview" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <link rel="canonical" href="https://snakeconverter.com/markdown-to-html" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://snakeconverter.com/markdown-to-html" />
+  <meta property="og:title" content="Markdown to HTML Converter Online Free | SnakeConverter" />
+  <meta property="og:description" content="Convert Markdown to HTML online free — live preview, copy HTML code or download. No signup, works in browser, 100% private." />
+  <meta property="og:image" content="https://snakeconverter.com/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Markdown to HTML Converter Online Free | SnakeConverter" />
+  <meta name="twitter:description" content="Convert Markdown to HTML online free. Live preview, copy or download. No signup, 100% private." />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "url": "https://snakeconverter.com/markdown-to-html",
+        "name": "Markdown to HTML Converter Online Free",
+        "description": "Convert Markdown to HTML online free — live preview, copy HTML code or download. No signup, works in browser, 100% private.",
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://snakeconverter.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Developer Tools", "item": "https://snakeconverter.com/dev" },
+            { "@type": "ListItem", "position": 3, "name": "Markdown to HTML", "item": "https://snakeconverter.com/markdown-to-html" }
+          ]
+        }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "Markdown to HTML Converter",
+        "url": "https://snakeconverter.com/markdown-to-html",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any (Web Browser)",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is Markdown?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Markdown is a lightweight markup language created by John Gruber in 2004. It lets you write plain-text documents using simple formatting syntax (like # for headings or **bold**) that can be converted to HTML. It is widely used for README files, documentation, and blog posts." }
+          },
+          {
+            "@type": "Question",
+            "name": "Does it support all Markdown features?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The converter supports CommonMark basics: headings (h1–h6), bold, italic, inline code, fenced code blocks, unordered and ordered lists, blockquotes, hyperlinks, and horizontal rules. Extended syntax such as tables and footnotes is not currently supported." }
+          },
+          {
+            "@type": "Question",
+            "name": "Is my text uploaded anywhere?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. Everything runs entirely in your browser using JavaScript. Your text is never sent to any server — it stays completely private on your device." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I download the HTML file?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. Click the 'Download .html' button and a complete HTML file containing your converted content will be saved to your device instantly." }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the difference between Markdown and HTML?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Markdown is a human-friendly shorthand writing format designed to be easy to read and write. HTML (HyperText Markup Language) is the actual markup language that browsers render. Markdown is converted into HTML so browsers can display it correctly — this tool performs that conversion instantly." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1033284237916727" crossorigin="anonymous"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,600;0,14..32,700;0,14..32,900&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,700;0,14..32,900&display=swap" /></noscript>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+  <link rel="stylesheet" href="css/lp.css" />
+  <style>
+    .md-lp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 640px) {
+      .md-lp-grid { grid-template-columns: 1fr; }
+    }
+    .md-editor-label {
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: .4rem;
+    }
+    .md-textarea {
+      width: 100%;
+      min-height: 200px;
+      background: var(--bg-input, #1a1a2e);
+      color: var(--text, #e2e2e2);
+      border: 1px solid var(--border, #2e2e4a);
+      border-radius: .5rem;
+      padding: .75rem;
+      font-family: 'Fira Mono', 'Consolas', monospace;
+      font-size: .82rem;
+      resize: vertical;
+      outline: none;
+      transition: border-color .2s;
+      box-sizing: border-box;
+    }
+    .md-textarea:focus {
+      border-color: var(--accent, #7c6af7);
+    }
+    .md-preview-box {
+      min-height: 200px;
+      background: var(--bg-input, #1a1a2e);
+      border: 1px solid var(--border, #2e2e4a);
+      border-radius: .5rem;
+      padding: .75rem 1rem;
+      font-size: .88rem;
+      line-height: 1.65;
+      color: var(--text, #e2e2e2);
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+    .md-preview-box h1,.md-preview-box h2,.md-preview-box h3,
+    .md-preview-box h4,.md-preview-box h5,.md-preview-box h6 {
+      margin: .7em 0 .3em;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+    .md-preview-box h1 { font-size: 1.5em; }
+    .md-preview-box h2 { font-size: 1.25em; }
+    .md-preview-box h3 { font-size: 1.1em; }
+    .md-preview-box p  { margin: .5em 0; }
+    .md-preview-box ul,.md-preview-box ol { margin: .4em 0; padding-left: 1.4em; }
+    .md-preview-box li { margin: .15em 0; }
+    .md-preview-box code {
+      background: rgba(124,106,247,.15);
+      color: #a78bfa;
+      border-radius: .25rem;
+      padding: .1em .35em;
+      font-family: 'Fira Mono','Consolas',monospace;
+      font-size: .9em;
+    }
+    .md-preview-box pre {
+      background: rgba(0,0,0,.35);
+      border-radius: .4rem;
+      padding: .75rem 1rem;
+      overflow-x: auto;
+      margin: .6em 0;
+    }
+    .md-preview-box pre code {
+      background: none;
+      padding: 0;
+      color: #c4b5fd;
+    }
+    .md-preview-box blockquote {
+      border-left: 3px solid var(--accent, #7c6af7);
+      margin: .5em 0;
+      padding: .3em .8em;
+      opacity: .8;
+    }
+    .md-preview-box a { color: var(--accent-light, #a78bfa); }
+    .md-preview-box hr { border: none; border-top: 1px solid var(--border, #2e2e4a); margin: .75em 0; }
+    .md-preview-box strong { font-weight: 700; }
+    .md-preview-box em { font-style: italic; }
+    .md-html-out {
+      width: 100%;
+      min-height: 100px;
+      background: var(--bg-input, #1a1a2e);
+      color: var(--text-muted, #888);
+      border: 1px solid var(--border, #2e2e4a);
+      border-radius: .5rem;
+      padding: .65rem .75rem;
+      font-family: 'Fira Mono','Consolas',monospace;
+      font-size: .78rem;
+      resize: vertical;
+      outline: none;
+      box-sizing: border-box;
+    }
+    .md-stats {
+      font-size: .72rem;
+      color: var(--text-muted, #888);
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .md-btn-row {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+    }
+  </style>
+  <!-- Analytics -->
+  <script defer src="js/analytics.js"></script>
+</head>
+<body>
+
+<!-- ══ HEADER ══════════════════════════════════════════════ -->
+<header class="lp-header">
+  <div class="lp-header-inner">
+    <a href="/" class="lp-logo">
+      <span class="lp-logo-snake">🐍</span>
+      <span>SnakeConverter</span>
+    </a>
+    <nav class="lp-header-nav">
+      <a href="/dev">Developer Tools</a>
+      <a href="/sql-formatter">SQL Formatter</a>
+      <a href="/">All Tools</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<div class="lp-wrap">
+
+  <!-- ══ HERO ════════════════════════════════════════════ -->
+  <section class="lp-hero">
+    <h1 class="lp-h1">Markdown to <span class="accent">HTML</span> Converter</h1>
+    <p class="lp-hero-sub">Convert Markdown to HTML online free — live preview, copy HTML code or download. No signup, works in browser, 100% private.</p>
+    <div class="lp-trust">✓ Free · No signup · Works in browser · 100% private</div>
+  </section>
+
+  <!-- ══ TOOL AREA ════════════════════════════════════════ -->
+  <section class="lp-tool-box">
+    <div class="space-y">
+
+      <!-- Editor grid: left = Markdown input, right = preview -->
+      <div class="md-lp-grid">
+        <div>
+          <div class="md-editor-label">Markdown Input</div>
+          <textarea id="md-input" class="md-textarea"
+            placeholder="# Hello World&#10;&#10;Type your **Markdown** here and see the live *HTML preview* on the right.&#10;&#10;- Item one&#10;- Item two&#10;&#10;> Blockquote example&#10;&#10;`inline code` and [link](https://example.com)"
+            oninput="mdConvert()"></textarea>
+        </div>
+        <div>
+          <div class="md-editor-label">Live HTML Preview</div>
+          <div id="md-preview" class="md-preview-box">
+            <span style="color:var(--text-muted,#888);font-style:italic">Preview will appear here…</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Raw HTML output -->
+      <div>
+        <div class="md-editor-label">Raw HTML Output</div>
+        <textarea id="md-html-out" class="md-html-out" readonly placeholder="HTML output will appear here…"></textarea>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="md-btn-row">
+        <button type="button" class="btn-primary" onclick="mdCopyHtml()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Copy HTML
+        </button>
+        <button type="button" class="btn-secondary" onclick="mdDownload()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download .html
+        </button>
+        <button type="button" class="btn-secondary" onclick="mdClear()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+          Clear
+        </button>
+        <span id="md-copy-msg" style="font-size:.75rem;color:var(--green,#4ade80);align-self:center;display:none">✓ Copied!</span>
+      </div>
+
+      <!-- Stats -->
+      <div class="md-stats">
+        <span>Characters: <strong id="md-chars">0</strong></span>
+        <span>Lines: <strong id="md-lines">0</strong></span>
+        <span>Words: <strong id="md-words">0</strong></span>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ FEATURES ═════════════════════════════════════════ -->
+  <section class="lp-section">
+    <div class="lp-section-badge">Why use this tool</div>
+    <h2 class="lp-section-title">Fast, Private &amp; Free Markdown Converter</h2>
+    <div class="lp-features">
+      <div class="lp-feature">
+        <div class="lp-feature-ico">⚡</div>
+        <div class="lp-feature-text">
+          <strong>Instant Preview</strong>
+          <span>Live HTML rendering updates as you type — no button clicks needed.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">📋</div>
+        <div class="lp-feature-text">
+          <strong>Copy HTML</strong>
+          <span>Copy clean HTML code with one click, ready to paste anywhere.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">⬇️</div>
+        <div class="lp-feature-text">
+          <strong>Download File</strong>
+          <span>Save your converted content as a complete .html file instantly.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">🔒</div>
+        <div class="lp-feature-text">
+          <strong>100% Private</strong>
+          <span>Everything runs in your browser — your text is never uploaded to any server.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">🌐</div>
+        <div class="lp-feature-text">
+          <strong>No Signup</strong>
+          <span>Completely free with no account, registration or email required.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">📱</div>
+        <div class="lp-feature-text">
+          <strong>Mobile Friendly</strong>
+          <span>Responsive design works on phones, tablets and desktops alike.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="lp-divider"></div>
+
+  <!-- ══ HOW TO USE ════════════════════════════════════════ -->
+  <section class="lp-section">
+    <div class="lp-section-badge">How it works</div>
+    <h2 class="lp-section-title">Convert Markdown to HTML in 3 Simple Steps</h2>
+    <div class="lp-steps">
+      <div class="lp-step">
+        <div class="lp-step-num">1</div>
+        <div class="lp-step-text">
+          <strong>Type or paste your Markdown</strong>
+          <span>Enter your Markdown text in the left panel. Use headings, bold, italic, lists, links, code blocks and more.</span>
+        </div>
+      </div>
+      <div class="lp-step">
+        <div class="lp-step-num">2</div>
+        <div class="lp-step-text">
+          <strong>See the live HTML preview instantly</strong>
+          <span>The right panel renders your Markdown as HTML in real time. The raw HTML code appears in the output area below.</span>
+        </div>
+      </div>
+      <div class="lp-step">
+        <div class="lp-step-num">3</div>
+        <div class="lp-step-text">
+          <strong>Copy the HTML or download as .html file</strong>
+          <span>Click "Copy HTML" to copy the code to clipboard, or "Download .html" to save a complete HTML file to your device.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="lp-divider"></div>
+
+  <!-- ══ FAQ ══════════════════════════════════════════════ -->
+  <section class="lp-section">
+    <div class="lp-section-badge">FAQ</div>
+    <h2 class="lp-section-title">Frequently Asked Questions</h2>
+    <div class="lp-faq">
+      <details class="lp-faq-item" open>
+        <summary>What is Markdown?</summary>
+        <div class="lp-faq-body">Markdown is a lightweight markup language created by John Gruber in 2004. It lets you write documents using a simple, readable plain-text syntax — for example <code>#</code> for headings or <code>**bold**</code> — that is then converted to HTML. It is widely used in README files, documentation, wikis, and blog posts.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>Does it support all Markdown features?</summary>
+        <div class="lp-faq-body">The converter supports <strong>CommonMark basics</strong>: headings h1–h6, bold, italic, inline code, fenced code blocks, unordered lists, ordered lists, blockquotes, hyperlinks, and horizontal rules. Extended syntax such as tables, task lists, and footnotes is not currently supported.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>Is my text uploaded anywhere?</summary>
+        <div class="lp-faq-body">No. Everything runs <strong>entirely in your browser</strong> using JavaScript. Your text is never sent to any server — it stays completely private on your device.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>Can I download the HTML file?</summary>
+        <div class="lp-faq-body">Yes. Click the <strong>"Download .html"</strong> button and a complete, self-contained HTML file containing your converted content will be saved to your device instantly, ready to open in any browser.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>What's the difference between Markdown and HTML?</summary>
+        <div class="lp-faq-body">Markdown is a human-friendly shorthand writing format designed to be easy to read and write. HTML (HyperText Markup Language) is the actual markup language that browsers render. Markdown is converted into HTML so browsers can display it correctly — this tool performs that conversion instantly, directly in your browser.</div>
+      </details>
+    </div>
+  </section>
+
+  <div class="lp-divider"></div>
+
+  <!-- ══ RELATED TOOLS ═════════════════════════════════════ -->
+  <section class="lp-section">
+    <div class="lp-section-badge">Related tools</div>
+    <h2 class="lp-section-title">More Developer Tools</h2>
+    <div class="lp-related-grid">
+      <a href="/sql-formatter" class="lp-related-card">
+        <span class="lp-related-ico">🗄️</span>
+        <div><div class="lp-related-name">SQL Formatter</div><div class="lp-related-desc">Format &amp; beautify SQL queries</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/jwt-decoder" class="lp-related-card">
+        <span class="lp-related-ico">🔑</span>
+        <div><div class="lp-related-name">JWT Decoder</div><div class="lp-related-desc">Decode &amp; inspect JWT tokens</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/tools#base64" class="lp-related-card">
+        <span class="lp-related-ico">🔠</span>
+        <div><div class="lp-related-name">Base64 Encoder</div><div class="lp-related-desc">Encode &amp; decode Base64 strings</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/password-generator" class="lp-related-card">
+        <span class="lp-related-ico">🔐</span>
+        <div><div class="lp-related-name">Password Generator</div><div class="lp-related-desc">Strong secure passwords</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/uuid-generator" class="lp-related-card">
+        <span class="lp-related-ico">🆔</span>
+        <div><div class="lp-related-name">UUID Generator</div><div class="lp-related-desc">Generate v4 UUIDs instantly</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/tools#words" class="lp-related-card">
+        <span class="lp-related-ico">📝</span>
+        <div><div class="lp-related-name">Word Counter</div><div class="lp-related-desc">Count words, chars &amp; sentences</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<!-- ══ FOOTER ══════════════════════════════════════════════ -->
+<footer class="lp-footer">
+  <div class="lp-wrap">
+    <div class="lp-footer-links">
+      <a href="/">All Tools</a>
+      <a href="/pdf">PDF Tools</a>
+      <a href="/image">Image Tools</a>
+      <a href="/dev">Developer Tools</a>
+      <a href="/tools">Utility Tools</a>
+    </div>
+    <p>© 2026 SnakeConverter · Free, no signup, works in browser</p>
+  </div>
+</footer>
+
+<script>
+/* ── Inline Markdown → HTML Parser ── */
+function mdParse(md) {
+  if (!md) return '';
+
+  var lines = md.split('\n');
+  var html = '';
+  var i = 0;
+  var inUl = false, inOl = false, inPre = false;
+
+  function closeList() {
+    if (inUl) { html += '</ul>\n'; inUl = false; }
+    if (inOl) { html += '</ol>\n'; inOl = false; }
+  }
+
+  function inlineFormat(text) {
+    // Escape HTML entities first (but we already process raw text)
+    // inline code (backtick) — must run before bold/italic
+    text = text.replace(/`([^`]+)`/g, '<code>$1</code>');
+    // bold **text** or __text__
+    text = text.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    text = text.replace(/__([^_]+)__/g, '<strong>$1</strong>');
+    // italic *text* or _text_
+    text = text.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+    text = text.replace(/_([^_]+)_/g, '<em>$1</em>');
+    // links [text](url)
+    text = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+    return text;
+  }
+
+  while (i < lines.length) {
+    var line = lines[i];
+
+    // Fenced code block opening
+    if (/^```/.test(line)) {
+      closeList();
+      if (!inPre) {
+        var lang = line.replace(/^```/, '').trim();
+        html += '<pre><code' + (lang ? ' class="language-' + mdEsc(lang) + '"' : '') + '>';
+        inPre = true;
+        i++;
+        continue;
+      } else {
+        html += '</code></pre>\n';
+        inPre = false;
+        i++;
+        continue;
+      }
+    }
+
+    if (inPre) {
+      html += mdEsc(line) + '\n';
+      i++;
+      continue;
+    }
+
+    // Blank line
+    if (line.trim() === '') {
+      closeList();
+      i++;
+      continue;
+    }
+
+    // Headings
+    var hMatch = line.match(/^(#{1,6})\s+(.*)/);
+    if (hMatch) {
+      closeList();
+      var level = hMatch[1].length;
+      html += '<h' + level + '>' + inlineFormat(hMatch[2].trim()) + '</h' + level + '>\n';
+      i++;
+      continue;
+    }
+
+    // Horizontal rule
+    if (/^(-{3,}|\*{3,}|_{3,})$/.test(line.trim())) {
+      closeList();
+      html += '<hr />\n';
+      i++;
+      continue;
+    }
+
+    // Blockquote
+    if (/^>\s?/.test(line)) {
+      closeList();
+      var bqContent = line.replace(/^>\s?/, '');
+      html += '<blockquote><p>' + inlineFormat(bqContent) + '</p></blockquote>\n';
+      i++;
+      continue;
+    }
+
+    // Unordered list
+    var ulMatch = line.match(/^[-*+]\s+(.*)/);
+    if (ulMatch) {
+      if (inOl) { html += '</ol>\n'; inOl = false; }
+      if (!inUl) { html += '<ul>\n'; inUl = true; }
+      html += '<li>' + inlineFormat(ulMatch[1]) + '</li>\n';
+      i++;
+      continue;
+    }
+
+    // Ordered list
+    var olMatch = line.match(/^\d+\.\s+(.*)/);
+    if (olMatch) {
+      if (inUl) { html += '</ul>\n'; inUl = false; }
+      if (!inOl) { html += '<ol>\n'; inOl = true; }
+      html += '<li>' + inlineFormat(olMatch[1]) + '</li>\n';
+      i++;
+      continue;
+    }
+
+    // Paragraph
+    closeList();
+    html += '<p>' + inlineFormat(line) + '</p>\n';
+    i++;
+  }
+
+  // Close any open blocks
+  closeList();
+  if (inPre) html += '</code></pre>\n';
+
+  return html;
+}
+
+function mdEsc(str) {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+/* ── Live conversion ── */
+function mdConvert() {
+  var input = document.getElementById('md-input').value;
+  var rendered = mdParse(input);
+
+  // Update preview
+  document.getElementById('md-preview').innerHTML = rendered || '<span style="color:var(--text-muted,#888);font-style:italic">Preview will appear here…</span>';
+
+  // Update raw HTML output
+  document.getElementById('md-html-out').value = rendered;
+
+  // Stats
+  var chars = input.length;
+  var lines = input === '' ? 0 : input.split('\n').length;
+  var words = input.trim() === '' ? 0 : input.trim().split(/\s+/).length;
+  document.getElementById('md-chars').textContent = chars;
+  document.getElementById('md-lines').textContent = lines;
+  document.getElementById('md-words').textContent = words;
+}
+
+function mdCopyHtml() {
+  var out = document.getElementById('md-html-out').value;
+  if (!out) return;
+  navigator.clipboard.writeText(out).then(function() {
+    var msg = document.getElementById('md-copy-msg');
+    msg.style.display = 'inline';
+    setTimeout(function() { msg.style.display = 'none'; }, 2000);
+  }).catch(function() {
+    var ta = document.getElementById('md-html-out');
+    ta.select();
+    document.execCommand('copy');
+  });
+}
+
+function mdDownload() {
+  var out = document.getElementById('md-html-out').value;
+  if (!out) return;
+  var fullHtml = '<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8" />\n  <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n  <title>Converted from Markdown</title>\n  <style>\n    body { font-family: system-ui, sans-serif; max-width: 800px; margin: 2rem auto; padding: 0 1rem; line-height: 1.65; }\n    pre { background: #f5f5f5; padding: 1rem; border-radius: .4rem; overflow-x: auto; }\n    code { background: #f0eeff; padding: .1em .35em; border-radius: .25rem; }\n    blockquote { border-left: 3px solid #7c6af7; margin: .5em 0; padding: .3em .8em; color: #555; }\n  </style>\n</head>\n<body>\n' + out + '</body>\n</html>';
+  var blob = new Blob([fullHtml], { type: 'text/html' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'converted.html';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function mdClear() {
+  document.getElementById('md-input').value = '';
+  mdConvert();
+}
+</script>
+</body>
+</html>

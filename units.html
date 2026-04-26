@@ -200,7 +200,174 @@
       <div id="shoe-out" style="overflow-x:auto;margin-top:.6rem;"></div>
     </section>
 
-    <!-- 14. Typography Units -->
+    <!-- 14. Clothing Size Converter -->
+    <section id="clothing-size" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">👕</span>
+        <div>
+          <div class="tps-title" data-i18n="units.clothing.name">Clothing Size Converter</div>
+          <div class="tps-desc" data-i18n="units.clothing.desc">EU / US / UK / IT sizes for tops, bottoms & dresses — chest/waist/hip in cm</div>
+        </div>
+      </div>
+      <style>
+        .clothing-tabs{display:flex;gap:.4rem;margin-bottom:.8rem;flex-wrap:wrap;}
+        .clothing-tab{padding:.28rem .85rem;border-radius:999px;border:1px solid var(--border-subtle);
+          font-size:.73rem;font-weight:700;background:transparent;color:var(--text-muted);cursor:pointer;transition:all .15s;}
+        .clothing-tab.active{background:rgba(130,80,255,.2);border-color:#8250ff;color:#c4b5fd;}
+        .clothing-gender{display:flex;gap:.4rem;margin-bottom:.8rem;}
+        .clothing-gender label{flex:1;text-align:center;padding:.4rem;border:1px solid var(--border-subtle);
+          border-radius:8px;font-size:.73rem;font-weight:700;cursor:pointer;color:var(--text-muted);transition:all .15s;}
+        .clothing-gender input{display:none;}
+        .clothing-gender input:checked+label{background:rgba(130,80,255,.18);border-color:#8250ff;color:#c4b5fd;}
+        .clothing-table{width:100%;border-collapse:collapse;font-size:.73rem;overflow-x:auto;display:block;}
+        .clothing-table th{background:rgba(130,80,255,.12);color:#a78bfa;font-weight:700;padding:.4rem .55rem;text-align:center;white-space:nowrap;}
+        .clothing-table td{padding:.35rem .55rem;text-align:center;border-bottom:1px solid rgba(255,255,255,.05);color:#e8e4ff;}
+        .clothing-table tr.selected td{background:rgba(130,80,255,.18);color:#c4b5fd;font-weight:700;}
+        .clothing-size-input-row{display:flex;gap:.5rem;align-items:center;margin-bottom:.6rem;flex-wrap:wrap;}
+        .clothing-size-input-row select{flex:1;min-width:100px;}
+      </style>
+      <div class="clothing-gender">
+        <input type="radio" name="cg" id="cg-w" value="women" checked onchange="clothingRender()">
+        <label for="cg-w">👩 Women</label>
+        <input type="radio" name="cg" id="cg-m" value="men" onchange="clothingRender()">
+        <label for="cg-m">👨 Men</label>
+      </div>
+      <div class="clothing-tabs" id="clothing-tabs">
+        <button class="clothing-tab active" onclick="clothingSetCat('tops',this)">Tops / Shirts</button>
+        <button class="clothing-tab" onclick="clothingSetCat('bottoms',this)">Bottoms / Pants</button>
+        <button class="clothing-tab" onclick="clothingSetCat('dresses',this)">Dresses / Outerwear</button>
+      </div>
+      <div class="clothing-size-input-row">
+        <select id="clothing-from" class="unit-card-select" onchange="clothingRender()">
+          <option value="eu">EU / INT</option>
+          <option value="us">US</option>
+          <option value="uk">UK</option>
+          <option value="it">IT (Italy)</option>
+          <option value="cm">Chest/Waist cm</option>
+        </select>
+        <input type="number" id="clothing-val" class="input-field" placeholder="e.g. 40" style="max-width:110px;"
+          oninput="clothingRender()" />
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="clothing-table" id="clothing-table"></table>
+      </div>
+      <script>
+      (function(){
+        /* Data: women tops */
+        var DATA = {
+          women: {
+            tops: [
+              {eu:'34',us:'XS/0',uk:'6',it:'38',label:'XS',chest:'76-80'},
+              {eu:'36',us:'XS/2',uk:'8',it:'40',label:'XS-S',chest:'81-84'},
+              {eu:'38',us:'S/4',uk:'10',it:'42',label:'S',chest:'85-88'},
+              {eu:'40',us:'M/6',uk:'12',it:'44',label:'M',chest:'89-92'},
+              {eu:'42',us:'M/8',uk:'14',it:'46',label:'M-L',chest:'93-96'},
+              {eu:'44',us:'L/10',uk:'16',it:'48',label:'L',chest:'97-100'},
+              {eu:'46',us:'XL/12',uk:'18',it:'50',label:'XL',chest:'101-104'},
+              {eu:'48',us:'XXL/14',uk:'20',it:'52',label:'XXL',chest:'105-110'},
+              {eu:'50',us:'3XL/16',uk:'22',it:'54',label:'3XL',chest:'111-116'},
+            ],
+            bottoms: [
+              {eu:'34',us:'XS/25',uk:'6',it:'38',label:'XS',waist:'62-64'},
+              {eu:'36',us:'XS/26',uk:'8',it:'40',label:'XS-S',waist:'65-68'},
+              {eu:'38',us:'S/27',uk:'10',it:'42',label:'S',waist:'69-72'},
+              {eu:'40',us:'M/28',uk:'12',it:'44',label:'M',waist:'73-76'},
+              {eu:'42',us:'M/29',uk:'14',it:'46',label:'M-L',waist:'77-80'},
+              {eu:'44',us:'L/30',uk:'16',it:'48',label:'L',waist:'81-84'},
+              {eu:'46',us:'XL/32',uk:'18',it:'50',label:'XL',waist:'85-90'},
+              {eu:'48',us:'XXL/34',uk:'20',it:'52',label:'XXL',waist:'91-96'},
+            ],
+            dresses: [
+              {eu:'34',us:'XS/0',uk:'6',it:'38',label:'XS',chest:'76-80',waist:'60-64'},
+              {eu:'36',us:'XS/2',uk:'8',it:'40',label:'XS-S',chest:'81-84',waist:'65-68'},
+              {eu:'38',us:'S/4',uk:'10',it:'42',label:'S',chest:'85-88',waist:'69-72'},
+              {eu:'40',us:'M/6',uk:'12',it:'44',label:'M',chest:'89-92',waist:'73-76'},
+              {eu:'42',us:'M/8',uk:'14',it:'46',label:'M-L',chest:'93-96',waist:'77-80'},
+              {eu:'44',us:'L/10',uk:'16',it:'48',label:'L',chest:'97-100',waist:'81-84'},
+              {eu:'46',us:'XL/12',uk:'18',it:'50',label:'XL',chest:'101-104',waist:'85-90'},
+              {eu:'48',us:'XXL/14',uk:'20',it:'52',label:'XXL',chest:'105-110',waist:'91-96'},
+            ],
+          },
+          men: {
+            tops: [
+              {eu:'44',us:'XS/34',uk:'34',it:'44',label:'XS',chest:'84-88'},
+              {eu:'46',us:'S/36',uk:'36',it:'46',label:'S',chest:'89-92'},
+              {eu:'48',us:'M/38',uk:'38',it:'48',label:'M',chest:'93-96'},
+              {eu:'50',us:'L/40',uk:'40',it:'50',label:'L',chest:'97-100'},
+              {eu:'52',us:'XL/42',uk:'42',it:'52',label:'XL',chest:'101-104'},
+              {eu:'54',us:'XXL/44',uk:'44',it:'54',label:'XXL',chest:'105-110'},
+              {eu:'56',us:'3XL/46',uk:'46',it:'56',label:'3XL',chest:'111-116'},
+              {eu:'58',us:'4XL/48',uk:'48',it:'58',label:'4XL',chest:'117-122'},
+            ],
+            bottoms: [
+              {eu:'44',us:'28',uk:'28',it:'44',label:'XS',waist:'70-74'},
+              {eu:'46',us:'30',uk:'30',it:'46',label:'S',waist:'75-79'},
+              {eu:'48',us:'32',uk:'32',it:'48',label:'M',waist:'80-84'},
+              {eu:'50',us:'34',uk:'34',it:'50',label:'L',waist:'85-89'},
+              {eu:'52',us:'36',uk:'36',it:'52',label:'XL',waist:'90-94'},
+              {eu:'54',us:'38',uk:'38',it:'54',label:'XXL',waist:'95-100'},
+              {eu:'56',us:'40',uk:'40',it:'56',label:'3XL',waist:'101-106'},
+              {eu:'58',us:'42',uk:'42',it:'58',label:'4XL',waist:'107-112'},
+            ],
+            dresses: [
+              {eu:'44',us:'XS/34',uk:'34',it:'44',label:'XS',chest:'84-88',waist:'70-74'},
+              {eu:'46',us:'S/36',uk:'36',it:'46',label:'S',chest:'89-92',waist:'75-79'},
+              {eu:'48',us:'M/38',uk:'38',it:'48',label:'M',chest:'93-96',waist:'80-84'},
+              {eu:'50',us:'L/40',uk:'40',it:'50',label:'L',chest:'97-100',waist:'85-89'},
+              {eu:'52',us:'XL/42',uk:'42',it:'52',label:'XL',chest:'101-104',waist:'90-94'},
+              {eu:'54',us:'XXL/44',uk:'44',it:'54',label:'XXL',chest:'105-110',waist:'95-100'},
+            ],
+          }
+        };
+        var currentCat = 'tops';
+        window.clothingSetCat = function(cat, btn){
+          currentCat = cat;
+          document.querySelectorAll('.clothing-tab').forEach(b=>b.classList.remove('active'));
+          if(btn) btn.classList.add('active');
+          clothingRender();
+        };
+        window.clothingRender = function(){
+          var gender = document.querySelector('input[name="cg"]:checked').value;
+          var from   = document.getElementById('clothing-from').value;
+          var valStr = (document.getElementById('clothing-val').value||'').trim();
+          var rows   = DATA[gender][currentCat];
+          var hasDress = currentCat === 'dresses';
+          var cmKey  = (currentCat === 'bottoms') ? 'waist' : 'chest';
+          /* Build header */
+          var thead = '<thead><tr><th>Label</th><th>EU/INT</th><th>US</th><th>UK</th><th>IT</th>';
+          thead += (hasDress ? '<th>Chest cm</th><th>Waist cm</th>' : '<th>'+(cmKey==='waist'?'Waist':'Chest')+' cm</th>');
+          thead += '</tr></thead>';
+          /* Find matched row */
+          var matched = -1;
+          if(valStr){
+            rows.forEach(function(r,i){
+              var cell = from === 'cm' ? r[cmKey] : r[from];
+              if(cell && (cell.toString().toLowerCase() === valStr.toLowerCase() ||
+                (from==='cm' && matchCmRange(valStr, r[cmKey])))) matched = i;
+            });
+          }
+          /* Build body */
+          var tbody = '<tbody>' + rows.map(function(r,i){
+            var cls = (i===matched)?' class="selected"':'';
+            var extra = hasDress
+              ? '<td>'+(r.chest||'—')+'</td><td>'+(r.waist||'—')+'</td>'
+              : '<td>'+(r[cmKey]||'—')+'</td>';
+            return '<tr'+cls+'><td>'+r.label+'</td><td>'+r.eu+'</td><td>'+r.us+'</td><td>'+r.uk+'</td><td>'+r.it+'</td>'+extra+'</tr>';
+          }).join('') + '</tbody>';
+          document.getElementById('clothing-table').innerHTML = thead + tbody;
+        };
+        function matchCmRange(val, range){
+          if(!range) return false;
+          var parts = range.split('-').map(Number);
+          var v = Number(val);
+          return v >= parts[0] && v <= parts[1];
+        }
+        clothingRender();
+      })();
+      </script>
+    </section>
+
+    <!-- 15. Typography Units -->
     <section id="typography" class="tool-page-section">
       <div class="tps-header">
         <span class="tps-icon">🔤</span>
@@ -307,11 +474,11 @@
   });
 
   /* Add custom tool links to jump nav */
-  ['cooking','shoe-size','typography'].forEach(id=>{
+  ['cooking','shoe-size','clothing-size','typography'].forEach(id=>{
     const a=document.createElement('a');
     a.href='#'+id; a.className='jump-link';
-    const icons={cooking:'🍳',['shoe-size']:'👟',typography:'🔤'};
-    const labels={cooking:'Cooking','shoe-size':'Shoe Size',typography:'Typography'};
+    const icons={cooking:'🍳',['shoe-size']:'👟',['clothing-size']:'👕',typography:'🔤'};
+    const labels={cooking:'Cooking',['shoe-size']:'Shoe Size',['clothing-size']:'Clothing Size',typography:'Typography'};
     a.textContent=(icons[id]||'')+(icons[id]?' ':'')+labels[id];
     jumpNav.appendChild(a);
   });

@@ -582,6 +582,7 @@
       .idx-nav-icon { font-size: 1.5rem; line-height: 1; }
       .idx-nav-count {
         display: inline-block;
+        margin-left: 0;
         font-size: .58rem;
         font-weight: 700;
         color: #8250ff;
@@ -675,12 +676,12 @@
       <button class="idx-nav-item active" data-cat="pdf"      onclick="switchCat('pdf',this)">
         <span class="idx-nav-icon">📄</span>
         <span data-i18n="cat.pdf">PDF Tools</span>
-        <span class="idx-nav-count">7</span>
+        <span class="idx-nav-count">9</span>
       </button>
       <button class="idx-nav-item" data-cat="units"    onclick="switchCat('units',this)">
         <span class="idx-nav-icon">📐</span>
         <span data-i18n="cat.units">Unit Converters</span>
-        <span class="idx-nav-count">13</span>
+        <span class="idx-nav-count">15</span>
       </button>
       <button class="idx-nav-item" data-cat="text"     onclick="switchCat('text',this)">
         <span class="idx-nav-icon">🔤</span>
@@ -690,7 +691,7 @@
       <button class="idx-nav-item" data-cat="security" onclick="switchCat('security',this)">
         <span class="idx-nav-icon">🔑</span>
         <span data-i18n="cat.security">Security & Generators</span>
-        <span class="idx-nav-count">5</span>
+        <span class="idx-nav-count">6</span>
       </button>
       <button class="idx-nav-item" data-cat="calc"     onclick="switchCat('calc',this)">
         <span class="idx-nav-icon">🧮</span>
@@ -700,7 +701,7 @@
       <button class="idx-nav-item" data-cat="finance"  onclick="switchCat('finance',this)">
         <span class="idx-nav-icon">💰</span>
         <span data-i18n="cat.finance">Finance & Currency</span>
-        <span class="idx-nav-count">3</span>
+        <span class="idx-nav-count">5</span>
       </button>
       <button class="idx-nav-item" data-cat="datetime" onclick="switchCat('datetime',this)">
         <span class="idx-nav-icon">📅</span>
@@ -710,7 +711,7 @@
       <button class="idx-nav-item" data-cat="dev"      onclick="switchCat('dev',this)">
         <span class="idx-nav-icon">💻</span>
         <span data-i18n="cat.dev">Developer Tools</span>
-        <span class="idx-nav-count">10</span>
+        <span class="idx-nav-count">12</span>
       </button>
       <button class="idx-nav-item" data-cat="color"    onclick="switchCat('color',this)">
         <span class="idx-nav-icon">🎨</span>
@@ -719,7 +720,7 @@
       </button>
       <button class="idx-nav-item" data-cat="image"    onclick="switchCat('image',this)">
         <span class="idx-nav-icon">🖼️</span>
-        <span>Image Tools</span>
+        <span data-i18n="cat.image">Image Tools</span>
         <span class="idx-nav-count">7</span>
       </button>
       <button class="idx-nav-item" data-cat="health"   onclick="switchCat('health',this)">
@@ -832,8 +833,16 @@
           <a href="compress-pdf.html" class="idx-tool-card" data-search="pdf compressor reduce file size shrink optimize">
             <span class="idx-tool-card-ico">🗜️</span>
             <div class="idx-tool-card-body">
-              <div class="idx-tool-card-name">PDF Compressor</div>
-              <div class="idx-tool-card-desc">Shrink PDF size — browser-only</div>
+              <div class="idx-tool-card-name" data-i18n="tool.pdfcompress.name">PDF Compressor</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.pdfcompress.desc">Shrink PDF size — browser-only</div>
+            </div>
+            <span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="pdf.html#ocr" class="idx-tool-card" data-search="pdf ocr text recognition scan readable searchable tesseract">
+            <span class="idx-tool-card-ico">🔍</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.pdfocr.name">PDF OCR</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.pdfocr.desc">Extract text from scanned PDFs</div>
             </div>
             <span class="idx-tool-card-arr">›</span>
           </a>
@@ -936,6 +945,20 @@
             <div class="idx-tool-card-body">
               <div class="idx-tool-card-name" data-i18n="unit.shoe.name">Shoe Size</div>
               <div class="idx-tool-card-desc" data-i18n="unit.shoe.desc">EU, US Men, US Women, UK, CM</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="units.html#clothing-size" class="idx-tool-card" data-search="clothing size beden xs s m l xl xxl eu us uk it">
+            <span class="idx-tool-card-ico">👕</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="units.clothing.name">Clothing Size</div>
+              <div class="idx-tool-card-desc" data-i18n="units.clothing.desc">EU/US/UK/IT tops, bottoms, dresses</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="unit-converter.html" class="idx-tool-card" data-search="unit converter all length weight temperature quick">
+            <span class="idx-tool-card-ico">🔄</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.unitconv.name">Quick Converter</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.unitconv.desc">All categories in one place</div>
             </div><span class="idx-tool-card-arr">›</span>
           </a>
         </div>
@@ -1049,6 +1072,13 @@
               <div class="idx-tool-card-desc" data-i18n="tool.dice.desc">Roll any number of dice</div>
             </div><span class="idx-tool-card-arr">›</span>
           </a>
+          <a href="tools.html#raffle" class="idx-tool-card" data-search="raffle draw winner giveaway random select lucky">
+            <span class="idx-tool-card-ico">🎁</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.raffle.name">Raffle / Draw</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.raffle.desc">Pick a random winner from list</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
         </div>
       </div>
 
@@ -1111,11 +1141,18 @@
               <div class="idx-tool-card-desc" data-i18n="tool.currency.desc">Live exchange rates (150+ currencies)</div>
             </div><span class="idx-tool-card-arr">›</span>
           </a>
-          <a href="calc.html#loan" class="idx-tool-card" data-search="loan emi mortgage monthly payment interest">
+          <a href="loan-calculator.html" class="idx-tool-card" data-search="loan emi mortgage monthly payment interest amortization">
             <span class="idx-tool-card-ico">🏦</span>
             <div class="idx-tool-card-body">
-              <div class="idx-tool-card-name" data-i18n="tool.loan.name">Loan / EMI</div>
-              <div class="idx-tool-card-desc" data-i18n="tool.loan.desc">Monthly payment + total interest</div>
+              <div class="idx-tool-card-name" data-i18n="tool.loan.name">Loan Calculator</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.loan.desc">Monthly payment + amortization</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="invoice-generator.html" class="idx-tool-card" data-search="invoice generator create professional pdf download">
+            <span class="idx-tool-card-ico">🧾</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.invoice.name">Invoice Generator</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.invoice.desc">Create & print professional invoices</div>
             </div><span class="idx-tool-card-arr">›</span>
           </a>
           <a href="calc.html#num-to-words" class="idx-tool-card" data-search="number to words 1234 one thousand spelling">
@@ -1278,6 +1315,20 @@
               <div class="idx-tool-card-desc">Beautify SQL — MySQL, PostgreSQL &amp; more</div>
             </div><span class="idx-tool-card-arr">›</span>
           </a>
+          <a href="dev.html#code-formatter" class="idx-tool-card" data-search="code formatter beautify js html css json pretty print indent">
+            <span class="idx-tool-card-ico">✨</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.codefmt.name">Code Formatter</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.codefmt.desc">Beautify JS, HTML, CSS, JSON, SQL</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
+          <a href="markdown-to-html.html" class="idx-tool-card" data-search="markdown html converter md preview live editor">
+            <span class="idx-tool-card-ico">📝</span>
+            <div class="idx-tool-card-body">
+              <div class="idx-tool-card-name" data-i18n="tool.md.name">Markdown → HTML</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.md.desc">Live preview + copy HTML</div>
+            </div><span class="idx-tool-card-arr">›</span>
+          </a>
         </div>
       </div>
 
@@ -1295,7 +1346,7 @@
               <div class="idx-tool-card-desc" data-i18n="tool.hexrgb.desc">All color format conversions</div>
             </div><span class="idx-tool-card-arr">›</span>
           </a>
-          <a href="color.html#random-palette" class="idx-tool-card" data-search="color palette generator harmonious complementary">
+          <a href="color-palette-generator.html" class="idx-tool-card" data-search="color palette generator harmonious complementary analogous triadic">
             <span class="idx-tool-card-ico">🌈</span>
             <div class="idx-tool-card-body">
               <div class="idx-tool-card-name" data-i18n="tool.palette.name">Palette Generator</div>

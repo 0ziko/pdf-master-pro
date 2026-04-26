@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loan Calculator Online Free — Monthly Payment &amp; Amortization | SnakeConverter</title>
+
+  <meta name="description" content="Calculate monthly loan payments, total interest, and see a full amortization schedule. Free online loan calculator — no signup, works in browser." />
+  <meta name="keywords" content="loan calculator, mortgage calculator, monthly payment calculator, amortization schedule, interest calculator, personal loan calculator" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <link rel="canonical" href="https://snakeconverter.com/loan-calculator" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://snakeconverter.com/loan-calculator" />
+  <meta property="og:title" content="Loan Calculator Online Free — Monthly Payment &amp; Amortization" />
+  <meta property="og:description" content="Calculate monthly loan payments, total interest, and see a full amortization schedule. Free, no signup, works in browser." />
+  <meta property="og:image" content="https://snakeconverter.com/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Loan Calculator Online Free | SnakeConverter" />
+  <meta name="twitter:description" content="Calculate monthly payments &amp; total interest instantly. Free, no signup, browser-only." />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "url": "https://snakeconverter.com/loan-calculator",
+        "name": "Loan Calculator Online Free — Monthly Payment & Amortization",
+        "description": "Calculate monthly loan payments, total interest, and see a full amortization schedule. Free online loan calculator — no signup, works in browser.",
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://snakeconverter.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Calculators", "item": "https://snakeconverter.com/calc" },
+            { "@type": "ListItem", "position": 3, "name": "Loan Calculator", "item": "https://snakeconverter.com/loan-calculator" }
+          ]
+        }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "Loan Calculator",
+        "url": "https://snakeconverter.com/loan-calculator",
+        "applicationCategory": "FinanceApplication",
+        "operatingSystem": "Any (Web Browser)",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How is the monthly payment calculated?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Monthly payment uses the standard amortization formula: P × [r(1+r)^n] / [(1+r)^n − 1], where P is the loan amount, r is the monthly interest rate (annual rate ÷ 12), and n is the total number of monthly payments." }
+          },
+          {
+            "@type": "Question",
+            "name": "What is an amortization schedule?",
+            "acceptedAnswer": { "@type": "Answer", "text": "An amortization schedule is a month-by-month breakdown of each payment, showing how much goes toward principal and how much goes toward interest, plus the remaining balance after each payment." }
+          },
+          {
+            "@type": "Question",
+            "name": "Does it account for taxes and insurance?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. The calculator computes principal and interest only. Property taxes, homeowner's insurance, and PMI must be added separately to get your total monthly housing cost." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I use it for mortgages?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. Simply enter your mortgage amount, annual interest rate, and loan term in years. The calculator works for any fixed-rate loan including mortgages, auto loans, and personal loans." }
+          },
+          {
+            "@type": "Question",
+            "name": "Is my financial data saved anywhere?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. All calculations happen entirely in your browser using JavaScript. No data is ever sent to our servers — your financial information stays completely private on your device." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1033284237916727" crossorigin="anonymous"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,600;0,14..32,700;0,14..32,900&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,700;0,14..32,900&display=swap" /></noscript>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+  <link rel="stylesheet" href="css/lp.css" />
+  <style>
+    .lc-result-hero{
+      text-align:center;padding:20px 0 14px;
+    }
+    .lc-result-label{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:.35rem}
+    .lc-monthly-amount{
+      font-size:clamp(2rem,6vw,3.2rem);font-weight:900;letter-spacing:-.03em;
+      background:linear-gradient(135deg,#a070ff,#c084fc);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      line-height:1.1;margin-bottom:.4rem;
+    }
+    .lc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-top:1rem}
+    @media(max-width:500px){.lc-stats{grid-template-columns:1fr 1fr}}
+    .lc-stat{
+      background:var(--surface);border:1px solid var(--border-subtle);
+      border-radius:.65rem;padding:10px 12px;text-align:center;
+    }
+    .lc-stat-val{font-size:.95rem;font-weight:800;color:#f1f5f9;margin-bottom:.2rem}
+    .lc-stat-lbl{font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted)}
+    .lc-amort-table{width:100%;border-collapse:collapse;font-size:.75rem;margin-top:.5rem}
+    .lc-amort-table th{
+      padding:7px 10px;text-align:right;font-size:.63rem;font-weight:800;
+      text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);
+      border-bottom:1px solid var(--border-subtle);
+    }
+    .lc-amort-table th:first-child{text-align:left}
+    .lc-amort-table td{
+      padding:7px 10px;text-align:right;color:var(--text-muted);
+      border-bottom:1px solid rgba(255,255,255,.04);
+    }
+    .lc-amort-table td:first-child{text-align:left;color:var(--text-primary);font-weight:600}
+    .lc-amort-table tr:last-child td{border-bottom:none}
+    .lc-amort-table tr:hover td{background:rgba(255,255,255,.02)}
+    details.lc-amort-details{
+      background:var(--surface);border:1px solid var(--border-subtle);
+      border-radius:.75rem;overflow:hidden;margin-top:1rem;
+    }
+    details.lc-amort-details[open]{border-color:var(--border)}
+    details.lc-amort-details summary{
+      padding:12px 16px;cursor:pointer;list-style:none;
+      font-size:.82rem;font-weight:700;color:#e2e8f0;
+      display:flex;align-items:center;justify-content:space-between;
+      user-select:none;gap:8px;
+    }
+    details.lc-amort-details summary::-webkit-details-marker{display:none}
+    details.lc-amort-details summary::after{
+      content:"﹢";font-size:1rem;flex-shrink:0;color:var(--accent-light);transition:transform .2s;
+    }
+    details.lc-amort-details[open] summary::after{content:"−"}
+    .lc-amort-body{padding:0 12px 12px;overflow-x:auto}
+    .lc-show-all-btn{
+      display:block;width:100%;padding:.55rem;margin-top:.5rem;
+      background:none;border:1px dashed var(--border-subtle);border-radius:.5rem;
+      color:var(--text-muted);font-size:.75rem;font-weight:700;cursor:pointer;
+      transition:all .15s;text-align:center;
+    }
+    .lc-show-all-btn:hover{border-color:var(--border);color:var(--text-primary)}
+    .lc-input-row{display:grid;grid-template-columns:1fr 1fr;gap:.6rem}
+    @media(max-width:480px){.lc-input-row{grid-template-columns:1fr}}
+    .lc-term-row{display:flex;gap:.5rem;align-items:flex-end}
+    .lc-term-row .input-field:first-child{flex:1}
+    .lc-term-unit{width:110px;flex-shrink:0}
+  </style>
+  <!-- Analytics -->
+  <script defer src="js/analytics.js"></script>
+</head>
+<body>
+
+<!-- ══ HEADER ══════════════════════════════════════════════ -->
+<header class="lp-header">
+  <div class="lp-header-inner">
+    <a href="/" class="lp-logo">
+      <span class="lp-logo-snake">🐍</span>
+      <span>SnakeConverter</span>
+    </a>
+    <nav class="lp-header-nav">
+      <a href="/calc">Calculators</a>
+      <a href="/">All Tools</a>
+      <a href="/tools#percent">Finance Tools</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<div class="lp-wrap">
+
+  <!-- ══ HERO ════════════════════════════════════════════ -->
+  <section class="lp-hero">
+    <h1 class="lp-h1">Loan <span class="accent">Calculator</span></h1>
+    <p class="lp-hero-sub">Calculate monthly loan payments, total interest, and see a full amortization schedule. Free online loan calculator — no signup, works in browser.</p>
+    <div class="lp-trust">✓ Free · No signup · Works in browser · 100% private</div>
+  </section>
+
+  <!-- ══ TOOL AREA ════════════════════════════════════════ -->
+  <section class="lp-tool-box">
+    <div class="space-y">
+
+      <!-- Inputs -->
+      <div class="lc-input-row">
+        <div>
+          <label class="field-label" for="loanAmount">Loan Amount ($)</label>
+          <input type="number" id="loanAmount" class="input-field" value="10000" min="0" step="100" placeholder="e.g. 10000" />
+        </div>
+        <div>
+          <label class="field-label" for="loanRate">Annual Interest Rate (%)</label>
+          <input type="number" id="loanRate" class="input-field" value="6.5" min="0" max="100" step="0.1" placeholder="e.g. 6.5" />
+        </div>
+      </div>
+
+      <div class="lc-input-row">
+        <div>
+          <label class="field-label">Loan Term</label>
+          <div class="lc-term-row">
+            <input type="number" id="loanTerm" class="input-field" value="60" min="1" step="1" placeholder="e.g. 60" />
+            <select id="loanTermUnit" class="input-field lc-term-unit">
+              <option value="months" selected>Months</option>
+              <option value="years">Years</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="field-label" for="loanType">Loan Type</label>
+          <select id="loanType" class="input-field">
+            <option value="fixed" selected>Fixed Rate</option>
+            <option value="interest-only">Interest Only</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="button" class="btn-primary" onclick="loanCalc()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="15" height="15"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        Calculate
+      </button>
+
+      <!-- Results -->
+      <div id="loanResults" style="display:none">
+        <div class="lc-result-hero">
+          <div class="lc-result-label">Monthly Payment</div>
+          <div class="lc-monthly-amount" id="lcMonthly">$0.00</div>
+        </div>
+
+        <div class="lc-stats">
+          <div class="lc-stat">
+            <div class="lc-stat-val" id="lcTotalPayment">$0.00</div>
+            <div class="lc-stat-lbl">Total Payment</div>
+          </div>
+          <div class="lc-stat">
+            <div class="lc-stat-val" id="lcTotalInterest">$0.00</div>
+            <div class="lc-stat-lbl">Total Interest</div>
+          </div>
+          <div class="lc-stat">
+            <div class="lc-stat-val" id="lcEffAPR">0.00%</div>
+            <div class="lc-stat-lbl">Effective APR</div>
+          </div>
+        </div>
+
+        <!-- Amortization -->
+        <details class="lc-amort-details" id="lcAmortDetails">
+          <summary>📊 Amortization Schedule</summary>
+          <div class="lc-amort-body">
+            <table class="lc-amort-table">
+              <thead>
+                <tr>
+                  <th>Month</th>
+                  <th>Payment</th>
+                  <th>Principal</th>
+                  <th>Interest</th>
+                  <th>Balance</th>
+                </tr>
+              </thead>
+              <tbody id="lcAmortBody"></tbody>
+            </table>
+            <button type="button" class="lc-show-all-btn" id="lcShowAll" onclick="lcShowAllRows()" style="display:none">
+              Show all months ↓
+            </button>
+          </div>
+        </details>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ FEATURES ═════════════════════════════════════════ -->
+  <section class="lp-section">
+    <div class="lp-section-badge">Why use this tool</div>
+    <h2 class="lp-section-title">Full-Featured Loan Calculator</h2>
+    <div class="lp-features">
+      <div class="lp-feature">
+        <div class="lp-feature-ico">📊</div>
+        <div class="lp-feature-text">
+          <strong>Full Amortization</strong>
+          <span>Month-by-month breakdown of principal, interest, and remaining balance for every payment.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">💰</div>
+        <div class="lp-feature-text">
+          <strong>Total Cost View</strong>
+          <span>See exactly what you pay — total amount, total interest, and the true cost of your loan.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">⚡</div>
+        <div class="lp-feature-text">
+          <strong>Instant Results</strong>
+          <span>Calculate in real-time — no waiting. Change any value and recalculate instantly.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">🔒</div>
+        <div class="lp-feature-text">
+          <strong>100% Private</strong>
+          <span>No data is sent anywhere. All calculations happen locally in your browser.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">🌐</div>
+        <div class="lp-feature-text">
+          <strong>Free Forever</strong>
+          <span>No subscription, no signup, no ads blocking the tool — unlimited free use.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">📱</div>
+        <div class="lp-feature-text">
+          <strong>Mobile Friendly</strong>
+          <span>Works on all devices — phone, tablet, or desktop browser, no app required.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="lp-divider"></div>
+
+  <!-- ══ HOW TO USE ════════════════════════════════════════ -->
+  <section class="lp-section">
+    <div class="lp-section-badge">How it works</div>
+    <h2 class="lp-section-title">Calculate Your Loan in 3 Steps</h2>
+    <div class="lp-steps">
+      <div class="lp-step">
+        <div class="lp-step-num">1</div>
+        <div class="lp-step-text">
+          <strong>Enter loan amount, interest rate, and term</strong>
+          <span>Type in your principal amount, annual interest rate as a percentage, and choose the loan duration in months or years.</span>
+        </div>
+      </div>
+      <div class="lp-step">
+        <div class="lp-step-num">2</div>
+        <div class="lp-step-text">
+          <strong>Click Calculate to see monthly payment and total cost</strong>
+          <span>The calculator instantly computes your monthly payment, total interest paid, and total repayment amount.</span>
+        </div>
+      </div>
+      <div class="lp-step">
+        <div class="lp-step-num">3</div>
+        <div class="lp-step-text">
+          <strong>View the full amortization schedule below</strong>
+          <span>Expand the amortization table to see a complete month-by-month breakdown of every payment for the life of the loan.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="lp-divider"></div>
+
+  <!-- ══ FAQ ══════════════════════════════════════════════ -->
+  <section class="lp-section">
+    <div class="lp-section-badge">FAQ</div>
+    <h2 class="lp-section-title">Frequently Asked Questions</h2>
+    <div class="lp-faq">
+      <details class="lp-faq-item" open>
+        <summary>How is the monthly payment calculated?</summary>
+        <div class="lp-faq-body">Monthly payment uses the standard amortization formula: <strong>P × [r(1+r)^n] / [(1+r)^n − 1]</strong>, where P is the loan amount, r is the monthly interest rate (annual rate ÷ 12), and n is the total number of monthly payments. For interest-only loans, the payment is simply P × r.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>What is an amortization schedule?</summary>
+        <div class="lp-faq-body">An amortization schedule is a <strong>month-by-month breakdown</strong> of each payment, showing how much goes toward reducing the principal balance versus paying interest, along with the remaining balance after each payment. Early payments are mostly interest; later payments are mostly principal.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>Does it account for taxes and insurance?</summary>
+        <div class="lp-faq-body">No. The calculator computes <strong>principal and interest only</strong>. Property taxes, homeowner's insurance, PMI, and other escrow items must be added separately to determine your full monthly housing cost (PITI).</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>Can I use it for mortgages?</summary>
+        <div class="lp-faq-body">Yes. Enter your mortgage amount, annual interest rate, and loan term in years (e.g. 30 years). The calculator works for any fixed-rate loan — mortgages, auto loans, student loans, and personal loans alike.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>Is my financial data saved anywhere?</summary>
+        <div class="lp-faq-body">No. All calculations happen <strong>entirely in your browser</strong> using JavaScript. No data is ever sent to our servers — your financial information stays completely private on your device.</div>
+      </details>
+    </div>
+  </section>
+
+  <div class="lp-divider"></div>
+
+  <!-- ══ RELATED TOOLS ═════════════════════════════════════ -->
+  <section class="lp-section">
+    <div class="lp-section-badge">Related tools</div>
+    <h2 class="lp-section-title">More Calculators</h2>
+    <div class="lp-related-grid">
+      <a href="/tools#percent" class="lp-related-card">
+        <span class="lp-related-ico">%</span>
+        <div><div class="lp-related-name">Percentage Calculator</div><div class="lp-related-desc">Percent of, change &amp; more</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/calc" class="lp-related-card">
+        <span class="lp-related-ico">🔢</span>
+        <div><div class="lp-related-name">Scientific Calculator</div><div class="lp-related-desc">Advanced math functions</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/calc#statistics" class="lp-related-card">
+        <span class="lp-related-ico">📈</span>
+        <div><div class="lp-related-name">Statistics Calculator</div><div class="lp-related-desc">Mean, median, std dev</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/tools#age" class="lp-related-card">
+        <span class="lp-related-ico">🎂</span>
+        <div><div class="lp-related-name">Age Calculator</div><div class="lp-related-desc">Days between dates</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/tools#bmi" class="lp-related-card">
+        <span class="lp-related-ico">⚖️</span>
+        <div><div class="lp-related-name">BMI Calculator</div><div class="lp-related-desc">Body mass index</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/" class="lp-related-card">
+        <span class="lp-related-ico">🐍</span>
+        <div><div class="lp-related-name">All Tools</div><div class="lp-related-desc">50+ free tools</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<!-- ══ FOOTER ══════════════════════════════════════════════ -->
+<footer class="lp-footer">
+  <div class="lp-wrap">
+    <div class="lp-footer-links">
+      <a href="/">All Tools</a>
+      <a href="/calc">Calculators</a>
+      <a href="/units">Unit Converters</a>
+      <a href="/tools">Utility Tools</a>
+      <a href="/pdf">PDF Tools</a>
+    </div>
+    <p>© 2026 SnakeConverter · Free, no signup, works in browser</p>
+  </div>
+</footer>
+
+<script>
+/* ── Loan Calculator Logic ── */
+
+var _lcAmortData = [];
+var _lcShowingAll = false;
+
+function loanCalc() {
+  var principal = parseFloat(document.getElementById('loanAmount').value);
+  var annualRate = parseFloat(document.getElementById('loanRate').value);
+  var termVal = parseFloat(document.getElementById('loanTerm').value);
+  var termUnit = document.getElementById('loanTermUnit').value;
+  var loanType = document.getElementById('loanType').value;
+
+  if (isNaN(principal) || principal <= 0) { alert('Please enter a valid loan amount.'); return; }
+  if (isNaN(annualRate) || annualRate < 0) { alert('Please enter a valid interest rate.'); return; }
+  if (isNaN(termVal) || termVal <= 0) { alert('Please enter a valid loan term.'); return; }
+
+  var n = termUnit === 'years' ? Math.round(termVal * 12) : Math.round(termVal);
+  var r = annualRate / 100 / 12;
+
+  var monthlyPayment, totalPayment, totalInterest;
+
+  if (loanType === 'interest-only') {
+    monthlyPayment = principal * r;
+    totalPayment = monthlyPayment * n + principal;
+    totalInterest = monthlyPayment * n;
+  } else {
+    if (r === 0) {
+      monthlyPayment = principal / n;
+    } else {
+      var rn = Math.pow(1 + r, n);
+      monthlyPayment = principal * (r * rn) / (rn - 1);
+    }
+    totalPayment = monthlyPayment * n;
+    totalInterest = totalPayment - principal;
+  }
+
+  document.getElementById('lcMonthly').textContent = formatCurrency(monthlyPayment);
+  document.getElementById('lcTotalPayment').textContent = formatCurrency(totalPayment);
+  document.getElementById('lcTotalInterest').textContent = formatCurrency(totalInterest);
+  document.getElementById('lcEffAPR').textContent = annualRate.toFixed(2) + '%';
+
+  _lcAmortData = buildAmortization(principal, r, n, monthlyPayment, loanType);
+  _lcShowingAll = false;
+
+  renderAmortRows(12);
+
+  var showAllBtn = document.getElementById('lcShowAll');
+  if (n > 12) {
+    showAllBtn.style.display = '';
+    showAllBtn.textContent = 'Show all ' + n + ' months \u2193';
+  } else {
+    showAllBtn.style.display = 'none';
+  }
+
+  document.getElementById('loanResults').style.display = '';
+}
+
+function buildAmortization(principal, r, n, monthlyPayment, loanType) {
+  var rows = [];
+  var balance = principal;
+  for (var i = 1; i <= n; i++) {
+    var interest = balance * r;
+    var princ;
+    if (loanType === 'interest-only') {
+      princ = (i === n) ? balance : 0;
+    } else {
+      princ = monthlyPayment - interest;
+      if (i === n) princ = balance;
+    }
+    balance = Math.max(0, balance - princ);
+    rows.push({
+      month: i,
+      payment: princ + interest,
+      principal: princ,
+      interest: interest,
+      balance: balance
+    });
+  }
+  return rows;
+}
+
+function renderAmortRows(limit) {
+  var tbody = document.getElementById('lcAmortBody');
+  var rows = limit ? _lcAmortData.slice(0, limit) : _lcAmortData;
+  tbody.innerHTML = rows.map(function(r) {
+    return '<tr>' +
+      '<td>' + r.month + '</td>' +
+      '<td>' + formatCurrency(r.payment) + '</td>' +
+      '<td>' + formatCurrency(r.principal) + '</td>' +
+      '<td>' + formatCurrency(r.interest) + '</td>' +
+      '<td>' + formatCurrency(r.balance) + '</td>' +
+    '</tr>';
+  }).join('');
+}
+
+function lcShowAllRows() {
+  _lcShowingAll = true;
+  renderAmortRows(0);
+  document.getElementById('lcShowAll').style.display = 'none';
+  document.getElementById('lcAmortDetails').open = true;
+}
+
+function formatCurrency(n) {
+  return '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+</script>
+</body>
+</html>

@@ -68,6 +68,7 @@
     share:      { key: 'tab.share',   fallback: 'Share PDF' },
     screenshot: { key: null, fallback: 'Screenshot → PDF' },
     compress:   { key: null, fallback: 'PDF Compressor' },
+    ocr:        { key: null, fallback: 'PDF OCR' },
   };
 
   function getTabTitle(id) {
@@ -80,7 +81,7 @@
     return entry.fallback;
   }
 
-  const VALID_TABS = new Set(['excel', 'image', 'merge', 'split', 'encrypt', 'share', 'screenshot', 'compress']);
+  const VALID_TABS = new Set(['excel', 'image', 'merge', 'split', 'encrypt', 'share', 'screenshot', 'compress', 'ocr']);
 
   function switchTab(id) {
     if (!VALID_TABS.has(id)) id = 'excel';

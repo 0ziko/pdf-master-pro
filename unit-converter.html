@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unit Converter Online Free — Length, Weight, Temperature &amp; More | SnakeConverter</title>
+
+  <meta name="description" content="Convert units online free — length, weight, temperature, area, volume, speed, data, energy and more. Instant conversion, no signup required." />
+  <meta name="keywords" content="unit converter, length converter, weight converter, temperature converter, metric to imperial, measurement converter online" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <link rel="canonical" href="https://snakeconverter.com/unit-converter" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://snakeconverter.com/unit-converter" />
+  <meta property="og:title" content="Unit Converter Online Free — Length, Weight, Temperature &amp; More" />
+  <meta property="og:description" content="Convert units online free — length, weight, temperature, area, volume, speed, data and more. Instant conversion, no signup required." />
+  <meta property="og:image" content="https://snakeconverter.com/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Unit Converter Online Free | SnakeConverter" />
+  <meta name="twitter:description" content="Convert length, weight, temperature and more instantly. Free, no signup, browser-only." />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "url": "https://snakeconverter.com/unit-converter",
+        "name": "Unit Converter Online Free — Length, Weight, Temperature & More",
+        "description": "Convert units online free — length, weight, temperature, area, volume, speed, data and more. Instant conversion, no signup required.",
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://snakeconverter.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Unit Converters", "item": "https://snakeconverter.com/units" },
+            { "@type": "ListItem", "position": 3, "name": "Unit Converter", "item": "https://snakeconverter.com/unit-converter" }
+          ]
+        }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "Unit Converter",
+        "url": "https://snakeconverter.com/unit-converter",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Any (Web Browser)",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Which unit systems does it support?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The converter supports metric (SI), imperial, and US customary systems across all categories including length, weight, temperature, area, volume, speed, and digital data." }
+          },
+          {
+            "@type": "Question",
+            "name": "How accurate are the conversions?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Conversions are calculated with up to 10 significant figures of precision using JavaScript's double-precision floating-point arithmetic, which is accurate enough for virtually all practical applications." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I convert temperature?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. The temperature category supports Celsius (°C), Fahrenheit (°F), and Kelvin (K) with exact conversion formulas — not approximations." }
+          },
+          {
+            "@type": "Question",
+            "name": "Is there a limit to what I can convert?",
+            "acceptedAnswer": { "@type": "Answer", "text": "There are no practical limits. The tool handles very small and very large numbers. Simply type in your value and the result appears instantly." }
+          },
+          {
+            "@type": "Question",
+            "name": "Does this tool work offline?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Once the page is loaded, all conversions run entirely in your browser with no server calls. If you have the page open, it will continue working even if your internet connection drops." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1033284237916727" crossorigin="anonymous"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,600;0,14..32,700;0,14..32,900&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,700;0,14..32,900&display=swap" /></noscript>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+  <link rel="stylesheet" href="css/lp.css" />
+  <style>
+    /* Category tab bar */
+    .uc-tabs{
+      display:flex;gap:.35rem;flex-wrap:wrap;margin-bottom:1.1rem;
+    }
+    .uc-tab{
+      padding:.36rem .75rem;border-radius:.5rem;
+      border:1px solid var(--border-subtle);background:var(--surface);
+      color:var(--text-muted);font-size:.72rem;font-weight:700;cursor:pointer;
+      transition:all .15s;white-space:nowrap;
+    }
+    .uc-tab:hover{border-color:var(--border);color:var(--text-primary)}
+    .uc-tab.active{
+      background:var(--accent-dim);border-color:var(--border);
+      color:var(--accent-light);
+    }
+
+    /* Converter row */
+    .uc-converter{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+    .uc-converter input[type="number"]{flex:1;min-width:100px}
+    .uc-converter select{flex:1;min-width:120px}
+    .uc-swap-btn{
+      flex-shrink:0;width:36px;height:36px;display:flex;align-items:center;justify-content:center;
+      background:var(--surface-2);border:1px solid var(--border-subtle);border-radius:.5rem;
+      color:var(--text-muted);cursor:pointer;font-size:1rem;transition:all .15s;
+    }
+    .uc-swap-btn:hover{border-color:var(--border);color:var(--accent-light);transform:rotate(180deg)}
+
+    /* Result display */
+    .uc-result-wrap{text-align:center;padding:16px 0 8px}
+    .uc-result-label{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted);margin-bottom:.3rem}
+    .uc-result-value{
+      font-size:clamp(1.6rem,5vw,2.4rem);font-weight:900;letter-spacing:-.03em;
+      background:linear-gradient(135deg,#a070ff,#c084fc);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      line-height:1.15;word-break:break-all;
+    }
+    .uc-result-unit{font-size:.82rem;color:var(--text-muted);margin-top:.2rem}
+
+    /* Quick conversions */
+    .uc-quick-label{
+      font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;
+      color:var(--text-muted);margin-bottom:.5rem;margin-top:1rem;
+    }
+    .uc-quick-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.4rem}
+    .uc-quick-card{
+      background:var(--surface);border:1px solid var(--border-subtle);
+      border-radius:.6rem;padding:9px 12px;cursor:pointer;transition:all .15s;
+    }
+    .uc-quick-card:hover{border-color:var(--border);background:var(--surface-2)}
+    .uc-quick-from{font-size:.72rem;font-weight:700;color:#f1f5f9}
+    .uc-quick-to{font-size:.68rem;color:var(--text-muted);margin-top:.1rem}
+  </style>
+  <!-- Analytics -->
+  <script defer src="js/analytics.js"></script>
+</head>
+<body>
+
+<!-- ══ HEADER ══════════════════════════════════════════════ -->
+<header class="lp-header">
+  <div class="lp-header-inner">
+    <a href="/" class="lp-logo">
+      <span class="lp-logo-snake">🐍</span>
+      <span>SnakeConverter</span>
+    </a>
+    <nav class="lp-header-nav">
+      <a href="/units">Unit Converters</a>
+      <a href="/calc">Calculators</a>
+      <a href="/">All Tools</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<div class="lp-wrap">
+
+  <!-- ══ HERO ════════════════════════════════════════════ -->
+  <section class="lp-hero">
+    <h1 class="lp-h1">Unit <span class="accent">Converter</span></h1>
+    <p class="lp-hero-sub">Convert units online free — length, weight, temperature, area, volume, speed, data and more. Instant conversion, no signup required.</p>
+    <div class="lp-trust">✓ Free · No signup · Works in browser · 100% private</div>
+  </section>
+
+  <!-- ══ TOOL AREA ════════════════════════════════════════ -->
+  <section class="lp-tool-box">
+
+    <!-- Category tabs -->
+    <div class="uc-tabs" id="ucTabs">
+      <button class="uc-tab active" onclick="ucSetCat('length',this)">📏 Length</button>
+      <button class="uc-tab" onclick="ucSetCat('weight',this)">⚖️ Weight</button>
+      <button class="uc-tab" onclick="ucSetCat('temperature',this)">🌡️ Temperature</button>
+      <button class="uc-tab" onclick="ucSetCat('area',this)">⬜ Area</button>
+      <button class="uc-tab" onclick="ucSetCat('volume',this)">🥛 Volume</button>
+      <button class="uc-tab" onclick="ucSetCat('speed',this)">💨 Speed</button>
+      <button class="uc-tab" onclick="ucSetCat('data',this)">💾 Data</button>
+    </div>
+
+    <!-- Converter controls -->
+    <div class="uc-converter">
+      <input type="number" id="ucVal" class="input-field" value="1" placeholder="Enter value" oninput="ucConvert()" />
+      <select id="ucFrom" class="input-field" onchange="ucConvert()"></select>
+      <button class="uc-swap-btn" onclick="ucSwap()" title="Swap units">⇌</button>
+      <select id="ucTo" class="input-field" onchange="ucConvert()"></select>
+    </div>
+
+    <!-- Result -->
+    <div class="uc-result-wrap">
+      <div class="uc-result-label">Result</div>
+      <div class="uc-result-value" id="ucResult">—</div>
+      <div class="uc-result-unit" id="ucResultUnit"></div>
+    </div>
+
+    <!-- Quick conversions -->
+    <div class="uc-quick-label">Common conversions</div>
+    <div class="uc-quick-grid" id="ucQuickGrid"></div>
+
+  </section>
+
+  <!-- ══ FEATURES ═════════════════════════════════════════ -->
+  <section class="lp-section">
+    <div class="lp-section-badge">Why use this tool</div>
+    <h2 class="lp-section-title">Fast, Accurate Unit Conversion</h2>
+    <div class="lp-features">
+      <div class="lp-feature">
+        <div class="lp-feature-ico">📐</div>
+        <div class="lp-feature-text">
+          <strong>7 Categories</strong>
+          <span>Length, weight, temperature, area, volume, speed, and digital data — all in one tool.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">⚡</div>
+        <div class="lp-feature-text">
+          <strong>Instant Results</strong>
+          <span>Real-time conversion as you type — no need to click a button.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">⇌</div>
+        <div class="lp-feature-text">
+          <strong>Swap Units</strong>
+          <span>One click to reverse the conversion direction — from and to units instantly swap.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">🌐</div>
+        <div class="lp-feature-text">
+          <strong>All Systems</strong>
+          <span>Metric, imperial, and US customary units — everything you need in one place.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">🔒</div>
+        <div class="lp-feature-text">
+          <strong>Browser-Only</strong>
+          <span>No data is sent anywhere. All conversions happen locally in your browser.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">📱</div>
+        <div class="lp-feature-text">
+          <strong>Mobile Ready</strong>
+          <span>Works on any device — phone, tablet, or desktop — without installing anything.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="lp-divider"></div>
+
+  <!-- ══ HOW TO USE ════════════════════════════════════════ -->
+  <section class="lp-section">
+    <div class="lp-section-badge">How it works</div>
+    <h2 class="lp-section-title">Convert Units in 3 Simple Steps</h2>
+    <div class="lp-steps">
+      <div class="lp-step">
+        <div class="lp-step-num">1</div>
+        <div class="lp-step-text">
+          <strong>Select a category (length, weight, temperature, etc.)</strong>
+          <span>Click one of the category tabs at the top of the tool to switch between unit types.</span>
+        </div>
+      </div>
+      <div class="lp-step">
+        <div class="lp-step-num">2</div>
+        <div class="lp-step-text">
+          <strong>Enter a value and select the units to convert from and to</strong>
+          <span>Type your number, choose the source unit from the left dropdown, and the target unit from the right dropdown.</span>
+        </div>
+      </div>
+      <div class="lp-step">
+        <div class="lp-step-num">3</div>
+        <div class="lp-step-text">
+          <strong>See the instant result — click ⇌ to swap units</strong>
+          <span>The result appears immediately as you type. Hit the swap button to reverse the conversion direction in one click.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="lp-divider"></div>
+
+  <!-- ══ FAQ ══════════════════════════════════════════════ -->
+  <section class="lp-section">
+    <div class="lp-section-badge">FAQ</div>
+    <h2 class="lp-section-title">Frequently Asked Questions</h2>
+    <div class="lp-faq">
+      <details class="lp-faq-item" open>
+        <summary>Which unit systems does it support?</summary>
+        <div class="lp-faq-body">The converter supports <strong>metric (SI), imperial, and US customary</strong> systems. This covers units like kilometers, miles, kilograms, pounds, Celsius, Fahrenheit, Kelvin, liters, gallons, and many more across all seven categories.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>How accurate are the conversions?</summary>
+        <div class="lp-faq-body">Conversions are calculated with up to <strong>10 significant figures</strong> of precision using JavaScript's double-precision floating-point arithmetic — accurate enough for virtually all practical, scientific, and engineering applications.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>Can I convert temperature?</summary>
+        <div class="lp-faq-body">Yes. The Temperature category supports <strong>Celsius (°C), Fahrenheit (°F), and Kelvin (K)</strong> with exact conversion formulas — not approximations. Switch to the Temperature tab and select your units.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>Is there a limit to what I can convert?</summary>
+        <div class="lp-faq-body">There are no practical limits. The tool handles very small and very large numbers equally well. Simply type in your value and the conversion result appears instantly — no upper or lower bound restrictions.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>Does this tool work offline?</summary>
+        <div class="lp-faq-body">Once the page is loaded, all conversions run <strong>entirely in your browser</strong> with no server calls. If you already have the page open, it will continue working even if your internet connection drops.</div>
+      </details>
+    </div>
+  </section>
+
+  <div class="lp-divider"></div>
+
+  <!-- ══ RELATED TOOLS ═════════════════════════════════════ -->
+  <section class="lp-section">
+    <div class="lp-section-badge">Related tools</div>
+    <h2 class="lp-section-title">More Converters &amp; Calculators</h2>
+    <div class="lp-related-grid">
+      <a href="/units" class="lp-related-card">
+        <span class="lp-related-ico">📐</span>
+        <div><div class="lp-related-name">All Unit Converters</div><div class="lp-related-desc">11 conversion categories</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/tools#percent" class="lp-related-card">
+        <span class="lp-related-ico">%</span>
+        <div><div class="lp-related-name">Percentage Calculator</div><div class="lp-related-desc">Percent of, change &amp; more</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/calc" class="lp-related-card">
+        <span class="lp-related-ico">🔢</span>
+        <div><div class="lp-related-name">Scientific Calculator</div><div class="lp-related-desc">Advanced math functions</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/loan-calculator" class="lp-related-card">
+        <span class="lp-related-ico">💰</span>
+        <div><div class="lp-related-name">Loan Calculator</div><div class="lp-related-desc">Monthly payments &amp; amortization</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/tools#bmi" class="lp-related-card">
+        <span class="lp-related-ico">⚖️</span>
+        <div><div class="lp-related-name">BMI Calculator</div><div class="lp-related-desc">Body mass index</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/tools#age" class="lp-related-card">
+        <span class="lp-related-ico">🎂</span>
+        <div><div class="lp-related-name">Age Calculator</div><div class="lp-related-desc">Days between dates</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<!-- ══ FOOTER ══════════════════════════════════════════════ -->
+<footer class="lp-footer">
+  <div class="lp-wrap">
+    <div class="lp-footer-links">
+      <a href="/">All Tools</a>
+      <a href="/units">Unit Converters</a>
+      <a href="/calc">Calculators</a>
+      <a href="/tools">Utility Tools</a>
+      <a href="/pdf">PDF Tools</a>
+    </div>
+    <p>© 2026 SnakeConverter · Free, no signup, works in browser</p>
+  </div>
+</footer>
+
+<script>
+/* ── Unit Converter Logic ── */
+
+var UC_CATS = {
+  length: {
+    label: 'Length',
+    base: 'm',
+    units: {
+      'km':   { label: 'Kilometer (km)',   factor: 1000 },
+      'm':    { label: 'Meter (m)',         factor: 1 },
+      'cm':   { label: 'Centimeter (cm)',  factor: 0.01 },
+      'mm':   { label: 'Millimeter (mm)',  factor: 0.001 },
+      'mile': { label: 'Mile',             factor: 1609.344 },
+      'yard': { label: 'Yard (yd)',         factor: 0.9144 },
+      'foot': { label: 'Foot (ft)',         factor: 0.3048 },
+      'inch': { label: 'Inch (in)',         factor: 0.0254 }
+    },
+    quick: [
+      { from: '1 mile', to: 'km',   fv: 1, fu: 'mile', tu: 'km' },
+      { from: '1 foot', to: 'cm',   fv: 1, fu: 'foot', tu: 'cm' },
+      { from: '1 km',   to: 'mile', fv: 1, fu: 'km',   tu: 'mile' },
+      { from: '1 inch', to: 'cm',   fv: 1, fu: 'inch', tu: 'cm' }
+    ]
+  },
+  weight: {
+    label: 'Weight',
+    base: 'kg',
+    units: {
+      'kg':    { label: 'Kilogram (kg)',  factor: 1 },
+      'g':     { label: 'Gram (g)',       factor: 0.001 },
+      'mg':    { label: 'Milligram (mg)', factor: 0.000001 },
+      'lb':    { label: 'Pound (lb)',     factor: 0.45359237 },
+      'oz':    { label: 'Ounce (oz)',     factor: 0.028349523125 },
+      'stone': { label: 'Stone',          factor: 6.35029318 },
+      'ton':   { label: 'Metric Ton (t)', factor: 1000 }
+    },
+    quick: [
+      { from: '1 kg',  to: 'lb',    fv: 1, fu: 'kg',  tu: 'lb' },
+      { from: '1 lb',  to: 'kg',    fv: 1, fu: 'lb',  tu: 'kg' },
+      { from: '1 oz',  to: 'g',     fv: 1, fu: 'oz',  tu: 'g' },
+      { from: '1 ton', to: 'lb',    fv: 1, fu: 'ton', tu: 'lb' }
+    ]
+  },
+  temperature: {
+    label: 'Temperature',
+    base: 'C',
+    units: {
+      'C': { label: '°Celsius (°C)',    factor: null },
+      'F': { label: '°Fahrenheit (°F)', factor: null },
+      'K': { label: 'Kelvin (K)',        factor: null }
+    },
+    quick: [
+      { from: '0°C',    to: '°F',  fv: 0,   fu: 'C', tu: 'F' },
+      { from: '100°C',  to: '°F',  fv: 100, fu: 'C', tu: 'F' },
+      { from: '32°F',   to: '°C',  fv: 32,  fu: 'F', tu: 'C' },
+      { from: '98.6°F', to: '°C',  fv: 98.6,fu: 'F', tu: 'C' }
+    ]
+  },
+  area: {
+    label: 'Area',
+    base: 'm2',
+    units: {
+      'm2':      { label: 'Square Meter (m²)',      factor: 1 },
+      'km2':     { label: 'Square Kilometer (km²)', factor: 1e6 },
+      'cm2':     { label: 'Square Centimeter (cm²)',factor: 0.0001 },
+      'ft2':     { label: 'Square Foot (ft²)',      factor: 0.09290304 },
+      'in2':     { label: 'Square Inch (in²)',      factor: 0.00064516 },
+      'acre':    { label: 'Acre',                   factor: 4046.8564224 },
+      'hectare': { label: 'Hectare (ha)',            factor: 10000 }
+    },
+    quick: [
+      { from: '1 acre',    to: 'hectare', fv: 1, fu: 'acre',    tu: 'hectare' },
+      { from: '1 hectare', to: 'acre',    fv: 1, fu: 'hectare', tu: 'acre' },
+      { from: '1 km²',     to: 'acre',    fv: 1, fu: 'km2',     tu: 'acre' },
+      { from: '1 ft²',     to: 'm²',      fv: 1, fu: 'ft2',     tu: 'm2' }
+    ]
+  },
+  volume: {
+    label: 'Volume',
+    base: 'L',
+    units: {
+      'L':      { label: 'Liter (L)',           factor: 1 },
+      'mL':     { label: 'Milliliter (mL)',     factor: 0.001 },
+      'm3':     { label: 'Cubic Meter (m³)',    factor: 1000 },
+      'ft3':    { label: 'Cubic Foot (ft³)',    factor: 28.316846592 },
+      'gallon': { label: 'Gallon (US)',         factor: 3.785411784 },
+      'cup':    { label: 'Cup (US)',            factor: 0.2365882365 },
+      'fl_oz':  { label: 'Fluid Ounce (US)',   factor: 0.0295735296 },
+      'tbsp':   { label: 'Tablespoon (US)',     factor: 0.0147867648 },
+      'tsp':    { label: 'Teaspoon (US)',       factor: 0.0049289216 }
+    },
+    quick: [
+      { from: '1 gallon', to: 'L',   fv: 1, fu: 'gallon', tu: 'L' },
+      { from: '1 cup',    to: 'mL',  fv: 1, fu: 'cup',    tu: 'mL' },
+      { from: '1 L',      to: 'fl oz',fv: 1, fu: 'L',      tu: 'fl_oz' },
+      { from: '1 ft³',    to: 'L',   fv: 1, fu: 'ft3',    tu: 'L' }
+    ]
+  },
+  speed: {
+    label: 'Speed',
+    base: 'm/s',
+    units: {
+      'km/h':  { label: 'Kilometer/hour (km/h)', factor: 0.27777778 },
+      'm/s':   { label: 'Meter/second (m/s)',    factor: 1 },
+      'mph':   { label: 'Miles/hour (mph)',       factor: 0.44704 },
+      'knot':  { label: 'Knot (kn)',              factor: 0.51444444 },
+      'Mach':  { label: 'Mach (at sea level)',    factor: 340.29 }
+    },
+    quick: [
+      { from: '100 km/h', to: 'mph',  fv: 100, fu: 'km/h', tu: 'mph' },
+      { from: '60 mph',   to: 'km/h', fv: 60,  fu: 'mph',  tu: 'km/h' },
+      { from: '1 Mach',   to: 'km/h', fv: 1,   fu: 'Mach', tu: 'km/h' },
+      { from: '1 knot',   to: 'km/h', fv: 1,   fu: 'knot', tu: 'km/h' }
+    ]
+  },
+  data: {
+    label: 'Data',
+    base: 'B',
+    units: {
+      'B':  { label: 'Byte (B)',      factor: 1 },
+      'KB': { label: 'Kilobyte (KB)', factor: 1024 },
+      'MB': { label: 'Megabyte (MB)', factor: 1048576 },
+      'GB': { label: 'Gigabyte (GB)', factor: 1073741824 },
+      'TB': { label: 'Terabyte (TB)', factor: 1099511627776 },
+      'PB': { label: 'Petabyte (PB)', factor: 1125899906842624 }
+    },
+    quick: [
+      { from: '1 GB', to: 'MB', fv: 1, fu: 'GB', tu: 'MB' },
+      { from: '1 TB', to: 'GB', fv: 1, fu: 'TB', tu: 'GB' },
+      { from: '1 MB', to: 'KB', fv: 1, fu: 'MB', tu: 'KB' },
+      { from: '1 GB', to: 'TB', fv: 1, fu: 'GB', tu: 'TB' }
+    ]
+  }
+};
+
+var _ucCurrentCat = 'length';
+
+function ucSetCat(cat, tabEl) {
+  _ucCurrentCat = cat;
+  document.querySelectorAll('.uc-tab').forEach(function(t) { t.classList.remove('active'); });
+  if (tabEl) tabEl.classList.add('active');
+
+  var catData = UC_CATS[cat];
+  var unitKeys = Object.keys(catData.units);
+
+  var fromSel = document.getElementById('ucFrom');
+  var toSel = document.getElementById('ucTo');
+
+  fromSel.innerHTML = unitKeys.map(function(k) {
+    return '<option value="' + k + '">' + catData.units[k].label + '</option>';
+  }).join('');
+  toSel.innerHTML = fromSel.innerHTML;
+
+  fromSel.value = unitKeys[0];
+  toSel.value = unitKeys.length > 1 ? unitKeys[1] : unitKeys[0];
+
+  ucRenderQuick();
+  ucConvert();
+}
+
+function ucConvert() {
+  var cat = UC_CATS[_ucCurrentCat];
+  var val = parseFloat(document.getElementById('ucVal').value);
+  var fromKey = document.getElementById('ucFrom').value;
+  var toKey = document.getElementById('ucTo').value;
+  var resultEl = document.getElementById('ucResult');
+  var unitEl = document.getElementById('ucResultUnit');
+
+  if (isNaN(val)) {
+    resultEl.textContent = '—';
+    unitEl.textContent = '';
+    return;
+  }
+
+  var result = ucDoConvert(val, fromKey, toKey, cat);
+  var formatted = ucFormat(result);
+  resultEl.textContent = formatted;
+  unitEl.textContent = cat.units[toKey].label;
+}
+
+function ucDoConvert(val, fromKey, toKey, cat) {
+  if (_ucCurrentCat === 'temperature') {
+    var c = toC(val, fromKey);
+    return fromC(c, toKey);
+  }
+  var base = val * cat.units[fromKey].factor;
+  return base / cat.units[toKey].factor;
+}
+
+function toC(val, unit) {
+  if (unit === 'C') return val;
+  if (unit === 'F') return (val - 32) * 5 / 9;
+  if (unit === 'K') return val - 273.15;
+  return val;
+}
+
+function fromC(c, unit) {
+  if (unit === 'C') return c;
+  if (unit === 'F') return c * 9 / 5 + 32;
+  if (unit === 'K') return c + 273.15;
+  return c;
+}
+
+function ucFormat(n) {
+  if (!isFinite(n)) return '—';
+  if (Math.abs(n) >= 1e10 || (Math.abs(n) < 1e-6 && n !== 0)) {
+    return n.toExponential(6);
+  }
+  var s = parseFloat(n.toPrecision(10)).toString();
+  return s;
+}
+
+function ucSwap() {
+  var fromSel = document.getElementById('ucFrom');
+  var toSel = document.getElementById('ucTo');
+  var tmp = fromSel.value;
+  fromSel.value = toSel.value;
+  toSel.value = tmp;
+  ucConvert();
+}
+
+function ucRenderQuick() {
+  var cat = UC_CATS[_ucCurrentCat];
+  var grid = document.getElementById('ucQuickGrid');
+  grid.innerHTML = cat.quick.map(function(q) {
+    var result = ucDoConvert(q.fv, q.fu, q.tu, cat);
+    var formatted = ucFormat(result);
+    var toLabel = cat.units[q.tu].label;
+    return '<div class="uc-quick-card" onclick="ucSetQuick(' +
+      q.fv + ',\'' + q.fu + '\',\'' + q.tu + '\')">' +
+      '<div class="uc-quick-from">' + q.from + '</div>' +
+      '<div class="uc-quick-to">= ' + formatted + ' ' + toLabel + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function ucSetQuick(val, from, to) {
+  document.getElementById('ucVal').value = val;
+  document.getElementById('ucFrom').value = from;
+  document.getElementById('ucTo').value = to;
+  ucConvert();
+}
+
+/* Initialize with length category */
+ucSetCat('length', null);
+</script>
+</body>
+</html>

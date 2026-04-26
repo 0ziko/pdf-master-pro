@@ -123,6 +123,7 @@
       <a href="#countdown"        class="jump-link">⏳ Countdown</a>
       <a href="#pomodoro"         class="jump-link">🍅 Pomodoro</a>
       <a href="#invoice"          class="jump-link">🧾 Invoice</a>
+      <a href="#raffle"           class="jump-link">🎁 Raffle / Draw</a>
       <a href="#passmanager"      class="jump-link">🔐 Pass Manager</a>
     </nav>
 
@@ -861,6 +862,117 @@
     </section>
 
     <!-- ══ LOCAL PASSWORD MANAGER ══ -->
+    <!-- ══ RAFFLE / RANDOM DRAW ══ -->
+    <section id="raffle" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">🎁</span>
+        <div><div class="tps-title" data-i18n="text.raffle.name">Raffle / Random Draw</div><div class="tps-desc" data-i18n="text.raffle.desc">Add participants, draw a winner with animation — history kept</div></div>
+      </div>
+      <style>
+        .raffle-winner-box { text-align:center; padding:1.4rem 1rem; border-radius:14px;
+          background:linear-gradient(135deg,rgba(130,80,255,.15),rgba(236,72,153,.1));
+          border:2px solid rgba(130,80,255,.3); margin:.5rem 0; min-height:90px;
+          display:flex; flex-direction:column; align-items:center; justify-content:center; }
+        .raffle-winner-name { font-size:2rem; font-weight:900; color:#c4b5fd;
+          letter-spacing:-.02em; line-height:1.1; word-break:break-word; transition:all .3s; }
+        .raffle-winner-sub { font-size:.7rem; color:var(--text-muted); margin-top:.3rem; }
+        .raffle-winner-box.rolling .raffle-winner-name { animation: raffleRoll .08s infinite alternate; }
+        @keyframes raffleRoll { from{opacity:.4;transform:scale(.95)} to{opacity:1;transform:scale(1)} }
+        .raffle-history { list-style:none; padding:0; margin:0; max-height:140px; overflow-y:auto; }
+        .raffle-history li { display:flex; justify-content:space-between; align-items:center;
+          padding:.3rem .5rem; font-size:.76rem; border-bottom:1px solid rgba(255,255,255,.05); }
+        .raffle-history li:last-child { border:none; }
+        .raffle-history .rh-num { color:var(--text-muted); font-size:.65rem; margin-right:.5rem; }
+        .raffle-history .rh-name { color:#e8e4ff; font-weight:600; }
+        .raffle-history .rh-del { cursor:pointer; color:var(--text-muted); font-size:.8rem; }
+        .raffle-history .rh-del:hover { color:#f87171; }
+        .raffle-count-badge { display:inline-block; background:rgba(130,80,255,.2); color:#a78bfa;
+          border-radius:999px; font-size:.65rem; font-weight:700; padding:1px 8px; }
+      </style>
+      <div class="space-y">
+        <div>
+          <label class="field-label">
+            Participants <span id="raffle-count" class="raffle-count-badge">0</span>
+          </label>
+          <textarea id="raffle-list" class="dev-textarea" style="min-height:120px;resize:vertical;"
+            placeholder="Enter one participant per line&#10;Alice&#10;Bob&#10;Charlie&#10;David"
+            oninput="raffleCount()"></textarea>
+        </div>
+        <div class="raffle-winner-box" id="raffle-winner-box">
+          <div class="raffle-winner-name" id="raffle-winner-name">—</div>
+          <div class="raffle-winner-sub" id="raffle-winner-sub">Draw a winner to start</div>
+        </div>
+        <div class="tool-btn-row">
+          <button type="button" class="btn-primary" style="flex:1" onclick="raffleDraw()">🎲 Draw Winner</button>
+          <button type="button" class="btn-secondary" onclick="raffleReset()">↺ Reset</button>
+          <button type="button" class="btn-secondary" onclick="raffleClearHistory()">🗑 History</button>
+        </div>
+        <div id="raffle-history-wrap" style="display:none">
+          <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);margin-bottom:.4rem;">Past Winners</div>
+          <ul class="raffle-history" id="raffle-history"></ul>
+        </div>
+      </div>
+      <script>
+      (function(){
+        let _rolling = false;
+        function raffleGetList(){
+          return (document.getElementById('raffle-list').value||'').split('\n').map(s=>s.trim()).filter(Boolean);
+        }
+        window.raffleCount = function(){
+          document.getElementById('raffle-count').textContent = raffleGetList().length;
+        };
+        window.raffleDraw = function(){
+          if(_rolling) return;
+          var list = raffleGetList();
+          if(list.length === 0){ alert('Add at least one participant!'); return; }
+          var box = document.getElementById('raffle-winner-box');
+          var nameEl = document.getElementById('raffle-winner-name');
+          var subEl = document.getElementById('raffle-winner-sub');
+          _rolling = true; box.classList.add('rolling');
+          var ticks = 0, maxTicks = 18 + Math.floor(Math.random()*14);
+          var iv = setInterval(function(){
+            nameEl.textContent = list[Math.floor(Math.random()*list.length)];
+            ticks++;
+            if(ticks >= maxTicks){
+              clearInterval(iv);
+              var winner = list[Math.floor(Math.random()*list.length)];
+              nameEl.textContent = winner;
+              subEl.textContent = '🏆 Winner #' + (raffleHistoryLen()+1);
+              box.classList.remove('rolling');
+              _rolling = false;
+              raffleAddHistory(winner);
+            }
+          }, 80);
+        };
+        window.raffleReset = function(){
+          document.getElementById('raffle-winner-name').textContent='—';
+          document.getElementById('raffle-winner-sub').textContent='Draw a winner to start';
+        };
+        var _history = [];
+        function raffleHistoryLen(){ return _history.length; }
+        function raffleAddHistory(name){
+          _history.unshift(name);
+          raffleRenderHistory();
+        }
+        function raffleRenderHistory(){
+          var ul = document.getElementById('raffle-history');
+          var wrap = document.getElementById('raffle-history-wrap');
+          if(_history.length === 0){ wrap.style.display='none'; return; }
+          wrap.style.display='block';
+          ul.innerHTML = _history.map(function(n,i){
+            return '<li><span class="rh-num">#'+(_history.length-i)+'</span><span class="rh-name">'+n+'</span><span class="rh-del" onclick="raffleDeleteHistory('+i+')">✕</span></li>';
+          }).join('');
+        }
+        window.raffleDeleteHistory = function(i){
+          _history.splice(i,1); raffleRenderHistory();
+        };
+        window.raffleClearHistory = function(){
+          _history=[]; raffleRenderHistory();
+        };
+      })();
+      </script>
+    </section>
+
     <section id="passmanager" class="tool-page-section">
       <div class="tps-header">
         <span class="tps-icon">🔐</span>
