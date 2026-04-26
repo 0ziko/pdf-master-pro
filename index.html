@@ -202,19 +202,21 @@
     }
     .idx-search-icon {
       position: absolute;
-      left: 11px;
+      right: 10px;
+      left: auto;
       top: 50%;
       transform: translateY(-50%);
       color: #6b7280;
       pointer-events: none;
       z-index: 1;
+      flex-shrink: 0;
     }
     .idx-search-input {
       width: 100%;
       background: rgba(255,255,255,.05);
       border: 1px solid rgba(130,80,255,.25);
       border-radius: 8px;
-      padding: 6px 10px 6px 38px;
+      padding: 6px 34px 6px 10px;
       color: #e8e4ff;
       font-size: .74rem;
       font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
@@ -594,7 +596,7 @@
 
       /* ── Search: full width ── */
       .idx-search { padding: 10px 14px 8px; }
-      .idx-search-input { font-size: .8rem; padding: 9px 12px 9px 40px; }
+      .idx-search-input { font-size: .8rem; padding: 9px 38px 9px 12px; }
 
       /* ── Category grid: 2×5 app-style grid ── */
       .idx-nav {
@@ -720,8 +722,8 @@
     <!-- Search -->
     <div class="idx-search">
       <div class="idx-search-wrap">
-        <svg class="idx-search-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" id="idxSearchInput" class="idx-search-input" placeholder="Search tools…" data-i18n-ph="index.search" autocomplete="off" oninput="handleSearch(this.value)" />
+        <input type="text" id="idxSearchInput" class="idx-search-input" placeholder="Search tools…" data-i18n-ph="index.search" autocomplete="off" oninput="handleSearch(this.value)" aria-label="Search tools" />
+        <svg class="idx-search-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </div>
     </div>
 
