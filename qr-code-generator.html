@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QR Code Generator Online Free (Custom with Logo) | SnakeConverter</title>
+  <meta name="description" content="Generate custom QR codes online for free. Set colors, add a logo, choose size and error correction. No signup, works in your browser instantly." />
+  <meta name="keywords" content="qr code generator, qr code maker, custom qr code, qr code with logo, free qr code generator, online qr code" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <link rel="canonical" href="https://snakeconverter.com/qr-code-generator" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://snakeconverter.com/qr-code-generator" />
+  <meta property="og:title" content="QR Code Generator Online Free (Custom with Logo)" />
+  <meta property="og:description" content="Create custom QR codes with logo, custom colors, and sizes. Free, no signup, works in browser." />
+  <meta property="og:image" content="https://snakeconverter.com/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="QR Code Generator Online | SnakeConverter" />
+  <meta name="twitter:description" content="Custom QR codes with logo and colors. Free, no signup." />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "url": "https://snakeconverter.com/qr-code-generator",
+        "name": "QR Code Generator Online Free",
+        "description": "Free online QR code generator with custom colors, logo overlay, and size options.",
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://snakeconverter.com/" },
+            { "@type": "ListItem", "position": 2, "name": "QR Code Generator", "item": "https://snakeconverter.com/qr-code-generator" }
+          ]
+        }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "QR Code Generator",
+        "url": "https://snakeconverter.com/qr-code-generator",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Any (Web Browser)",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Can I add a logo to my QR code?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes! Upload any image file using the Logo Upload option. The logo will be centered on the QR code. We recommend using Q or H error correction level to ensure the QR code remains scannable even with a logo overlay." }
+          },
+          {
+            "@type": "Question",
+            "name": "What error correction level should I choose?",
+            "acceptedAnswer": { "@type": "Answer", "text": "L (Low, 7%) is fine for clean digital displays. M (Medium, 15%) is a good default. Q (Quartile, 25%) is recommended when adding a logo. H (High, 30%) provides maximum redundancy and is best for printed QR codes that may get dirty or damaged." }
+          },
+          {
+            "@type": "Question",
+            "name": "What size should I generate for printing?",
+            "acceptedAnswer": { "@type": "Answer", "text": "For print, use 512px or 1024px — these provide enough resolution for sharp printing up to A4 size. For digital/web use, 256px is usually sufficient." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can QR codes link to any URL?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. QR codes can encode any text or URL. You can link to a website, a phone number (tel:+1234567890), an email (mailto:), Wi-Fi credentials, or plain text messages." }
+          },
+          {
+            "@type": "Question",
+            "name": "Is my data sent to any server?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. QR code generation happens entirely in your browser using the QRCode.js library. Your text or URL is never sent to our servers." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1033284237916727" crossorigin="anonymous"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,700;0,14..32,900&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" /></noscript>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
+  <link rel="stylesheet" href="css/lp.css" />
+  <script defer src="js/analytics.js"></script>
+  <style>
+    .qr-preview{text-align:center;margin-top:.75rem}
+    .qr-canvas-wrap{display:inline-block;border:1px solid var(--border);border-radius:.75rem;overflow:hidden;background:#fff}
+    .qr-canvas-wrap canvas{display:block}
+    .color-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+    .color-field{display:flex;align-items:center;gap:.5rem}
+    .color-field input[type=color]{width:36px;height:36px;border:none;border-radius:.35rem;cursor:pointer;background:none;padding:0}
+    .logo-remove{font-size:.72rem;color:var(--red);cursor:pointer;margin-left:.5rem}
+    @media(max-width:500px){.color-row{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+
+<header class="lp-header">
+  <div class="lp-header-inner">
+    <a href="/" class="lp-logo">
+      <span class="lp-logo-snake">🐍</span>
+      <span>SnakeConverter</span>
+    </a>
+    <nav class="lp-header-nav">
+      <a href="/password-generator">Password Gen</a>
+      <a href="/uuid-generator">UUID Gen</a>
+      <a href="/dev">Dev Tools</a>
+      <a href="/">All Tools</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<div class="lp-wrap">
+
+  <section class="lp-hero">
+    <h1 class="lp-h1">QR Code <span class="accent">Generator</span></h1>
+    <p class="lp-hero-sub">Create custom QR codes with your own colors and logo — download as PNG instantly. No signup needed.</p>
+    <div class="lp-trust">✓ Free · No signup · Works in browser · 100% private</div>
+  </section>
+
+  <section class="lp-tool-box">
+    <div class="space-y">
+
+      <div>
+        <label class="field-label" for="qrText">Text or URL</label>
+        <textarea id="qrText" class="input-field" rows="3" placeholder="https://example.com or any text…" style="resize:vertical"></textarea>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+        <div>
+          <label class="field-label" for="qrSize">Size (px)</label>
+          <select id="qrSize" class="input-field">
+            <option value="128">128 px</option>
+            <option value="256" selected>256 px</option>
+            <option value="512">512 px</option>
+            <option value="1024">1024 px</option>
+          </select>
+        </div>
+        <div>
+          <label class="field-label" for="qrEc">Error Correction</label>
+          <select id="qrEc" class="input-field">
+            <option value="L">L — Low (7%)</option>
+            <option value="M">M — Medium (15%)</option>
+            <option value="Q" selected>Q — Quartile (25%)</option>
+            <option value="H">H — High (30%)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="color-row">
+        <div>
+          <label class="field-label">Dark Color</label>
+          <div class="color-field">
+            <input type="color" id="qrDark" value="#000000" oninput="document.getElementById('qrDarkHex').value=this.value">
+            <input type="text" id="qrDarkHex" class="input-field" value="#000000" maxlength="7" style="flex:1" oninput="if(/^#[0-9a-fA-F]{6}$/.test(this.value))document.getElementById('qrDark').value=this.value">
+          </div>
+        </div>
+        <div>
+          <label class="field-label">Background Color</label>
+          <div class="color-field">
+            <input type="color" id="qrLight" value="#ffffff" oninput="document.getElementById('qrLightHex').value=this.value">
+            <input type="text" id="qrLightHex" class="input-field" value="#ffffff" maxlength="7" style="flex:1" oninput="if(/^#[0-9a-fA-F]{6}$/.test(this.value))document.getElementById('qrLight').value=this.value">
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <label class="field-label">Logo (optional)</label>
+        <div style="display:flex;align-items:center;gap:.5rem;flex-wrap:wrap">
+          <button class="btn-secondary" style="padding:.5rem .9rem;font-size:.78rem" onclick="document.getElementById('qrLogoInput').click()">📎 Upload Logo</button>
+          <input type="file" id="qrLogoInput" accept="image/*" class="hidden" onchange="qrLogoLoad(this.files)">
+          <span id="qrLogoName" style="font-size:.75rem;color:var(--text-muted)">No file chosen</span>
+          <span class="logo-remove" id="qrLogoRemove" style="display:none" onclick="qrLogoRemove()">✕ Remove</span>
+        </div>
+        <p style="font-size:.68rem;color:var(--text-dim);margin-top:.25rem">Use Q or H error correction when adding a logo for best scanning reliability.</p>
+      </div>
+
+      <button class="btn-primary" onclick="qrGenerate()">Generate QR Code</button>
+
+      <div id="qrResult" style="display:none">
+        <div class="qr-preview">
+          <div class="qr-canvas-wrap">
+            <canvas id="qrCanvas"></canvas>
+          </div>
+        </div>
+        <div style="display:flex;gap:.5rem;margin-top:.75rem">
+          <button class="btn-primary" onclick="qrDownload()">⬇ Download PNG</button>
+        </div>
+      </div>
+
+      <p id="qrMsg" style="font-size:.75rem;color:var(--text-muted);text-align:center;min-height:1em"></p>
+    </div>
+  </section>
+
+  <section class="lp-section">
+    <div class="lp-section-badge">Why use this tool</div>
+    <h2 class="lp-section-title">Fast, Custom QR Code Generator</h2>
+    <div class="lp-features">
+      <div class="lp-feature">
+        <div class="lp-feature-ico">🎨</div>
+        <div class="lp-feature-text">
+          <strong>Custom Colors</strong>
+          <span>Set any dark and background color with a color picker or hex code for brand-matched QR codes.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">🖼️</div>
+        <div class="lp-feature-text">
+          <strong>Logo Overlay</strong>
+          <span>Add your brand logo to the center of the QR code. Works with any image format.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">📐</div>
+        <div class="lp-feature-text">
+          <strong>Multiple Sizes</strong>
+          <span>128px for thumbnails, 256px for screens, 512–1024px for crisp print quality.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">🛡️</div>
+        <div class="lp-feature-text">
+          <strong>Error Correction Levels</strong>
+          <span>Choose L, M, Q, or H redundancy. Use H for printed or damaged environments.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">⬇️</div>
+        <div class="lp-feature-text">
+          <strong>Instant PNG Download</strong>
+          <span>Download your QR code as a high-quality PNG file ready for print or digital use.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">🔒</div>
+        <div class="lp-feature-text">
+          <strong>Private &amp; Offline</strong>
+          <span>All QR generation happens in your browser. Your URLs and text never leave your device.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="lp-divider"></div>
+
+  <section class="lp-section">
+    <div class="lp-section-badge">How it works</div>
+    <h2 class="lp-section-title">Create a QR Code in 3 Simple Steps</h2>
+    <div class="lp-steps">
+      <div class="lp-step">
+        <div class="lp-step-num">1</div>
+        <div class="lp-step-text">
+          <strong>Enter your text or URL</strong>
+          <span>Type or paste any URL, phone number, plain text, or email address into the input box above.</span>
+        </div>
+      </div>
+      <div class="lp-step">
+        <div class="lp-step-num">2</div>
+        <div class="lp-step-text">
+          <strong>Customize your QR code</strong>
+          <span>Choose the size, error correction level, colors, and optionally upload a logo to overlay in the center.</span>
+        </div>
+      </div>
+      <div class="lp-step">
+        <div class="lp-step-num">3</div>
+        <div class="lp-step-text">
+          <strong>Generate &amp; download as PNG</strong>
+          <span>Click "Generate QR Code" and your code appears instantly. Click "Download PNG" to save it.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="lp-divider"></div>
+
+  <section class="lp-section">
+    <div class="lp-section-badge">FAQ</div>
+    <h2 class="lp-section-title">Frequently Asked Questions</h2>
+    <div class="lp-faq">
+      <details class="lp-faq-item" open>
+        <summary>Can I add a logo to my QR code?</summary>
+        <div class="lp-faq-body">Yes! Upload any image file using the Logo Upload option. The logo will be centered on the QR code. We recommend using <strong>Q or H error correction</strong> to ensure the QR code remains scannable even with a logo covering part of the pattern.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>What error correction level should I choose?</summary>
+        <div class="lp-faq-body"><strong>L (7%)</strong> is fine for clean digital displays. <strong>M (15%)</strong> is a good default for most uses. <strong>Q (25%)</strong> is recommended when adding a logo. <strong>H (30%)</strong> is best for printed QR codes that may get dirty or damaged.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>What size should I use for printing?</summary>
+        <div class="lp-faq-body">For print, use <strong>512px or 1024px</strong> — these provide enough resolution for sharp printing up to A4 size. For digital and web use, 256px is usually sufficient and downloads faster.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>Can QR codes encode more than URLs?</summary>
+        <div class="lp-faq-body">Yes. QR codes can encode any text: URLs, phone numbers (<code>tel:+1234567890</code>), emails (<code>mailto:</code>), Wi-Fi credentials, vCard contacts, geographic coordinates, or any plain text message.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>Is my data sent to any server?</summary>
+        <div class="lp-faq-body">No. QR code generation happens entirely in your browser using the <strong>QRCode.js library</strong>. Your text or URL is never sent to our servers, making this tool completely private.</div>
+      </details>
+    </div>
+  </section>
+
+  <div class="lp-divider"></div>
+
+  <section class="lp-section">
+    <div class="lp-section-badge">Related tools</div>
+    <h2 class="lp-section-title">More Generator Tools</h2>
+    <div class="lp-related-grid">
+      <a href="/password-generator" class="lp-related-card">
+        <span class="lp-related-ico">🔐</span>
+        <div><div class="lp-related-name">Password Generator</div><div class="lp-related-desc">Strong secure passwords</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/uuid-generator" class="lp-related-card">
+        <span class="lp-related-ico">🆔</span>
+        <div><div class="lp-related-name">UUID Generator</div><div class="lp-related-desc">Generate v4 &amp; v7 UUIDs</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/dev#url" class="lp-related-card">
+        <span class="lp-related-ico">🔗</span>
+        <div><div class="lp-related-name">URL Encoder</div><div class="lp-related-desc">Encode &amp; decode URLs</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/compress-pdf" class="lp-related-card">
+        <span class="lp-related-ico">🗜️</span>
+        <div><div class="lp-related-name">PDF Compressor</div><div class="lp-related-desc">Reduce PDF file size</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/jwt-decoder" class="lp-related-card">
+        <span class="lp-related-ico">🔑</span>
+        <div><div class="lp-related-name">JWT Decoder</div><div class="lp-related-desc">Decode &amp; verify tokens</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/dev" class="lp-related-card">
+        <span class="lp-related-ico">🛠️</span>
+        <div><div class="lp-related-name">All Dev Tools</div><div class="lp-related-desc">More developer utilities</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<footer class="lp-footer">
+  <div class="lp-wrap">
+    <div class="lp-footer-links">
+      <a href="/">All Tools</a>
+      <a href="/pdf">PDF Tools</a>
+      <a href="/dev">Developer Tools</a>
+      <a href="/tools">Utility Tools</a>
+      <a href="/units">Unit Converters</a>
+    </div>
+    <p>© 2026 SnakeConverter · Free, no signup, works in browser</p>
+  </div>
+</footer>
+
+<script>
+var _qrLogoImg = null;
+
+function qrLogoLoad(files) {
+  if (!files || !files[0]) return;
+  var f = files[0];
+  document.getElementById('qrLogoName').textContent = f.name;
+  document.getElementById('qrLogoRemove').style.display = '';
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var img = new Image();
+    img.onload = function() { _qrLogoImg = img; };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(f);
+}
+
+function qrLogoRemove() {
+  _qrLogoImg = null;
+  document.getElementById('qrLogoInput').value = '';
+  document.getElementById('qrLogoName').textContent = 'No file chosen';
+  document.getElementById('qrLogoRemove').style.display = 'none';
+}
+
+function qrGenerate() {
+  var text = document.getElementById('qrText').value.trim();
+  var msg  = document.getElementById('qrMsg');
+  if (!text) { msg.textContent = 'Please enter some text or URL first.'; msg.style.color = 'var(--red)'; return; }
+  var size = parseInt(document.getElementById('qrSize').value);
+  var ec   = document.getElementById('qrEc').value;
+  var dark = document.getElementById('qrDark').value;
+  var light= document.getElementById('qrLight').value;
+
+  msg.textContent = 'Generating…';
+  msg.style.color = 'var(--text-muted)';
+
+  var offCanvas = document.createElement('canvas');
+  QRCode.toCanvas(offCanvas, text, { width: size, margin: 2, errorCorrectionLevel: ec, color: { dark: dark, light: light } }, function(err) {
+    if (err) { msg.textContent = '✗ Error: ' + err.message; msg.style.color = 'var(--red)'; return; }
+
+    var finalCanvas = document.getElementById('qrCanvas');
+    finalCanvas.width  = size;
+    finalCanvas.height = size;
+    var ctx = finalCanvas.getContext('2d');
+    ctx.drawImage(offCanvas, 0, 0);
+
+    if (_qrLogoImg) {
+      var logoSize = size * 0.22;
+      var x = (size - logoSize) / 2;
+      var y = (size - logoSize) / 2;
+      var r = logoSize * 0.18;
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + logoSize - r, y);
+      ctx.quadraticCurveTo(x + logoSize, y, x + logoSize, y + r);
+      ctx.lineTo(x + logoSize, y + logoSize - r);
+      ctx.quadraticCurveTo(x + logoSize, y + logoSize, x + logoSize - r, y + logoSize);
+      ctx.lineTo(x + r, y + logoSize);
+      ctx.quadraticCurveTo(x, y + logoSize, x, y + logoSize - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+      ctx.fill();
+      ctx.drawImage(_qrLogoImg, x, y, logoSize, logoSize);
+    }
+
+    document.getElementById('qrResult').style.display = '';
+    msg.textContent = '✓ QR code generated!';
+    msg.style.color = 'var(--green)';
+  });
+}
+
+function qrDownload() {
+  var canvas = document.getElementById('qrCanvas');
+  var a = document.createElement('a');
+  a.download = 'qrcode.png';
+  a.href = canvas.toDataURL('image/png');
+  a.click();
+}
+</script>
+</body>
+</html>

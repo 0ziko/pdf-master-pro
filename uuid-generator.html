@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UUID Generator Online (Bulk Generate v4/v7) | SnakeConverter</title>
+  <meta name="description" content="Generate UUID v4, v7, or Nil UUIDs online for free. Bulk generate up to 1000 UUIDs at once. No signup, works entirely in your browser." />
+  <meta name="keywords" content="uuid generator, uuid v4 generator, uuid v7, generate uuid online, bulk uuid generator, guid generator" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <link rel="canonical" href="https://snakeconverter.com/uuid-generator" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://snakeconverter.com/uuid-generator" />
+  <meta property="og:title" content="UUID Generator Online (Bulk Generate v4/v7)" />
+  <meta property="og:description" content="Generate UUID v4, v7, or Nil in bulk. Free, no signup, browser-based." />
+  <meta property="og:image" content="https://snakeconverter.com/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="UUID Generator Online | SnakeConverter" />
+  <meta name="twitter:description" content="Bulk generate UUIDs v4/v7/Nil online free. No signup." />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "url": "https://snakeconverter.com/uuid-generator",
+        "name": "UUID Generator Online",
+        "description": "Free online UUID generator supporting v4 (random), v7 (time-ordered), and Nil UUIDs. Generate up to 1000 at once.",
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://snakeconverter.com/" },
+            { "@type": "ListItem", "position": 2, "name": "UUID Generator", "item": "https://snakeconverter.com/uuid-generator" }
+          ]
+        }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "UUID Generator",
+        "url": "https://snakeconverter.com/uuid-generator",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any (Web Browser)",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is the difference between UUID v4 and v7?",
+            "acceptedAnswer": { "@type": "Answer", "text": "UUID v4 is randomly generated with 122 bits of randomness — great for general purpose use. UUID v7 is time-ordered: the first 48 bits encode the current Unix timestamp in milliseconds, making v7 UUIDs sortable by creation time, which is better for database primary keys as it avoids index fragmentation." }
+          },
+          {
+            "@type": "Question",
+            "name": "What is a Nil UUID?",
+            "acceptedAnswer": { "@type": "Answer", "text": "A Nil UUID is 00000000-0000-0000-0000-000000000000 — all zeros. It's used as a placeholder or null value in APIs and databases when you need to represent 'no UUID'." }
+          },
+          {
+            "@type": "Question",
+            "name": "Are the generated UUIDs truly unique?",
+            "acceptedAnswer": { "@type": "Answer", "text": "UUID v4 uses cryptographically random bits (crypto.randomUUID), making collisions astronomically unlikely — you'd need to generate over a quintillion UUIDs before expecting a single duplicate. In practice, they're treated as globally unique." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I generate UUIDs in bulk?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes! Enter any count from 1 to 1000 and click Generate. You can then copy individual UUIDs, copy all at once, or download the full list as a .txt file." }
+          },
+          {
+            "@type": "Question",
+            "name": "What is a UUID used for?",
+            "acceptedAnswer": { "@type": "Answer", "text": "UUIDs (Universally Unique Identifiers) are used as unique primary keys in databases, identifiers for objects in distributed systems, session tokens, file names, and anywhere a collision-resistant unique ID is needed without a central authority." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1033284237916727" crossorigin="anonymous"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,700;0,14..32,900&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" /></noscript>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="css/lp.css" />
+  <script defer src="js/analytics.js"></script>
+  <style>
+    .uuid-list{max-height:320px;overflow-y:auto;font-family:monospace;font-size:.79rem;background:rgba(0,0,0,.25);border:1px solid var(--border-subtle);border-radius:.65rem;padding:8px 0}
+    .uuid-row{display:flex;align-items:center;justify-content:space-between;padding:.3rem 12px;border-bottom:1px solid rgba(255,255,255,.04);gap:8px}
+    .uuid-row:last-child{border-bottom:none}
+    .uuid-val{flex:1;color:var(--text-primary);word-break:break-all}
+    .uuid-copy-btn{font-size:.65rem;padding:.2rem .5rem;background:var(--accent-dim);border:1px solid var(--border);color:var(--accent-light);border-radius:.3rem;cursor:pointer;white-space:nowrap;flex-shrink:0}
+    .uuid-copy-btn:hover{background:rgba(130,80,255,.25)}
+  </style>
+</head>
+<body>
+
+<header class="lp-header">
+  <div class="lp-header-inner">
+    <a href="/" class="lp-logo">
+      <span class="lp-logo-snake">🐍</span>
+      <span>SnakeConverter</span>
+    </a>
+    <nav class="lp-header-nav">
+      <a href="/password-generator">Password Gen</a>
+      <a href="/qr-code-generator">QR Code</a>
+      <a href="/jwt-decoder">JWT Decoder</a>
+      <a href="/">All Tools</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<div class="lp-wrap">
+
+  <section class="lp-hero">
+    <h1 class="lp-h1">UUID <span class="accent">Generator</span></h1>
+    <p class="lp-hero-sub">Generate UUID v4, v7, or Nil identifiers in bulk — copy individually or download as a text file. Instant, free, browser-based.</p>
+    <div class="lp-trust">✓ Free · No signup · Works in browser · 100% private</div>
+  </section>
+
+  <section class="lp-tool-box">
+    <div class="space-y">
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem">
+        <div>
+          <label class="field-label" for="uuidVer">Version</label>
+          <select id="uuidVer" class="input-field">
+            <option value="v4" selected>v4 — Random</option>
+            <option value="v7">v7 — Time-ordered</option>
+            <option value="nil">Nil — All zeros</option>
+          </select>
+        </div>
+        <div>
+          <label class="field-label" for="uuidCount">Count (1–1000)</label>
+          <input type="number" id="uuidCount" class="input-field" value="5" min="1" max="1000">
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="uuidGenerate()">Generate UUIDs</button>
+
+      <div id="uuidResult" style="display:none">
+        <div class="uuid-list" id="uuidList"></div>
+        <div style="display:flex;gap:.5rem;margin-top:.75rem;flex-wrap:wrap">
+          <button class="btn-secondary" onclick="uuidCopyAll()">📋 Copy All</button>
+          <button class="btn-secondary" onclick="uuidDownload()">⬇ Download TXT</button>
+        </div>
+      </div>
+
+      <p id="uuidMsg" style="font-size:.75rem;color:var(--text-muted);text-align:center;min-height:1em"></p>
+    </div>
+  </section>
+
+  <section class="lp-section">
+    <div class="lp-section-badge">Why use this tool</div>
+    <h2 class="lp-section-title">Fast, Reliable UUID Generation</h2>
+    <div class="lp-features">
+      <div class="lp-feature">
+        <div class="lp-feature-ico">🎲</div>
+        <div class="lp-feature-text">
+          <strong>UUID v4 (Random)</strong>
+          <span>Uses crypto.randomUUID() for 122 bits of cryptographic randomness. Ideal for general-purpose identifiers.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">⏱️</div>
+        <div class="lp-feature-text">
+          <strong>UUID v7 (Time-ordered)</strong>
+          <span>Timestamp-prefixed UUIDs that sort chronologically — ideal as database primary keys without index fragmentation.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">🔢</div>
+        <div class="lp-feature-text">
+          <strong>Nil UUID</strong>
+          <span>Generate the all-zeros UUID for use as a null placeholder in APIs and database fields.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">📦</div>
+        <div class="lp-feature-text">
+          <strong>Bulk Generate</strong>
+          <span>Generate up to 1000 unique UUIDs in a single click. Copy all or download as a .txt file.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">📋</div>
+        <div class="lp-feature-text">
+          <strong>One-click Copy</strong>
+          <span>Each UUID has an individual copy button. Copy the entire list with a single "Copy All" action.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">🔒</div>
+        <div class="lp-feature-text">
+          <strong>100% Client-side</strong>
+          <span>UUIDs are generated in your browser. Nothing is sent to servers — private and always available offline.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="lp-divider"></div>
+
+  <section class="lp-section">
+    <div class="lp-section-badge">How it works</div>
+    <h2 class="lp-section-title">Generate UUIDs in 3 Easy Steps</h2>
+    <div class="lp-steps">
+      <div class="lp-step">
+        <div class="lp-step-num">1</div>
+        <div class="lp-step-text">
+          <strong>Choose UUID version and count</strong>
+          <span>Select v4 (random), v7 (time-ordered), or Nil. Enter how many UUIDs you need (1–1000).</span>
+        </div>
+      </div>
+      <div class="lp-step">
+        <div class="lp-step-num">2</div>
+        <div class="lp-step-text">
+          <strong>Click Generate</strong>
+          <span>Your UUIDs appear instantly in a scrollable list. Each entry has an individual "Copy" button.</span>
+        </div>
+      </div>
+      <div class="lp-step">
+        <div class="lp-step-num">3</div>
+        <div class="lp-step-text">
+          <strong>Copy or download the list</strong>
+          <span>Click "Copy All" to copy the full list to clipboard, or "Download TXT" to save as a text file.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="lp-divider"></div>
+
+  <section class="lp-section">
+    <div class="lp-section-badge">FAQ</div>
+    <h2 class="lp-section-title">Frequently Asked Questions</h2>
+    <div class="lp-faq">
+      <details class="lp-faq-item" open>
+        <summary>What is the difference between UUID v4 and v7?</summary>
+        <div class="lp-faq-body">UUID v4 is <strong>randomly generated</strong> with 122 bits of randomness — great for general purpose use. UUID v7 is <strong>time-ordered</strong>: the first 48 bits encode the current Unix timestamp, making v7 UUIDs sortable by creation time. This is better for database primary keys as it avoids index fragmentation.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>What is a Nil UUID?</summary>
+        <div class="lp-faq-body">A Nil UUID is <code>00000000-0000-0000-0000-000000000000</code> — all zeros. It is used as a placeholder or null value in APIs and databases when you need to represent "no UUID" or an uninitialized identifier.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>Are the generated UUIDs truly unique?</summary>
+        <div class="lp-faq-body">UUID v4 uses cryptographically random bits via <strong>crypto.randomUUID()</strong>, making collisions astronomically unlikely. You would need to generate over a quintillion (10<sup>18</sup>) UUIDs before expecting a single duplicate. In practice, they are treated as globally unique.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>Can I generate UUIDs in bulk?</summary>
+        <div class="lp-faq-body">Yes! Enter any count from <strong>1 to 1000</strong> and click Generate. You can then copy individual UUIDs using their inline Copy button, copy all at once with "Copy All", or download the full list as a <code>.txt</code> file.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>What are UUIDs used for?</summary>
+        <div class="lp-faq-body">UUIDs are used as <strong>unique primary keys</strong> in databases, identifiers for objects in distributed systems, session tokens, file names, API resource IDs, and anywhere a collision-resistant unique ID is needed without requiring a central authority to assign it.</div>
+      </details>
+    </div>
+  </section>
+
+  <div class="lp-divider"></div>
+
+  <section class="lp-section">
+    <div class="lp-section-badge">Related tools</div>
+    <h2 class="lp-section-title">More Developer Tools</h2>
+    <div class="lp-related-grid">
+      <a href="/password-generator" class="lp-related-card">
+        <span class="lp-related-ico">🔐</span>
+        <div><div class="lp-related-name">Password Generator</div><div class="lp-related-desc">Strong secure passwords</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/qr-code-generator" class="lp-related-card">
+        <span class="lp-related-ico">📷</span>
+        <div><div class="lp-related-name">QR Code Generator</div><div class="lp-related-desc">Custom QR codes with logo</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/jwt-decoder" class="lp-related-card">
+        <span class="lp-related-ico">🔑</span>
+        <div><div class="lp-related-name">JWT Decoder</div><div class="lp-related-desc">Decode &amp; verify tokens</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/sql-formatter" class="lp-related-card">
+        <span class="lp-related-ico">🗄️</span>
+        <div><div class="lp-related-name">SQL Formatter</div><div class="lp-related-desc">Beautify SQL queries</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/dev#hash" class="lp-related-card">
+        <span class="lp-related-ico">#️⃣</span>
+        <div><div class="lp-related-name">Hash Generator</div><div class="lp-related-desc">MD5, SHA-1, SHA-256</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/dev" class="lp-related-card">
+        <span class="lp-related-ico">🛠️</span>
+        <div><div class="lp-related-name">All Dev Tools</div><div class="lp-related-desc">More developer utilities</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<footer class="lp-footer">
+  <div class="lp-wrap">
+    <div class="lp-footer-links">
+      <a href="/">All Tools</a>
+      <a href="/pdf">PDF Tools</a>
+      <a href="/dev">Developer Tools</a>
+      <a href="/tools">Utility Tools</a>
+      <a href="/units">Unit Converters</a>
+    </div>
+    <p>© 2026 SnakeConverter · Free, no signup, works in browser</p>
+  </div>
+</footer>
+
+<script>
+window._uuidList = [];
+
+function uuidV4() {
+  return crypto.randomUUID();
+}
+
+function uuidV7() {
+  var ts = Date.now();
+  var tsHex = ts.toString(16).padStart(12, '0');
+  var rand = new Uint8Array(10);
+  crypto.getRandomValues(rand);
+  var hexRand = Array.from(rand).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
+  var p1 = tsHex.slice(0, 8);
+  var p2 = tsHex.slice(8, 12);
+  var p3 = '7' + hexRand.slice(0, 3);
+  var p4 = ((parseInt(hexRand.slice(3, 4), 16) & 0x3) | 0x8).toString(16) + hexRand.slice(4, 7);
+  var p5 = hexRand.slice(7, 19).padStart(12, '0');
+  return p1 + '-' + p2 + '-' + p3 + '-' + p4 + '-' + p5;
+}
+
+function uuidNil() {
+  return '00000000-0000-0000-0000-000000000000';
+}
+
+function uuidGenOne(ver) {
+  if (ver === 'v4') return uuidV4();
+  if (ver === 'v7') return uuidV7();
+  return uuidNil();
+}
+
+function uuidGenerate() {
+  var ver   = document.getElementById('uuidVer').value;
+  var count = Math.min(1000, Math.max(1, parseInt(document.getElementById('uuidCount').value) || 5));
+  var list  = [];
+  for (var i = 0; i < count; i++) list.push(uuidGenOne(ver));
+  window._uuidList = list;
+
+  var html = list.map(function(u, idx) {
+    return '<div class="uuid-row"><span class="uuid-val">' + u + '</span><button class="uuid-copy-btn" onclick="uuidCopyOne(' + idx + ',this)">Copy</button></div>';
+  }).join('');
+  document.getElementById('uuidList').innerHTML = html;
+  document.getElementById('uuidResult').style.display = '';
+
+  var msg = document.getElementById('uuidMsg');
+  msg.textContent = '✓ ' + count + ' UUID' + (count > 1 ? 's' : '') + ' generated';
+  msg.style.color = 'var(--green)';
+}
+
+function uuidCopyOne(idx, btn) {
+  navigator.clipboard.writeText(window._uuidList[idx]).then(function() {
+    var orig = btn.textContent;
+    btn.textContent = '✓';
+    setTimeout(function(){ btn.textContent = orig; }, 1200);
+  });
+}
+
+function uuidCopyAll() {
+  navigator.clipboard.writeText(window._uuidList.join('\n')).then(function() {
+    var msg = document.getElementById('uuidMsg');
+    msg.textContent = '✓ All UUIDs copied to clipboard!';
+    msg.style.color = 'var(--green)';
+    setTimeout(function(){ msg.textContent = ''; }, 2000);
+  });
+}
+
+function uuidDownload() {
+  var blob = new Blob([window._uuidList.join('\n')], { type: 'text/plain' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'uuids.txt';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+</script>
+</body>
+</html>

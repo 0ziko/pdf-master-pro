@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Merge PDF Files Online Free (Combine PDFs) | SnakeConverter</title>
+  <meta name="description" content="Merge multiple PDF files online for free. Drag, reorder, and combine PDFs into one file instantly — no upload, no signup, works in your browser." />
+  <meta name="keywords" content="merge pdf, combine pdf files, pdf merger, join pdf online, merge pdf free, combine pdf online" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <link rel="canonical" href="https://snakeconverter.com/merge-pdf" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://snakeconverter.com/merge-pdf" />
+  <meta property="og:title" content="Merge PDF Files Online Free (Combine PDFs)" />
+  <meta property="og:description" content="Combine multiple PDFs into one file — reorder pages, merge instantly. Free, no signup, browser-based." />
+  <meta property="og:image" content="https://snakeconverter.com/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Merge PDF Online | SnakeConverter" />
+  <meta name="twitter:description" content="Combine PDF files free. No upload, works in browser." />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "url": "https://snakeconverter.com/merge-pdf",
+        "name": "Merge PDF Files Online Free",
+        "description": "Free online PDF merger. Combine multiple PDF files into one, reorder them, and download the merged result — all in your browser.",
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://snakeconverter.com/" },
+            { "@type": "ListItem", "position": 2, "name": "PDF Tools", "item": "https://snakeconverter.com/pdf" },
+            { "@type": "ListItem", "position": 3, "name": "Merge PDF", "item": "https://snakeconverter.com/merge-pdf" }
+          ]
+        }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "PDF Merger",
+        "url": "https://snakeconverter.com/merge-pdf",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Any (Web Browser)",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "How many PDF files can I merge at once?",
+            "acceptedAnswer": { "@type": "Answer", "text": "You can merge as many PDFs as your browser's memory allows. For typical use cases, merging 2–20 files works smoothly. Very large PDFs (100+ pages each) may require a few seconds to process." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I reorder the PDF files before merging?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes! Each file in the list has Move Up (↑) and Move Down (↓) buttons to reorder them. Files are merged in the order shown in the list from top to bottom." }
+          },
+          {
+            "@type": "Question",
+            "name": "Is my PDF uploaded to any server?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. All PDF processing uses the pdf-lib JavaScript library running entirely in your browser. Your files never leave your device and are never uploaded to our servers." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I merge password-protected PDFs?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Password-protected PDFs cannot be merged without the password. If you encounter an error for a protected PDF, first decrypt it using a PDF decryption tool, then add the decrypted version to this merger." }
+          },
+          {
+            "@type": "Question",
+            "name": "Will merging preserve PDF quality?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. This tool copies all pages from the source PDFs to the output document without re-encoding or compressing the content. The merged PDF preserves the original quality, fonts, and embedded images." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1033284237916727" crossorigin="anonymous"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,700;0,14..32,900&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" /></noscript>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+  <link rel="stylesheet" href="css/lp.css" />
+  <script defer src="js/analytics.js"></script>
+  <style>
+    .merge-file-list{display:flex;flex-direction:column;gap:.4rem}
+    .merge-file-row{display:flex;align-items:center;gap:.5rem;background:var(--surface);border:1px solid var(--border-subtle);border-radius:.65rem;padding:.5rem .75rem}
+    .merge-file-icon{font-size:1.1rem;flex-shrink:0}
+    .merge-file-name{flex:1;font-size:.8rem;color:var(--text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .merge-file-size{font-size:.7rem;color:var(--text-dim);flex-shrink:0}
+    .merge-file-btns{display:flex;gap:.25rem;flex-shrink:0}
+    .merge-btn-sm{font-size:.65rem;padding:.22rem .5rem;background:var(--surface-2);border:1px solid var(--border-subtle);color:var(--text-muted);border-radius:.3rem;cursor:pointer;transition:all .12s}
+    .merge-btn-sm:hover{border-color:var(--border);color:var(--text-primary)}
+    .merge-btn-remove{color:var(--red);border-color:rgba(248,113,113,.2)}
+    .merge-btn-remove:hover{background:rgba(248,113,113,.08);border-color:var(--red)}
+  </style>
+</head>
+<body>
+
+<header class="lp-header">
+  <div class="lp-header-inner">
+    <a href="/" class="lp-logo">
+      <span class="lp-logo-snake">🐍</span>
+      <span>SnakeConverter</span>
+    </a>
+    <nav class="lp-header-nav">
+      <a href="/compress-pdf">Compress PDF</a>
+      <a href="/image-to-pdf">Image→PDF</a>
+      <a href="/pdf">PDF Tools</a>
+      <a href="/">All Tools</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<div class="lp-wrap">
+
+  <section class="lp-hero">
+    <h1 class="lp-h1">Merge <span class="accent">PDF Files</span></h1>
+    <p class="lp-hero-sub">Combine multiple PDF files into one — reorder them, then download the merged result instantly. No upload required.</p>
+    <div class="lp-trust">✓ Free · No signup · Works in browser · 100% private</div>
+  </section>
+
+  <section class="lp-tool-box">
+    <div class="space-y">
+
+      <div id="mergeDrop" class="dropzone"
+          onclick="document.getElementById('mergeInput').click()"
+          ondragover="event.preventDefault();this.classList.add('drag-over')"
+          ondragleave="this.classList.remove('drag-over')"
+          ondrop="event.preventDefault();this.classList.remove('drag-over');mergeAddFiles(event.dataTransfer.files)">
+        <input type="file" id="mergeInput" accept=".pdf" multiple class="hidden" onchange="mergeAddFiles(this.files);this.value=''">
+        <div class="drop-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <p class="drop-title">Add PDF files to merge</p>
+        <p class="drop-sub">Drag multiple PDFs here or click to browse · Files processed locally</p>
+      </div>
+
+      <div id="mergeListWrap" style="display:none">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem">
+          <label class="field-label" style="margin:0">Files to merge (<span id="mergeCount">0</span>)</label>
+          <button class="btn-secondary" style="font-size:.72rem;padding:.3rem .65rem" onclick="document.getElementById('mergeInput').click()">+ Add more</button>
+        </div>
+        <div class="merge-file-list" id="mergeFileList"></div>
+      </div>
+
+      <div id="mergeProgress" style="display:none">
+        <div style="font-size:.78rem;color:var(--text-muted);margin-bottom:.3rem" id="mergePrgLabel">Merging…</div>
+        <div class="progress-track"><div class="progress-bar" id="mergePrgBar" style="width:0%"></div></div>
+      </div>
+
+      <button class="btn-primary" id="mergeRunBtn" onclick="mergeRun()" disabled>📂 Merge PDFs &amp; Download</button>
+
+      <p id="mergeMsg" style="font-size:.75rem;color:var(--text-muted);text-align:center;min-height:1em"></p>
+    </div>
+  </section>
+
+  <section class="lp-section">
+    <div class="lp-section-badge">Why use this tool</div>
+    <h2 class="lp-section-title">Fast, Private PDF Merger</h2>
+    <div class="lp-features">
+      <div class="lp-feature">
+        <div class="lp-feature-ico">📂</div>
+        <div class="lp-feature-text">
+          <strong>Unlimited Files</strong>
+          <span>Add as many PDFs as you need. No artificial limits on the number of files you can combine.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">↕️</div>
+        <div class="lp-feature-text">
+          <strong>Reorder Before Merging</strong>
+          <span>Move files up or down in the list to control the exact order of pages in the merged PDF.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">🎯</div>
+        <div class="lp-feature-text">
+          <strong>Lossless Quality</strong>
+          <span>Pages are copied without re-encoding — original quality, fonts, and images are fully preserved.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">🔒</div>
+        <div class="lp-feature-text">
+          <strong>100% Private</strong>
+          <span>Processing happens in your browser using pdf-lib. Your PDFs never leave your device.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">⚡</div>
+        <div class="lp-feature-text">
+          <strong>Instant Download</strong>
+          <span>The merged PDF downloads automatically as soon as processing is complete — no waiting.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">🆓</div>
+        <div class="lp-feature-text">
+          <strong>Completely Free</strong>
+          <span>No subscription, no signup, no watermarks. Merge PDFs as many times as you need.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="lp-divider"></div>
+
+  <section class="lp-section">
+    <div class="lp-section-badge">How it works</div>
+    <h2 class="lp-section-title">Merge PDFs in 3 Simple Steps</h2>
+    <div class="lp-steps">
+      <div class="lp-step">
+        <div class="lp-step-num">1</div>
+        <div class="lp-step-text">
+          <strong>Add your PDF files</strong>
+          <span>Drag and drop multiple PDFs into the drop zone, or click to browse and select multiple files at once.</span>
+        </div>
+      </div>
+      <div class="lp-step">
+        <div class="lp-step-num">2</div>
+        <div class="lp-step-text">
+          <strong>Reorder the files</strong>
+          <span>Use the ↑ and ↓ buttons to arrange the PDFs in the desired order. Add more files using the "+ Add more" button.</span>
+        </div>
+      </div>
+      <div class="lp-step">
+        <div class="lp-step-num">3</div>
+        <div class="lp-step-text">
+          <strong>Merge &amp; download</strong>
+          <span>Click "Merge PDFs &amp; Download". The combined PDF downloads automatically with all pages in order.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="lp-divider"></div>
+
+  <section class="lp-section">
+    <div class="lp-section-badge">FAQ</div>
+    <h2 class="lp-section-title">Frequently Asked Questions</h2>
+    <div class="lp-faq">
+      <details class="lp-faq-item" open>
+        <summary>How many PDF files can I merge at once?</summary>
+        <div class="lp-faq-body">You can merge as many PDFs as your browser's memory allows. For typical use, merging <strong>2–20 files</strong> works smoothly. Very large PDFs (100+ pages each) may require a few seconds to process. There is no hard limit on the number of files.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>Can I reorder the PDF files before merging?</summary>
+        <div class="lp-faq-body">Yes! Each file in the list has <strong>Move Up (↑) and Move Down (↓)</strong> buttons to change the order. Files are merged top-to-bottom in the order shown in the list. You can also remove individual files using the ✕ Remove button.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>Is my PDF uploaded to any server?</summary>
+        <div class="lp-faq-body">No. All PDF processing uses the <strong>pdf-lib JavaScript library</strong> running entirely in your browser. Your files never leave your device and are never uploaded to our servers — completely private processing.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>Can I merge password-protected PDFs?</summary>
+        <div class="lp-faq-body">Password-protected PDFs cannot be merged without being decrypted first. If you encounter an error for a protected PDF, use a <a href="/pdf#encrypt" style="color:var(--accent-light)">PDF Decryption tool</a> to remove the password first, then add the decrypted version to the merger.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>Will merging preserve the original PDF quality?</summary>
+        <div class="lp-faq-body">Yes. This tool copies all pages from source PDFs to the output document <strong>without re-encoding</strong> or compressing the content. The merged PDF preserves the original quality, embedded fonts, vector graphics, and images at full fidelity.</div>
+      </details>
+    </div>
+  </section>
+
+  <div class="lp-divider"></div>
+
+  <section class="lp-section">
+    <div class="lp-section-badge">Related tools</div>
+    <h2 class="lp-section-title">More PDF Tools</h2>
+    <div class="lp-related-grid">
+      <a href="/compress-pdf" class="lp-related-card">
+        <span class="lp-related-ico">🗜️</span>
+        <div><div class="lp-related-name">Compress PDF</div><div class="lp-related-desc">Reduce PDF file size</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/image-to-pdf" class="lp-related-card">
+        <span class="lp-related-ico">🖼️</span>
+        <div><div class="lp-related-name">Image to PDF</div><div class="lp-related-desc">Convert images to PDF</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/pdf#split" class="lp-related-card">
+        <span class="lp-related-ico">✂️</span>
+        <div><div class="lp-related-name">Split PDF</div><div class="lp-related-desc">Extract pages to ZIP</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/pdf#encrypt" class="lp-related-card">
+        <span class="lp-related-ico">🔒</span>
+        <div><div class="lp-related-name">Encrypt PDF</div><div class="lp-related-desc">Password protect your PDF</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/pdf#screenshot" class="lp-related-card">
+        <span class="lp-related-ico">📸</span>
+        <div><div class="lp-related-name">Screenshot to PDF</div><div class="lp-related-desc">Capture pages as PDF</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/password-generator" class="lp-related-card">
+        <span class="lp-related-ico">🔐</span>
+        <div><div class="lp-related-name">Password Generator</div><div class="lp-related-desc">Strong secure passwords</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<footer class="lp-footer">
+  <div class="lp-wrap">
+    <div class="lp-footer-links">
+      <a href="/">All Tools</a>
+      <a href="/pdf">PDF Tools</a>
+      <a href="/image">Image Tools</a>
+      <a href="/dev">Developer Tools</a>
+      <a href="/tools">Utility Tools</a>
+    </div>
+    <p>© 2026 SnakeConverter · Free, no signup, works in browser</p>
+  </div>
+</footer>
+
+<script>
+var mergeFiles = [];
+
+function fmtSize(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024*1024) return (bytes/1024).toFixed(1) + ' KB';
+  return (bytes/1024/1024).toFixed(2) + ' MB';
+}
+
+function mergeRender() {
+  var list = document.getElementById('mergeFileList');
+  var wrap = document.getElementById('mergeListWrap');
+  document.getElementById('mergeCount').textContent = mergeFiles.length;
+  document.getElementById('mergeRunBtn').disabled = mergeFiles.length < 2;
+
+  if (mergeFiles.length === 0) {
+    wrap.style.display = 'none';
+    return;
+  }
+  wrap.style.display = '';
+  list.innerHTML = mergeFiles.map(function(f, i) {
+    return '<div class="merge-file-row">' +
+      '<span class="merge-file-icon">📄</span>' +
+      '<span class="merge-file-name">' + f.name + '</span>' +
+      '<span class="merge-file-size">' + fmtSize(f.file.size) + '</span>' +
+      '<div class="merge-file-btns">' +
+        (i > 0 ? '<button class="merge-btn-sm" onclick="mergeMove(' + i + ',-1)">↑</button>' : '') +
+        (i < mergeFiles.length-1 ? '<button class="merge-btn-sm" onclick="mergeMove(' + i + ',1)">↓</button>' : '') +
+        '<button class="merge-btn-sm merge-btn-remove" onclick="mergeRemove(' + i + ')">✕</button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function mergeAddFiles(files) {
+  for (var i = 0; i < files.length; i++) {
+    if (files[i].type === 'application/pdf' || files[i].name.toLowerCase().endsWith('.pdf')) {
+      mergeFiles.push({ file: files[i], name: files[i].name });
+    }
+  }
+  mergeRender();
+  document.getElementById('mergeMsg').textContent = '';
+}
+
+function mergeRemove(idx) {
+  mergeFiles.splice(idx, 1);
+  mergeRender();
+}
+
+function mergeMove(idx, dir) {
+  var newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= mergeFiles.length) return;
+  var tmp = mergeFiles[idx];
+  mergeFiles[idx] = mergeFiles[newIdx];
+  mergeFiles[newIdx] = tmp;
+  mergeRender();
+}
+
+async function mergeRun() {
+  if (mergeFiles.length < 2) { alert('Please add at least 2 PDF files.'); return; }
+  var btn   = document.getElementById('mergeRunBtn');
+  var msg   = document.getElementById('mergeMsg');
+  var prog  = document.getElementById('mergeProgress');
+  var bar   = document.getElementById('mergePrgBar');
+  var lbl   = document.getElementById('mergePrgLabel');
+  btn.disabled = true;
+  prog.style.display = '';
+  msg.textContent = '';
+
+  try {
+    var PDFDocument = window.PDFLib.PDFDocument;
+    var merged = await PDFDocument.create();
+
+    for (var i = 0; i < mergeFiles.length; i++) {
+      lbl.textContent = 'Merging file ' + (i+1) + ' of ' + mergeFiles.length + ': ' + mergeFiles[i].name;
+      bar.style.width = Math.round(((i) / mergeFiles.length) * 90) + '%';
+      try {
+        var bytes = await mergeFiles[i].file.arrayBuffer();
+        var srcDoc = await PDFDocument.load(bytes, { ignoreEncryption: false });
+        var pages  = await merged.copyPages(srcDoc, srcDoc.getPageIndices());
+        pages.forEach(function(p){ merged.addPage(p); });
+      } catch(e) {
+        if (e.message && e.message.includes('encrypt')) {
+          msg.textContent = '✗ "' + mergeFiles[i].name + '" is password-protected and could not be merged.';
+          msg.style.color = 'var(--red)';
+          prog.style.display = 'none';
+          btn.disabled = false;
+          return;
+        }
+        throw e;
+      }
+    }
+
+    lbl.textContent = 'Saving merged PDF…';
+    bar.style.width = '95%';
+    var outBytes = await merged.save();
+    bar.style.width = '100%';
+    prog.style.display = 'none';
+
+    var blob = new Blob([outBytes], { type: 'application/pdf' });
+    var url  = URL.createObjectURL(blob);
+    var a    = document.createElement('a');
+    a.href = url; a.download = 'merged.pdf'; a.click();
+    URL.revokeObjectURL(url);
+
+    msg.textContent = '✓ Merged ' + mergeFiles.length + ' PDFs successfully! File downloaded.';
+    msg.style.color = 'var(--green)';
+  } catch(e) {
+    prog.style.display = 'none';
+    msg.textContent = '✗ Error: ' + e.message;
+    msg.style.color = 'var(--red)';
+  }
+  btn.disabled = false;
+}
+</script>
+</body>
+</html>

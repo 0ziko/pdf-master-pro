@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JWT Decoder &amp; Validator Online (Decode Token Instantly) | SnakeConverter</title>
+  <meta name="description" content="Decode, validate, and sign JWT tokens online for free. Inspect headers and payloads, verify HMAC signatures, and encode new tokens instantly in your browser." />
+  <meta name="keywords" content="jwt decoder, jwt validator, decode jwt token, jwt debugger, jwt parser, json web token decoder, jwt verify" />
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+  <link rel="canonical" href="https://snakeconverter.com/jwt-decoder" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://snakeconverter.com/jwt-decoder" />
+  <meta property="og:title" content="JWT Decoder &amp; Validator Online" />
+  <meta property="og:description" content="Decode JWT header and payload, verify HMAC signatures, and sign new tokens. Free, browser-based, private." />
+  <meta property="og:image" content="https://snakeconverter.com/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="JWT Decoder Online | SnakeConverter" />
+  <meta name="twitter:description" content="Decode, validate, and sign JWT tokens instantly. Free, no signup." />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebPage",
+        "url": "https://snakeconverter.com/jwt-decoder",
+        "name": "JWT Decoder & Validator Online",
+        "description": "Free online JWT decoder and validator. Decode headers/payloads, verify HMAC-SHA256 signatures, and encode new JWT tokens.",
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://snakeconverter.com/" },
+            { "@type": "ListItem", "position": 2, "name": "JWT Decoder", "item": "https://snakeconverter.com/jwt-decoder" }
+          ]
+        }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "JWT Decoder & Validator",
+        "url": "https://snakeconverter.com/jwt-decoder",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Any (Web Browser)",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is decoding a JWT safe to do online?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes, for decoding. JWT headers and payloads are Base64-encoded but not encrypted — anyone with the token can decode them. This tool decodes entirely in your browser without sending the token to any server. Never share tokens containing sensitive data in untrusted tools." }
+          },
+          {
+            "@type": "Question",
+            "name": "What hashing algorithms does the validator support?",
+            "acceptedAnswer": { "@type": "Answer", "text": "The validator currently supports HMAC-SHA256 (HS256) signature verification using the browser's built-in SubtleCrypto API. RS256 and other asymmetric algorithms require public key infrastructure and are not supported in this browser-only tool." }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the difference between JWT decoding and validation?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Decoding reads the header and payload content — anyone can do this without the secret key. Validation verifies the signature using the secret key to confirm the token was not tampered with. Always validate tokens on your server before trusting their claims." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I sign (encode) a JWT with this tool?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes! The Encode tab lets you enter a JSON payload and a secret key, then generate a valid HS256-signed JWT token. This is useful for testing APIs or understanding how JWT encoding works." }
+          },
+          {
+            "@type": "Question",
+            "name": "How do I check if a JWT has expired?",
+            "acceptedAnswer": { "@type": "Answer", "text": "In the Decode tab, paste your JWT and the tool will automatically check the 'exp' (expiration) claim. It displays whether the token is expired, valid, or has no expiry set, along with the exact expiration date and time." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1033284237916727" crossorigin="anonymous"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,700;0,14..32,900&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" /></noscript>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="css/lp.css" />
+  <script defer src="js/analytics.js"></script>
+  <style>
+    .jwt-tabs{display:flex;gap:.4rem;border-bottom:1px solid var(--border-subtle);margin-bottom:1rem}
+    .jwt-tab{padding:.5rem 1rem;font-size:.78rem;font-weight:700;cursor:pointer;color:var(--text-muted);border-bottom:2px solid transparent;transition:all .15s;background:none;border-top:none;border-left:none;border-right:none}
+    .jwt-tab.active{color:var(--accent-light);border-bottom-color:var(--accent)}
+    .jwt-panel{display:none}
+    .jwt-panel.active{display:block}
+    .jwt-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
+    @media(max-width:600px){.jwt-grid{grid-template-columns:1fr}}
+    .json-box{background:rgba(0,0,0,.3);border:1px solid var(--border-subtle);border-radius:.6rem;padding:10px 12px;font-family:monospace;font-size:.75rem;white-space:pre-wrap;word-break:break-all;min-height:80px;color:var(--text-primary)}
+    .jwt-status{display:inline-flex;align-items:center;gap:.4rem;font-size:.75rem;font-weight:700;padding:.3rem .75rem;border-radius:100px;margin-top:.5rem}
+    .jwt-status.valid{background:rgba(74,222,128,.1);color:var(--green);border:1px solid rgba(74,222,128,.25)}
+    .jwt-status.expired{background:rgba(248,113,113,.1);color:var(--red);border:1px solid rgba(248,113,113,.25)}
+    .jwt-status.noexp{background:var(--accent-dim);color:var(--accent-light);border:1px solid var(--border)}
+    .jwt-encoded{font-family:monospace;font-size:.75rem;word-break:break-all;line-height:1.6}
+    .jwt-encoded .jwt-h{color:#f87171}
+    .jwt-encoded .jwt-p{color:#c084fc}
+    .jwt-encoded .jwt-s{color:#60a5fa}
+  </style>
+</head>
+<body>
+
+<header class="lp-header">
+  <div class="lp-header-inner">
+    <a href="/" class="lp-logo">
+      <span class="lp-logo-snake">🐍</span>
+      <span>SnakeConverter</span>
+    </a>
+    <nav class="lp-header-nav">
+      <a href="/sql-formatter">SQL Formatter</a>
+      <a href="/uuid-generator">UUID Gen</a>
+      <a href="/password-generator">Password Gen</a>
+      <a href="/">All Tools</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<div class="lp-wrap">
+
+  <section class="lp-hero">
+    <h1 class="lp-h1">JWT Decoder <span class="accent">&amp; Validator</span></h1>
+    <p class="lp-hero-sub">Decode JWT headers and payloads, verify HMAC signatures, and sign new tokens — all in your browser without sending data anywhere.</p>
+    <div class="lp-trust">✓ Free · No signup · Works in browser · 100% private</div>
+  </section>
+
+  <section class="lp-tool-box">
+    <div class="jwt-tabs">
+      <button class="jwt-tab active" onclick="jwtTab('decode',this)">🔍 Decode</button>
+      <button class="jwt-tab" onclick="jwtTab('validate',this)">✔️ Validate</button>
+      <button class="jwt-tab" onclick="jwtTab('encode',this)">✏️ Encode</button>
+    </div>
+
+    <!-- DECODE -->
+    <div class="jwt-panel active" id="jwt-panel-decode">
+      <div class="space-y">
+        <div>
+          <label class="field-label" for="jwtDecIn">JWT Token</label>
+          <textarea id="jwtDecIn" class="input-field" rows="4" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.signature"
+            oninput="jwtDecode()" style="font-family:monospace;font-size:.78rem;resize:vertical;word-break:break-all"></textarea>
+        </div>
+        <div class="jwt-grid">
+          <div>
+            <label class="field-label">Header</label>
+            <div class="json-box" id="jwtDecHeader">—</div>
+          </div>
+          <div>
+            <label class="field-label">Payload</label>
+            <div class="json-box" id="jwtDecPayload">—</div>
+          </div>
+        </div>
+        <div id="jwtDecStatus"></div>
+      </div>
+    </div>
+
+    <!-- VALIDATE -->
+    <div class="jwt-panel" id="jwt-panel-validate">
+      <div class="space-y">
+        <div>
+          <label class="field-label" for="jwtValIn">JWT Token</label>
+          <textarea id="jwtValIn" class="input-field" rows="4" placeholder="Paste your JWT token here…" style="font-family:monospace;font-size:.78rem;resize:vertical"></textarea>
+        </div>
+        <div>
+          <label class="field-label" for="jwtValSecret">Secret Key</label>
+          <input type="text" id="jwtValSecret" class="input-field" placeholder="your-secret-key" />
+        </div>
+        <button class="btn-primary" onclick="jwtValidate()">Verify Signature</button>
+        <div id="jwtValResult"></div>
+      </div>
+    </div>
+
+    <!-- ENCODE -->
+    <div class="jwt-panel" id="jwt-panel-encode">
+      <div class="space-y">
+        <div>
+          <label class="field-label" for="jwtEncPayload">Payload (JSON)</label>
+          <textarea id="jwtEncPayload" class="input-field" rows="5" style="font-family:monospace;font-size:.78rem;resize:vertical">{"sub":"1234567890","name":"John Doe","iat":1516239022}</textarea>
+        </div>
+        <div>
+          <label class="field-label" for="jwtEncSecret">Secret Key</label>
+          <input type="text" id="jwtEncSecret" class="input-field" value="my-secret" />
+        </div>
+        <button class="btn-primary" onclick="jwtEncode()">Sign JWT (HS256)</button>
+        <div id="jwtEncResult" style="display:none">
+          <label class="field-label">Signed Token</label>
+          <div class="result-box jwt-encoded" id="jwtEncOut"></div>
+          <div style="display:flex;gap:.5rem;margin-top:.6rem">
+            <button class="btn-secondary" onclick="jwtEncCopy()">Copy Token</button>
+          </div>
+        </div>
+        <p id="jwtEncMsg" style="font-size:.75rem;text-align:center;min-height:1em"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="lp-section">
+    <div class="lp-section-badge">Why use this tool</div>
+    <h2 class="lp-section-title">Complete JWT Toolkit in Your Browser</h2>
+    <div class="lp-features">
+      <div class="lp-feature">
+        <div class="lp-feature-ico">🔍</div>
+        <div class="lp-feature-text">
+          <strong>Instant Decoding</strong>
+          <span>Paste a JWT and instantly see the decoded header and payload — auto-decodes as you type.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">⏰</div>
+        <div class="lp-feature-text">
+          <strong>Expiry Detection</strong>
+          <span>Automatically checks the exp claim and shows whether the token is valid, expired, or has no expiry.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">✔️</div>
+        <div class="lp-feature-text">
+          <strong>Signature Validation</strong>
+          <span>Verify HS256 HMAC signatures using the browser's SubtleCrypto API — no external library needed.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">✏️</div>
+        <div class="lp-feature-text">
+          <strong>JWT Signing</strong>
+          <span>Create signed HS256 JWT tokens from a JSON payload and secret. Color-coded parts for clarity.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">🔒</div>
+        <div class="lp-feature-text">
+          <strong>100% Private</strong>
+          <span>Your tokens and secrets never leave the browser. All operations use built-in Web Crypto APIs.</span>
+        </div>
+      </div>
+      <div class="lp-feature">
+        <div class="lp-feature-ico">🆓</div>
+        <div class="lp-feature-text">
+          <strong>Free, No Login</strong>
+          <span>No account required. Use all three tabs — decode, validate, and encode — completely free.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="lp-divider"></div>
+
+  <section class="lp-section">
+    <div class="lp-section-badge">How it works</div>
+    <h2 class="lp-section-title">Decode or Validate a JWT in 3 Steps</h2>
+    <div class="lp-steps">
+      <div class="lp-step">
+        <div class="lp-step-num">1</div>
+        <div class="lp-step-text">
+          <strong>Choose a tab: Decode, Validate, or Encode</strong>
+          <span>Select the operation you need from the tab bar at the top of the tool.</span>
+        </div>
+      </div>
+      <div class="lp-step">
+        <div class="lp-step-num">2</div>
+        <div class="lp-step-text">
+          <strong>Paste your JWT token (and secret if validating)</strong>
+          <span>For decoding, just paste the token. For validation, also enter the secret key. For encoding, paste a JSON payload.</span>
+        </div>
+      </div>
+      <div class="lp-step">
+        <div class="lp-step-num">3</div>
+        <div class="lp-step-text">
+          <strong>Review the result</strong>
+          <span>Decoded view shows header + payload + expiry status. Validate shows VALID or INVALID. Encode shows a color-coded signed token.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="lp-divider"></div>
+
+  <section class="lp-section">
+    <div class="lp-section-badge">FAQ</div>
+    <h2 class="lp-section-title">Frequently Asked Questions</h2>
+    <div class="lp-faq">
+      <details class="lp-faq-item" open>
+        <summary>Is decoding a JWT safe to do online?</summary>
+        <div class="lp-faq-body">Yes, for decoding. JWT headers and payloads are <strong>Base64-encoded but not encrypted</strong> — anyone with the token can decode them. This tool decodes entirely in your browser without sending the token to any server. Avoid pasting tokens that contain sensitive user data in public environments.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>What hashing algorithms does the validator support?</summary>
+        <div class="lp-faq-body">The validator currently supports <strong>HMAC-SHA256 (HS256)</strong> signature verification using the browser's built-in SubtleCrypto API. RS256 and other asymmetric algorithms require public key infrastructure and are not supported in this browser-only tool.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>What is the difference between decoding and validating a JWT?</summary>
+        <div class="lp-faq-body"><strong>Decoding</strong> reads the header and payload content — anyone can do this without the secret key. <strong>Validation</strong> verifies the signature using the secret key to confirm the token was not tampered with. Always validate tokens on your server before trusting their claims.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>Can I sign (encode) a JWT with this tool?</summary>
+        <div class="lp-faq-body">Yes! The <strong>Encode tab</strong> lets you enter a JSON payload and a secret key, then generates a valid HS256-signed JWT token. The result is color-coded: red = header, purple = payload, blue = signature. Useful for testing APIs and understanding JWT structure.</div>
+      </details>
+      <details class="lp-faq-item">
+        <summary>How do I check if a JWT has expired?</summary>
+        <div class="lp-faq-body">In the <strong>Decode tab</strong>, paste your JWT and the tool automatically checks the <code>exp</code> (expiration) claim. It displays whether the token is expired, still valid, or has no expiry set, along with the exact expiration date and time converted from Unix timestamp.</div>
+      </details>
+    </div>
+  </section>
+
+  <div class="lp-divider"></div>
+
+  <section class="lp-section">
+    <div class="lp-section-badge">Related tools</div>
+    <h2 class="lp-section-title">More Developer Tools</h2>
+    <div class="lp-related-grid">
+      <a href="/sql-formatter" class="lp-related-card">
+        <span class="lp-related-ico">🗄️</span>
+        <div><div class="lp-related-name">SQL Formatter</div><div class="lp-related-desc">Beautify SQL queries</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/uuid-generator" class="lp-related-card">
+        <span class="lp-related-ico">🆔</span>
+        <div><div class="lp-related-name">UUID Generator</div><div class="lp-related-desc">Generate v4 &amp; v7 UUIDs</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/password-generator" class="lp-related-card">
+        <span class="lp-related-ico">🔐</span>
+        <div><div class="lp-related-name">Password Generator</div><div class="lp-related-desc">Strong secure passwords</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/dev#hash" class="lp-related-card">
+        <span class="lp-related-ico">#️⃣</span>
+        <div><div class="lp-related-name">Hash Generator</div><div class="lp-related-desc">MD5, SHA-1, SHA-256</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/dev#url" class="lp-related-card">
+        <span class="lp-related-ico">🔗</span>
+        <div><div class="lp-related-name">URL Encoder</div><div class="lp-related-desc">Encode &amp; decode URLs</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+      <a href="/dev" class="lp-related-card">
+        <span class="lp-related-ico">🛠️</span>
+        <div><div class="lp-related-name">All Dev Tools</div><div class="lp-related-desc">More developer utilities</div></div>
+        <span class="lp-related-arr">›</span>
+      </a>
+    </div>
+  </section>
+
+</div>
+</main>
+
+<footer class="lp-footer">
+  <div class="lp-wrap">
+    <div class="lp-footer-links">
+      <a href="/">All Tools</a>
+      <a href="/pdf">PDF Tools</a>
+      <a href="/dev">Developer Tools</a>
+      <a href="/tools">Utility Tools</a>
+      <a href="/units">Unit Converters</a>
+    </div>
+    <p>© 2026 SnakeConverter · Free, no signup, works in browser</p>
+  </div>
+</footer>
+
+<script>
+function jwtTab(name, btn) {
+  document.querySelectorAll('.jwt-tab').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.jwt-panel').forEach(function(p){ p.classList.remove('active'); });
+  btn.classList.add('active');
+  document.getElementById('jwt-panel-' + name).classList.add('active');
+}
+
+function b64urlDecode(s) {
+  s = s.replace(/-/g, '+').replace(/_/g, '/');
+  while (s.length % 4) s += '=';
+  return atob(s);
+}
+
+function jwtDecode() {
+  var raw = document.getElementById('jwtDecIn').value.trim();
+  var headerEl  = document.getElementById('jwtDecHeader');
+  var payloadEl = document.getElementById('jwtDecPayload');
+  var statusEl  = document.getElementById('jwtDecStatus');
+  headerEl.textContent = '—'; payloadEl.textContent = '—'; statusEl.innerHTML = '';
+  if (!raw) return;
+  var parts = raw.split('.');
+  if (parts.length < 2) { headerEl.textContent = 'Invalid JWT format'; return; }
+  try {
+    var header  = JSON.parse(b64urlDecode(parts[0]));
+    headerEl.textContent = JSON.stringify(header, null, 2);
+  } catch(e) { headerEl.textContent = 'Error decoding header'; }
+  try {
+    var payload = JSON.parse(b64urlDecode(parts[1]));
+    payloadEl.textContent = JSON.stringify(payload, null, 2);
+    if (payload.exp) {
+      var expMs = payload.exp * 1000;
+      var now   = Date.now();
+      var expDate = new Date(expMs).toLocaleString();
+      if (now > expMs) {
+        statusEl.innerHTML = '<span class="jwt-status expired">✗ Expired — ' + expDate + '</span>';
+      } else {
+        statusEl.innerHTML = '<span class="jwt-status valid">✓ Valid — Expires ' + expDate + '</span>';
+      }
+    } else {
+      statusEl.innerHTML = '<span class="jwt-status noexp">ℹ No expiry (exp claim not set)</span>';
+    }
+  } catch(e) { payloadEl.textContent = 'Error decoding payload'; }
+}
+
+async function jwtValidate() {
+  var token  = document.getElementById('jwtValIn').value.trim();
+  var secret = document.getElementById('jwtValSecret').value;
+  var res    = document.getElementById('jwtValResult');
+  if (!token || !secret) { res.innerHTML = '<span class="jwt-status expired">✗ Please provide both a JWT and a secret key.</span>'; return; }
+  var parts = token.split('.');
+  if (parts.length !== 3) { res.innerHTML = '<span class="jwt-status expired">✗ Invalid JWT format (must have 3 parts).</span>'; return; }
+  try {
+    var enc  = new TextEncoder();
+    var key  = await crypto.subtle.importKey('raw', enc.encode(secret), { name:'HMAC', hash:'SHA-256' }, false, ['verify']);
+    var sig  = Uint8Array.from(atob(parts[2].replace(/-/g,'+').replace(/_/g,'/')), function(c){ return c.charCodeAt(0); });
+    var data = enc.encode(parts[0] + '.' + parts[1]);
+    var ok   = await crypto.subtle.verify('HMAC', key, sig, data);
+    if (ok) {
+      res.innerHTML = '<span class="jwt-status valid">✓ VALID — Signature verified successfully</span>';
+    } else {
+      res.innerHTML = '<span class="jwt-status expired">✗ INVALID — Signature does not match</span>';
+    }
+  } catch(e) {
+    res.innerHTML = '<span class="jwt-status expired">✗ Error: ' + e.message + '</span>';
+  }
+}
+
+function b64urlEncode(str) {
+  return btoa(str).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');
+}
+
+async function jwtEncode() {
+  var payloadStr = document.getElementById('jwtEncPayload').value.trim();
+  var secret     = document.getElementById('jwtEncSecret').value;
+  var msg        = document.getElementById('jwtEncMsg');
+  var resEl      = document.getElementById('jwtEncResult');
+  try {
+    JSON.parse(payloadStr);
+  } catch(e) {
+    msg.textContent = '✗ Invalid JSON payload: ' + e.message;
+    msg.style.color = 'var(--red)';
+    return;
+  }
+  var header  = { alg: 'HS256', typ: 'JWT' };
+  var hPart   = b64urlEncode(JSON.stringify(header));
+  var pPart   = b64urlEncode(payloadStr);
+  var enc     = new TextEncoder();
+  try {
+    var key     = await crypto.subtle.importKey('raw', enc.encode(secret), { name:'HMAC', hash:'SHA-256' }, false, ['sign']);
+    var sigBuf  = await crypto.subtle.sign('HMAC', key, enc.encode(hPart + '.' + pPart));
+    var sigArr  = Array.from(new Uint8Array(sigBuf));
+    var sPart   = btoa(String.fromCharCode.apply(null, sigArr)).replace(/=/g,'').replace(/\+/g,'-').replace(/\//g,'_');
+    var out     = document.getElementById('jwtEncOut');
+    out.innerHTML = '<span class="jwt-h">' + hPart + '</span>.<span class="jwt-p">' + pPart + '</span>.<span class="jwt-s">' + sPart + '</span>';
+    window._jwtEncToken = hPart + '.' + pPart + '.' + sPart;
+    resEl.style.display = '';
+    msg.textContent = '✓ JWT signed successfully!';
+    msg.style.color = 'var(--green)';
+  } catch(e) {
+    msg.textContent = '✗ Error: ' + e.message;
+    msg.style.color = 'var(--red)';
+  }
+}
+
+function jwtEncCopy() {
+  if (!window._jwtEncToken) return;
+  navigator.clipboard.writeText(window._jwtEncToken).then(function() {
+    var msg = document.getElementById('jwtEncMsg');
+    msg.textContent = '✓ Token copied to clipboard!';
+    msg.style.color = 'var(--green)';
+    setTimeout(function(){ msg.textContent = ''; }, 2000);
+  });
+}
+</script>
+</body>
+</html>
