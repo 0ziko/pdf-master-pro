@@ -1,25 +1,60 @@
 #!/usr/bin/env node
 /**
  * audit-links.js — postToolUse hook
- * Fires after Write / StrReplace on any .html file.
- * Parses index.html links and validates every href="*.html#id"
- * against the real section IDs in the target pages.
+ * Fires after Write / StrReplace.
+ * 1) For .html: validates index.html hash links (when index.html exists).
+ * 2) Always injects additional_context so the agent ends the reply with PowerShell (user policy).
  */
 'use strict';
 
 const fs   = require('fs');
 const path = require('path');
 
+/**
+ * Appended to every postToolUse additional_context.
+ * Yalnızca `npm run build` Cloudflare’i güncellemez; deploy Git push veya wrangler ile olur.
+ */
+const POWERSHELL_REMINDER = [
+  '',
+  '─── [Proje kuralı: Kullanıcıya gösterilecek PowerShell] ───',
+  'Cevabının sonuna mutlaka aşağıdaki bloğu ekle. Açıkla: sadece local build yetmez; Cloudflare genelde `git push` sonrası deploy alır (Pages → Git).',
+  '```powershell',
+  'Set-Location "C:\\Users\\ozanv\\.cursor\\projects\\empty-window\\pdf-master-pro"',
+  '',
+  '# 1) Yerel doğrulama (dist + SEO adımları build.js içinde)',
+  'npm run build',
+  '',
+  '# 2) Cloudflare Pages — Git entegrasyonu (yaygın): commit + push = yeni deploy tetikler',
+  'git status',
+  'git add -A',
+  'git commit -m "fix: kısa açıklama"',
+  'git push origin main',
+  '# Üretim dalın main değilse: git push origin <dal-adı>',
+  '# İlk kez / uzak yoksa: git remote -v  ve  git push -u origin main',
+  '',
+  '# 2b) Git kullanmıyorsan: dist klasörünü wrangler ile yükle (proje adını Cloudflare’den al)',
+  '# npx wrangler pages deploy dist --project-name=ORNEK_PROJE',
+  '# npx wrangler login',
+  '',
+  '# 3) Sadece spoke HTML + sitemap (build zaten çağırıyorsa atlanabilir)',
+  '# npm run seo',
+  '```',
+].join('\n');
+
+function withPs(extra) {
+  const base = (extra && String(extra).trim()) ? String(extra).trim() + '\n' : '';
+  return { additional_context: base + POWERSHELL_REMINDER };
+}
 let raw = '';
 process.stdin.on('data', d => (raw += d));
 process.stdin.on('end', () => {
   let input = {};
   try { input = JSON.parse(raw); } catch (_) {}
 
-  /* Only run when an HTML file was edited */
   const editedPath = (input.tool_input && input.tool_input.path) || '';
+  /* Link-audit sadece .html; PowerShell hatırlatması her dosya türü için aşağıda */
   if (!editedPath.endsWith('.html')) {
-    process.stdout.write(JSON.stringify({ additional_context: '' }));
+    process.stdout.write(JSON.stringify(withPs('')));
     return;
   }
 
@@ -27,7 +62,7 @@ process.stdin.on('end', () => {
   const indexPath   = path.join(projectRoot, 'index.html');
 
   if (!fs.existsSync(indexPath)) {
-    process.stdout.write(JSON.stringify({ additional_context: '' }));
+    process.stdout.write(JSON.stringify(withPs('')));
     return;
   }
 
@@ -94,7 +129,7 @@ process.stdin.on('end', () => {
   }
 
   if (broken.length === 0) {
-    process.stdout.write(JSON.stringify({ additional_context: '' }));
+    process.stdout.write(JSON.stringify(withPs('')));
     return;
   }
 
@@ -109,5 +144,5 @@ process.stdin.on('end', () => {
     'Fix these links in index.html before committing.',
   ].join('\n');
 
-  process.stdout.write(JSON.stringify({ additional_context: report }));
+  process.stdout.write(JSON.stringify(withPs(report)));
 });

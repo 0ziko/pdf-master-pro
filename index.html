@@ -214,13 +214,27 @@
       background: rgba(255,255,255,.05);
       border: 1px solid rgba(130,80,255,.25);
       border-radius: 8px;
-      padding: 6px 10px 6px 36px;
+      padding: 6px 10px 6px 38px;
       color: #e8e4ff;
       font-size: .74rem;
+      font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+      font-weight: 400;
+      font-synthesis: none;
+      line-height: 1.45;
+      letter-spacing: 0.01em;
+      -webkit-font-smoothing: antialiased;
       outline: none;
       transition: border-color .2s;
     }
-    .idx-search-input::placeholder { color: #6b7280; }
+    .idx-search-input::placeholder,
+    .idx-search-input::-webkit-input-placeholder,
+    .idx-search-input::-moz-placeholder {
+      color: #6b7280;
+      opacity: 1;
+      font-family: inherit;
+      font-weight: 400;
+      font-synthesis: none;
+    }
     .idx-search-input:focus { border-color: #8250ff; }
 
     /* Nav */
