@@ -245,7 +245,7 @@
     <div class="sc-sidebar-footer">
       <a href="index.html" class="sc-back-link">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-        All Tools
+        <span data-i18n="back.hub">All Tools</span>
       </a>
       <div class="lang-switcher">
         <button type="button" data-lang-btn="en" class="lang-btn lang-active">EN</button>
@@ -671,39 +671,39 @@
         <div class="sci-expr" id="sci-expr"></div>
         <div class="sci-result" id="sci-res">0</div>
       </div>
-      <div class="sci-keypad" id="sci-keypad">
-        <button class="sci-btn fn" onclick="sciKey('Math.sin(')">sin</button>
-        <button class="sci-btn fn" onclick="sciKey('Math.cos(')">cos</button>
-        <button class="sci-btn fn" onclick="sciKey('Math.tan(')">tan</button>
-        <button class="sci-btn fn" onclick="sciKey('Math.log10(')">log</button>
-        <button class="sci-btn fn" onclick="sciKey('Math.log(')">ln</button>
-        <button class="sci-btn fn" onclick="sciKey('Math.sqrt(')">√</button>
-        <button class="sci-btn fn" onclick="sciKey('**2')">x²</button>
-        <button class="sci-btn fn" onclick="sciKey('**3')">x³</button>
-        <button class="sci-btn fn" onclick="sciKey('1/(')">1/x</button>
-        <button class="sci-btn op" onclick="sciKey('Math.PI')">π</button>
-        <button class="sci-btn op" onclick="sciKey('Math.E')">e</button>
-        <button class="sci-btn clr" onclick="sciClear()">C</button>
-        <button class="sci-btn op" onclick="sciKey('(')">(</button>
-        <button class="sci-btn op" onclick="sciKey(')')">)</button>
-        <button class="sci-btn op" onclick="sciKey('%')">%</button>
-        <button class="sci-btn op" onclick="sciKey('/')">÷</button>
-        <button class="sci-btn" onclick="sciKey('7')">7</button>
-        <button class="sci-btn" onclick="sciKey('8')">8</button>
-        <button class="sci-btn" onclick="sciKey('9')">9</button>
-        <button class="sci-btn op" onclick="sciKey('*')">×</button>
-        <button class="sci-btn" onclick="sciKey('4')">4</button>
-        <button class="sci-btn" onclick="sciKey('5')">5</button>
-        <button class="sci-btn" onclick="sciKey('6')">6</button>
-        <button class="sci-btn op" onclick="sciKey('-')">−</button>
-        <button class="sci-btn" onclick="sciKey('1')">1</button>
-        <button class="sci-btn" onclick="sciKey('2')">2</button>
-        <button class="sci-btn" onclick="sciKey('3')">3</button>
-        <button class="sci-btn op" onclick="sciKey('+')">+</button>
-        <button class="sci-btn" onclick="sciKey('0')" style="grid-column:span 2">0</button>
-        <button class="sci-btn" onclick="sciKey('.')">.</button>
-        <button class="sci-btn" onclick="sciBack()">⌫</button>
-        <button class="sci-btn eq" onclick="sciCalc()">=</button>
+      <div class="sci-keypad" id="sci-keypad" aria-label="Scientific keypad">
+        <button type="button" class="sci-btn fn" onclick="sciKey('Math.sin(')">sin</button>
+        <button type="button" class="sci-btn fn" onclick="sciKey('Math.cos(')">cos</button>
+        <button type="button" class="sci-btn fn" onclick="sciKey('Math.tan(')">tan</button>
+        <button type="button" class="sci-btn fn" onclick="sciKey('Math.log10(')">log</button>
+        <button type="button" class="sci-btn fn" onclick="sciKey('Math.log(')">ln</button>
+        <button type="button" class="sci-btn fn" onclick="sciKey('Math.sqrt(')">√</button>
+        <button type="button" class="sci-btn fn" onclick="sciKey('**2')">x²</button>
+        <button type="button" class="sci-btn fn" onclick="sciKey('**3')">x³</button>
+        <button type="button" class="sci-btn fn" onclick="sciKey('1/(')">1/x</button>
+        <button type="button" class="sci-btn op" onclick="sciKey('Math.PI')">π</button>
+        <button type="button" class="sci-btn op" onclick="sciKey('Math.E')">e</button>
+        <button type="button" class="sci-btn clr" onclick="sciClear()">C</button>
+        <button type="button" class="sci-btn op" onclick="sciKey('(')">(</button>
+        <button type="button" class="sci-btn op" onclick="sciKey(')')">)</button>
+        <button type="button" class="sci-btn op" onclick="sciKey('%')">%</button>
+        <button type="button" class="sci-btn op" onclick="sciKey('/')">÷</button>
+        <button type="button" class="sci-btn" onclick="sciKey('7')">7</button>
+        <button type="button" class="sci-btn" onclick="sciKey('8')">8</button>
+        <button type="button" class="sci-btn" onclick="sciKey('9')">9</button>
+        <button type="button" class="sci-btn op" onclick="sciKey('*')">×</button>
+        <button type="button" class="sci-btn" onclick="sciKey('4')">4</button>
+        <button type="button" class="sci-btn" onclick="sciKey('5')">5</button>
+        <button type="button" class="sci-btn" onclick="sciKey('6')">6</button>
+        <button type="button" class="sci-btn op" onclick="sciKey('-')">−</button>
+        <button type="button" class="sci-btn" onclick="sciKey('1')">1</button>
+        <button type="button" class="sci-btn" onclick="sciKey('2')">2</button>
+        <button type="button" class="sci-btn" onclick="sciKey('3')">3</button>
+        <button type="button" class="sci-btn op" onclick="sciKey('+')">+</button>
+        <button type="button" class="sci-btn sci-wide" onclick="sciKey('0')">0</button>
+        <button type="button" class="sci-btn" onclick="sciKey('.')">.</button>
+        <button type="button" class="sci-btn" onclick="sciBack()">⌫</button>
+        <button type="button" class="sci-btn eq" onclick="sciCalc()">=</button>
       </div>
       <div class="sci-history" id="sci-history"></div>
     </section>

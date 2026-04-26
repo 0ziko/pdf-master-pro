@@ -128,13 +128,14 @@
       <a href="#pomodoro"         class="jump-link">🍅 Pomodoro</a>
       <a href="#invoice"          class="jump-link">🧾 Invoice</a>
       <a href="#raffle"           class="jump-link">🎁 Raffle / Draw</a>
+      <a href="#ai-prompt"        class="jump-link">🤖 AI Prompt</a>
       <a href="#passmanager"      class="jump-link">🔐 Pass Manager</a>
     </nav>
 
     <div class="sc-sidebar-footer">
       <a href="index.html" class="sc-back-link">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-        All Tools
+        <span data-i18n="back.hub">All Tools</span>
       </a>
       <div class="lang-switcher">
         <button type="button" data-lang-btn="en" class="lang-btn lang-active">EN</button>
@@ -751,7 +752,7 @@
     <section id="pomodoro" class="tool-page-section">
       <div class="tps-header">
         <span class="tps-icon">🍅</span>
-        <div><div class="tps-title">Pomodoro Timer</div><div class="tps-desc">25/5 focus sessions — configurable, with session tracking</div></div>
+        <div><div class="tps-title" data-i18n="pomo.name">Pomodoro Timer</div><div class="tps-desc" data-i18n="pomo.desc">25/5 focus sessions — configurable, with session tracking</div></div>
       </div>
       <style>
         .pomo-clock { font-size: 3.8rem; font-weight: 900; text-align: center; letter-spacing: -.02em;
@@ -771,21 +772,21 @@
         .pomo-settings label { font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-dim);display:block;margin-bottom:.22rem; }
       </style>
       <div class="pomo-mode-row">
-        <button class="pomo-mode-btn active" id="pomoBtnWork" onclick="pomoSetMode('work')">🍅 Focus</button>
-        <button class="pomo-mode-btn brk"   id="pomoBtnShort" onclick="pomoSetMode('short')">☕ Short Break</button>
-        <button class="pomo-mode-btn brk"   id="pomoBtnLong"  onclick="pomoSetMode('long')">🌿 Long Break</button>
+        <button class="pomo-mode-btn active" id="pomoBtnWork" onclick="pomoSetMode('work')"><span data-i18n="pomo.focus">🍅 Focus</span></button>
+        <button class="pomo-mode-btn brk"   id="pomoBtnShort" onclick="pomoSetMode('short')"><span data-i18n="pomo.short">☕ Short Break</span></button>
+        <button class="pomo-mode-btn brk"   id="pomoBtnLong"  onclick="pomoSetMode('long')"><span data-i18n="pomo.long">🌿 Long Break</span></button>
       </div>
       <div class="pomo-clock work" id="pomoClock">25:00</div>
       <div class="pomo-progress"><div class="pomo-bar" id="pomoBar" style="width:100%"></div></div>
       <div class="pomo-sessions" id="pomoSessions">Session 1 · 0 pomodoros completed</div>
       <div class="tool-btn-row" style="justify-content:center;gap:.6rem">
-        <button class="btn-primary" id="pomoStartBtn" onclick="pomoToggle()">▶ Start</button>
-        <button class="btn-secondary" onclick="pomoReset()">↺ Reset</button>
+        <button type="button" class="btn-primary" id="pomoStartBtn" onclick="pomoToggle()">▶ Start</button>
+        <button type="button" class="btn-secondary" onclick="pomoReset()" data-i18n="pomo.reset">↺ Reset</button>
       </div>
       <div class="pomo-settings">
-        <div><label>Focus (min)</label><input type="number" id="pomoFocusMin" class="input-field" value="25" min="1" max="90" onchange="pomoReset()"></div>
-        <div><label>Short break</label><input type="number" id="pomoShortMin" class="input-field" value="5"  min="1" max="30" onchange="pomoReset()"></div>
-        <div><label>Long break</label><input type="number" id="pomoLongMin"  class="input-field" value="15" min="1" max="60" onchange="pomoReset()"></div>
+        <div><label data-i18n="pomo.min.focus">Focus (min)</label><input type="number" id="pomoFocusMin" class="input-field" value="25" min="1" max="90" onchange="pomoReset()"></div>
+        <div><label data-i18n="pomo.min.short">Short break</label><input type="number" id="pomoShortMin" class="input-field" value="5"  min="1" max="30" onchange="pomoReset()"></div>
+        <div><label data-i18n="pomo.min.long">Long break</label><input type="number" id="pomoLongMin"  class="input-field" value="15" min="1" max="60" onchange="pomoReset()"></div>
       </div>
     </section>
 
@@ -793,7 +794,7 @@
     <section id="invoice" class="tool-page-section">
       <div class="tps-header">
         <span class="tps-icon">🧾</span>
-        <div><div class="tps-title">Invoice Generator</div><div class="tps-desc">Create a professional invoice and print/download as PDF — no account needed</div></div>
+        <div><div class="tps-title" data-i18n="tool.invoice.name">Invoice Generator</div><div class="tps-desc" data-i18n="tool.invoice.desc">Create a professional invoice and print or save as PDF</div></div>
       </div>
       <style>
         .inv-grid-2 { display:grid;grid-template-columns:1fr 1fr;gap:.6rem; }
@@ -807,61 +808,88 @@
         .inv-total-table td { padding:.22rem .6rem; }
         .inv-total-table td:last-child { text-align:right;font-weight:700;color:#a5b4fc; }
         .inv-grand { font-size:1.05rem!important;color:#fff!important;border-top:1px solid var(--border-subtle);padding-top:.4rem!important; }
+        .inv-theme-bar { display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin:.6rem 0; }
+        .inv-preview-wrap { border:1px solid var(--border-subtle); border-radius:12px; padding:0; margin-top:.6rem; overflow:hidden; background:#080810; }
+        .inv-prev-hd { font-size:.62rem; font-weight:800; text-transform:uppercase; letter-spacing:.08em; color:var(--text-muted); padding:10px 12px; border-bottom:1px solid var(--border-subtle); }
+        .inv-prev-hd small { display:block; font-weight:500; text-transform:none; letter-spacing:0; color:var(--text-dim); margin-top:4px; }
+        .inv-prev-body { padding:12px; max-height:min(50vh,320px); overflow:auto; }
+        .iprev { color:#0f172a; background:#f8fafc; border-radius:8px; padding:16px; font-size:12px; line-height:1.45; }
+        .iprev h2 { font-size:22px; margin:0 0 4px; color:#1e1b4b; }
+        .iprev.ip-min h2 { color:#111; font-weight:300; letter-spacing:.12em; text-transform:uppercase; font-size:18px; }
+        .iprev.ip-acc { border-left:5px solid #6366f1; padding-left:20px; }
+        .iprev table { width:100%; border-collapse:collapse; margin:12px 0; }
+        .iprev th { text-align:left; font-size:10px; text-transform:uppercase; color:#64748b; border-bottom:1px solid #e2e8f0; padding:6px 0; }
+        .iprev td { border-bottom:1px solid #f1f5f9; padding:6px 0; }
+        .iprev .meta { font-size:11px; color:#64748b; }
       </style>
       <div class="inv-grid-2">
         <div>
-          <div class="inv-section-title">Your Company</div>
+          <div class="inv-section-title" data-i18n="inv.sec.company">Your Company</div>
           <div style="display:flex;flex-direction:column;gap:.45rem">
-            <div><label class="inv-label">Company / Your Name</label><input type="text" id="invFrom" class="input-field" placeholder="Acme Inc." /></div>
-            <div><label class="inv-label">Address</label><input type="text" id="invFromAddr" class="input-field" placeholder="123 Main St, City" /></div>
-            <div><label class="inv-label">Email</label><input type="text" id="invFromEmail" class="input-field" placeholder="hello@company.com" /></div>
+            <div><label class="inv-label" data-i18n="inv.co.name">Company / Your Name</label><input type="text" id="invFrom" class="input-field" placeholder="Acme Inc." oninput="invCalc()" /></div>
+            <div><label class="inv-label" data-i18n="inv.addr">Address</label><input type="text" id="invFromAddr" class="input-field" data-i18n-ph="inv.addr" placeholder="123 Main St" oninput="invCalc()" /></div>
+            <div><label class="inv-label" data-i18n="inv.email">Email</label><input type="text" id="invFromEmail" class="input-field" placeholder="hello@company.com" oninput="invCalc()" /></div>
           </div>
         </div>
         <div>
-          <div class="inv-section-title">Bill To</div>
+          <div class="inv-section-title" data-i18n="inv.sec.billto">Bill To</div>
           <div style="display:flex;flex-direction:column;gap:.45rem">
-            <div><label class="inv-label">Client Name</label><input type="text" id="invTo" class="input-field" placeholder="Client Corp." /></div>
-            <div><label class="inv-label">Address</label><input type="text" id="invToAddr" class="input-field" placeholder="456 Client Ave, City" /></div>
-            <div><label class="inv-label">Email</label><input type="text" id="invToEmail" class="input-field" placeholder="client@example.com" /></div>
+            <div><label class="inv-label" data-i18n="inv.client">Client Name</label><input type="text" id="invTo" class="input-field" placeholder="Client Corp." oninput="invCalc()" /></div>
+            <div><label class="inv-label" data-i18n="inv.addr">Address</label><input type="text" id="invToAddr" class="input-field" oninput="invCalc()" /></div>
+            <div><label class="inv-label" data-i18n="inv.email">Email</label><input type="text" id="invToEmail" class="input-field" oninput="invCalc()" /></div>
           </div>
         </div>
       </div>
 
       <div class="inv-grid-2" style="margin-top:.6rem">
-        <div><label class="inv-label">Invoice #</label><input type="text" id="invNum" class="input-field" value="INV-001" /></div>
-        <div><label class="inv-label">Date</label><input type="date" id="invDate" class="input-field" /></div>
-        <div><label class="inv-label">Due Date</label><input type="date" id="invDue" class="input-field" /></div>
-        <div><label class="inv-label">Currency</label>
-          <select id="invCur" class="calc-select">
+        <div><label class="inv-label" data-i18n="inv.num">Invoice #</label><input type="text" id="invNum" class="input-field" value="INV-001" oninput="invCalc()" /></div>
+        <div><label class="inv-label" data-i18n="inv.date">Date</label><input type="date" id="invDate" class="input-field" oninput="invCalc()" /></div>
+        <div><label class="inv-label" data-i18n="inv.due">Due Date</label><input type="date" id="invDue" class="input-field" oninput="invCalc()" /></div>
+        <div><label class="inv-label" data-i18n="inv.cur">Currency</label>
+          <select id="invCur" class="calc-select" onchange="invCalc()">
             <option value="USD">USD $</option><option value="EUR">EUR €</option><option value="GBP">GBP £</option>
             <option value="TRY">TRY ₺</option><option value="JPY">JPY ¥</option><option value="CAD">CAD $</option>
           </select>
         </div>
       </div>
 
-      <div class="inv-section-title">Line Items</div>
+      <div class="inv-theme-bar">
+        <label class="inv-label" style="margin:0" data-i18n="inv.theme">Design</label>
+        <select id="invTheme" class="calc-select" style="min-width:160px" onchange="invSyncPreview()">
+          <option value="std" data-i18n="inv.theme.std">Standard</option>
+          <option value="min" data-i18n="inv.theme.min">Minimal</option>
+          <option value="acc" data-i18n="inv.theme.acc">Accent stripe</option>
+        </select>
+      </div>
+
+      <div class="inv-section-title" data-i18n="inv.items">Line Items</div>
       <div id="invItems"></div>
-      <button class="btn-secondary" onclick="invAddRow()" style="font-size:.75rem;padding:.35rem .8rem;margin-top:.3rem">+ Add Item</button>
+      <button type="button" class="btn-secondary" onclick="invAddRow()" style="font-size:.75rem;padding:.35rem .8rem;margin-top:.3rem" data-i18n="inv.addrow">+ Add Item</button>
 
       <div class="inv-grid-2" style="margin-top:.8rem">
-        <div><label class="inv-label">Tax (%)</label><input type="number" id="invTax" class="input-field" value="0" min="0" max="100" step="0.1" oninput="invCalc()" /></div>
-        <div><label class="inv-label">Discount (%)</label><input type="number" id="invDisc" class="input-field" value="0" min="0" max="100" step="0.1" oninput="invCalc()" /></div>
+        <div><label class="inv-label" data-i18n="inv.taxp">Tax (%)</label><input type="number" id="invTax" class="input-field" value="0" min="0" max="100" step="0.1" oninput="invCalc()" /></div>
+        <div><label class="inv-label" data-i18n="inv.discp">Discount (%)</label><input type="number" id="invDisc" class="input-field" value="0" min="0" max="100" step="0.1" oninput="invCalc()" /></div>
       </div>
 
       <div class="inv-total-row" style="margin-top:.8rem">
         <table class="inv-total-table">
-          <tr><td>Subtotal</td><td id="invSubtotal">—</td></tr>
-          <tr><td>Discount</td><td id="invDiscAmt">—</td></tr>
-          <tr><td>Tax</td><td id="invTaxAmt">—</td></tr>
-          <tr class="inv-grand"><td><strong>Total</strong></td><td id="invTotal"><strong>—</strong></td></tr>
+          <tr><td data-i18n="inv.sub">Subtotal</td><td id="invSubtotal">—</td></tr>
+          <tr><td data-i18n="inv.discount">Discount</td><td id="invDiscAmt">—</td></tr>
+          <tr><td data-i18n="inv.tax">Tax</td><td id="invTaxAmt">—</td></tr>
+          <tr class="inv-grand"><td><strong data-i18n="inv.tot">Total</strong></td><td id="invTotal"><strong>—</strong></td></tr>
         </table>
       </div>
 
-      <div style="margin-top:.6rem"><label class="inv-label">Notes / Payment Terms</label><textarea id="invNotes" class="input-field" rows="2" placeholder="Payment due within 30 days. Thank you!"></textarea></div>
+      <div style="margin-top:.6rem"><label class="inv-label" data-i18n="inv.notes">Notes / Payment Terms</label><textarea id="invNotes" class="input-field" rows="2" data-i18n-ph="inv.notes.ph" placeholder="Payment due within 30 days" oninput="invCalc()"></textarea></div>
 
-      <div class="tool-btn-row" style="margin-top:1rem;gap:.6rem">
-        <button class="btn-primary" onclick="invPrint()">🖨️ Print / Save PDF</button>
-        <button class="btn-secondary" onclick="invReset()">↺ Clear</button>
+      <div class="inv-preview-wrap" aria-label="Print preview">
+        <div class="inv-prev-hd"><span data-i18n="inv.prev.title">Print preview</span><small data-i18n="inv.prev.hint">Live preview. PDF/print uses the design you select.</small></div>
+        <div class="inv-prev-body"><div class="iprev" id="invPreview"></div></div>
+      </div>
+
+      <div class="tool-btn-row" style="margin-top:1rem;gap:.6rem;flex-wrap:wrap">
+        <button type="button" class="btn-primary" onclick="invPrint()"><span data-i18n="inv.btn.print">🖨️ Print / Save PDF</span></button>
+        <button type="button" class="btn-secondary" onclick="invReset()" data-i18n="inv.btn.clear">↺ Clear</button>
       </div>
     </section>
 
@@ -895,40 +923,62 @@
       </style>
       <div class="space-y">
         <div>
-          <label class="field-label">
-            Participants <span id="raffle-count" class="raffle-count-badge">0</span>
-          </label>
-          <textarea id="raffle-list" class="dev-textarea" style="min-height:120px;resize:vertical;"
-            placeholder="Enter one participant per line&#10;Alice&#10;Bob&#10;Charlie&#10;David"
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:6px">
+            <label class="field-label" style="margin:0">
+              <span data-i18n="raffle.part">Participants</span> <span id="raffle-count" class="raffle-count-badge">0</span>
+            </label>
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+              <input type="file" id="raffle-file" accept=".txt,.csv,text/plain,text/csv" class="sr-only" aria-hidden="true" />
+              <button type="button" class="btn-secondary" style="font-size:.72rem;padding:.28rem .7rem" onclick="document.getElementById('raffle-file').click()">📥 <span data-i18n="raffle.import">Import</span></button>
+              <span class="meta" style="font-size:.6rem;color:var(--text-dim);max-width:200px" data-i18n="raffle.import.hint">.txt / .csv</span>
+            </div>
+          </div>
+          <textarea id="raffle-list" class="dev-textarea" data-i18n-ph="raffle.list.ph" style="min-height:120px;resize:vertical;"
+            placeholder="One name per line"
             oninput="raffleCount()"></textarea>
         </div>
         <div class="raffle-winner-box" id="raffle-winner-box">
           <div class="raffle-winner-name" id="raffle-winner-name">—</div>
-          <div class="raffle-winner-sub" id="raffle-winner-sub">Draw a winner to start</div>
+          <div class="raffle-winner-sub" id="raffle-winner-sub" data-i18n="raffle.sub">Draw a winner to start</div>
         </div>
         <div class="tool-btn-row">
-          <button type="button" class="btn-primary" style="flex:1" onclick="raffleDraw()">🎲 Draw Winner</button>
-          <button type="button" class="btn-secondary" onclick="raffleReset()">↺ Reset</button>
-          <button type="button" class="btn-secondary" onclick="raffleClearHistory()">🗑 History</button>
+          <button type="button" class="btn-primary" style="flex:1" onclick="raffleDraw()">🎲 <span data-i18n="raffle.draw">Draw Winner</span></button>
+          <button type="button" class="btn-secondary" onclick="raffleReset()"><span data-i18n="raffle.reset">Reset</span></button>
+          <button type="button" class="btn-secondary" onclick="raffleClearHistory()">🗑 <span data-i18n="raffle.histbtn">Clear list</span></button>
         </div>
         <div id="raffle-history-wrap" style="display:none">
-          <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);margin-bottom:.4rem;">Past Winners</div>
+          <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);margin-bottom:.4rem;" data-i18n="raffle.past">Past Winners</div>
           <ul class="raffle-history" id="raffle-history"></ul>
         </div>
       </div>
       <script>
       (function(){
-        let _rolling = false;
+        var _rolling = false;
+        function rT(k){ return (window.PdfMasterI18n && window.PdfMasterI18n.t) ? window.PdfMasterI18n.t(k) : k; }
         function raffleGetList(){
-          return (document.getElementById('raffle-list').value||'').split('\n').map(s=>s.trim()).filter(Boolean);
+          return (document.getElementById('raffle-list').value||'').split('\n').map(function(s){ return s.trim(); }).filter(Boolean);
         }
         window.raffleCount = function(){
-          document.getElementById('raffle-count').textContent = raffleGetList().length;
+          document.getElementById('raffle-count').textContent = String(raffleGetList().length);
         };
+        var fin = document.getElementById('raffle-file');
+        if (fin) fin.addEventListener('change', function(ev) {
+          var f = ev.target.files && ev.target.files[0];
+          if (!f) return;
+          var reader = new FileReader();
+          reader.onload = function() {
+            var t = (reader.result || '').replace(/\r\n/g, '\n');
+            document.getElementById('raffle-list').value = t;
+            raffleCount();
+            ev.target.value = '';
+          };
+          reader.onerror = function() { ev.target.value = ''; };
+          reader.readAsText(f);
+        });
         window.raffleDraw = function(){
           if(_rolling) return;
           var list = raffleGetList();
-          if(list.length === 0){ alert('Add at least one participant!'); return; }
+          if(list.length === 0){ alert(rT('raffle.need')); return; }
           var box = document.getElementById('raffle-winner-box');
           var nameEl = document.getElementById('raffle-winner-name');
           var subEl = document.getElementById('raffle-winner-sub');
@@ -941,7 +991,7 @@
               clearInterval(iv);
               var winner = list[Math.floor(Math.random()*list.length)];
               nameEl.textContent = winner;
-              subEl.textContent = '🏆 Winner #' + (raffleHistoryLen()+1);
+              subEl.textContent = '🏆 ' + rT('raffle.subwin') + (raffleHistoryLen()+1);
               box.classList.remove('rolling');
               _rolling = false;
               raffleAddHistory(winner);
@@ -950,7 +1000,7 @@
         };
         window.raffleReset = function(){
           document.getElementById('raffle-winner-name').textContent='—';
-          document.getElementById('raffle-winner-sub').textContent='Draw a winner to start';
+          document.getElementById('raffle-winner-sub').textContent = rT('raffle.sub');
         };
         var _history = [];
         function raffleHistoryLen(){ return _history.length; }
@@ -964,7 +1014,7 @@
           if(_history.length === 0){ wrap.style.display='none'; return; }
           wrap.style.display='block';
           ul.innerHTML = _history.map(function(n,i){
-            return '<li><span class="rh-num">#'+(_history.length-i)+'</span><span class="rh-name">'+n+'</span><span class="rh-del" onclick="raffleDeleteHistory('+i+')">✕</span></li>';
+            return '<li><span class="rh-num">#'+(_history.length-i)+'</span><span class="rh-name">'+n.replace(/</g,'&lt;')+'</span><span class="rh-del" onclick="raffleDeleteHistory('+i+')">✕</span></li>';
           }).join('');
         }
         window.raffleDeleteHistory = function(i){
@@ -974,6 +1024,58 @@
           _history=[]; raffleRenderHistory();
         };
       })();
+      </script>
+    </section>
+
+    <section id="ai-prompt" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">🤖</span>
+        <div><div class="tps-title" data-i18n="aip.name">AI Prompt Builder</div><div class="tps-desc" data-i18n="aip.desc">Describe your problem — get a clear prompt for ChatGPT, Claude, or Gemini</div></div>
+      </div>
+      <p style="font-size:.72rem;color:var(--text-dim);margin:0 0 .8rem" data-i18n="aip.tip">Nothing is sent to a server. Your text stays in the browser.</p>
+      <div style="margin-bottom:.6rem">
+        <label class="field-label" data-i18n="aip.goal">What do you need?</label>
+        <select id="aip-goal" class="calc-select" style="max-width:100%">
+          <option value="general" data-i18n="aip.g.general">General help</option>
+          <option value="write" data-i18n="aip.g.write">Write or rewrite</option>
+          <option value="code" data-i18n="aip.g.code">Code / debug</option>
+          <option value="learn" data-i18n="aip.g.learn">Explain / learn</option>
+          <option value="decide" data-i18n="aip.g.decide">Decide / compare</option>
+        </select>
+      </div>
+      <label class="field-label" data-i18n="aip.in">Your situation</label>
+      <textarea id="aip-in" class="dev-textarea" data-i18n-ph="aip.in.ph" style="min-height:120px" placeholder="Describe your situation…"></textarea>
+      <div class="tool-btn-row" style="margin-top:.6rem;flex-wrap:wrap">
+        <button type="button" class="btn-primary" onclick="aipBuild()" data-i18n="aip.gen">Build prompt</button>
+        <button type="button" class="btn-secondary" onclick="aipCopy()" data-i18n="aip.copy">Copy</button>
+      </div>
+      <label class="field-label" style="margin-top:1rem" data-i18n="aip.out">Prompt to paste</label>
+      <textarea id="aip-out" class="dev-textarea" readonly style="min-height:180px"></textarea>
+      <script>
+      function aipT(k) { return (window.PdfMasterI18n && window.PdfMasterI18n.t) ? window.PdfMasterI18n.t(k) : k; }
+      function aipBuild() {
+        var raw = (document.getElementById('aip-in').value || '').trim();
+        if (!raw) { document.getElementById('aip-out').value = ''; return; }
+        var g = document.getElementById('aip-goal').value;
+        var _map = {
+          general: 'Answer helpfully. Structure your reply with clear sections. If something is uncertain, say so and suggest what information would help.',
+          write: 'Help improve or create text. Preserve the user’s tone and language. Suggest a concise final version and brief alternatives if useful.',
+          code: 'Focus on code quality, security, and clarity. If you show code, use fenced blocks. Mention edge cases and how to test.',
+          learn: 'Explain step by step. Use simple language first, then add technical detail. Give a short summary at the end.',
+          decide: 'Compare options fairly. List pros, cons, and a recommendation with reasoning. If data is missing, list assumptions.'
+        };
+        var inst = _map[g] || _map.general;
+        var out = '### Context (from the user)\n' + raw + '\n\n' +
+          '### Instructions for the AI assistant\n' + inst + '\n\n' +
+          '### Output language\nRespond in the same language the user used above (if they mixed languages, use the main one).\n\n' +
+          '### My question / goal\n' + raw;
+        document.getElementById('aip-out').value = out;
+      }
+      function aipCopy() {
+        var el = document.getElementById('aip-out');
+        el.select();
+        try { navigator.clipboard.writeText(el.value); } catch (e) {}
+      }
       </script>
     </section>
 
@@ -1594,17 +1696,25 @@ ToolsApp.genPass();
 
 /* ════ POMODORO ════ */
 var _pomoTimer = null, _pomoRunning = false, _pomoMode = 'work', _pomoSessions = 0;
-var _pomoTotal = 0, _pomoRemain = 0;
+var _pomoTotal = 0, _pomoRemain = 0, _pomoPaused = false;
 
+function pomoT(k) {
+  return (window.PdfMasterI18n && window.PdfMasterI18n.t) ? window.PdfMasterI18n.t(k) : k;
+}
+function pomoSessText() {
+  return pomoT('pomo.sessline')
+    .replace(/\{s\}/g, String(_pomoSessions + 1))
+    .replace(/\{c\}/g, String(_pomoSessions));
+}
 function pomoMins() {
   var map = { work: 'pomoFocusMin', short: 'pomoShortMin', long: 'pomoLongMin' };
   return parseInt(document.getElementById(map[_pomoMode]).value) || 25;
 }
 
 function pomoSetMode(m) {
-  clearInterval(_pomoTimer); _pomoTimer = null; _pomoRunning = false;
+  clearInterval(_pomoTimer); _pomoTimer = null; _pomoRunning = false; _pomoPaused = false;
   _pomoMode = m;
-  document.getElementById('pomoStartBtn').textContent = '▶ Start';
+  document.getElementById('pomoStartBtn').textContent = pomoT('pomo.start');
   var clock = document.getElementById('pomoClock');
   clock.className = 'pomo-clock ' + (m === 'work' ? 'work' : 'brk');
   document.getElementById('pomoBtnWork').classList.toggle('active', m==='work');
@@ -1623,38 +1733,46 @@ function pomoUpdateClock() {
 
 function pomoToggle() {
   if (_pomoRunning) {
-    clearInterval(_pomoTimer); _pomoRunning = false;
-    document.getElementById('pomoStartBtn').textContent = '▶ Resume';
+    clearInterval(_pomoTimer); _pomoTimer = null; _pomoRunning = false; _pomoPaused = true;
+    document.getElementById('pomoStartBtn').textContent = pomoT('pomo.resume');
   } else {
-    _pomoRunning = true;
-    document.getElementById('pomoStartBtn').textContent = '⏸ Pause';
+    _pomoRunning = true; _pomoPaused = false;
+    document.getElementById('pomoStartBtn').textContent = pomoT('pomo.pause');
     _pomoTimer = setInterval(function(){
       _pomoRemain--;
       pomoUpdateClock();
       if (_pomoRemain <= 0) {
-        clearInterval(_pomoTimer); _pomoRunning = false;
+        clearInterval(_pomoTimer); _pomoRunning = false; _pomoPaused = false;
         if (_pomoMode === 'work') { _pomoSessions++; }
-        document.getElementById('pomoSessions').textContent =
-          'Session ' + (_pomoSessions+1) + ' · ' + _pomoSessions + ' pomodoro' + (_pomoSessions!==1?'s':'') + ' completed';
+        document.getElementById('pomoSessions').textContent = pomoSessText();
         try { new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAA...').play(); } catch(e){}
-        document.getElementById('pomoStartBtn').textContent = '▶ Start';
+        document.getElementById('pomoStartBtn').textContent = pomoT('pomo.start');
       }
     }, 1000);
   }
 }
 
 function pomoReset() {
-  clearInterval(_pomoTimer); _pomoTimer = null; _pomoRunning = false;
+  clearInterval(_pomoTimer); _pomoTimer = null; _pomoRunning = false; _pomoPaused = false;
   _pomoTotal = pomoMins() * 60; _pomoRemain = _pomoTotal;
-  document.getElementById('pomoStartBtn').textContent = '▶ Start';
+  document.getElementById('pomoStartBtn').textContent = pomoT('pomo.start');
   pomoUpdateClock();
 }
 
 /* init */
-(function(){ _pomoTotal = 25*60; _pomoRemain = _pomoTotal; pomoUpdateClock(); })();
+(function(){
+  _pomoTotal = 25*60; _pomoRemain = _pomoTotal;
+  pomoUpdateClock();
+  document.getElementById('pomoSessions').textContent = pomoSessText();
+  document.getElementById('pomoStartBtn').textContent = pomoT('pomo.start');
+})();
 
 /* ════ INVOICE ════ */
 var _invRows = [];
+
+function invT(k) {
+  return (window.PdfMasterI18n && window.PdfMasterI18n.t) ? window.PdfMasterI18n.t(k) : k;
+}
 
 (function(){
   var today = new Date();
@@ -1663,6 +1781,7 @@ var _invRows = [];
   document.getElementById('invDate').value = fmt(today);
   document.getElementById('invDue').value  = fmt(due);
   invAddRow(); invAddRow(); invAddRow();
+  invSyncPreview();
 })();
 
 function invAddRow() {
@@ -1672,20 +1791,22 @@ function invAddRow() {
   var row = document.createElement('div');
   row.className = 'inv-item-row';
   row.dataset.idx = idx;
+  var Ld = invT('inv.col.desc'), Lq = invT('inv.col.qty'), Lu = invT('inv.col.unit');
   row.innerHTML =
-    '<div>' + (idx===0?'<label class="inv-label">Description</label>':'') +
+    '<div>' + (idx===0?'<label class="inv-label">' + Ld + '</label>':'') +
       '<input type="text" class="input-field inv-desc" placeholder="Service / Product" oninput="invCalc()" /></div>' +
-    '<div>' + (idx===0?'<label class="inv-label">Qty</label>':'') +
+    '<div>' + (idx===0?'<label class="inv-label">' + Lq + '</label>':'') +
       '<input type="number" class="input-field inv-qty" value="1" min="0" oninput="invCalc()" /></div>' +
-    '<div>' + (idx===0?'<label class="inv-label">Unit Price</label>':'') +
+    '<div>' + (idx===0?'<label class="inv-label">' + Lu + '</label>':'') +
       '<input type="number" class="input-field inv-price" value="0" min="0" step="0.01" oninput="invCalc()" /></div>' +
-    '<button class="pm-icon-btn" onclick="invRemoveRow(this)" style="align-self:center;margin-top:' + (idx===0?'18px':'0') + '">✕</button>';
+    '<button type="button" class="pm-icon-btn" onclick="invRemoveRow(this)" style="align-self:center;margin-top:' + (idx===0?'18px':'0') + '">✕</button>';
   container.appendChild(row);
   invCalc();
 }
 
 function invRemoveRow(btn) {
-  btn.parentElement.remove(); invCalc();
+  btn.parentElement.remove();
+  invCalc();
 }
 
 function invCalc() {
@@ -1707,66 +1828,122 @@ function invCalc() {
   document.getElementById('invDiscAmt').textContent  = disc > 0 ? '-' + f(discAmt) : '—';
   document.getElementById('invTaxAmt').textContent   = tax  > 0 ? f(taxAmt) : '—';
   document.getElementById('invTotal').innerHTML = '<strong>' + f(total) + '</strong>';
+  invSyncPreview();
 }
 
-function invPrint() {
+function invInvoiceData() {
   var cur = document.getElementById('invCur').value;
-  var sym = {USD:'$',EUR:'€',GBP:'£',TRY:'₺',JPY:'¥',CAD:'CA$'}[cur] || cur+' ';
-  var rows = [];
+  var sym = {USD:'$',EUR:'€',GBP:'£',TRY:'₺',JPY:'¥',CAD:'CA$'}[cur] || cur + ' ';
   var subtotal = 0;
+  var rows = [];
   document.querySelectorAll('#invItems .inv-item-row').forEach(function(row){
-    var desc  = row.querySelector('.inv-desc').value  || '—';
+    var desc  = (row.querySelector('.inv-desc').value  || '').trim() || '—';
     var qty   = parseFloat(row.querySelector('.inv-qty').value)   || 0;
     var price = parseFloat(row.querySelector('.inv-price').value) || 0;
     var amt   = qty * price;
     subtotal += amt;
-    if (desc !== '—' || amt) rows.push({desc,qty,price,amt});
+    if (desc !== '—' || amt) rows.push({ desc: desc, qty: qty, price: price, amt: amt });
   });
-  var disc = parseFloat(document.getElementById('invDisc').value)||0;
-  var tax  = parseFloat(document.getElementById('invTax').value)||0;
-  var discAmt = subtotal*disc/100, taxAmt=(subtotal-discAmt)*tax/100, total=subtotal-discAmt+taxAmt;
-  var f = function(n){ return sym+n.toFixed(2); };
-  var win = window.open('','_blank');
-  win.document.write('<!DOCTYPE html><html><head><title>Invoice</title>' +
-    '<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,sans-serif;padding:40px;color:#111;font-size:13px}' +
-    'h1{font-size:28px;font-weight:900;color:#6366f1;margin-bottom:4px}.inv-header{display:flex;justify-content:space-between;margin-bottom:28px}' +
-    '.inv-from,.inv-to{flex:1}.inv-from{margin-right:20px}.inv-meta{text-align:right;font-size:12px;color:#555}' +
-    '.inv-meta b{font-size:14px;display:block;color:#111;margin-bottom:2px}' +
-    'table{width:100%;border-collapse:collapse;margin:20px 0}th{background:#f3f4f6;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.05em;padding:8px 10px;text-align:left}' +
-    'td{padding:8px 10px;border-bottom:1px solid #e5e7eb}.totals-table{width:240px;margin-left:auto}.totals-table td{border:none;padding:4px 10px}' +
-    '.grand td{font-size:15px;font-weight:700;border-top:2px solid #6366f1;padding-top:8px}.notes{margin-top:20px;font-size:12px;color:#555;border-top:1px solid #e5e7eb;padding-top:12px}' +
-    '@media print{body{padding:20px}}</style></head><body>' +
+  var disc = parseFloat(document.getElementById('invDisc').value) || 0;
+  var tax  = parseFloat(document.getElementById('invTax').value)  || 0;
+  var discAmt = subtotal * disc / 100;
+  var taxAmt  = (subtotal - discAmt) * tax / 100;
+  var total   = subtotal - discAmt + taxAmt;
+  return {
+    sym: sym, rows: rows, subtotal: subtotal, disc: disc, tax: tax,
+    discAmt: discAmt, taxAmt: taxAmt, total: total,
+    from: document.getElementById('invFrom').value,
+    fromAddr: document.getElementById('invFromAddr').value,
+    fromEmail: document.getElementById('invFromEmail').value,
+    to: document.getElementById('invTo').value,
+    toAddr: document.getElementById('invToAddr').value,
+    toEmail: document.getElementById('invToEmail').value,
+    num: document.getElementById('invNum').value,
+    date: document.getElementById('invDate').value,
+    due: document.getElementById('invDue').value,
+    notes: document.getElementById('invNotes').value
+  };
+}
+
+function invSyncPreview() {
+  var el = document.getElementById('invPreview');
+  if (!el) return;
+  var d = invInvoiceData();
+  var f = function(n) { return d.sym + n.toFixed(2); };
+  var theme = (document.getElementById('invTheme') && document.getElementById('invTheme').value) || 'std';
+  var cls = 'iprev' + (theme === 'min' ? ' ip-min' : theme === 'acc' ? ' ip-acc' : '');
+  el.className = cls;
+  var th1 = invT('inv.col.desc'), th2 = invT('inv.col.qty'), th3 = invT('inv.col.unit'), th4 = invT('inv.col.amt');
+  var tb = d.rows.map(function(r) {
+    return '<tr><td>' + (r.desc.replace(/</g, '&lt;')) + '</td><td>' + r.qty + '</td><td>' + f(r.price) + '</td><td>' + f(r.amt) + '</td></tr>';
+  }).join('');
+  if (!tb) tb = '<tr><td colspan="4" class="meta">—</td></tr>';
+  el.innerHTML =
+    '<h2>' + invT('inv.h1') + '</h2>' +
+    '<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;">' +
+      '<div><strong style="font-size:14px">' + (d.from || '—') + '</strong><div class="meta">' + (d.fromAddr || '').replace(/</g, '&lt;') + '</div><div class="meta">' + (d.fromEmail || '').replace(/</g, '&lt;') + '</div></div>' +
+      '<div style="text-align:right"><div class="meta"><strong>' + invT('inv.sec.billto') + '</strong> ' + (d.to || '—') + '</div>' +
+      '<div class="meta">' + (d.toAddr || '').replace(/</g, '&lt;') + ' ' + (d.toEmail || '').replace(/</g, '&lt;') + '</div>' +
+      '<div class="meta">' + invT('inv.num') + ' ' + (d.num || '') + ' · ' + invT('inv.date') + ' ' + (d.date || '') + ' · ' + invT('inv.due') + ' ' + (d.due || '') + '</div></div></div>' +
+    '<table><thead><tr><th>' + th1 + '</th><th>' + th2 + '</th><th>' + th3 + '</th><th>' + th4 + '</th></tr></thead><tbody>' + tb + '</tbody></table>' +
+    '<div style="max-width:240px;margin-left:auto">' +
+    '<div style="display:flex;justify-content:space-between"><span class="meta">' + invT('inv.sub') + '</span><strong>' + f(d.subtotal) + '</strong></div>' +
+    (d.disc > 0 ? '<div style="display:flex;justify-content:space-between"><span class="meta">' + invT('inv.discount') + '</span><span>−' + f(d.discAmt) + '</span></div>' : '') +
+    (d.tax > 0 ? '<div style="display:flex;justify-content:space-between"><span class="meta">' + invT('inv.tax') + '</span><span>' + f(d.taxAmt) + '</span></div>' : '') +
+    '<div style="display:flex;justify-content:space-between;border-top:1px solid #e2e8f0;padding-top:6px;margin-top:4px"><strong>' + invT('inv.tot') + '</strong><strong>' + f(d.total) + '</strong></div></div>' +
+    (d.notes ? '<div class="meta" style="margin-top:10px;border-top:1px solid #e2e8f0;padding-top:8px"><strong>' + invT('inv.notes') + ':</strong> ' + d.notes.replace(/</g, '&lt;') + '</div>' : '');
+}
+
+function invPrintSkin(theme) {
+  if (theme === 'min') {
+    return 'body{font-family:Georgia,serif;padding:32px;color:#111;font-size:13px}h1{font-size:22px;font-weight:300;letter-spacing:.15em;text-transform:uppercase;color:#111;margin:0 0 16px}table{margin:20px 0}th{background:transparent;border-bottom:1px solid #000;font-size:10px}td{border-bottom:1px solid #e5e5e5}';
+  }
+  if (theme === 'acc') {
+    return 'body{font-family:system-ui,Segoe UI,sans-serif;padding:32px 32px 32px 24px;border-left:6px solid #6366f1;box-sizing:border-box;font-size:13px;color:#0f172a}h1{font-size:28px;font-weight:900;color:#1e1b4b;margin:0 0 6px}table{margin:20px 0}th{background:#f1f5f9}';
+  }
+  return 'body{font-family:Arial,sans-serif;padding:40px;color:#111;font-size:13px}h1{font-size:28px;font-weight:900;color:#6366f1;margin-bottom:4px}table{margin:20px 0}th{background:#f3f4f6}';
+}
+
+function invPrint() {
+  var d = invInvoiceData();
+  var f = function(n) { return d.sym + n.toFixed(2); };
+  var theme = (document.getElementById('invTheme') && document.getElementById('invTheme').value) || 'std';
+  var th1 = invT('inv.col.desc'), th2 = invT('inv.col.qty'), th3 = invT('inv.col.unit'), th4 = invT('inv.col.amt');
+  var rowsHtml = d.rows.map(function(r) {
+    return '<tr><td>' + r.desc.replace(/</g, '&lt;') + '</td><td>' + r.qty + '</td><td>' + f(r.price) + '</td><td>' + f(r.amt) + '</td></tr>';
+  }).join('');
+  var win = window.open('', '_blank');
+  win.document.write('<!DOCTYPE html><html><head><title>Invoice</title><style>' +
+    '*{box-sizing:border-box;margin:0}' + invPrintSkin(theme) +
+    '.inv-header{display:flex;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px}.inv-meta{text-align:right;font-size:12px;color:#555}.inv-meta b{display:block}' +
+    'table{width:100%;border-collapse:collapse}th{font-weight:700;padding:8px 10px;text-align:left}td{padding:8px 10px}' +
+    '.totals-table{width:260px;margin-left:auto}.totals-table td{padding:4px 10px}.grand td{font-size:15px;font-weight:700;border-top:2px solid #6366f1;padding-top:8px}' +
+    '.notes{margin-top:16px;padding-top:12px;border-top:1px solid #e5e7eb;font-size:12px;color:#555}@media print{body{padding:20px}}' +
+    '</style></head><body>' +
     '<div class="inv-header">' +
-      '<div class="inv-from"><h1>INVOICE</h1><b style="font-size:15px;font-weight:700;margin-top:6px;display:block">' + (document.getElementById('invFrom').value||'Your Company') + '</b>' +
-        '<div style="color:#555;font-size:12px">' + (document.getElementById('invFromAddr').value||'') + '</div>' +
-        '<div style="color:#555;font-size:12px">' + (document.getElementById('invFromEmail').value||'') + '</div></div>' +
-      '<div class="inv-meta"><div><b>Bill To</b>' + (document.getElementById('invTo').value||'Client') + '<br>' +
-        (document.getElementById('invToAddr').value||'') + '<br>' + (document.getElementById('invToEmail').value||'') + '</div>' +
-        '<div style="margin-top:10px"><b>Invoice #</b>' + document.getElementById('invNum').value + '</div>' +
-        '<div><b>Date</b>' + document.getElementById('invDate').value + '</div>' +
-        '<div><b>Due</b>' + document.getElementById('invDue').value + '</div></div>' +
-    '</div>' +
-    '<table><thead><tr><th>Description</th><th>Qty</th><th>Unit Price</th><th>Amount</th></tr></thead><tbody>' +
-    rows.map(function(r){ return '<tr><td>'+r.desc+'</td><td>'+r.qty+'</td><td>'+f(r.price)+'</td><td>'+f(r.amt)+'</td></tr>'; }).join('') +
-    '</tbody></table>' +
+      '<div><h1>' + invT('inv.h1') + '</h1><b style="font-size:15px">' + (d.from || '—') + '</b><div class="inv-meta" style="text-align:left">' + (d.fromAddr || '') + '<br/>' + (d.fromEmail || '') + '</div></div>' +
+      '<div class="inv-meta"><b>' + invT('inv.sec.billto') + '</b>' + (d.to || '—') + '<br/>' + (d.toAddr || '') + '<br/>' + (d.toEmail || '') + '' +
+      '<div style="margin-top:8px"><b>' + invT('inv.num') + '</b> ' + d.num + '</div><div><b>' + invT('inv.date') + '</b> ' + d.date + '</div><div><b>' + invT('inv.due') + '</b> ' + d.due + '</div></div></div>' +
+    '<table><thead><tr><th>' + th1 + '</th><th>' + th2 + '</th><th>' + th3 + '</th><th>' + th4 + '</th></tr></thead><tbody>' + rowsHtml + '</tbody></table>' +
     '<table class="totals-table"><tbody>' +
-    '<tr><td>Subtotal</td><td>'+f(subtotal)+'</td></tr>' +
-    (disc>0?'<tr><td>Discount ('+disc+'%)</td><td>-'+f(discAmt)+'</td></tr>':'')+
-    (tax>0?'<tr><td>Tax ('+tax+'%)</td><td>'+f(taxAmt)+'</td></tr>':'')+
-    '<tr class="grand"><td>Total</td><td>'+f(total)+'</td></tr></tbody></table>' +
-    (document.getElementById('invNotes').value ? '<div class="notes"><b>Notes:</b> '+document.getElementById('invNotes').value+'</div>':'') +
+    '<tr><td>' + invT('inv.sub') + '</td><td>' + f(d.subtotal) + '</td></tr>' +
+    (d.disc > 0 ? '<tr><td>' + invT('inv.discount') + ' (' + d.disc + '%)</td><td>−' + f(d.discAmt) + '</td></tr>' : '') +
+    (d.tax > 0 ? '<tr><td>' + invT('inv.tax') + ' (' + d.tax + '%)</td><td>' + f(d.taxAmt) + '</td></tr>' : '') +
+    '<tr class="grand"><td>' + invT('inv.tot') + '</td><td>' + f(d.total) + '</td></tr></tbody></table>' +
+    (d.notes ? '<div class="notes"><b>' + invT('inv.notes') + ':</b> ' + d.notes.replace(/</g, '&lt;') + '</div>' : '') +
     '</body></html>');
   win.document.close();
-  setTimeout(function(){ win.print(); }, 400);
+  setTimeout(function() { win.print(); }, 400);
 }
 
 function invReset() {
-  ['invFrom','invFromAddr','invFromEmail','invTo','invToAddr','invToEmail','invNotes'].forEach(function(id){ document.getElementById(id).value=''; });
-  document.getElementById('invNum').value='INV-001';
-  document.getElementById('invTax').value='0';
-  document.getElementById('invDisc').value='0';
-  document.getElementById('invItems').innerHTML='';
-  _invRows=[];
+  ['invFrom', 'invFromAddr', 'invFromEmail', 'invTo', 'invToAddr', 'invToEmail', 'invNotes'].forEach(function(id) { document.getElementById(id).value = ''; });
+  document.getElementById('invNum').value = 'INV-001';
+  document.getElementById('invTax').value = '0';
+  document.getElementById('invDisc').value = '0';
+  if (document.getElementById('invTheme')) document.getElementById('invTheme').value = 'std';
+  document.getElementById('invItems').innerHTML = '';
+  _invRows = [];
   invAddRow(); invAddRow(); invAddRow();
 }
 

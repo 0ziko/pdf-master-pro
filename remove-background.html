@@ -105,11 +105,14 @@
       <span>SnakeConverter</span>
     </a>
     <nav class="lp-header-nav">
-      <a href="/compress-pdf">Compress PDF</a>
-      <a href="/image">Image Tools</a>
-      <a href="/merge-pdf">Merge PDF</a>
-      <a href="/">All Tools</a>
+      <a href="index.html" data-i18n="lp.home">Home</a>
+      <a href="image.html">Image Tools</a>
+      <a href="index.html" data-i18n="lp.alltools">All Tools</a>
     </nav>
+    <div class="lp-lang">
+      <button type="button" data-lang-btn="en" class="lang-btn lang-active">EN</button>
+      <button type="button" data-lang-btn="tr" class="lang-btn">TR</button>
+    </div>
   </div>
 </header>
 
@@ -453,5 +456,6 @@ function bgDownload() {
   setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
 }
 </script>
+<script src="js/i18n.js"></script>
 </body>
 </html>

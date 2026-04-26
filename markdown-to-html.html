@@ -218,10 +218,14 @@
       <span>SnakeConverter</span>
     </a>
     <nav class="lp-header-nav">
-      <a href="/dev">Developer Tools</a>
-      <a href="/sql-formatter">SQL Formatter</a>
-      <a href="/">All Tools</a>
+      <a href="index.html" data-i18n="lp.home">Home</a>
+      <a href="dev.html">Developer Tools</a>
+      <a href="index.html" data-i18n="lp.alltools">All Tools</a>
     </nav>
+    <div class="lp-lang">
+      <button type="button" data-lang-btn="en" class="lang-btn lang-active">EN</button>
+      <button type="button" data-lang-btn="tr" class="lang-btn">TR</button>
+    </div>
   </div>
 </header>
 
@@ -639,5 +643,6 @@ function mdClear() {
   mdConvert();
 }
 </script>
+<script src="js/i18n.js"></script>
 </body>
 </html>

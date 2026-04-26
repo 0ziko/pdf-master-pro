@@ -149,7 +149,7 @@
     <div class="sc-sidebar-footer">
       <a href="index.html" class="sc-back-link">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-        All Tools
+        <span data-i18n="back.hub">All Tools</span>
       </a>
       <div class="lang-switcher">
         <button type="button" data-lang-btn="en" class="lang-btn lang-active">EN</button>
@@ -234,17 +234,17 @@
       <div class="tps-header">
         <span class="tps-icon">🌈</span>
         <div>
-          <div class="tps-title">Color Shade Generator</div>
-          <div class="tps-desc">Generate a full lightness scale from any color — click any swatch to copy its HEX</div>
+          <div class="tps-title" data-i18n="color.shades.name">Shade Generator</div>
+          <div class="tps-desc" data-i18n="color.shades.desc">Full lightness scale from any color</div>
         </div>
       </div>
       <div class="conv-input-row">
         <input type="color" id="shade-picker" class="color-picker-native" value="#6366f1" oninput="document.getElementById('shade-in').value=this.value;shadesRun()" />
         <input type="text" id="shade-in" class="input-field" value="#6366f1" style="flex:1;font-family:monospace" oninput="shadesRun()" />
         <select id="shade-steps" style="background:rgba(255,255,255,.06);border:1px solid var(--border-subtle);border-radius:.6rem;padding:.5rem .65rem;color:var(--text-primary);font-size:.8rem;outline:none;" onchange="shadesRun()">
-          <option value="10" selected>10 steps</option>
-          <option value="20">20 steps</option>
-          <option value="5">5 steps</option>
+          <option value="10" selected data-i18n="color.shade.opt10">10 steps</option>
+          <option value="20" data-i18n="color.shade.opt20">20 steps</option>
+          <option value="5" data-i18n="color.shade.opt5">5 steps</option>
         </select>
       </div>
       <div id="shades-out" class="shade-grid"></div>

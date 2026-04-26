@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Excel &amp; PowerPoint Keyboard Shortcuts — Free Reference | SnakeConverter</title>
+  <meta name="description" content="Search and download Microsoft Excel and PowerPoint keyboard shortcut lists. Free, no signup, works in your browser." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://snakeconverter.com/shortcuts" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="stylesheet" href="css/lp.css" />
+  <style>
+    .kbs-tabs{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem}
+    .kbs-tab{padding:.4rem 1rem;border-radius:8px;border:1px solid var(--border-subtle);background:var(--surface);color:var(--text-muted);
+      font-size:.8rem;font-weight:700;cursor:pointer;transition:all .15s}
+    .kbs-tab.active{background:var(--accent-dim);border-color:var(--border);color:var(--accent-light)}
+    .kbs-search{width:100%;padding:.5rem .75rem;border-radius:8px;border:1px solid var(--border-subtle);background:var(--surface);color:var(--text-primary);font-size:.85rem;margin-bottom:.75rem}
+    .kbs-list{max-height:min(50vh,420px);overflow-y:auto;border:1px solid var(--border-subtle);border-radius:10px}
+    .kbs-row{display:flex;justify-content:space-between;gap:12px;padding:10px 12px;border-bottom:1px solid var(--border-subtle);font-size:.8rem;align-items:flex-start}
+    .kbs-row:last-child{border-bottom:none}
+    .kbs-keys{flex:0 0 140px;font-family:ui-monospace,monospace;font-weight:700;color:var(--accent-light)}
+    .kbs-desc{color:var(--text-muted);flex:1}
+    @media(max-width:520px){.kbs-row{flex-direction:column}.kbs-keys{flex:none}}
+  </style>
+  <script defer src="js/analytics.js"></script>
+</head>
+<body>
+<header class="lp-header">
+  <div class="lp-header-inner">
+    <a href="index.html" class="lp-logo">
+      <span class="lp-logo-snake">🐍</span>
+      <span>SnakeConverter</span>
+    </a>
+    <nav class="lp-header-nav">
+      <a href="index.html" data-i18n="lp.home">Home</a>
+      <a href="dev.html" data-i18n="kbs.devref">Dev tools</a>
+      <a href="index.html" data-i18n="lp.alltools">All Tools</a>
+    </nav>
+    <div class="lp-lang">
+      <button type="button" data-lang-btn="en" class="lang-btn lang-active">EN</button>
+      <button type="button" data-lang-btn="tr" class="lang-btn">TR</button>
+    </div>
+  </div>
+</header>
+<main>
+<div class="lp-wrap">
+  <section class="lp-hero">
+    <h1 class="lp-h1">Excel &amp; <span class="accent">PowerPoint</span> Shortcuts</h1>
+    <p class="lp-hero-sub" data-i18n="kbs.hero">Search and download Microsoft Excel and PowerPoint keyboard shortcuts.</p>
+    <div class="lp-trust">✓ Free · No signup · <span data-i18n="aip.tip">Browser only</span></div>
+  </section>
+  <section class="lp-tool-box">
+    <div class="kbs-tabs" role="tablist">
+      <button type="button" class="kbs-tab active" id="kbsTabX" data-kbs="x" data-i18n="kbs.excel.name">Excel</button>
+      <button type="button" class="kbs-tab" id="kbsTabP" data-kbs="p" data-i18n="kbs.ppt.name">PowerPoint</button>
+    </div>
+    <input type="search" class="kbs-search" id="kbsFilter" data-i18n-ph="kbs.search" placeholder="Filter…" />
+    <div class="kbs-list" id="kbsList"></div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:12px">
+      <button type="button" class="lp-btn" id="kbsDl" data-i18n="kbs.dl">Download</button>
+    </div>
+  </section>
+</div>
+</main>
+<footer class="lp-footer" style="margin-top:48px;padding:24px;text-align:center;font-size:12px;color:var(--text-dim)">
+  <a href="index.html">SnakeConverter</a>
+</footer>
+<script>
+(function(){
+  var KBS_EXCEL = [
+    ['Ctrl+N','New workbook'],['Ctrl+O','Open'],['Ctrl+S','Save'],['Ctrl+P','Print'],['Ctrl+C','Copy'],['Ctrl+X','Cut'],['Ctrl+V','Paste'],
+    ['Ctrl+Z','Undo'],['Ctrl+Y / F4','Redo / Repeat action'],['Ctrl+F','Find & Replace (Find tab)'],['Ctrl+H','Find & Replace (Replace)'],
+    ['Ctrl+T','Create table from range'],['Ctrl+Shift+L','Toggle filters'],['Ctrl+;','Insert today’s date'],['Ctrl+Shift+;','Insert current time'],
+    ['Ctrl+1','Format cells dialog'],['F2','Edit active cell'],['Ctrl+Arrow','Jump to region edge'],['Ctrl+Shift+Arrow','Select to region edge'],
+    ['Ctrl+Space','Select column'],['Shift+Space','Select row'],['Ctrl+A','Select all (used range)'],['Ctrl+D','Fill down from cell above'],
+    ['Ctrl+R','Fill right from cell left'],['Alt+=','AutoSum selected cells'],['F4','Lock reference in formula (while editing)'],
+    ['Ctrl+`','Show formulas'],['F9','Recalculate (manual calc mode)'],['Ctrl+PageUp / PageDown','Previous / next sheet'],
+    ['Shift+F11','New worksheet'],['Ctrl+B','Bold'],['Ctrl+I','Italic'],['Ctrl+U','Underline']
+  ];
+  var KBS_PPT = [
+    ['Ctrl+N','New presentation'],['Ctrl+O','Open'],['Ctrl+S','Save'],['Ctrl+P','Print'],['Ctrl+C','Copy'],['Ctrl+X','Cut'],['Ctrl+V','Paste'],
+    ['Ctrl+Z','Undo'],['Ctrl+Y / F4','Redo / Repeat'],['Ctrl+D','Duplicate object'],['Ctrl+G','Group objects'],['Ctrl+Shift+G','Ungroup'],
+    ['F5 / Ctrl+G','Go to slide'],['F5 (slideshow)','Start from beginning (when not editing text)'],
+    ['Shift+F5','Start from current slide (slideshow)'],['Esc','End slideshow (presenter)'],['B','Black screen in slideshow (presenter)'],
+    ['W','White screen in slideshow (presenter)'],['N / PageDown / Right / Space','Next slide (slideshow)'],['P / PageUp / Left','Previous slide (slideshow)'],
+    ['F2','Edit text in shape'],['Ctrl+M','New slide (layout default)'],['Ctrl+Shift+> / <','Increase / decrease font size (selection)'],
+    ['Ctrl+Shift+Enter','Line break in same text box'],['Ctrl+B','Bold'],['Ctrl+I','Italic'],['Ctrl+U','Underline'],['F6','Next pane']
+  ];
+  var mode = 'x';
+  function list(){
+    return mode==='x' ? KBS_EXCEL : KBS_PPT;
+  }
+  function render(){
+    var q = (document.getElementById('kbsFilter').value || '').toLowerCase();
+    var ul = document.getElementById('kbsList');
+    var items = list().filter(function(p){
+      return !q || (p[0]+' '+p[1]).toLowerCase().indexOf(q) >= 0;
+    });
+    ul.innerHTML = items.map(function(p){
+      return '<div class="kbs-row"><span class="kbs-keys">'+p[0].replace(/</g,'&lt;')+'</span><span class="kbs-desc">'+p[1].replace(/</g,'&lt;')+'</span></div>';
+    }).join('') || '<div class="kbs-row"><span class="kbs-desc">—</span></div>';
+  }
+  document.getElementById('kbsFilter').addEventListener('input', render);
+  document.getElementById('kbsTabX').addEventListener('click', function(){
+    mode = 'x'; this.classList.add('active'); document.getElementById('kbsTabP').classList.remove('active'); render();
+  });
+  document.getElementById('kbsTabP').addEventListener('click', function(){
+    mode = 'p'; this.classList.add('active'); document.getElementById('kbsTabX').classList.remove('active'); render();
+  });
+  document.getElementById('kbsDl').addEventListener('click', function(){
+    var s = (mode==='x' ? 'EXCEL' : 'POWERPOINT') + ' keyboard shortcuts (SnakeConverter)\n\n';
+    list().forEach(function(p){ s += p[0] + ' — ' + p[1] + '\n'; });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([s],{type:'text/plain;charset=utf-8'}));
+    a.download = (mode==='x' ? 'excel' : 'powerpoint') + '-shortcuts.txt';
+    a.click();
+  });
+  render();
+})();
+</script>
+<script src="js/i18n.js"></script>
+</body>
+</html>
