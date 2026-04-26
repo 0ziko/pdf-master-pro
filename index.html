@@ -805,10 +805,10 @@
     <!-- Top bar -->
     <div class="idx-topbar">
       <div>
-        <div class="idx-breadcrumb">SnakeConverter › <span id="idxBreadcat" data-i18n="cat.pdf">PDF Tools</span></div>
-        <div class="idx-topbar-title" id="idxPanelTitle" data-i18n="cat.pdf">PDF Tools</div>
+        <div class="idx-breadcrumb">SnakeConverter › <span id="idxBreadcat">PDF Tools</span></div>
+        <div class="idx-topbar-title" id="idxPanelTitle">PDF Tools</div>
       </div>
-      <div class="idx-badge">🌐 Browser · No Server</div>
+      <div class="idx-badge">🌐 <span data-i18n="badge">Browser · No Server</span></div>
     </div>
 
     <!-- Content area -->
@@ -881,8 +881,8 @@
           <a href="pdf.html#screenshot" class="idx-tool-card" data-search="screenshot image to pdf png jpg multiple pages">
             <span class="idx-tool-card-ico">📸</span>
             <div class="idx-tool-card-body">
-              <div class="idx-tool-card-name">Screenshot → PDF</div>
-              <div class="idx-tool-card-desc">Images to PDF, one per page</div>
+              <div class="idx-tool-card-name" data-i18n="pdf.screenshot.name">Screenshot → PDF</div>
+              <div class="idx-tool-card-desc" data-i18n="pdf.screenshot.desc">Images to PDF, one per page</div>
             </div>
             <span class="idx-tool-card-arr">›</span>
           </a>
@@ -1294,22 +1294,22 @@
           <a href="tools.html#pomodoro" class="idx-tool-card" data-search="pomodoro timer focus 25 minutes productivity work break">
             <span class="idx-tool-card-ico">🍅</span>
             <div class="idx-tool-card-body">
-              <div class="idx-tool-card-name">Pomodoro Timer</div>
-              <div class="idx-tool-card-desc">25/5 focus sessions with tracking</div>
+              <div class="idx-tool-card-name" data-i18n="pomo.name">Pomodoro Timer</div>
+              <div class="idx-tool-card-desc" data-i18n="pomo.desc">25/5 focus sessions with tracking</div>
             </div><span class="idx-tool-card-arr">›</span>
           </a>
           <a href="tools.html#invoice" class="idx-tool-card" data-search="invoice generator pdf create bill receipt freelance">
             <span class="idx-tool-card-ico">🧾</span>
             <div class="idx-tool-card-body">
-              <div class="idx-tool-card-name">Invoice Generator</div>
-              <div class="idx-tool-card-desc">Professional invoice → PDF print</div>
+              <div class="idx-tool-card-name" data-i18n="tool.invoice.name">Invoice Generator</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.invoice.desc">Create & print professional invoices</div>
             </div><span class="idx-tool-card-arr">›</span>
           </a>
           <a href="tools.html#passmanager" class="idx-tool-card" data-search="password manager local store vault browser secure">
             <span class="idx-tool-card-ico">🔐</span>
             <div class="idx-tool-card-body">
-              <div class="idx-tool-card-name">Local Password Manager</div>
-              <div class="idx-tool-card-desc">Store passwords in browser only</div>
+              <div class="idx-tool-card-name" data-i18n="tool.localpass.name">Local Password Manager</div>
+              <div class="idx-tool-card-desc" data-i18n="tool.localpass.desc">Store passwords in browser only</div>
             </div><span class="idx-tool-card-arr">›</span>
           </a>
         </div>
@@ -1395,15 +1395,15 @@
           <a href="jwt-decoder.html" class="idx-tool-card" data-search="jwt encoder decoder validator hs256 token bearer">
             <span class="idx-tool-card-ico">🔐</span>
             <div class="idx-tool-card-body">
-              <div class="idx-tool-card-name">JWT Encoder / Decoder</div>
-              <div class="idx-tool-card-desc">Sign, decode &amp; validate JWT tokens</div>
+              <div class="idx-tool-card-name" data-i18n="dev.jwtenc.name">JWT Encoder / Decoder</div>
+              <div class="idx-tool-card-desc" data-i18n="dev.jwtenc.desc">Sign, decode &amp; validate JWT tokens</div>
             </div><span class="idx-tool-card-arr">›</span>
           </a>
           <a href="sql-formatter.html" class="idx-tool-card" data-search="sql formatter beautify format mysql postgresql query">
             <span class="idx-tool-card-ico">🗄️</span>
             <div class="idx-tool-card-body">
-              <div class="idx-tool-card-name">SQL Formatter</div>
-              <div class="idx-tool-card-desc">Beautify SQL — MySQL, PostgreSQL &amp; more</div>
+              <div class="idx-tool-card-name" data-i18n="dev.sql.name">SQL Formatter</div>
+              <div class="idx-tool-card-desc" data-i18n="dev.sql.desc">Beautify SQL — MySQL, PostgreSQL &amp; more</div>
             </div><span class="idx-tool-card-arr">›</span>
           </a>
           <a href="dev.html#code-formatter" class="idx-tool-card" data-search="code formatter beautify js html css json pretty print indent">
@@ -1475,8 +1475,8 @@
           <a href="color.html#shades" class="idx-tool-card" data-search="shade generator tint lighter darker color variants">
             <span class="idx-tool-card-ico">🌈</span>
             <div class="idx-tool-card-body">
-              <div class="idx-tool-card-name">Shade Generator</div>
-              <div class="idx-tool-card-desc">Tints &amp; shades for any color</div>
+              <div class="idx-tool-card-name" data-i18n="color.shades.name">Shade Generator</div>
+              <div class="idx-tool-card-desc" data-i18n="color.shades.tag">Tints &amp; shades for any color</div>
             </div><span class="idx-tool-card-arr">›</span>
           </a>
           <a href="color.html#tint-shade" class="idx-tool-card" data-search="tint shade lighter darker color variants">
@@ -1492,64 +1492,64 @@
       <!-- ══ 10. Image Tools ══ -->
       <div class="idx-panel" id="panel-image">
         <div class="idx-panel-hdr">
-          <div class="idx-panel-title">🖼️ Image Tools</div>
-          <div class="idx-panel-desc">Compress, resize, convert and analyse images — all in your browser, nothing uploaded.</div>
+          <div class="idx-panel-title">🖼️ <span data-i18n="cat.image">Image Tools</span></div>
+          <div class="idx-panel-desc" data-i18n="cat.image.desc">Compress, resize, convert and enhance images — all in your browser.</div>
         </div>
         <div class="idx-tools-grid">
           <a href="image.html#compress" class="idx-tool-card" data-search="image compressor reduce file size jpg webp png">
             <span class="idx-tool-card-ico">🗜️</span>
             <div class="idx-tool-card-body">
-              <div class="idx-tool-card-name">Image Compressor</div>
-              <div class="idx-tool-card-desc">Reduce size with quality slider</div>
+              <div class="idx-tool-card-name" data-i18n="idximg.compress.name">Image Compressor</div>
+              <div class="idx-tool-card-desc" data-i18n="idximg.compress.desc">Reduce size with quality slider</div>
             </div><span class="idx-tool-card-arr">›</span>
           </a>
           <a href="image.html#resize" class="idx-tool-card" data-search="image resizer resize width height pixels percentage">
             <span class="idx-tool-card-ico">📐</span>
             <div class="idx-tool-card-body">
-              <div class="idx-tool-card-name">Image Resizer</div>
-              <div class="idx-tool-card-desc">Exact px or percentage scale</div>
+              <div class="idx-tool-card-name" data-i18n="idximg.resize.name">Image Resizer</div>
+              <div class="idx-tool-card-desc" data-i18n="idximg.resize.desc">Exact px or percentage scale</div>
             </div><span class="idx-tool-card-arr">›</span>
           </a>
           <a href="image.html#convert" class="idx-tool-card" data-search="image converter png jpg webp format convert">
             <span class="idx-tool-card-ico">🔄</span>
             <div class="idx-tool-card-body">
-              <div class="idx-tool-card-name">Format Converter</div>
-              <div class="idx-tool-card-desc">PNG ↔ JPG ↔ WebP</div>
+              <div class="idx-tool-card-name" data-i18n="idximg.format.name">Format Converter</div>
+              <div class="idx-tool-card-desc" data-i18n="idximg.format.desc">PNG ↔ JPG ↔ WebP</div>
             </div><span class="idx-tool-card-arr">›</span>
           </a>
           <a href="image.html#exif" class="idx-tool-card" data-search="exif stripper remove metadata gps location photo">
             <span class="idx-tool-card-ico">🔍</span>
             <div class="idx-tool-card-body">
-              <div class="idx-tool-card-name">EXIF Stripper</div>
-              <div class="idx-tool-card-desc">Remove GPS &amp; camera metadata</div>
+              <div class="idx-tool-card-name" data-i18n="idximg.exif.name">EXIF Stripper</div>
+              <div class="idx-tool-card-desc" data-i18n="idximg.exif.desc">Remove GPS &amp; camera metadata</div>
             </div><span class="idx-tool-card-arr">›</span>
           </a>
           <a href="image.html#base64" class="idx-tool-card" data-search="image to base64 data url encode embed html css">
             <span class="idx-tool-card-ico">📄</span>
             <div class="idx-tool-card-body">
-              <div class="idx-tool-card-name">Image → Base64</div>
-              <div class="idx-tool-card-desc">Embed images in HTML/CSS</div>
+              <div class="idx-tool-card-name" data-i18n="idximg.base64.name">Image → Base64</div>
+              <div class="idx-tool-card-desc" data-i18n="idximg.base64.desc">Embed images in HTML/CSS</div>
             </div><span class="idx-tool-card-arr">›</span>
           </a>
           <a href="image.html#palette" class="idx-tool-card" data-search="color palette extract image dominant colors">
             <span class="idx-tool-card-ico">🎨</span>
             <div class="idx-tool-card-body">
-              <div class="idx-tool-card-name">Color Palette Extractor</div>
-              <div class="idx-tool-card-desc">Dominant colors from any photo</div>
+              <div class="idx-tool-card-name" data-i18n="idximg.palette.name">Color Palette Extractor</div>
+              <div class="idx-tool-card-desc" data-i18n="idximg.palette.desc">Dominant colors from any photo</div>
             </div><span class="idx-tool-card-arr">›</span>
           </a>
           <a href="image.html#metadata" class="idx-tool-card" data-search="image metadata viewer dimensions size format megapixels">
             <span class="idx-tool-card-ico">📊</span>
             <div class="idx-tool-card-body">
-              <div class="idx-tool-card-name">Metadata Viewer</div>
-              <div class="idx-tool-card-desc">Dimensions, size, format info</div>
+              <div class="idx-tool-card-name" data-i18n="idximg.metadata.name">Metadata Viewer</div>
+              <div class="idx-tool-card-desc" data-i18n="idximg.metadata.desc">Dimensions, size, format info</div>
             </div><span class="idx-tool-card-arr">›</span>
           </a>
           <a href="remove-background.html" class="idx-tool-card" data-search="background remover remove bg ai transparent png">
             <span class="idx-tool-card-ico">✂️</span>
             <div class="idx-tool-card-body">
-              <div class="idx-tool-card-name">Background Remover</div>
-              <div class="idx-tool-card-desc">AI background removal — browser-only</div>
+              <div class="idx-tool-card-name" data-i18n="idximg.rembg.name">Background Remover</div>
+              <div class="idx-tool-card-desc" data-i18n="idximg.rembg.desc">AI background removal — browser-only</div>
             </div><span class="idx-tool-card-arr">›</span>
           </a>
         </div>
@@ -1613,8 +1613,16 @@ var CAT_LABELS = {
   datetime: { en: 'Date & Time',            tr: 'Tarih & Saat' },
   dev:      { en: 'Developer Tools',        tr: 'Geliştirici Araçları' },
   color:    { en: 'Color & Design',         tr: 'Renk & Tasarım' },
+  image:    { en: 'Image Tools',            tr: 'Görsel Araçlar' },
   health:   { en: 'Health & Life',          tr: 'Sağlık & Yaşam' }
 };
+
+function _idxTopbarLang() {
+  if (window.PdfMasterI18n && typeof window.PdfMasterI18n.getLang === 'function') {
+    return window.PdfMasterI18n.getLang() || 'en';
+  }
+  return localStorage.getItem('pmp-lang') || 'en';
+}
 
 function switchCat(cat, btn) {
   /* hide all panels */
@@ -1625,9 +1633,9 @@ function switchCat(cat, btn) {
   var panel = document.getElementById('panel-' + cat);
   if (panel) panel.classList.add('visible');
   if (btn) btn.classList.add('active');
-  /* update topbar */
-  var lang = (localStorage.getItem('sc_lang') || 'en');
-  var label = (CAT_LABELS[cat] || {})[lang] || cat;
+  /* update topbar — must match i18n.js storage key (pmp-lang), not sc_lang */
+  var lang = _idxTopbarLang();
+  var label = (CAT_LABELS[cat] || {})[lang] || (CAT_LABELS[cat] || {}).en || cat;
   var titleEl = document.getElementById('idxPanelTitle');
   var breadEl = document.getElementById('idxBreadcat');
   if (titleEl) titleEl.textContent = label;
@@ -1656,13 +1664,28 @@ function switchCat(cat, btn) {
     json:'dev', html:'dev', url:'dev', regex:'dev', base64:'dev', timestamp:'dev',
     css:'dev', jsontab:'dev', diff:'dev', cron:'dev',
     converter:'color', palette:'color', contrast:'color', gradient:'color',
-    blindness:'color', random_color:'color', tint:'color',
+    blindness:'color', random_color:'color', tint:'color', shades:'color',
     bmi:'health', age:'health'
   };
   var cat = hash ? (hashMap[hash] || 'pdf') : 'pdf';
   var btn = document.querySelector('[data-cat="'+cat+'"]');
   switchCat(cat, btn);
 })();
+
+/* Re-sync topbar after i18n first paint; keep in sync when user toggles EN/TR */
+(function wrapIndexLangTopbar() {
+  if (!window.PdfMasterI18n || typeof window.PdfMasterI18n.setLang !== 'function') return;
+  var orig = window.PdfMasterI18n.setLang;
+  window.PdfMasterI18n.setLang = function (lang) {
+    orig.call(window.PdfMasterI18n, lang);
+    var a = document.querySelector('.idx-nav-item.active');
+    if (a) switchCat(a.getAttribute('data-cat'), a);
+  };
+})();
+requestAnimationFrame(function () {
+  var a = document.querySelector('.idx-nav-item.active');
+  if (a) switchCat(a.getAttribute('data-cat'), a);
+});
 
 /* ── Search ── */
 var ALL_CARDS = null;
