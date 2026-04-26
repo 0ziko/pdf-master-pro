@@ -157,6 +157,8 @@
     }
     .img-dl-btn:hover { opacity: .88; transform: translateY(-1px); }
     .img-dl-btn:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+    .bg-preview-grid { display:grid;grid-template-columns:1fr 1fr;gap:1rem; }
+    @media(max-width:600px){ .bg-preview-grid { grid-template-columns:1fr; } }
   </style>
 </head>
 <body>
@@ -186,7 +188,8 @@
       <a href="#exif"      class="jump-link">🔍 EXIF Stripper</a>
       <a href="#base64"    class="jump-link">📄 Image → Base64</a>
       <a href="#palette"   class="jump-link">🎨 Color Palette</a>
-      <a href="#metadata"  class="jump-link">📊 Metadata Viewer</a>
+      <a href="#metadata"   class="jump-link">📊 Metadata Viewer</a>
+      <a href="#bg-remove"  class="jump-link">✂️ BG Remover</a>
     </nav>
 
     <div class="sc-sidebar-footer">
@@ -489,6 +492,68 @@
 
       <div id="metaResult" style="display:none;margin-top:1rem">
         <table class="meta-table" id="metaTable"></table>
+      </div>
+    </section>
+
+    <!-- ══ Background Remover ══ -->
+    <section id="bg-remove" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">✂️</span>
+        <div>
+          <div class="tps-title">Background Remover</div>
+          <div class="tps-desc">Remove image backgrounds using AI — client-side, no API key, files never leave your device</div>
+        </div>
+      </div>
+
+      <!-- Info banner: first-time model download -->
+      <div style="background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:.65rem;padding:.6rem .9rem;font-size:.72rem;color:#fbbf24;margin-bottom:1rem;display:flex;gap:.5rem;align-items:flex-start">
+        <span style="flex-shrink:0">ℹ️</span>
+        <span>First use downloads the AI model (~40 MB, cached for future visits). Processing runs entirely in your browser — your images are never uploaded.</span>
+      </div>
+
+      <!-- Drop zone -->
+      <div id="bgDrop" class="dropzone" onclick="document.getElementById('bgInput').click()"
+          ondragover="event.preventDefault();this.classList.add('drag-over')"
+          ondragleave="this.classList.remove('drag-over')"
+          ondrop="event.preventDefault();this.classList.remove('drag-over');bgLoad(event.dataTransfer.files)">
+        <input type="file" id="bgInput" accept="image/jpeg,image/png,image/webp" class="hidden" onchange="bgLoad(this.files)">
+        <div class="drop-icon" style="font-size:2.5rem;height:auto;margin-bottom:.5rem">🖼️</div>
+        <p class="drop-title">Drag image here or click to select</p>
+        <p class="drop-sub">JPG · PNG · WebP</p>
+      </div>
+
+      <!-- Preview area -->
+      <div id="bgPreviewArea" style="display:none;margin-top:1rem">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem" class="bg-preview-grid">
+          <div>
+            <p style="font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.4rem">Original</p>
+            <img id="bgOrigImg" style="max-width:100%;border-radius:.65rem;border:1px solid rgba(255,255,255,.08)" alt="Original" />
+          </div>
+          <div>
+            <p style="font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.4rem">Result</p>
+            <div id="bgResultWrap" style="border-radius:.65rem;overflow:hidden;border:1px solid rgba(255,255,255,.08);min-height:80px;display:flex;align-items:center;justify-content:center;background:repeating-conic-gradient(#1e1e30 0% 25%,#2d2d4a 0% 50%) 0 0/20px 20px">
+              <span id="bgResultPlaceholder" style="font-size:.72rem;color:var(--text-muted)">Result will appear here</span>
+              <img id="bgResultImg" style="max-width:100%;display:none" alt="Background removed" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Progress -->
+        <div id="bgProgressWrap" style="margin-top:.75rem;display:none">
+          <div style="display:flex;justify-content:space-between;font-size:.72rem;color:var(--text-muted);margin-bottom:.3rem">
+            <span id="bgProgressLabel">Loading AI model…</span>
+            <span id="bgProgressPct">0%</span>
+          </div>
+          <div style="height:5px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden">
+            <div id="bgProgressBar" style="height:100%;background:linear-gradient(90deg,#8250ff,#a070ff);width:0%;transition:width .3s ease;border-radius:3px"></div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:.5rem;margin-top:.75rem;flex-wrap:wrap">
+          <button type="button" id="bgRunBtn" onclick="bgRun()" class="btn-primary" style="flex:1">✂️ Remove Background</button>
+          <button type="button" id="bgDownloadBtn" onclick="bgDownload()" class="btn-secondary" style="display:none">⬇ Download PNG</button>
+        </div>
+        <p id="bgMsg" style="font-size:.73rem;color:var(--text-muted);text-align:center;margin-top:.4rem;min-height:1em"></p>
       </div>
     </section>
 
@@ -962,6 +1027,102 @@ function gcd_ar(w, h) {
     ? location.hash.slice(1) : (sections.length ? sections[0].id : '');
   if (startId) showSection(startId);
 })();
+
+/* ════════════════════════════════════════════════════════════
+   8. BACKGROUND REMOVER (lazy-loads @imgly/background-removal)
+════════════════════════════════════════════════════════════ */
+var _bgFile = null;
+var _bgResultBlob = null;
+var _bgLibLoaded = false;
+
+function bgLoad(files) {
+  if (!files || !files[0]) return;
+  _bgFile = files[0];
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var img = document.getElementById('bgOrigImg');
+    img.src = e.target.result;
+    document.getElementById('bgPreviewArea').style.display = '';
+    document.getElementById('bgResultImg').style.display = 'none';
+    document.getElementById('bgResultPlaceholder').style.display = '';
+    document.getElementById('bgDownloadBtn').style.display = 'none';
+    document.getElementById('bgMsg').textContent = '';
+  };
+  reader.readAsDataURL(_bgFile);
+}
+
+async function bgLoadLib() {
+  if (_bgLibLoaded) return;
+  return new Promise(function(resolve, reject) {
+    var s = document.createElement('script');
+    s.type = 'module';
+    s.innerHTML = [
+      'import { removeBackground } from "https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.4.5/dist/index.browser.mjs";',
+      'window._imglyRemoveBg = removeBackground;',
+      'window.dispatchEvent(new Event("imgly-ready"));'
+    ].join('\n');
+    document.head.appendChild(s);
+    window.addEventListener('imgly-ready', function(){ _bgLibLoaded = true; resolve(); }, { once: true });
+    s.onerror = reject;
+  });
+}
+
+async function bgRun() {
+  if (!_bgFile) return;
+  var btn = document.getElementById('bgRunBtn');
+  var msg = document.getElementById('bgMsg');
+  var progWrap = document.getElementById('bgProgressWrap');
+  var progBar  = document.getElementById('bgProgressBar');
+  var progLbl  = document.getElementById('bgProgressLabel');
+  var progPct  = document.getElementById('bgProgressPct');
+  btn.disabled = true;
+  progWrap.style.display = '';
+  msg.textContent = '';
+  try {
+    if (!_bgLibLoaded) {
+      progLbl.textContent = 'Downloading AI model (~40 MB, cached after first use)…';
+      await bgLoadLib();
+    }
+    progLbl.textContent = 'Removing background…';
+    var fn = window._imglyRemoveBg;
+    if (!fn) throw new Error('Library failed to load');
+    var resultBlob = await fn(_bgFile, {
+      debug: false,
+      model: 'medium',
+      progress: function(key, current, total) {
+        var pct = total > 0 ? Math.round((current / total) * 100) : 0;
+        progBar.style.width = pct + '%';
+        progPct.textContent = pct + '%';
+        if (key === 'compute:inference') progLbl.textContent = 'AI processing…';
+        else if (key.startsWith('fetch')) progLbl.textContent = 'Downloading model…';
+      }
+    });
+    _bgResultBlob = resultBlob;
+    var url = URL.createObjectURL(resultBlob);
+    var resImg = document.getElementById('bgResultImg');
+    resImg.src = url;
+    resImg.style.display = '';
+    document.getElementById('bgResultPlaceholder').style.display = 'none';
+    document.getElementById('bgDownloadBtn').style.display = '';
+    progWrap.style.display = 'none';
+    msg.textContent = '✓ Done! Click Download to save the PNG.';
+    msg.style.color = '#4ade80';
+  } catch(e) {
+    progWrap.style.display = 'none';
+    msg.textContent = '✗ Error: ' + e.message;
+    msg.style.color = '#f87171';
+    console.error(e);
+  }
+  btn.disabled = false;
+}
+
+function bgDownload() {
+  if (!_bgResultBlob) return;
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(_bgResultBlob);
+  a.download = (_bgFile ? _bgFile.name.replace(/\.[^.]+$/, '') : 'image') + '_no_bg.png';
+  a.click();
+}
 </script>
 <!-- seo-content.js disabled -->
 <script defer src="js/pro.js"></script>

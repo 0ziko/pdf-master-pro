@@ -6,8 +6,8 @@
     <title>SnakeConverter — Free Online Tools &amp; Converters</title>
 
     <!-- SEO -->
-    <meta name="description" content="Free online PDF tools: convert Excel to PDF, merge PDFs, split PDFs, encrypt with password, and convert images to PDF. Turkish character support included." />
-    <meta name="keywords" content="pdf merge, pdf split, pdf encrypt, excel to pdf, image to pdf, pdf tools online, free pdf converter" />
+    <meta name="description" content="Free online PDF tools: compress PDF, convert Excel to PDF, merge & split PDFs, encrypt with password, convert images to PDF — all in browser, nothing uploaded." />
+    <meta name="keywords" content="pdf compressor, compress pdf online, pdf merge, pdf split, pdf encrypt, excel to pdf, image to pdf, screenshot to pdf, free pdf tools" />
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
     <link rel="canonical" href="https://snakeconverter.com/pdf" />
     <link rel="alternate" hreflang="en" href="https://snakeconverter.com/pdf" />
@@ -17,7 +17,7 @@
     <!-- Open Graph -->
     <meta property="og:type"        content="website" />
     <meta property="og:url"         content="https://snakeconverter.com/pdf" />
-    <meta property="og:title"       content="PDF Tools — SnakeConverter" />
+    <meta property="og:title"       content="PDF Tools: Compress, Convert, Merge — SnakeConverter" />
     <meta property="og:description" content="Merge, split, encrypt and convert PDFs for free. No signup, works in your browser." />
     <meta property="og:image"       content="https://snakeconverter.com/og-image.png" />
 
@@ -455,6 +455,13 @@
           <div class="pdf-nav-hint">Images to PDF instantly</div>
         </div>
       </button>
+      <button type="button" data-tab="compress" class="pdf-nav-item">
+        <span class="pdf-nav-icon">🗜️</span>
+        <div>
+          <div class="pdf-nav-name">PDF Compressor</div>
+          <div class="pdf-nav-hint">Reduce file size instantly</div>
+        </div>
+      </button>
       </div><!-- /pdf-nav-items-row -->
 
       <div class="pdf-sidebar-footer">
@@ -748,6 +755,69 @@
           </div>
         </div>
 
+        <!-- ══ PDF Compressor Panel ══ -->
+        <div data-panel="compress" class="panel pdf-tool-card" style="--gap:1rem">
+          <div class="pdf-tool-card-hdr">
+            <div class="pdf-tool-card-ico">🗜️</div>
+            <div>
+              <div class="pdf-tool-card-title">PDF Compressor</div>
+              <div class="pdf-tool-card-desc">Reduce PDF file size — browser-only, nothing uploaded</div>
+            </div>
+          </div>
+
+          <div class="space-y">
+            <div id="cmpDrop" class="dropzone" onclick="document.getElementById('cmpInput').click()"
+                ondragover="event.preventDefault();this.classList.add('drag-over')"
+                ondragleave="this.classList.remove('drag-over')"
+                ondrop="event.preventDefault();this.classList.remove('drag-over');cmpLoad(event.dataTransfer.files)">
+              <input type="file" id="cmpInput" accept=".pdf" class="hidden" onchange="cmpLoad(this.files)">
+              <div class="drop-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                </svg>
+              </div>
+              <p class="drop-title">Drag PDF here or click to select</p>
+              <p class="drop-sub">Works entirely in your browser — files stay private</p>
+              <div id="cmpFileStatus" class="drop-selected" style="display:none">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span id="cmpFileName"></span>
+              </div>
+            </div>
+
+            <!-- Quality selector -->
+            <div style="margin-top:.5rem">
+              <p style="font-size:.72rem;color:var(--text-muted);margin-bottom:.5rem">Compression level</p>
+              <div style="display:flex;gap:.5rem;flex-wrap:wrap" id="cmpQualityBtns">
+                <button type="button" onclick="cmpSetQ('low')"    id="cmpQLow"    class="btn-secondary" style="flex:1;min-width:80px">🔴 Low quality<br><span style="font-size:.65rem;color:var(--text-muted)">Smallest file</span></button>
+                <button type="button" onclick="cmpSetQ('medium')" id="cmpQMedium" class="btn-primary"   style="flex:1;min-width:80px">🟡 Medium<br><span style="font-size:.65rem;opacity:.8">Balanced</span></button>
+                <button type="button" onclick="cmpSetQ('high')"   id="cmpQHigh"   class="btn-secondary" style="flex:1;min-width:80px">🟢 High quality<br><span style="font-size:.65rem;color:var(--text-muted)">Larger file</span></button>
+              </div>
+            </div>
+
+            <!-- Stats -->
+            <div id="cmpStats" style="display:none;background:rgba(130,80,255,.08);border:1px solid rgba(130,80,255,.2);border-radius:10px;padding:12px 16px;font-size:.78rem">
+              <div style="display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap">
+                <span>📄 Original: <strong id="cmpOrigSize">—</strong></span>
+                <span>🗜️ Compressed: <strong id="cmpNewSize">—</strong></span>
+                <span>✂️ Saved: <strong id="cmpSaved" style="color:#4ade80">—</strong></span>
+              </div>
+              <div id="cmpBarWrap" style="margin-top:8px;height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden">
+                <div id="cmpBar" style="height:100%;background:linear-gradient(90deg,#8250ff,#a070ff);width:0%;transition:width .4s ease;border-radius:3px"></div>
+              </div>
+            </div>
+
+            <!-- Progress -->
+            <div id="cmpProgress" style="display:none;font-size:.78rem;color:var(--text-muted);text-align:center">Processing page <span id="cmpPg">0</span> of <span id="cmpTotal">0</span>…</div>
+
+            <button type="button" id="cmpRun" class="btn-primary" onclick="cmpRun()" disabled>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Compress & Download PDF
+            </button>
+            <p id="cmpMsg" style="font-size:.75rem;color:var(--text-muted);text-align:center;min-height:1.2em"></p>
+          </div>
+        </div>
+
       </div><!-- /pdf-content -->
     </main><!-- /pdf-main -->
   </div><!-- /pdf-layout -->
@@ -755,6 +825,106 @@
   <script>
     document.getElementById("imageFitA4").addEventListener("change", function () { document.getElementById("imageFit").value = "a4"; });
     document.getElementById("imageFitOrig").addEventListener("change", function () { document.getElementById("imageFit").value = "original"; });
+
+    /* ── PDF Compressor ── */
+    var _cmpFile = null;
+    var _cmpQuality = 'medium';
+    var _cmpPresets = {
+      low:    { scale: 0.75, jpegQ: 0.45 },
+      medium: { scale: 1.0,  jpegQ: 0.68 },
+      high:   { scale: 1.5,  jpegQ: 0.85 },
+    };
+
+    function cmpLoad(files) {
+      if (!files || !files[0]) return;
+      _cmpFile = files[0];
+      document.getElementById('cmpFileName').textContent = _cmpFile.name + ' (' + (_cmpFile.size / 1024 / 1024).toFixed(2) + ' MB)';
+      document.getElementById('cmpFileStatus').style.display = '';
+      document.getElementById('cmpRun').disabled = false;
+      document.getElementById('cmpStats').style.display = 'none';
+      document.getElementById('cmpMsg').textContent = '';
+    }
+
+    function cmpSetQ(q) {
+      _cmpQuality = q;
+      ['Low','Medium','High'].forEach(function(n) {
+        var btn = document.getElementById('cmpQ' + n);
+        if (btn) btn.className = (n.toLowerCase() === q) ? 'btn-primary' : 'btn-secondary';
+      });
+    }
+
+    async function cmpRun() {
+      if (!_cmpFile) return;
+      var btn = document.getElementById('cmpRun');
+      var msg = document.getElementById('cmpMsg');
+      var prog = document.getElementById('cmpProgress');
+      btn.disabled = true;
+      msg.textContent = 'Loading PDF…';
+      prog.style.display = '';
+
+      try {
+        var preset = _cmpPresets[_cmpQuality];
+        var origBytes = await _cmpFile.arrayBuffer();
+
+        /* Render pages with PDF.js */
+        var pdfJS = await pdfjsLib.getDocument({ data: origBytes }).promise;
+        var numPages = pdfJS.numPages;
+        document.getElementById('cmpTotal').textContent = numPages;
+
+        var { PDFDocument } = window.PDFLib;
+        var outDoc = await PDFDocument.create();
+
+        for (var i = 1; i <= numPages; i++) {
+          document.getElementById('cmpPg').textContent = i;
+          msg.textContent = 'Processing page ' + i + '/' + numPages + '…';
+
+          var page = await pdfJS.getPage(i);
+          var vp = page.getViewport({ scale: preset.scale });
+          var canvas = document.createElement('canvas');
+          canvas.width  = Math.round(vp.width);
+          canvas.height = Math.round(vp.height);
+          var ctx = canvas.getContext('2d');
+          await page.render({ canvasContext: ctx, viewport: vp }).promise;
+
+          var dataUrl = canvas.toDataURL('image/jpeg', preset.jpegQ);
+          var resp = await fetch(dataUrl);
+          var jpegBuf = await resp.arrayBuffer();
+          var jpgImg = await outDoc.embedJpg(new Uint8Array(jpegBuf));
+          var pdfPage = outDoc.addPage([vp.width, vp.height]);
+          pdfPage.drawImage(jpgImg, { x: 0, y: 0, width: vp.width, height: vp.height });
+        }
+
+        msg.textContent = 'Saving…';
+        var outBytes = await outDoc.save({ useObjectStreams: true });
+        prog.style.display = 'none';
+
+        /* Stats */
+        var origMB   = (_cmpFile.size / 1024 / 1024).toFixed(2);
+        var newMB    = (outBytes.byteLength / 1024 / 1024).toFixed(2);
+        var savedPct = (((1 - outBytes.byteLength / _cmpFile.size) * 100)).toFixed(0);
+        document.getElementById('cmpOrigSize').textContent = origMB + ' MB';
+        document.getElementById('cmpNewSize').textContent  = newMB + ' MB';
+        document.getElementById('cmpSaved').textContent    = savedPct + '% smaller';
+        document.getElementById('cmpBar').style.width = Math.max(0, savedPct) + '%';
+        document.getElementById('cmpStats').style.display = '';
+
+        /* Download */
+        var blob = new Blob([outBytes], { type: 'application/pdf' });
+        var url  = URL.createObjectURL(blob);
+        var a    = document.createElement('a');
+        a.href = url;
+        a.download = _cmpFile.name.replace(/\.pdf$/i, '') + '_compressed.pdf';
+        a.click();
+        URL.revokeObjectURL(url);
+
+        msg.textContent = '✓ Done! File downloaded.';
+      } catch (err) {
+        prog.style.display = 'none';
+        msg.textContent = '✗ Error: ' + err.message;
+        console.error(err);
+      }
+      btn.disabled = false;
+    }
 
     /* ── Screenshot → PDF ── */
     var _ssFiles = [];
