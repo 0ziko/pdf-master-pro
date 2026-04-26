@@ -2,6 +2,13 @@
 (function (w) {
   "use strict";
 
+  /* ── X% of Y (micro calculator pages) ─────────── */
+  function calcPercentOf(pct, ofVal) {
+    const p = parseFloat(pct), t = parseFloat(ofVal);
+    if (isNaN(p) || isNaN(t)) return null;
+    return { value: r2((p / 100) * t) };
+  }
+
   /* ── Discount ────────────────────────────────── */
   function calcDiscount(original, pct) {
     const o = parseFloat(original), p = parseFloat(pct);
@@ -149,8 +156,75 @@
 
   function r2(n) { return Math.round(n * 100) / 100; }
 
+  function _gcdInt(a, b) {
+    a = Math.abs(Math.floor(a));
+    b = Math.abs(Math.floor(b));
+    if (!b) return a;
+    return _gcdInt(b, a % b);
+  }
+
+  /* Simplify two-part ratio (e.g. 4 and 6 → 2:3) */
+  function calcRatioSimplify(a, b) {
+    let x = Math.round(parseFloat(a));
+    let y = Math.round(parseFloat(b));
+    if (isNaN(x) || isNaN(y) || y === 0) return null;
+    const g = _gcdInt(x, y);
+    return { a: x / g, b: y / g };
+  }
+
+  /* Calendar days and Mon–Fri working days between two ISO dates (YYYY-MM-DD) */
+  function dateRangeStats(isoA, isoB) {
+    const sA = String(isoA).slice(0, 10);
+    const sB = String(isoB).slice(0, 10);
+    const a = new Date(sA + "T12:00:00");
+    const b = new Date(sB + "T12:00:00");
+    if (isNaN(a) || isNaN(b)) return null;
+    const min = a < b ? a : b;
+    const max = a < b ? b : a;
+    const totalDays = Math.round((max - min) / 86400000);
+    let wd = 0;
+    for (let d = new Date(min); d <= max; d.setDate(d.getDate() + 1)) {
+      const day = d.getDay();
+      if (day !== 0 && day !== 6) wd++;
+    }
+    return { totalDays, workingDays: wd, totalWeeks: (totalDays / 7).toFixed(2) };
+  }
+
+  function calcProfitMargin(cost, price) {
+    const c = parseFloat(cost);
+    const p = parseFloat(price);
+    if (isNaN(c) || isNaN(p) || p === 0) return null;
+    return {
+      marginPct: r2(((p - c) / p) * 100),
+      markupPct: c === 0 ? null : r2(((p - c) / c) * 100),
+    };
+  }
+
+  /* Megabit per second → megabyte per second (1 byte = 8 bits) */
+  function mbpsToMBps(mbps) {
+    const m = parseFloat(mbps);
+    if (isNaN(m)) return null;
+    return r2(m / 8);
+  }
+
+  function decimalToBinaryStr(n) {
+    const v = parseInt(n, 10);
+    if (isNaN(v) || v < 0) return null;
+    return v.toString(2);
+  }
+
+  function binaryToDecimal(s) {
+    const t = String(s).replace(/[^01]/g, "");
+    if (!t) return null;
+    const v = parseInt(t, 2);
+    return isNaN(v) ? null : v;
+  }
+
   w.CalcTools = {
+    calcPercentOf,
     calcDiscount, calcVAT, calcTip, calcCompound, calcLoan,
     calcBMR, calcIdealWeight, calcWater, calcSleep, calcDueDate, calcFuel,
+    calcRatioSimplify, dateRangeStats, calcProfitMargin, mbpsToMBps,
+    decimalToBinaryStr, binaryToDecimal,
   };
 })(window);

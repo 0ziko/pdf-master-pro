@@ -242,5 +242,13 @@
     return str;
   }
 
-  w.SnakeUnits = { CATS, convertAll };
+  /* Single target unit (e.g. micro SEO spoke pages) */
+  function convertPair(catId, value, fromId, toId) {
+    const all = convertAll(catId, value, fromId);
+    if (!all || !all.length) return null;
+    const row = all.find((u) => u.id === toId);
+    return row ? row.result : null;
+  }
+
+  w.SnakeUnits = { CATS, convertAll, convertPair };
 })(window);

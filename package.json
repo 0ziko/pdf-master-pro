@@ -5,7 +5,9 @@
   "private": true,
   "scripts": {
     "build": "node build.js",
-    "dev": "npx serve . -p 3000"
+    "dev": "npx serve . -p 3000",
+    "sitemap": "node scripts/generate-sitemap.cjs",
+    "seo": "node scripts/generate-micro-pages.cjs && node scripts/generate-sitemap.cjs"
   },
   "devDependencies": {
     "javascript-obfuscator": "^4.1.1",

@@ -9,10 +9,11 @@
 
 "use strict";
 
-const fs      = require("fs");
-const path    = require("path");
-const fse     = require("fs-extra");
-const { obfuscate } = require("javascript-obfuscator");
+const fs            = require("fs");
+const path          = require("path");
+const fse           = require("fs-extra");
+const { execFileSync } = require("child_process");
+const { obfuscate }    = require("javascript-obfuscator");
 
 /* ── Config ─────────────────────────────────────────── */
 
@@ -22,6 +23,8 @@ const { obfuscate } = require("javascript-obfuscator");
  */
 const ALLOWED_DOMAINS = [
   "pdf-master-pro.pages.dev",
+  "snakeconverter.com",
+  "www.snakeconverter.com",
   "localhost",
   "127.0.0.1",
 ];
@@ -83,6 +86,7 @@ const JS_FILES = [
   "js/tools.js",
   "js/units.js",
   "js/calc-tools.js",
+  "js/micro-spoke.js",
   "js/dev-tools.js",
   "js/color-tools.js",
 ];
@@ -108,6 +112,11 @@ async function build() {
   console.log("║   SnakeConverter  —  Production Build ║");
   console.log("╚══════════════════════════════════════╝");
 
+  /* 0. Generate SEO micro landings + sitemap merge */
+  banner("Generating convert/calculators landings + sitemap…");
+  execFileSync(process.execPath, [path.join(SRC, "scripts", "generate-micro-pages.cjs")], { cwd: SRC, stdio: "inherit" });
+  execFileSync(process.execPath, [path.join(SRC, "scripts", "generate-sitemap.cjs")], { cwd: SRC, stdio: "inherit" });
+
   /* 1. Clean dist */
   banner("Cleaning dist/…");
   fse.removeSync(DIST);
@@ -119,6 +128,10 @@ async function build() {
   const cssFile = "css/app.css";
   fse.copySync(path.join(SRC, cssFile), path.join(DIST, cssFile));
   console.log(`     ${cssFile}  (${sizeKB(path.join(SRC, cssFile))})`);
+  if (fs.existsSync(path.join(SRC, "css/lp.css"))) {
+    fse.copySync(path.join(SRC, "css/lp.css"), path.join(DIST, "css/lp.css"));
+    banner("Copied css/lp.css");
+  }
 
   /* 3. Process index.html — add copyright comment, copy */
   banner("Processing index.html…");
@@ -138,6 +151,38 @@ async function build() {
     if (!html.startsWith("<!--")) html = copyright + html;
     fs.writeFileSync(path.join(DIST, f), html, "utf8");
     banner(`Copied ${f}`);
+  }
+
+  /* 3b2. All other root *.html, convert/, tr/, calculators/ (SEO landings) */
+  function copyHtmlWithCopyright(relPath) {
+    const srcF = path.join(SRC, relPath);
+    if (!fs.existsSync(srcF) || !relPath.endsWith(".html")) return;
+    let html = fs.readFileSync(srcF, "utf8");
+    const year = new Date().getFullYear();
+    const copyright = `<!--\n  © ${year} SnakeConverter. All rights reserved.\n-->\n`;
+    if (!html.startsWith("<!--")) html = copyright + html;
+    const destF = path.join(DIST, relPath);
+    fse.ensureDirSync(path.dirname(destF));
+    fs.writeFileSync(destF, html, "utf8");
+  }
+  for (const f of fs.readdirSync(SRC)) {
+    if (f.endsWith(".html") && f !== "index.html" && !EXTRA_HTML.includes(f)) {
+      copyHtmlWithCopyright(f);
+      banner("Copied " + f);
+    }
+  }
+  for (const d of ["convert", "tr", "calculators"]) {
+    const from = path.join(SRC, d);
+    if (fs.existsSync(from)) {
+      fse.copySync(from, path.join(DIST, d), { overwrite: true });
+      banner("Copied " + d + "/");
+    }
+  }
+  for (const extra of ["robots.txt", "favicon.svg", "og-image.png", "sitemap.xml"]) {
+    if (fs.existsSync(path.join(SRC, extra))) {
+      fse.copySync(path.join(SRC, extra), path.join(DIST, extra));
+      banner("Copied " + extra);
+    }
   }
 
   /* 4. Obfuscate JS files */

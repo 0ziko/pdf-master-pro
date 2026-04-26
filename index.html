@@ -385,6 +385,45 @@
       color: #9ca3af;
     }
 
+    .idx-hub-spokes {
+      margin: 0 0 16px;
+      padding: 12px 14px;
+      background: rgba(99, 102, 241, .06);
+      border: 1px solid rgba(99, 102, 241, .2);
+      border-radius: 10px;
+    }
+    .idx-hub-spokes h3 {
+      font-size: .75rem;
+      font-weight: 700;
+      color: #a5b4fc;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 6px;
+    }
+    .idx-hub-spokes p.sub {
+      font-size: .7rem;
+      color: #6b7280;
+      margin-bottom: 8px;
+      line-height: 1.35;
+    }
+    .idx-hub-spoke-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .idx-hub-spoke-links a {
+      font-size: .7rem;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, .05);
+      border: 1px solid rgba(130, 80, 255, .2);
+      color: #c4b5fd;
+      text-decoration: none;
+    }
+    .idx-hub-spoke-links a:hover {
+      background: rgba(130, 80, 255, .12);
+    }
+
     /* Tools grid */
     .idx-tools-grid {
       display: grid;
@@ -856,6 +895,20 @@
           <div class="idx-panel-title">📐 <span data-i18n="cat.units">Unit Converters</span></div>
           <div class="idx-panel-desc" data-i18n="cat.units.desc">Convert between any units of measurement instantly — length, weight, temperature and more.</div>
         </div>
+        <div class="idx-hub-spokes" data-nosnippet>
+          <h3 data-i18n="hub.seo.cvt_h">Popular conversion pages</h3>
+          <p class="sub" data-i18n="hub.seo.cvt_d">One intent per URL. Turkish versions: tr/convert/…</p>
+          <div class="idx-hub-spoke-links">
+            <a href="convert/kg-to-lbs.html" data-i18n="hub.spoke.cvt.kg">kg ↔ lb</a>
+            <a href="convert/cm-to-inches.html" data-i18n="hub.spoke.cvt.cm">cm ↔ in</a>
+            <a href="convert/celsius-to-fahrenheit.html" data-i18n="hub.spoke.cvt.temp">°C ↔ °F</a>
+            <a href="convert/liters-to-gallons.html" data-i18n="hub.spoke.cvt.vol">L ↔ US gal</a>
+            <a href="convert/kmh-to-mph.html" data-i18n="hub.spoke.cvt.spd">km/h ↔ mph</a>
+            <a href="convert/km-to-miles.html" data-i18n="hub.spoke.cvt.km">km ↔ miles</a>
+            <a href="tr/convert/kg-to-lbs.html" title="Türkçe" lang="tr">tr · kg↔lb</a>
+            <a href="tr/convert/celsius-to-fahrenheit.html" title="Türkçe" lang="tr">tr · °C↔°F</a>
+          </div>
+        </div>
         <div class="idx-tools-grid">
           <a href="units.html#length" class="idx-tool-card" data-search="length km m cm ft in mile unit">
             <span class="idx-tool-card-ico">📏</span>
@@ -1095,6 +1148,20 @@
         <div class="idx-panel-hdr">
           <div class="idx-panel-title">🧮 <span data-i18n="cat.calc">Calculators</span></div>
           <div class="idx-panel-desc" data-i18n="cat.calc.desc">Math, statistics, ratios and scientific calculations.</div>
+        </div>
+        <div class="idx-hub-spokes" data-nosnippet>
+          <h3 data-i18n="hub.seo.calc_h">Popular calculator pages</h3>
+          <p class="sub" data-i18n="hub.seo.calc_d">One intent per URL. Turkish: tr/calculators/…</p>
+          <div class="idx-hub-spoke-links">
+            <a href="calculators/percentage-calculator.html" data-i18n="hub.spoke.calc.pct">Percentage</a>
+            <a href="calculators/discount-calculator.html" data-i18n="hub.spoke.calc.disc">Discount</a>
+            <a href="calculators/loan-calculator.html" data-i18n="hub.spoke.calc.loan">Loan / EMI</a>
+            <a href="calculators/age-calculator.html" data-i18n="hub.spoke.calc.age">Age</a>
+            <a href="calculators/days-between-dates.html" data-i18n="hub.spoke.calc.dates">Date difference</a>
+            <a href="calculators/compound-interest-calculator.html" data-i18n="hub.spoke.calc.comp">Compound interest</a>
+            <a href="tr/calculators/percentage-calculator.html" title="Türkçe" lang="tr">tr · yüzde</a>
+            <a href="tr/calculators/loan-calculator.html" title="Türkçe" lang="tr">tr · kredi</a>
+          </div>
         </div>
         <div class="idx-tools-grid">
           <a href="tools.html#percent" class="idx-tool-card" data-search="percentage percent of what change increase decrease">
