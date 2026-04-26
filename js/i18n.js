@@ -415,7 +415,7 @@
       "alert.enc-enable":  "Üstteki şifreleme anahtarını aç ve yeni şifre yaz.",
       /* ── index.html ── */
       "index.sub":         "85+ ücretsiz tarayıcı aracı — sıfır yükleme, sıfır sunucu",
-      "index.search":      "Araç ara…",
+      "index.search":      "Araçlarda ara…",
       "cat.pdf":           "PDF Araçları",
       "cat.pdf.desc":      "PDF dosyalarını dönüştür, birleştir, böl, şifrele ve paylaş — tamamen tarayıcında, hiçbir şey yüklenmez.",
       "cat.units":         "Birim Dönüştürücüler",
