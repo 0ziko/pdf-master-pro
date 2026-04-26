@@ -19,9 +19,21 @@
   /* ══════════════════════════════════════════════
      2. AGE CALCULATOR
   ══════════════════════════════════════════════ */
+  function parseLocalDateInput(birthStr) {
+    if (!birthStr || typeof birthStr !== "string") return null;
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(birthStr.trim());
+    if (m) {
+      const y = parseInt(m[1], 10), mo = parseInt(m[2], 10) - 1, d = parseInt(m[3], 10);
+      const dt = new Date(y, mo, d);
+      if (dt.getFullYear() === y && dt.getMonth() === mo && dt.getDate() === d) return dt;
+    }
+    const d = new Date(birthStr);
+    return isNaN(d) ? null : d;
+  }
+
   function calcAge(birthStr) {
-    const birth = new Date(birthStr);
-    if (isNaN(birth)) return null;
+    const birth = parseLocalDateInput(String(birthStr || ""));
+    if (!birth) return null;
     const now = new Date();
 
     let years  = now.getFullYear() - birth.getFullYear();

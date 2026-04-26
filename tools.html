@@ -920,6 +920,7 @@
         .raffle-history .rh-del:hover { color:#f87171; }
         .raffle-count-badge { display:inline-block; background:rgba(130,80,255,.2); color:#a78bfa;
           border-radius:999px; font-size:.65rem; font-weight:700; padding:1px 8px; }
+        .raffle-winner-alts { width:100%; text-align:center; }
       </style>
       <div class="space-y">
         <div>
@@ -937,8 +938,19 @@
             placeholder="One name per line"
             oninput="raffleCount()"></textarea>
         </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-top:.4rem">
+          <div>
+            <label class="field-label" for="raffle-n-main" data-i18n="raffle.nmain">How many main winners</label>
+            <input type="number" id="raffle-n-main" class="field" min="1" max="500" value="1" />
+          </div>
+          <div>
+            <label class="field-label" for="raffle-n-res" data-i18n="raffle.nres">How many alternates</label>
+            <input type="number" id="raffle-n-res" class="field" min="0" max="500" value="0" />
+          </div>
+        </div>
         <div class="raffle-winner-box" id="raffle-winner-box">
           <div class="raffle-winner-name" id="raffle-winner-name">—</div>
+          <div id="raffle-winner-alts" class="raffle-winner-alts" style="display:none" aria-live="polite"></div>
           <div class="raffle-winner-sub" id="raffle-winner-sub" data-i18n="raffle.sub">Draw a winner to start</div>
         </div>
         <div class="tool-btn-row">
@@ -946,17 +958,35 @@
           <button type="button" class="btn-secondary" onclick="raffleReset()"><span data-i18n="raffle.reset">Reset</span></button>
           <button type="button" class="btn-secondary" onclick="raffleClearHistory()">🗑 <span data-i18n="raffle.histbtn">Clear list</span></button>
         </div>
-        <div id="raffle-history-wrap" style="display:none">
-          <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);margin-bottom:.4rem;" data-i18n="raffle.past">Past Winners</div>
+        <div id="raffle-history-wrap" style="display:none;margin-top:1rem">
+          <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);margin-bottom:.4rem;" data-i18n="raffle.past">Past winners</div>
           <ul class="raffle-history" id="raffle-history"></ul>
         </div>
       </div>
       <script>
       (function(){
+        var RAFFLE_LS = 'sc_raffle_hist_v2';
         var _rolling = false;
         function rT(k){ return (window.PdfMasterI18n && window.PdfMasterI18n.t) ? window.PdfMasterI18n.t(k) : k; }
+        function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
         function raffleGetList(){
           return (document.getElementById('raffle-list').value||'').split('\n').map(function(s){ return s.trim(); }).filter(Boolean);
+        }
+        function uniqNames(arr) {
+          var seen = Object.create(null), out = [];
+          for (var i = 0; i < arr.length; i++) {
+            var n = arr[i];
+            if (!seen[n]) { seen[n] = 1; out.push(n); }
+          }
+          return out;
+        }
+        function shuffle(a) {
+          var arr = a.slice();
+          for (var i = arr.length - 1; i > 0; i--) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+          }
+          return arr;
         }
         window.raffleCount = function(){
           document.getElementById('raffle-count').textContent = String(raffleGetList().length);
@@ -977,52 +1007,96 @@
         });
         window.raffleDraw = function(){
           if(_rolling) return;
-          var list = raffleGetList();
-          if(list.length === 0){ alert(rT('raffle.need')); return; }
+          var nMain = parseInt(document.getElementById('raffle-n-main').value, 10) || 0;
+          var nRes = parseInt(document.getElementById('raffle-n-res').value, 10) || 0;
+          if (nMain < 1) nMain = 1;
+          if (nRes < 0) nRes = 0;
+          var list = uniqNames(raffleGetList());
+          var need = nMain + nRes;
+          if (list.length === 0) { alert(rT('raffle.need')); return; }
+          if (list.length < need) {
+            alert(rT('raffle.notEnough').replace(/\{need\}/g, String(need)).replace(/\{have\}/g, String(list.length)));
+            return;
+          }
           var box = document.getElementById('raffle-winner-box');
           var nameEl = document.getElementById('raffle-winner-name');
           var subEl = document.getElementById('raffle-winner-sub');
+          var altEl = document.getElementById('raffle-winner-alts');
           _rolling = true; box.classList.add('rolling');
+          if (altEl) { altEl.style.display = 'none'; altEl.innerHTML = ''; }
           var ticks = 0, maxTicks = 18 + Math.floor(Math.random()*14);
           var iv = setInterval(function(){
             nameEl.textContent = list[Math.floor(Math.random()*list.length)];
             ticks++;
-            if(ticks >= maxTicks){
+            if (ticks >= maxTicks) {
               clearInterval(iv);
-              var winner = list[Math.floor(Math.random()*list.length)];
-              nameEl.textContent = winner;
-              subEl.textContent = '🏆 ' + rT('raffle.subwin') + (raffleHistoryLen()+1);
+              var sh = shuffle(list);
+              var primary = sh.slice(0, nMain);
+              var reserve = nRes ? sh.slice(nMain, nMain + nRes) : [];
+              if (primary.length === 1) { nameEl.textContent = primary[0]; }
+              else {
+                nameEl.innerHTML = primary.map(function(p, i) {
+                  return '<div style="font-size:1.2rem;line-height:1.25;margin:.2rem 0">'+(i+1)+'. '+esc(p)+'</div>';
+                }).join('');
+              }
+              subEl.textContent = '🏆 ' + rT('raffle.subwin') + (raffleHistoryLen() + 1);
+              if (altEl) {
+                if (reserve.length) {
+                  altEl.style.display = 'block';
+                  altEl.innerHTML = '<div style="margin-top:.4rem;font-size:.72rem;font-weight:700;color:var(--text-muted)">'+esc(rT('raffle.altsLabel'))+'</div>' +
+                    reserve.map(function(p, i) { return '<div style="font-size:.9rem;font-weight:600;color:#a5b4fc">'+(i+1)+'. '+esc(p)+'</div>'; }).join('');
+                } else { altEl.style.display = 'none'; altEl.innerHTML = ''; }
+              }
               box.classList.remove('rolling');
               _rolling = false;
-              raffleAddHistory(winner);
+              raffleAddHistory({ primary: primary, reserve: reserve });
             }
           }, 80);
         };
         window.raffleReset = function(){
-          document.getElementById('raffle-winner-name').textContent='—';
+          document.getElementById('raffle-winner-name').textContent = '—';
           document.getElementById('raffle-winner-sub').textContent = rT('raffle.sub');
+          var al = document.getElementById('raffle-winner-alts');
+          if (al) { al.style.display = 'none'; al.innerHTML = ''; }
         };
         var _history = [];
+        try {
+          var stored = localStorage.getItem(RAFFLE_LS);
+          if (stored) { var parsed = JSON.parse(stored); if (Array.isArray(parsed)) _history = parsed; }
+        } catch (e) { _history = []; }
+        function persist() {
+          try { localStorage.setItem(RAFFLE_LS, JSON.stringify(_history)); } catch (e) {}
+        }
         function raffleHistoryLen(){ return _history.length; }
-        function raffleAddHistory(name){
-          _history.unshift(name);
+        function raffleAddHistory(entry) {
+          if (typeof entry === 'string') entry = { primary: [entry], reserve: [] };
+          _history.unshift(entry);
+          if (_history.length > 40) _history = _history.slice(0, 40);
+          persist();
           raffleRenderHistory();
         }
-        function raffleRenderHistory(){
+        function formatEntry(e) {
+          if (typeof e === 'string') return esc(e);
+          var pr = (e.primary && e.primary.length) ? e.primary.map(esc).join(', ') : '—';
+          var rs = (e.reserve && e.reserve.length) ? e.reserve.map(esc).join(', ') : '';
+          return rs ? (pr + ' · ' + rT('raffle.altsLabel') + ': ' + rs) : pr;
+        }
+        function raffleRenderHistory() {
           var ul = document.getElementById('raffle-history');
           var wrap = document.getElementById('raffle-history-wrap');
-          if(_history.length === 0){ wrap.style.display='none'; return; }
-          wrap.style.display='block';
-          ul.innerHTML = _history.map(function(n,i){
-            return '<li><span class="rh-num">#'+(_history.length-i)+'</span><span class="rh-name">'+n.replace(/</g,'&lt;')+'</span><span class="rh-del" onclick="raffleDeleteHistory('+i+')">✕</span></li>';
+          if (_history.length === 0) { wrap.style.display = 'none'; return; }
+          wrap.style.display = 'block';
+          ul.innerHTML = _history.map(function(e, i) {
+            return '<li><span class="rh-num">#'+(_history.length-i)+'</span><span class="rh-name">'+formatEntry(e)+'</span><span class="rh-del" onclick="raffleDeleteHistory('+i+')">✕</span></li>';
           }).join('');
         }
-        window.raffleDeleteHistory = function(i){
-          _history.splice(i,1); raffleRenderHistory();
+        window.raffleDeleteHistory = function(i) {
+          _history.splice(i, 1); persist(); raffleRenderHistory();
         };
-        window.raffleClearHistory = function(){
-          _history=[]; raffleRenderHistory();
+        window.raffleClearHistory = function() {
+          _history = []; persist(); raffleRenderHistory();
         };
+        raffleRenderHistory();
       })();
       </script>
     </section>

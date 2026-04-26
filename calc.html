@@ -387,8 +387,8 @@
       <div class="tps-header">
         <span class="tps-icon">⛽</span>
         <div>
-          <div class="tps-title">Fuel Cost Calculator</div>
-          <div class="tps-desc">Trip cost based on distance, fuel efficiency, and fuel price</div>
+          <div class="tps-title" data-i18n="calc.fuel.name">Fuel Cost</div>
+          <div class="tps-desc" data-i18n="calc.fuel.desc">Trip cost by distance + efficiency</div>
         </div>
       </div>
       <div class="calc-form">
@@ -400,11 +400,19 @@
             <button type="button" class="fuel-unit-btn" data-unit="mpg">MPG</button>
           </div>
         </div>
-        <div><label class="calc-label">Distance (km)</label><input type="number" id="fuel-dist" class="input-field" placeholder="e.g. 500" /></div>
+        <div><label class="calc-label" data-i18n="calc.fuel.dist">Distance (km)</label><input type="number" id="fuel-dist" class="input-field" placeholder="e.g. 500" /></div>
         <div class="calc-row">
-          <div><label class="calc-label">Fuel Efficiency</label><input type="number" id="fuel-eff" class="input-field" placeholder="e.g. 7.5" /></div>
-          <div><label class="calc-label">Price per Liter</label><input type="number" id="fuel-price" class="input-field" placeholder="e.g. 1.85" /></div>
+          <div><label class="calc-label" data-i18n="calc.fuel.eff">Fuel Efficiency</label><input type="number" id="fuel-eff" class="input-field" placeholder="e.g. 7.5" /></div>
+          <div><label class="calc-label" data-i18n="calc.fuel.cur">Currency</label>
+            <select id="fuel-cur" class="calc-select" aria-label="Currency">
+              <option value="TRY">TRY (₺)</option>
+              <option value="USD">USD ($)</option>
+              <option value="EUR">EUR (€)</option>
+              <option value="GBP">GBP (£)</option>
+            </select>
+          </div>
         </div>
+        <div><label class="calc-label" data-i18n="calc.fuel.priceL">Price per liter</label><input type="number" id="fuel-price" class="input-field" placeholder="e.g. 1.85" step="0.01" /></div>
         <button type="button" onclick="doFuel()" class="btn-primary">Calculate</button>
         <div id="fuel-result" style="display:none"></div>
       </div>
@@ -613,7 +621,7 @@
     <section id="currency" class="tool-page-section">
       <div class="tps-header">
         <span class="tps-icon">💱</span>
-        <div><div class="tps-title" data-i18n="calc.currency.name">Currency Converter</div><div class="tps-desc">Live rates · European Central Bank · <span id="fx-rate-status">Loading…</span></div></div>
+        <div><div class="tps-title" data-i18n="calc.currency.name">Currency Converter</div><div class="tps-desc" data-i18n="calc.currency.desc">Live world FX (TRY inclusive) · <span id="fx-rate-status">Loading…</span></div></div>
       </div>
       <div class="calc-form">
         <div><label class="calc-label">Amount</label><input type="number" id="cur-amount" class="input-field" placeholder="100" value="100" /></div>
@@ -935,6 +943,10 @@ document.querySelectorAll(".fuel-unit-btn").forEach(btn => {
     btn.classList.add("active");
   });
 });
+function fuelMoneySym() {
+  const c = document.getElementById("fuel-cur").value;
+  return ({ TRY: "₺", USD: "$", EUR: "€", GBP: "£" })[c] || c + " ";
+}
 
 /* ── Hash routing ── */
 const hash = location.hash.replace("#","");
@@ -990,7 +1002,8 @@ function doLoan() {
 function doFuel() {
   const r = calcFuel(document.getElementById("fuel-dist").value, document.getElementById("fuel-eff").value, document.getElementById("fuel-price").value, fuelUnit);
   if (!r) return errMsg("fuel-result");
-  showResult("fuel-result", ri("Distance",r.distance+" km") + ri("Fuel Needed",r.liters+" L") + ri("Total Cost","$"+r.cost));
+  const sym = fuelMoneySym();
+  showResult("fuel-result", ri("Distance",r.distance+" km") + ri("Fuel Needed",r.liters+" L") + ri("Total Cost", sym + r.cost));
 }
 
 function doBMR() {
@@ -1142,42 +1155,71 @@ function doNumToWords() {
   el.style.display='flex';
 }
 
-/* ── 17. Currency — live rates via Frankfurter (ECB data) ── */
+/* ── 17. Currency — live rates (incl. TRY) via open.er; Frankfurter as backup ── */
 var _fxRates = null;
-var _fxCacheKey = 'sc_fx_rates';
+var _fxCacheKey = 'sc_fx_v4';
 var _fxCacheTTL = 3600000; /* 1 hour */
 
+function _fxPegs(rates) {
+  rates = rates || {};
+  if (!rates.USD) rates.USD = 1;
+  if (!rates.AED) rates.AED = 3.6725;
+  if (!rates.SAR) rates.SAR = 3.75;
+  return rates;
+}
+
 function _fxLoadRates(callback) {
-  /* Check localStorage cache first */
   try {
     var cached = JSON.parse(localStorage.getItem(_fxCacheKey) || 'null');
     if (cached && cached.rates && (Date.now() - cached.ts) < _fxCacheTTL) {
-      _fxRates = cached.rates;
+      _fxRates = _fxPegs(cached.rates);
       return callback(null, _fxRates);
     }
-  } catch(e) {}
+  } catch (e) {}
 
-  /* Fetch live rates from Frankfurter (European Central Bank) */
   var el = document.getElementById('cur-result');
   if (el) { el.style.display = ''; el.innerHTML = '<div class="currency-note">⏳ Fetching live rates…</div>'; }
 
-  fetch('https://api.frankfurter.app/latest?from=USD')
+  function save(rates) {
+    rates = _fxPegs(rates);
+    _fxRates = rates;
+    try { localStorage.setItem(_fxCacheKey, JSON.stringify({ rates: rates, ts: Date.now() })); } catch (e) {}
+  }
+
+  /* Primary: open.er (broad set, includes TRY) */
+  fetch('https://open.er-api.com/v6/latest/USD')
     .then(function(r) { return r.json(); })
     .then(function(data) {
-      var rates = data.rates || {};
-      rates.USD = 1;
-      /* AED and SAR not in ECB data — use fixed pegs */
-      if (!rates.AED) rates.AED = 3.6725;
-      if (!rates.SAR) rates.SAR = 3.75;
-      _fxRates = rates;
-      try {
-        localStorage.setItem(_fxCacheKey, JSON.stringify({ rates: rates, ts: Date.now() }));
-      } catch(e) {}
-      callback(null, rates);
+      if (data.result !== 'success' || !data.rates) throw new Error('open.er');
+      save(data.rates);
+      callback(null, _fxRates);
     })
-    .catch(function(err) {
-      /* Fallback to static rates if API fails */
-      _fxRates = {USD:1,EUR:0.92,GBP:0.79,TRY:38.5,JPY:154,CHF:0.9,CAD:1.38,AUD:1.56,CNY:7.25,INR:83.5,AED:3.6725,SAR:3.75};
+    .catch(function() {
+      /* Backup: Frankfurter (ECB) — no TRY; then merge a USD snapshot for missing codes */
+      return fetch('https://api.frankfurter.app/latest?from=USD')
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          var rates = _fxPegs(data.rates || {});
+          return fetch('https://open.er-api.com/v6/latest/USD')
+            .then(function(r2) { return r2.json(); })
+            .then(function(fb) {
+              if (fb.result === 'success' && fb.rates) {
+                /* Fill gaps (especially TRY) from open.er */
+                Object.keys(fb.rates).forEach(function(k) {
+                  if (rates[k] == null) rates[k] = fb.rates[k];
+                });
+              }
+            })
+            .catch(function() {})
+            .then(function() {
+              if (rates.TRY == null) rates.TRY = 40.0;
+              save(rates);
+              callback('mixed', _fxRates);
+            });
+        });
+    })
+    .catch(function() {
+      _fxRates = _fxPegs({ USD:1, EUR:0.92, GBP:0.78, TRY:42.0, JPY:152, CHF:0.88, CAD:1.42, AUD:1.55, CNY:7.2, INR:86, AED:3.6725, SAR:3.75 });
       callback('offline', _fxRates);
     });
 }
@@ -1189,13 +1231,13 @@ function doCurrency() {
   if (isNaN(amt)) return errMsg('cur-result', 'Enter a valid amount.');
 
   _fxLoadRates(function(err, rates) {
-    if (!rates[from] || !rates[to]) return errMsg('cur-result', 'Currency not supported.');
+    if (rates[from] == null || rates[to] == null) return errMsg('cur-result', 'Currency not supported.');
     var result = amt / rates[from] * rates[to];
     var el = document.getElementById('cur-result');
     var rate = rates[to] / rates[from];
-    var source = err === 'offline'
-      ? '⚠ Offline — using approximate rates.'
-      : '✓ Live rate · European Central Bank · Updates every hour';
+    var source = err === 'offline' ? '⚠ Offline — using approximate rates.'
+      : (err === 'mixed' ? '✓ Blended live rates (ECB + world FX)'
+      : '✓ Live rates · open.er (hourly cache)');
     el.innerHTML = '<div class="currency-result">' + amt.toFixed(2) + ' ' + from +
       ' = <strong>' + result.toFixed(4) + ' ' + to + '</strong></div>' +
       '<div class="currency-rate">1 ' + from + ' = ' + rate.toFixed(4) + ' ' + to + '</div>' +
