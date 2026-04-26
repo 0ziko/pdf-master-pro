@@ -1280,7 +1280,10 @@ const ToolsApp = (() => {
   const T = window.SnakeTools;
 
   function celebrate() {
-    if (snake && snake._s === "idle") snake._go("snack-happy");
+    try {
+      var m = window.snakeMascot;
+      if (m && typeof m.playAnimation === "function") m.playAnimation("happy", function () {});
+    } catch (e) { /* mascot optional */ }
   }
 
   function showErr(msg) { alert(msg); }
