@@ -84,7 +84,6 @@
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,700;0,14..32,900&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" /></noscript>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/build/qrcode.min.js"></script>
   <link rel="stylesheet" href="css/lp.css" />
   <script defer src="js/analytics.js"></script>
   <style>
@@ -366,6 +365,16 @@
 
 <script>
 var _qrLogoImg = null;
+var _qrModPromise = null;
+function ensureQRLib() {
+  if (window.QRCode) return Promise.resolve();
+  if (!_qrModPromise) {
+    _qrModPromise = import("https://esm.sh/qrcode@1.5.3").then(function (m) {
+      window.QRCode = m.default;
+    }).catch(function (e) { _qrModPromise = null; return Promise.reject(e); });
+  }
+  return _qrModPromise;
+}
 
 function qrLogoLoad(files) {
   if (!files || !files[0]) return;
@@ -400,40 +409,45 @@ function qrGenerate() {
   msg.textContent = 'Generating…';
   msg.style.color = 'var(--text-muted)';
 
-  var offCanvas = document.createElement('canvas');
-  QRCode.toCanvas(offCanvas, text, { width: size, margin: 2, errorCorrectionLevel: ec, color: { dark: dark, light: light } }, function(err) {
-    if (err) { msg.textContent = '✗ Error: ' + err.message; msg.style.color = 'var(--red)'; return; }
+  ensureQRLib().then(function () {
+    var offCanvas = document.createElement('canvas');
+    QRCode.toCanvas(offCanvas, text, { width: size, margin: 2, errorCorrectionLevel: ec, color: { dark: dark, light: light } }, function(err) {
+      if (err) { msg.textContent = '✗ Error: ' + err.message; msg.style.color = 'var(--red)'; return; }
 
-    var finalCanvas = document.getElementById('qrCanvas');
-    finalCanvas.width  = size;
-    finalCanvas.height = size;
-    var ctx = finalCanvas.getContext('2d');
-    ctx.drawImage(offCanvas, 0, 0);
+      var finalCanvas = document.getElementById('qrCanvas');
+      finalCanvas.width  = size;
+      finalCanvas.height = size;
+      var ctx = finalCanvas.getContext('2d');
+      ctx.drawImage(offCanvas, 0, 0);
 
-    if (_qrLogoImg) {
-      var logoSize = size * 0.22;
-      var x = (size - logoSize) / 2;
-      var y = (size - logoSize) / 2;
-      var r = logoSize * 0.18;
-      ctx.fillStyle = '#ffffff';
-      ctx.beginPath();
-      ctx.moveTo(x + r, y);
-      ctx.lineTo(x + logoSize - r, y);
-      ctx.quadraticCurveTo(x + logoSize, y, x + logoSize, y + r);
-      ctx.lineTo(x + logoSize, y + logoSize - r);
-      ctx.quadraticCurveTo(x + logoSize, y + logoSize, x + logoSize - r, y + logoSize);
-      ctx.lineTo(x + r, y + logoSize);
-      ctx.quadraticCurveTo(x, y + logoSize, x, y + logoSize - r);
-      ctx.lineTo(x, y + r);
-      ctx.quadraticCurveTo(x, y, x + r, y);
-      ctx.closePath();
-      ctx.fill();
-      ctx.drawImage(_qrLogoImg, x, y, logoSize, logoSize);
-    }
+      if (_qrLogoImg) {
+        var logoSize = size * 0.22;
+        var x = (size - logoSize) / 2;
+        var y = (size - logoSize) / 2;
+        var r = logoSize * 0.18;
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.lineTo(x + logoSize - r, y);
+        ctx.quadraticCurveTo(x + logoSize, y, x + logoSize, y + r);
+        ctx.lineTo(x + logoSize, y + logoSize - r);
+        ctx.quadraticCurveTo(x + logoSize, y + logoSize, x + logoSize - r, y + logoSize);
+        ctx.lineTo(x + r, y + logoSize);
+        ctx.quadraticCurveTo(x, y + logoSize, x, y + logoSize - r);
+        ctx.lineTo(x, y + r);
+        ctx.quadraticCurveTo(x, y, x + r, y);
+        ctx.closePath();
+        ctx.fill();
+        ctx.drawImage(_qrLogoImg, x, y, logoSize, logoSize);
+      }
 
-    document.getElementById('qrResult').style.display = '';
-    msg.textContent = '✓ QR code generated!';
-    msg.style.color = 'var(--green)';
+      document.getElementById('qrResult').style.display = '';
+      msg.textContent = '✓ QR code generated!';
+      msg.style.color = 'var(--green)';
+    });
+  }).catch(function () {
+    msg.textContent = 'QR library could not be loaded. Check your connection and try again.';
+    msg.style.color = 'var(--red)';
   });
 }
 

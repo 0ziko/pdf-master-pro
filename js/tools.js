@@ -176,9 +176,28 @@
   }
 
   /* ══════════════════════════════════════════════
-     8. QR CODE  — rendered via qrcode.js library
+     8. QR CODE  — qrcode (npm) via dynamic import; CDN .min UMD 404s on jsdelivr
   ══════════════════════════════════════════════ */
+  let _qrModPromise = null;
+  function ensureQRLib() {
+    if (w.QRCode) return Promise.resolve();
+    if (!_qrModPromise) {
+      _qrModPromise = import("https://esm.sh/qrcode@1.5.3")
+        .then((m) => { w.QRCode = m.default; })
+        .catch((err) => {
+          _qrModPromise = null;
+          return Promise.reject(err);
+        });
+    }
+    return _qrModPromise;
+  }
+
   async function renderQR(canvasId, text, opts) {
+    try {
+      await ensureQRLib();
+    } catch (e) {
+      throw new Error("i18n:err.qr.nolib");
+    }
     const canvas = document.getElementById(canvasId);
     if (!canvas || !w.QRCode) throw new Error("i18n:err.qr.nolib");
     if (!text.trim()) throw new Error("i18n:err.qr.empty");
