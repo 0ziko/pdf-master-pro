@@ -37,6 +37,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
   <link rel="preconnect" href="https://www.googletagmanager.com" />
+  <link rel="preconnect" href="https://date.nager.at" crossorigin />
   <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
   <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,600;0,14..32,700;0,14..32,900;1,14..32,300&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
@@ -154,6 +155,8 @@
       <a href="#pomodoro"         class="jump-link" data-i18n="tools.nav.pomo">🍅 Pomodoro</a>
       <a href="#invoice"          class="jump-link" data-i18n="tools.nav.inv">🧾 Invoice</a>
       <a href="#raffle"           class="jump-link" data-i18n="tools.nav.raffle">🎁 Raffle / Draw</a>
+      <a href="#horoscope"        class="jump-link" data-i18n="tools.nav.horo">♈ Zodiac / Horoscope</a>
+      <a href="#life-holidays"    class="jump-link" data-i18n="tools.nav.holiday">📅 Holidays &amp; PTO</a>
       <a href="#ai-prompt"        class="jump-link" data-i18n="tools.nav.aip">🤖 AI Prompt</a>
       <a href="#passmanager"      class="jump-link" data-i18n="tools.nav.pm">🔐 Pass Manager</a>
     </nav>
@@ -1304,6 +1307,75 @@
       </script>
     </section>
 
+    <section id="horoscope" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">♈</span>
+        <div>
+          <div class="tps-title" data-i18n="life.horo.name">Zodiac (sun sign)</div>
+          <div class="tps-desc" data-i18n="life.horo.desc">Tropical zodiac: traits from your birth date. Entertainment, not a prediction service.</div>
+        </div>
+      </div>
+      <p class="meta" style="font-size:0.72rem;color:var(--text-dim);margin:0 0 0.8rem;line-height:1.45" data-i18n="life.horo.disclaimer">Cusp: if you were born on a boundary day, check a full chart — this tool uses the date only.</p>
+      <div style="display:grid;grid-template-columns:1fr;gap:0.6rem;max-width:24rem">
+        <div>
+          <label class="field-label" for="horo-birth" data-i18n="life.horo.birth">Birth date</label>
+          <input type="date" id="horo-birth" class="input-field" />
+        </div>
+        <div>
+          <label class="field-label" for="horo-time" data-i18n="life.horo.time">Birth time (optional)</label>
+          <input type="time" id="horo-time" class="input-field" />
+        </div>
+        <p class="meta" style="font-size:0.64rem;margin:0;color:var(--text-dim)" data-i18n="life.horo.timeHint">We don’t use time for the sun sign; some moon/rising features would need a proper chart.</p>
+        <button type="button" class="btn-primary" style="align-self:start;width:auto" onclick="lifeRunHoroscope()"><span data-i18n="life.horo.btn">Show my sign</span></button>
+      </div>
+      <div id="horo-out" class="tool-result" style="display:none;margin-top:1rem;max-width:40rem">
+        <div id="horo-out-inner" style="line-height:1.55"></div>
+      </div>
+    </section>
+
+    <section id="life-holidays" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">📅</span>
+        <div>
+          <div class="tps-title" data-i18n="life.holiday.name">Public holidays &amp; PTO ideas</div>
+          <div class="tps-desc" data-i18n="life.holiday.desc">Official public holidays by country, plus simple “bridge day” ideas — your employer’s calendar may differ.</div>
+        </div>
+      </div>
+      <p class="meta" style="font-size:0.7rem;margin:0 0 0.6rem" data-i18n="life.holiday.api">Data: Nager.date public API. Needs internet.</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;max-width:28rem;align-items:end">
+        <div>
+          <label class="field-label" for="hol-cty" data-i18n="life.holiday.country">Country</label>
+          <select id="hol-cty" class="input-field" style="padding:0.5rem 0.7rem" onclick="lifeEnsureCountries()"></select>
+        </div>
+        <div>
+          <label class="field-label" for="hol-yr" data-i18n="life.holiday.year">Year</label>
+          <input type="number" id="hol-yr" class="input-field" min="2000" max="2040" step="1" value="2026" />
+        </div>
+      </div>
+      <div style="margin-top:0.5rem">
+        <button type="button" class="btn-primary" onclick="lifeRunHolidays()"><span data-i18n="life.holiday.load">Load holidays</span></button>
+        <span id="hol-status" class="meta" style="font-size:0.65rem;margin-left:0.5rem"></span>
+      </div>
+      <p id="hol-err" class="err-msg" style="display:none;margin-top:0.5rem"></p>
+      <div id="hol-table-wrap" style="display:none;margin-top:0.8rem;overflow-x:auto;max-width:100%">
+        <table class="data-table" style="width:100%;border-collapse:collapse;font-size:0.78rem">
+          <thead>
+            <tr style="text-align:left;border-bottom:1px solid var(--border-subtle)">
+              <th data-i18n="life.holiday.th.date" style="padding:0.35rem 0.4rem">Date</th>
+              <th data-i18n="life.holiday.th.wk" style="padding:0.35rem 0.4rem">Wk</th>
+              <th data-i18n="life.holiday.th.dow" style="padding:0.35rem 0.4rem">Day</th>
+              <th data-i18n="life.holiday.th.name" style="padding:0.35rem 0.4rem">Holiday</th>
+            </tr>
+          </thead>
+          <tbody id="hol-tbody"></tbody>
+        </table>
+      </div>
+      <div id="hol-bridge" style="display:none;margin-top:1rem" class="tool-result">
+        <div class="tps-title" style="font-size:0.8rem;margin-bottom:0.4rem" data-i18n="life.holiday.bridge">Bridge-day ideas (casual tips)</div>
+        <ul id="hol-bridge-list" style="margin:0;padding-left:1.1rem;font-size:0.78rem;color:var(--text-muted)"></ul>
+      </div>
+    </section>
+
     <section id="ai-prompt" class="tool-page-section">
       <div class="tps-header">
         <span class="tps-icon">🤖</span>
@@ -1427,6 +1499,7 @@
 <script src="js/i18n.js"></script>
 <script src="js/snake-mascot.js"></script>
 <script src="js/tools.js"></script>
+<script src="js/life-tools.js"></script>
 <script>
 /* ── Percentage mode switcher ── */
 document.querySelectorAll('input[name="pctMode"]').forEach(r => {
@@ -2503,6 +2576,85 @@ function qrLogoClear() {
     : (sections.length ? sections[0].id : '');
   if (startId) showSection(startId);
 })();
+</script>
+<script>
+function lifeI18n(k) { return (window.PdfMasterI18n && window.PdfMasterI18n.t) ? window.PdfMasterI18n.t(k) : k; }
+function lifeEsc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+var _lifeCty = false;
+function lifeEnsureCountries() {
+  if (_lifeCty) return Promise.resolve();
+  var L = window.LifeTools, s = document.getElementById("hol-cty");
+  if (!L || !s) return Promise.resolve();
+  s.innerHTML = "<option value=\"\">" + lifeI18n("life.holiday.pickcty") + "</option>";
+  return L.fetchNagerCountries().then(function (list) {
+    list.sort(function (a, b) { return a.name.localeCompare(b.name); });
+    s.innerHTML = "<option value=\"\">" + lifeI18n("life.holiday.pickcty") + "</option>" + list.map(function (c) {
+      return "<option value=\"" + lifeEsc(c.countryCode) + "\">" + lifeEsc(c.name) + "</option>";
+    }).join("");
+    _lifeCty = true;
+  }).catch(function () { s.innerHTML = "<option value=\"\">" + lifeI18n("life.holiday.ctyerr") + "</option>"; });
+}
+function lifeRunHoroscope() {
+  var L = window.LifeTools; if (!L) return;
+  var inp = document.getElementById("horo-birth");
+  if (!inp || !inp.value) { alert(lifeI18n("life.horo.needdate")); return; }
+  var p = inp.value.split("-");
+  var m = parseInt(p[1], 10), d = parseInt(p[2], 10);
+  if (isNaN(m) || isNaN(d)) { alert(lifeI18n("life.horo.needdate")); return; }
+  var key = L.sunSign(m, d);
+  var inner = document.getElementById("horo-out-inner"), out = document.getElementById("horo-out");
+  if (!inner || !out) return;
+  inner.innerHTML =
+    "<div style=\"font-size:1.25rem;font-weight:800;color:#c4b5fd;margin-bottom:.3rem\">" + lifeEsc(lifeI18n("zodiac." + key + ".n")) + "</div>" +
+    "<div class=\"meta\" style=\"margin-bottom:.45rem\">" + lifeEsc(lifeI18n("zodiac." + key + ".dates")) + " · " + lifeEsc(lifeI18n("zodiac." + key + ".el")) + "</div>" +
+    "<p style=\"font-size:.84rem;margin:.45rem 0\">" + lifeEsc(lifeI18n("zodiac." + key + ".p")) + "</p>" +
+    "<p style=\"font-size:.8rem\"><strong style=\"color:#86efac\">+</strong> " + lifeEsc(lifeI18n("zodiac." + key + ".plus")) + "</p>" +
+    "<p style=\"font-size:.8rem\"><strong style=\"color:#fbbf24\">~</strong> " + lifeEsc(lifeI18n("zodiac." + key + ".min")) + "</p>";
+  out.style.display = "block";
+  try { if (window.snakeMascot && window.snakeMascot.playAnimation) window.snakeMascot.playAnimation("happy", function () {}); } catch (e) {}
+}
+function lifeRunHolidays() {
+  var L = window.LifeTools, st = document.getElementById("hol-status"), err = document.getElementById("hol-err");
+  if (!L) return;
+  var c = document.getElementById("hol-cty"), yEl = document.getElementById("hol-yr");
+  if (!c || !yEl) return;
+  lifeEnsureCountries().then(function () {
+    var cty = c.value, y = parseInt(yEl.value, 10);
+    if (!cty) { alert(lifeI18n("life.holiday.needcty")); return; }
+    if (isNaN(y)) { alert(lifeI18n("life.holiday.badyear")); return; }
+    if (st) st.textContent = lifeI18n("life.holiday.loading");
+    if (err) { err.style.display = "none"; }
+    L.fetchNagerHolidays(y, cty).then(function (rows) {
+      if (st) st.textContent = "";
+      var tb = document.getElementById("hol-tbody"), w = document.getElementById("hol-table-wrap");
+      if (!tb || !w) return;
+      tb.innerHTML = (rows && rows.length ? rows : []).map(function (h) {
+        var wk = L.isoWeekNumber(h.date);
+        if (wk == null) wk = "–";
+        var dow = L.dayOfWeekFromISO(h.date);
+        var dlabel = lifeI18n("life.dow." + L.DOW_KEYS[dow]);
+        var label = h.localName || h.name;
+        return "<tr><td style=\"padding:.35rem .4rem;white-space:nowrap\">" + lifeEsc(h.date) + "</td><td style=\"padding:.35rem .4rem\">" + wk + "</td><td style=\"padding:.35rem .4rem\">" + lifeEsc(dlabel) + "</td><td style=\"padding:.35rem .4rem\">" + lifeEsc(label) + "</td></tr>";
+      }).join("");
+      w.style.display = "block";
+      var bl = document.getElementById("hol-bridge-list"), bd = document.getElementById("hol-bridge");
+      if (bl && bd) {
+        var htmlB = [];
+        (rows || []).forEach(function (h) {
+          var dow = L.dayOfWeekFromISO(h.date);
+          if (dow !== 2 && dow !== 4) return;
+          var tip = lifeI18n("life.bridge." + L.DOW_KEYS[dow]);
+          htmlB.push("<li><strong>" + lifeEsc(h.localName || h.name) + "</strong> — " + lifeEsc(h.date) + ". " + lifeEsc(tip) + "</li>");
+        });
+        bl.innerHTML = htmlB.join("");
+        bd.style.display = htmlB.length ? "block" : "none";
+      }
+    }).catch(function () {
+      if (st) st.textContent = "";
+      if (err) { err.textContent = lifeI18n("life.holiday.err"); err.style.display = "block"; }
+    });
+  });
+}
 </script>
 <script src="js/snake-tools.js"></script>
 <script>

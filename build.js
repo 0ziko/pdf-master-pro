@@ -84,6 +84,7 @@ const JS_FILES = [
   "js/snake-tools.js",
   "js/app.js",
   "js/tools.js",
+  "js/life-tools.js",
   "js/units.js",
   "js/calc-tools.js",
   "js/micro-spoke.js",
