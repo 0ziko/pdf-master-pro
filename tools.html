@@ -1349,7 +1349,7 @@
         </div>
         <div>
           <label class="field-label" for="hol-yr" data-i18n="life.holiday.year">Year</label>
-          <input type="number" id="hol-yr" class="input-field" min="2000" max="2040" step="1" value="2026" />
+          <input type="number" id="hol-yr" class="input-field" min="2000" max="2040" step="1" value="" />
         </div>
       </div>
       <div style="margin-top:0.5rem">
@@ -2147,6 +2147,7 @@ window.toolsOnLangUI = function () {
   if (typeof pomoT === "function" && document.getElementById("pomoStartBtn") && !window._pomoRunning) {
     try { document.getElementById("pomoStartBtn").textContent = pomoT("pomo.start"); } catch (e) {}
   }
+  try { if (typeof lifeRefreshOnLang === "function") lifeRefreshOnLang(); } catch (e) {}
 };
 
 /* ════ POMODORO ════ */
@@ -2581,6 +2582,58 @@ function qrLogoClear() {
 function lifeI18n(k) { return (window.PdfMasterI18n && window.PdfMasterI18n.t) ? window.PdfMasterI18n.t(k) : k; }
 function lifeEsc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
 var _lifeCty = false;
+var _lifeHolidayCache = null;
+function lifeRefreshCountryPick() {
+  var s = document.getElementById("hol-cty");
+  if (!s || !s.options || !s.options.length) return;
+  var o0 = s.options[0];
+  if (o0 && o0.value === "") o0.textContent = lifeI18n("life.holiday.pickcty");
+}
+function lifeRenderHolidaysTable(L, rows) {
+  if (!L) return;
+  _lifeHolidayCache = { rows: rows && rows.length ? rows.slice() : [] };
+  var st = document.getElementById("hol-status");
+  if (st) st.textContent = "";
+  var tb = document.getElementById("hol-tbody"), w = document.getElementById("hol-table-wrap");
+  if (!tb || !w) return;
+  var list = _lifeHolidayCache.rows;
+  tb.innerHTML = (list && list.length ? list : []).map(function (h) {
+    var wk = L.isoWeekNumber(h.date);
+    if (wk == null) wk = "–";
+    var dow = L.dayOfWeekFromISO(h.date);
+    var dlabel = lifeI18n("life.dow." + L.DOW_KEYS[dow]);
+    var label = h.localName || h.name;
+    return "<tr><td style=\"padding:.35rem .4rem;white-space:nowrap\">" + lifeEsc(h.date) + "</td><td style=\"padding:.35rem .4rem\">" + wk + "</td><td style=\"padding:.35rem .4rem\">" + lifeEsc(dlabel) + "</td><td style=\"padding:.35rem .4rem\">" + lifeEsc(label) + "</td></tr>";
+  }).join("");
+  w.style.display = "block";
+  var bl = document.getElementById("hol-bridge-list"), bd = document.getElementById("hol-bridge");
+  if (bl && bd) {
+    var htmlB = [];
+    (list || []).forEach(function (h) {
+      var dow = L.dayOfWeekFromISO(h.date);
+      if (dow !== 2 && dow !== 4) return;
+      var tip = lifeI18n("life.bridge." + L.DOW_KEYS[dow]);
+      htmlB.push("<li><strong>" + lifeEsc(h.localName || h.name) + "</strong> — " + lifeEsc(h.date) + ". " + lifeEsc(tip) + "</li>");
+    });
+    bl.innerHTML = htmlB.join("");
+    bd.style.display = htmlB.length ? "block" : "none";
+  }
+}
+function lifeRefreshOnLang() {
+  var L = window.LifeTools;
+  if (L) {
+    var ho = document.getElementById("horo-out");
+    if (ho && ho.style.display !== "none") {
+      var hb = document.getElementById("horo-birth");
+      if (hb && hb.value) { lifeRunHoroscope(); }
+    }
+    if (_lifeHolidayCache && _lifeHolidayCache.rows && _lifeHolidayCache.rows.length) {
+      var w = document.getElementById("hol-table-wrap");
+      if (w && w.style.display !== "none") { lifeRenderHolidaysTable(L, _lifeHolidayCache.rows); }
+    }
+  }
+  lifeRefreshCountryPick();
+}
 function lifeEnsureCountries() {
   if (_lifeCty) return Promise.resolve();
   var L = window.LifeTools, s = document.getElementById("hol-cty");
@@ -2625,30 +2678,7 @@ function lifeRunHolidays() {
     if (st) st.textContent = lifeI18n("life.holiday.loading");
     if (err) { err.style.display = "none"; }
     L.fetchNagerHolidays(y, cty).then(function (rows) {
-      if (st) st.textContent = "";
-      var tb = document.getElementById("hol-tbody"), w = document.getElementById("hol-table-wrap");
-      if (!tb || !w) return;
-      tb.innerHTML = (rows && rows.length ? rows : []).map(function (h) {
-        var wk = L.isoWeekNumber(h.date);
-        if (wk == null) wk = "–";
-        var dow = L.dayOfWeekFromISO(h.date);
-        var dlabel = lifeI18n("life.dow." + L.DOW_KEYS[dow]);
-        var label = h.localName || h.name;
-        return "<tr><td style=\"padding:.35rem .4rem;white-space:nowrap\">" + lifeEsc(h.date) + "</td><td style=\"padding:.35rem .4rem\">" + wk + "</td><td style=\"padding:.35rem .4rem\">" + lifeEsc(dlabel) + "</td><td style=\"padding:.35rem .4rem\">" + lifeEsc(label) + "</td></tr>";
-      }).join("");
-      w.style.display = "block";
-      var bl = document.getElementById("hol-bridge-list"), bd = document.getElementById("hol-bridge");
-      if (bl && bd) {
-        var htmlB = [];
-        (rows || []).forEach(function (h) {
-          var dow = L.dayOfWeekFromISO(h.date);
-          if (dow !== 2 && dow !== 4) return;
-          var tip = lifeI18n("life.bridge." + L.DOW_KEYS[dow]);
-          htmlB.push("<li><strong>" + lifeEsc(h.localName || h.name) + "</strong> — " + lifeEsc(h.date) + ". " + lifeEsc(tip) + "</li>");
-        });
-        bl.innerHTML = htmlB.join("");
-        bd.style.display = htmlB.length ? "block" : "none";
-      }
+      lifeRenderHolidaysTable(L, rows || []);
     }).catch(function () {
       if (st) st.textContent = "";
       if (err) { err.textContent = lifeI18n("life.holiday.err"); err.style.display = "block"; }
@@ -2660,6 +2690,13 @@ function lifeRunHolidays() {
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     if (window.ToolsApp && window.ToolsApp.coinSyncLetters) window.ToolsApp.coinSyncLetters();
+    var hy = document.getElementById("hol-yr");
+    if (hy) {
+      var yv = hy.value;
+      if (yv === "" || yv === null || yv === undefined) {
+        hy.value = String(new Date().getFullYear());
+      }
+    }
     if (typeof window.toolsOnLangUI === "function") window.toolsOnLangUI();
   });
   document.addEventListener("langchange", function () {
