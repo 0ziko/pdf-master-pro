@@ -220,11 +220,115 @@
     return isNaN(v) ? null : v;
   }
 
+  /* ── Calculus (math.js, window.math) — f(x) in x only ── */
+  function _math() {
+    return typeof w.math !== "undefined" ? w.math : null;
+  }
+
+  function calculusSafeExpr(raw) {
+    if (!raw || typeof raw !== "string") return { ok: false, err: "empty" };
+    const s = raw.trim();
+    if (!s.length) return { ok: false, err: "empty" };
+    if (s.length > 200) return { ok: false, err: "long" };
+    if (/[;{}]/.test(s)) return { ok: false, err: "unsafe" };
+    return { ok: true, s };
+  }
+
+  function calculusCompile(exprStr) {
+    const m = _math();
+    if (!m) return { ok: false, err: "no_math" };
+    const t = calculusSafeExpr(exprStr);
+    if (!t.ok) return t;
+    try {
+      return { ok: true, node: m.parse(t.s), str: t.s };
+    } catch (e) {
+      return { ok: false, err: "parse" };
+    }
+  }
+
+  function calculusF(node, x) {
+    return Number(node.evaluate({ x: x }));
+  }
+
+  function calculusDerivativeString(exprStr) {
+    const m = _math();
+    const t = calculusCompile(exprStr);
+    if (!t.ok) return t;
+    try {
+      const d = m.derivative(t.s, "x");
+      return { ok: true, value: d.toString() };
+    } catch (e) {
+      return { ok: false, err: "der" };
+    }
+  }
+
+  function calculusIntegralDefinite(exprStr, a, b) {
+    const t = calculusCompile(exprStr);
+    if (!t.ok) return t;
+    if (!isFinite(a) || !isFinite(b) || a === b) return { ok: false, err: "ab" };
+    const n = 400;
+    const h = (b - a) / n;
+    let s = 0;
+    const node = t.node;
+    try {
+      for (let i = 0; i <= n; i++) {
+        const x = a + h * i;
+        const wgt = (i === 0 || i === n) ? 0.5 : 1;
+        s += wgt * calculusF(node, x);
+      }
+      s *= h;
+    } catch (e) {
+      return { ok: false, err: "int" };
+    }
+    if (isNaN(s) || !isFinite(s)) return { ok: false, err: "int" };
+    return { ok: true, value: s };
+  }
+
+  function calculusLimitAt(exprStr, a) {
+    const t = calculusCompile(exprStr);
+    if (!t.ok) return t;
+    const node = t.node;
+    const eps = 1e-5;
+    try {
+      const fv = calculusF(node, a);
+      if (isFinite(fv) && !isNaN(fv)) return { ok: true, value: fv };
+    } catch (e) { /* fall through */ }
+    try {
+      const r1 = (calculusF(node, a + eps) + calculusF(node, a - eps)) / 2;
+      const r2 = (calculusF(node, a + 2 * eps) + calculusF(node, a - 2 * eps)) / 2;
+      const v = (r1 + r2) / 2;
+      if (isNaN(v) || !isFinite(v)) return { ok: false, err: "lim" };
+      return { ok: true, value: v, approx: true };
+    } catch (e) {
+      return { ok: false, err: "lim" };
+    }
+  }
+
+  function calculusSampleY(exprStr, xMin, xMax, nPts) {
+    const t = calculusCompile(exprStr);
+    if (!t.ok) return t;
+    const node = t.node;
+    const pts = [];
+    const w = xMax - xMin;
+    if (w <= 0 || nPts < 2) return { ok: false, err: "range" };
+    for (let i = 0; i < nPts; i++) {
+      const x = xMin + (w * i) / (nPts - 1);
+      try {
+        const y = calculusF(node, x);
+        if (isFinite(y)) pts.push({ x, y });
+      } catch (e) { /* skip */ }
+    }
+    if (pts.length < 2) return { ok: false, err: "graph" };
+    return { ok: true, points: pts };
+  }
+
   w.CalcTools = {
     calcPercentOf,
     calcDiscount, calcVAT, calcTip, calcCompound, calcLoan,
     calcBMR, calcIdealWeight, calcWater, calcSleep, calcDueDate, calcFuel,
     calcRatioSimplify, dateRangeStats, calcProfitMargin, mbpsToMBps,
     decimalToBinaryStr, binaryToDecimal,
+    calculusSafeExpr, calculusCompile, calculusDerivativeString,
+    calculusIntegralDefinite, calculusLimitAt, calculusSampleY, calculusF,
   };
 })(window);

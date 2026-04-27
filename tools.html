@@ -135,6 +135,7 @@
       <a href="#bmi"              class="jump-link" data-i18n="tools.nav.bmi">❤️ BMI</a>
       <a href="#percent"          class="jump-link" data-i18n="tools.nav.pct">% Percentage</a>
       <a href="#case"             class="jump-link" data-i18n="tools.nav.case">Aa Text Case</a>
+      <a href="#snake-case"       class="jump-link" data-i18n="tools.nav.snakecase">🐍 snake_case</a>
       <a href="#random"           class="jump-link" data-i18n="tools.nav.rng">🎲 Random</a>
       <a href="#pass"             class="jump-link" data-i18n="tools.nav.pass">🔐 Password</a>
       <a href="#qr"               class="jump-link" data-i18n="tools.nav.qr">📱 QR Code</a>
@@ -358,6 +359,35 @@
         </div>
       </div>
     </div>
+    </section>
+
+    <!-- 5b. snake_case (code naming) -->
+    <section id="snake-case" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">🐍</span>
+        <div>
+          <div class="tps-title" data-i18n="text.snakecase.name">snake_case converter</div>
+          <div class="tps-desc" data-i18n="text.snakecase.desc">Variable-style names for code — distinct from the site mascot</div>
+        </div>
+      </div>
+      <p class="meta" style="font-size:0.72rem;color:var(--text-dim);margin:0 0 0.6rem;line-height:1.45" data-i18n="text.snakecase.note">The word “snake” here means the programming style snake_case — not the mascot.</p>
+      <div class="space-y">
+        <label class="field-label" for="snakecase-input" data-i18n="text.snakecase.in">Text to convert</label>
+        <textarea id="snakecase-input" class="tool-textarea" data-i18n-ph="case.ph" rows="3" placeholder="my variable name"></textarea>
+        <button type="button" class="btn-primary" onclick="ToolsApp.doSnakeCase()">
+          <span data-i18n="text.snakecase.btn">Convert to snake_case</span>
+        </button>
+        <div id="snakecase-out-wrap" class="tool-result" style="display: none">
+          <div class="result-item" style="margin-bottom:0.35rem">
+            <span class="result-item-label" data-i18n="text.snakecase.out">Result</span>
+            <button type="button" class="copy-btn" style="float:right" onclick="ToolsApp.copy('snakecase-output')"><span data-i18n="btn.copy">Copy</span></button>
+          </div>
+          <textarea id="snakecase-output" class="tool-textarea" readonly rows="2" style="background:rgba(0,0,0,0.2)"></textarea>
+        </div>
+        <p class="meta" style="font-size:0.68rem;margin:0">
+          <a href="#case" data-i18n="text.snakecase.link" style="color:#a78bfa">Open full text case tools</a>
+        </p>
+      </div>
     </section>
 
     <!-- 6. Random Number Generator -->
@@ -951,6 +981,18 @@
         .raffle-count-badge { display:inline-block; background:rgba(130,80,255,.2); color:#a78bfa;
           border-radius:999px; font-size:.65rem; font-weight:700; padding:1px 8px; }
         .raffle-winner-alts { width:100%; text-align:center; }
+        .raffle-wheel-stage { text-align:center; margin:.35rem 0 1rem; }
+        .raffle-wheel-label { font-size:.65rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--text-muted); margin-bottom:.4rem; }
+        .raffle-wheel-gfx { position:relative; display:inline-block; }
+        .raffle-wheel-pointer {
+          position:absolute; top:-8px; left:50%; margin-left:-11px; width:0; height:0; z-index:2;
+          border-left:12px solid transparent; border-right:12px solid transparent; border-bottom:18px solid #c4b5fd;
+          filter:drop-shadow(0 2px 3px rgba(0,0,0,.45));
+        }
+        .raffle-wheel-svg { display:block; border-radius:50%; background:rgba(0,0,0,.2); }
+        .raffle-wheel-rot { transform-origin:0 0; will-change: transform; }
+        .raffle-wheel-rot.raffle-spin { transition: transform 4.15s cubic-bezier(0.1,0.7,0.1,1); }
+        .raffle-wheel-rot.raffle-instant { transition: none; }
       </style>
       <div class="space-y">
         <div>
@@ -976,6 +1018,15 @@
           <div>
             <label class="field-label" for="raffle-n-res" data-i18n="raffle.nres">How many alternates</label>
             <input type="number" id="raffle-n-res" class="field" min="0" max="500" value="0" />
+          </div>
+        </div>
+        <div id="raffle-wheel-stage" class="raffle-wheel-stage" style="display:none" aria-hidden="true">
+          <div class="raffle-wheel-label" data-i18n="raffle.wheel.title">Spinning wheel</div>
+          <div class="raffle-wheel-gfx">
+            <div class="raffle-wheel-pointer" aria-hidden="true"></div>
+            <svg class="raffle-wheel-svg" id="raffle-wheel-svg" viewBox="0 0 200 200" width="252" height="252" role="img" aria-label="Raffle wheel">
+              <g id="raffle-wheel-rot" class="raffle-wheel-rot" transform="translate(100,100)"></g>
+            </svg>
           </div>
         </div>
         <div class="raffle-winner-box" id="raffle-winner-box">
@@ -1035,6 +1086,54 @@
           reader.onerror = function() { ev.target.value = ''; };
           reader.readAsText(f);
         });
+        function raffleWheelBuild(names) {
+          var g = document.getElementById('raffle-wheel-rot');
+          if (!g) return;
+          var n = names.length, R = 90, html = '';
+          for (var i = 0; i < n; i++) {
+            var a0 = -Math.PI/2 + (i / n) * 2 * Math.PI;
+            var a1 = -Math.PI/2 + ((i+1) / n) * 2 * Math.PI;
+            var x0 = R * Math.cos(a0), y0 = R * Math.sin(a0);
+            var x1 = R * Math.cos(a1), y1 = R * Math.sin(a1);
+            var large = (a1 - a0 > Math.PI) ? 1 : 0;
+            var fill = (i % 2) ? 'rgba(130,80,255,0.42)' : 'rgba(236,72,153,0.28)';
+            html += '<path d="M 0 0 L '+x0.toFixed(2)+' '+y0.toFixed(2)+' A '+R+' '+R+' 0 '+large+' 1 '+x1.toFixed(2)+' '+y1.toFixed(2)+' Z" fill="'+fill+'" stroke="rgba(255,255,255,0.14)" stroke-width="0.6"/>';
+            var mid = (a0 + a1) / 2;
+            var tr = R * 0.55;
+            var tx = tr * Math.cos(mid), ty = tr * Math.sin(mid);
+            var lab = names[i].length > 16 ? (names[i].slice(0,15)+'…') : names[i];
+            var fs = Math.max(5.2, Math.min(10, 130 / n));
+            var rot = (mid * 180 / Math.PI) + 90;
+            html += '<text x="'+tx.toFixed(2)+'" y="'+ty.toFixed(2)+'" fill="#f5f3ff" font-size="'+fs+'" font-weight="700" text-anchor="middle" dominant-baseline="middle" transform="rotate('+rot.toFixed(2)+' '+tx.toFixed(2)+' '+ty.toFixed(2)+')">'+esc(lab)+'</text>';
+          }
+          g.innerHTML = html;
+          g.classList.remove('raffle-spin');
+          g.classList.add('raffle-instant');
+          g.style.transform = 'rotate(0deg)';
+        }
+        function raffleApplyResult(list, nMain, nRes, primary, reserve) {
+          var box = document.getElementById('raffle-winner-box');
+          var nameEl = document.getElementById('raffle-winner-name');
+          var subEl = document.getElementById('raffle-winner-sub');
+          var altEl = document.getElementById('raffle-winner-alts');
+          if (primary.length === 1) { nameEl.textContent = primary[0]; }
+          else {
+            nameEl.innerHTML = primary.map(function(p, i) {
+              return '<div style="font-size:1.2rem;line-height:1.25;margin:.2rem 0">'+(i+1)+'. '+esc(p)+'</div>';
+            }).join('');
+          }
+          subEl.textContent = '🏆 ' + rT('raffle.subwin') + (raffleHistoryLen() + 1);
+          if (altEl) {
+            if (reserve.length) {
+              altEl.style.display = 'block';
+              altEl.innerHTML = '<div style="margin-top:.4rem;font-size:.72rem;font-weight:700;color:var(--text-muted)">'+esc(rT('raffle.altsLabel'))+'</div>' +
+                reserve.map(function(p, i) { return '<div style="font-size:.9rem;font-weight:600;color:#a5b4fc">'+(i+1)+'. '+esc(p)+'</div>'; }).join('');
+            } else { altEl.style.display = 'none'; altEl.innerHTML = ''; }
+          }
+          box.classList.remove('rolling');
+          _rolling = false;
+          raffleAddHistory({ primary: primary, reserve: reserve });
+        }
         window.raffleDraw = function(){
           if(_rolling) return;
           var nMain = parseInt(document.getElementById('raffle-n-main').value, 10) || 0;
@@ -1052,34 +1151,56 @@
           var nameEl = document.getElementById('raffle-winner-name');
           var subEl = document.getElementById('raffle-winner-sub');
           var altEl = document.getElementById('raffle-winner-alts');
+          var sh = shuffle(list);
+          var primary = sh.slice(0, nMain);
+          var reserve = nRes ? sh.slice(nMain, nMain + nRes) : [];
+          var useWheel = (nMain === 1 && list.length >= 2 && list.length <= 48);
           _rolling = true; box.classList.add('rolling');
           if (altEl) { altEl.style.display = 'none'; altEl.innerHTML = ''; }
+          if (useWheel) {
+            var winIdx = list.indexOf(primary[0]);
+            if (winIdx < 0) winIdx = 0;
+            var stage = document.getElementById('raffle-wheel-stage');
+            var g = document.getElementById('raffle-wheel-rot');
+            raffleWheelBuild(list);
+            if (stage) stage.style.display = 'block';
+            var slice = 360 / list.length;
+            var last = parseFloat(g && g.dataset.angle ? g.dataset.angle : '0', 10) || 0;
+            var base = Math.ceil(last / 360) * 360;
+            var endDeg = base + 360 * 5 + (360 - winIdx * slice);
+            void (g && g.offsetWidth);
+            if (g) {
+              g.dataset.angle = String(endDeg);
+              g.classList.remove('raffle-instant');
+              g.classList.add('raffle-spin');
+              requestAnimationFrame(function () {
+                g.style.transform = 'rotate(' + endDeg + 'deg)';
+              });
+            }
+            var _fired = false;
+            var done = function (ev) {
+              if (ev && ev.propertyName && ev.propertyName !== 'transform') return;
+              if (_fired) return;
+              _fired = true;
+              if (g) g.removeEventListener('transitionend', done);
+              raffleApplyResult(list, nMain, nRes, primary, reserve);
+            };
+            if (g) {
+              g.addEventListener('transitionend', done);
+              setTimeout(function () { done(); }, 4500);
+            } else {
+              raffleApplyResult(list, nMain, nRes, primary, reserve);
+            }
+            return;
+          }
+          if (document.getElementById('raffle-wheel-stage')) document.getElementById('raffle-wheel-stage').style.display = 'none';
           var ticks = 0, maxTicks = 18 + Math.floor(Math.random()*14);
           var iv = setInterval(function(){
             nameEl.textContent = list[Math.floor(Math.random()*list.length)];
             ticks++;
             if (ticks >= maxTicks) {
               clearInterval(iv);
-              var sh = shuffle(list);
-              var primary = sh.slice(0, nMain);
-              var reserve = nRes ? sh.slice(nMain, nMain + nRes) : [];
-              if (primary.length === 1) { nameEl.textContent = primary[0]; }
-              else {
-                nameEl.innerHTML = primary.map(function(p, i) {
-                  return '<div style="font-size:1.2rem;line-height:1.25;margin:.2rem 0">'+(i+1)+'. '+esc(p)+'</div>';
-                }).join('');
-              }
-              subEl.textContent = '🏆 ' + rT('raffle.subwin') + (raffleHistoryLen() + 1);
-              if (altEl) {
-                if (reserve.length) {
-                  altEl.style.display = 'block';
-                  altEl.innerHTML = '<div style="margin-top:.4rem;font-size:.72rem;font-weight:700;color:var(--text-muted)">'+esc(rT('raffle.altsLabel'))+'</div>' +
-                    reserve.map(function(p, i) { return '<div style="font-size:.9rem;font-weight:600;color:#a5b4fc">'+(i+1)+'. '+esc(p)+'</div>'; }).join('');
-                } else { altEl.style.display = 'none'; altEl.innerHTML = ''; }
-              }
-              box.classList.remove('rolling');
-              _rolling = false;
-              raffleAddHistory({ primary: primary, reserve: reserve });
+              raffleApplyResult(list, nMain, nRes, primary, reserve);
             }
           }, 80);
         };
@@ -1088,6 +1209,8 @@
           document.getElementById('raffle-winner-sub').textContent = rT('raffle.sub');
           var al = document.getElementById('raffle-winner-alts');
           if (al) { al.style.display = 'none'; al.innerHTML = ''; }
+          var st = document.getElementById('raffle-wheel-stage');
+          if (st) st.style.display = 'none';
         };
         var _history = [];
         try {
@@ -1454,6 +1577,19 @@ const ToolsApp = (() => {
     document.getElementById("case-output").value = out;
     document.getElementById("case-mode-label").textContent = CASE_I18N[mode] ? _ti(CASE_I18N[mode]) : mode;
     document.getElementById("case-result").style.display = "";
+    celebrate();
+  }
+
+  function doSnakeCase() {
+    const el = document.getElementById("snakecase-input");
+    if (!el) return;
+    const input = el.value;
+    if (!input.trim()) return showErr("i18n:err.txt.empty");
+    const out = T.convertCase(input, "snake");
+    const o = document.getElementById("snakecase-output");
+    const w = document.getElementById("snakecase-out-wrap");
+    if (o) o.value = out;
+    if (w) w.style.display = "";
     celebrate();
   }
 
@@ -1862,7 +1998,7 @@ const ToolsApp = (() => {
     document.getElementById('cd-done').style.display='none';
   }
 
-  return { wordCount, calcAge, calcBMI, calcPct, doCase, genRandom, genPass, genQR, downloadQR, doBase64, dateToUnix, unixToDate, copy, copyRng,
+  return { wordCount, calcAge, calcBMI, calcPct, doCase, doSnakeCase, genRandom, genPass, genQR, downloadQR, doBase64, dateToUnix, unixToDate, copy, copyRng,
     morseEncode, morseDecode, textToBinary, binaryToText, checkPalindrome, dedupeLines, reverseText, inspectString,
     coinSyncLetters, flipCoin, rollDice, swToggle, swLap, swReset, cdToggle, cdReset };
 })();

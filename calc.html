@@ -36,6 +36,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
   <link rel="preconnect" href="https://www.googletagmanager.com" />
   <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
   <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
@@ -68,7 +69,7 @@
         "applicationCategory": "UtilitiesApplication",
         "operatingSystem": "Any (Web Browser)",
         "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-        "featureList": ["BMI Calculator", "Age Calculator", "Percentage Calculator", "Loan Calculator", "Currency Converter", "Date Difference", "Time Zone Converter", "Statistics Calculator", "Aspect Ratio", "Quadratic Solver", "Scientific Calculator"]
+        "featureList": ["BMI Calculator", "Age Calculator", "Percentage Calculator", "Loan Calculator", "Currency Converter", "Date Difference", "Time Zone Converter", "Statistics Calculator", "Aspect Ratio", "Quadratic Solver", "Calculus (derivative, integral, limits)", "Scientific Calculator"]
       }
     ]
   }
@@ -238,6 +239,7 @@
       <a href="#num-to-words" class="jump-link">🔢 Num→Words</a>
       <a href="#currency"     class="jump-link">💱 Currency</a>
       <a href="#quadratic"    class="jump-link">🧮 Quadratic</a>
+      <a href="#calculus"     class="jump-link" data-i18n="calc.nav.calculus">∫ Calculus</a>
       <a href="#sci-calc"     class="jump-link">🔬 Sci Calc</a>
       <a href="#calories"     class="jump-link">🔥 Calorie Robot</a>
     </nav>
@@ -686,7 +688,49 @@
       </div>
     </section>
 
-    <!-- 19. Scientific Calculator -->
+    <!-- 19. Calculus: limit, derivative, integral + graph -->
+    <section id="calculus" class="tool-page-section">
+      <div class="tps-header">
+        <span class="tps-icon">∫</span>
+        <div>
+          <div class="tps-title" data-i18n="calc.calc.name">Calculus (limits, derivatives, integrals)</div>
+          <div class="tps-desc" data-i18n="calc.calc.desc">Enter f(x) using x — see derivative, numeric integral, or limit, plus a function plot.</div>
+        </div>
+      </div>
+      <p class="meta" style="font-size:0.72rem;color:var(--text-dim);margin:0 0 0.75rem;line-height:1.45" data-i18n="calc.calc.tip">Uses math.js in your browser. Examples: <code class="m-0" style="background:rgba(0,0,0,.2);padding:0 .25rem;border-radius:4px">x^2 + 2*x</code>, <code class="m-0" style="background:rgba(0,0,0,.2);padding:0 .25rem;border-radius:4px">sin(x)</code>, <code class="m-0" style="background:rgba(0,0,0,.2);padding:0 .25rem;border-radius:4px">exp(x)</code>. For education only.</p>
+      <div class="calc-form" style="max-width: 36rem">
+        <div class="calc-row" style="margin-bottom: 0.5rem">
+          <div>
+            <label class="calc-label" for="cal-mode" data-i18n="calc.calc.mode">Mode</label>
+            <select id="cal-mode" class="input-field" style="width:100%;padding:0.55rem 0.75rem">
+              <option value="derivative" data-i18n="calc.calc.m.der">Derivative f′(x)</option>
+              <option value="integral" data-i18n="calc.calc.m.int">Definite integral ∫ₐᵇ f(x) dx</option>
+              <option value="limit" data-i18n="calc.calc.m.lim">Limit lim x→a f(x)</option>
+            </select>
+          </div>
+        </div>
+        <label class="calc-label" for="cal-expr" data-i18n="calc.calc.expr">f(x) =</label>
+        <input type="text" id="cal-expr" class="input-field" placeholder="x^2 + 1" autocomplete="off" style="width: 100%; margin-bottom: 0.55rem" data-i18n-ph="calc.calc.ph" />
+        <div class="calc-row" id="cal-row-ab">
+          <div>
+            <label class="calc-label" for="cal-a" data-i18n="calc.calc.a">a (lower or limit point)</label>
+            <input type="text" id="cal-a" class="input-field" value="0" inputmode="decimal" />
+          </div>
+          <div id="cal-wrap-b">
+            <label class="calc-label" for="cal-b" data-i18n="calc.calc.b">b (upper)</label>
+            <input type="text" id="cal-b" class="input-field" value="1" inputmode="decimal" />
+          </div>
+        </div>
+        <button type="button" class="btn-primary" style="width: 100%; margin-top: 0.35rem" onclick="doCalculus()"><span data-i18n="calc.calc.btn">Compute &amp; plot</span></button>
+        <div id="cal-result" class="result-box" style="grid-template-columns: 1fr; margin-top: 0.75rem; display: none; max-width: 100%"></div>
+        <div id="cal-graph-wrap" style="margin-top:0.6rem;display:none">
+          <div class="calc-label" data-i18n="calc.calc.graph">Plot y = f(x)</div>
+          <canvas id="cal-graph" width="640" height="220" style="width: 100%; max-width: 100%; height: auto; border-radius: 10px; background: rgba(0,0,0,.2); border: 1px solid var(--border-subtle)"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- 20. Scientific Calculator -->
     <section id="sci-calc" class="tool-page-section">
       <div class="tps-header">
         <span class="tps-icon">🔬</span>
@@ -946,6 +990,7 @@
 </div>
 
 <script src="js/i18n.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.2.0/math.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="js/calc-tools.js"></script>
 <script>
 const { calcDiscount, calcVAT, calcTip, calcCompound, calcLoan,
@@ -1305,7 +1350,137 @@ function doQuadratic() {
   el.style.display='flex';
 }
 
-/* ── 19. Scientific Calculator ── */
+/* ── 19. Calculus ── */
+function calModeSync() {
+  var m = document.getElementById("cal-mode");
+  var wB = document.getElementById("cal-wrap-b");
+  if (!m || !wB) return;
+  if (m.value === "integral") wB.style.display = "";
+  else wB.style.display = "none";
+}
+if (document.getElementById("cal-mode")) {
+  document.getElementById("cal-mode").addEventListener("change", calModeSync);
+  calModeSync();
+}
+
+function i18nCal(k) {
+  if (window.PdfMasterI18n && window.PdfMasterI18n.t) return window.PdfMasterI18n.t("calc.calc." + k);
+  return k;
+}
+
+function doCalculus() {
+  var T = window.CalcTools;
+  var out = document.getElementById("cal-result");
+  var gWrap = document.getElementById("cal-graph-wrap");
+  if (!T || !window.math) {
+    out.style.display = "block";
+    out.innerHTML = "<p class=\"err-msg\">" + i18nCal("err.nomath") + "</p>";
+    return;
+  }
+  var mode = document.getElementById("cal-mode").value;
+  var expr = document.getElementById("cal-expr").value;
+  var a = parseFloat(document.getElementById("cal-a").value);
+  var b = parseFloat(document.getElementById("cal-b").value);
+  if (mode === "integral" && (isNaN(a) || isNaN(b))) {
+    out.style.display = "block";
+    out.innerHTML = "<p class=\"err-msg\">" + i18nCal("err.nums") + "</p>";
+    return;
+  }
+  if (mode === "limit" && isNaN(a)) {
+    out.style.display = "block";
+    out.innerHTML = "<p class=\"err-msg\">" + i18nCal("err.a") + "</p>";
+    return;
+  }
+  var h = "";
+  if (mode === "derivative") {
+    var d = T.calculusDerivativeString(expr);
+    if (!d.ok) {
+      h = "<p class=\"err-msg\">" + i18nCal("err." + (d.err || "der")) + "</p>";
+    } else {
+      h = "<div class=\"result-item\" style=\"grid-column:1/-1;\"><div class=\"result-item-label\">f′(x)</div><div class=\"result-item-val\" style=\"word-break:break-all;font-size:1rem\">" + escHtml(d.value) + "</div></div>";
+    }
+  } else if (mode === "integral") {
+    var I = T.calculusIntegralDefinite(expr, a, b);
+    if (!I.ok) {
+      h = "<p class=\"err-msg\">" + i18nCal("err." + (I.err || "int")) + "</p>";
+    } else {
+      h = "<div class=\"result-item\" style=\"grid-column:1/-1;\"><div class=\"result-item-label\">∫<sub>" + a + "</sub><sup>" + b + "</sup> f(x) dx</div><div class=\"result-item-val\">" + I.value.toExponential(6) + " <span style=\"font-size:0.75em;font-weight:600;opacity:0.85\">" + i18nCal("num.int") + "</span></div></div>";
+    }
+  } else {
+    var L = T.calculusLimitAt(expr, a);
+    if (!L.ok) {
+      h = "<p class=\"err-msg\">" + i18nCal("err." + (L.err || "lim")) + "</p>";
+    } else {
+      h = "<div class=\"result-item\" style=\"grid-column:1/-1;\"><div class=\"result-item-label\">lim x → " + a + "</div><div class=\"result-item-val\">" + L.value;
+      h += (L.approx ? " <span style=\"font-size:0.75em;opacity:0.85\">(" + i18nCal("num.approx") + ")</span>" : "");
+      h += "</div></div>";
+    }
+  }
+  out.innerHTML = h;
+  out.style.display = "block";
+  var xMin, xMax;
+  if (mode === "integral" && isFinite(a) && isFinite(b)) {
+    xMin = Math.min(a, b) - 0.5; xMax = Math.max(a, b) + 0.5;
+  } else {
+    xMin = a - 4; xMax = a + 4;
+  }
+  if (xMax - xMin < 0.1) { xMin = a - 1; xMax = a + 1; }
+  drawCalGraph(expr, xMin, xMax);
+  if (gWrap) gWrap.style.display = "block";
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function drawCalGraph(exprStr, xMin, xMax) {
+  var T = window.CalcTools;
+  var canvas = document.getElementById("cal-graph");
+  if (!canvas || !T) return;
+  var s = T.calculusSampleY(exprStr, xMin, xMax, 320);
+  if (!s.ok) return;
+  var pts = s.points;
+  var ymin = Math.min.apply(null, pts.map(function (p) { return p.y; }));
+  var ymax = Math.max.apply(null, pts.map(function (p) { return p.y; }));
+  if (ymin === ymax) { ymin -= 1; ymax += 1; }
+  var padY = (ymax - ymin) * 0.08;
+  ymin -= padY; ymax += padY;
+  var w = canvas.width, h = canvas.height;
+  var ctx = canvas.getContext("2d");
+  if (!ctx) return;
+  var dpr = window.devicePixelRatio || 1;
+  canvas.width = 640 * dpr; canvas.height = 220 * dpr;
+  canvas.style.width = "100%";
+  w = 640; h = 220;
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.scale(dpr, dpr);
+  ctx.fillStyle = "rgba(10,12,20,0.95)";
+  ctx.fillRect(0, 0, w, h);
+  var pL = 36, pR = 12, pT = 10, pB = 20;
+  function X(x) { return pL + (x - xMin) / (xMax - xMin) * (w - pL - pR); }
+  function Y(y) { return pT + (1 - (y - ymin) / (ymax - ymin)) * (h - pT - pB); }
+  ctx.strokeStyle = "rgba(255,255,255,0.12)";
+  ctx.lineWidth = 1;
+  var gx = 0;
+  if (0 >= xMin && 0 <= xMax) { gx = X(0); ctx.beginPath(); ctx.moveTo(gx, pT); ctx.lineTo(gx, h - pB); ctx.stroke(); }
+  if (0 >= ymin && 0 <= ymax) {
+    var gy = Y(0);
+    ctx.beginPath(); ctx.moveTo(pL, gy); ctx.lineTo(w - pR, gy); ctx.stroke();
+  }
+  ctx.strokeStyle = "rgba(99, 102, 241, 0.9)";
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  for (var i = 0; i < pts.length; i++) {
+    var pi = X(pts[i].x), pj = Y(pts[i].y);
+    if (i === 0) ctx.moveTo(pi, pj); else ctx.lineTo(pi, pj);
+  }
+  ctx.stroke();
+  ctx.fillStyle = "rgba(165, 180, 252, 0.55)";
+  ctx.font = "10px system-ui, sans-serif";
+  ctx.fillText("x: " + xMin.toFixed(2) + " → " + xMax.toFixed(2), 8, 14);
+}
+
+/* ── 20. Scientific Calculator ── */
 var _sciExpr='';
 var _sciHist=[];
 function sciKey(k) {
