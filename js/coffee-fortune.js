@@ -1,10 +1,9 @@
 /* global window */
-/* Turkish coffee fortune — client-side only; lines are i18n, selection is deterministic from seed. */
+/* Turkish coffee fortune — 30 i18n blocks, one picked per read; seed mixes name, time, optional file meta. */
 (function (w) {
   "use strict";
 
-  var MOOD_COUNT = 6;
-  var LINE_COUNT = 24;
+  var BLOCK_COUNT = 30;
 
   function hashSeed(s) {
     var h = 2166136261;
@@ -25,27 +24,20 @@
     };
   }
 
-  function pickMoodAndLines(seedStr) {
+  /**
+   * @param {string} seedStr - name + time + optional "|ph:" + per-file name,size,mtime
+   * @returns {{ block: number, seed: number }}
+   */
+  function pickBlockIndex(seedStr) {
     var seed = hashSeed(seedStr);
     var rng = mulberry32(seed);
-    var mood = Math.floor(rng() * MOOD_COUNT) + 1;
-    var lines = [];
-    var used = {};
-    var guard = 0;
-    while (lines.length < 5 && guard++ < 200) {
-      var j = Math.floor(rng() * LINE_COUNT) + 1;
-      if (!used[j]) {
-        used[j] = 1;
-        lines.push(j);
-      }
-    }
-    return { mood: mood, lines: lines, seed: seed };
+    var block = Math.floor(rng() * BLOCK_COUNT) + 1;
+    return { block: block, seed: seed };
   }
 
   w.CoffeeFortune = {
-    MOOD_COUNT: MOOD_COUNT,
-    LINE_COUNT: LINE_COUNT,
+    BLOCK_COUNT: BLOCK_COUNT,
     hashSeed: hashSeed,
-    pickMoodAndLines: pickMoodAndLines,
+    pickBlockIndex: pickBlockIndex,
   };
 })(window);

@@ -1387,10 +1387,17 @@
         </div>
       </div>
       <p class="meta" style="font-size:0.72rem;color:var(--text-dim);margin:0 0 0.85rem;line-height:1.45" data-i18n="coffee.fortune.disclaimer">Traditional telve patterns are interpreted in fun, general terms — not fortune-telling or advice you should rely on.</p>
+      <p class="meta" style="font-size:0.64rem;color:var(--text-dim);margin:0 0 0.85rem;line-height:1.45" data-i18n="coffee.fortune.photoNote">You may attach up to three photos (e.g. your cup) — optional. Images never leave your device.</p>
       <div style="display:grid;gap:0.6rem;max-width:26rem">
         <div>
           <label class="field-label" for="coffee-name" data-i18n="coffee.fortune.nameLabel">Your first name (optional)</label>
           <input type="text" id="coffee-name" class="input-field" maxlength="48" data-i18n-ph="coffee.fortune.namePh" placeholder="Leave empty for a random spread" />
+        </div>
+        <div style="display:grid;gap:0.45rem">
+          <span class="field-label" data-i18n="coffee.fortune.photosLabel">Photos (optional, max 3)</span>
+          <input type="file" id="coffee-ph1" class="input-field" accept="image/*" style="padding:0.4rem 0.5rem;font-size:0.8rem" />
+          <input type="file" id="coffee-ph2" class="input-field" accept="image/*" style="padding:0.4rem 0.5rem;font-size:0.8rem" />
+          <input type="file" id="coffee-ph3" class="input-field" accept="image/*" style="padding:0.4rem 0.5rem;font-size:0.8rem" />
         </div>
         <button type="button" class="btn-primary" style="align-self:start;width:auto" onclick="coffeeRunFortune()"><span data-i18n="coffee.fortune.btn">Read the cup</span></button>
       </div>
@@ -2747,11 +2754,32 @@ function lifeRunHolidays() {
 var _coffeeLast = null;
 function coffeeI18n(k) { return (window.PdfMasterI18n && window.PdfMasterI18n.t) ? window.PdfMasterI18n.t(k) : k; }
 function coffeeEsc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+function coffeePhotoSeed() {
+  var parts = [];
+  for (var n = 1; n <= 3; n++) {
+    var el = document.getElementById("coffee-ph" + n);
+    if (!el || !el.files || !el.files.length) continue;
+    var f = el.files[0];
+    parts.push(encodeURIComponent(f.name || "") + "," + f.size + "," + (f.lastModified || 0));
+  }
+  return parts.length ? "|ph:" + parts.join("|") : "";
+}
 function coffeeBuildHtml(p) {
-  if (!p) return "";
-  var html = "<p class=\"coffee-mood\" style=\"font-weight:700;color:#fbbf24;margin:0 0 .75rem\">" + coffeeEsc(coffeeI18n("coffee.m" + p.mood)) + "</p>";
-  for (var i = 0; i < p.lines.length; i++) {
-    html += "<p style=\"margin:.5rem 0;line-height:1.55;font-size:.88rem\">" + coffeeEsc(coffeeI18n("coffee.l" + p.lines[i])) + "</p>";
+  if (!p || p.block == null) return "";
+  var raw = coffeeI18n("coffee.b" + p.block);
+  var chunks = String(raw).split(/\n{2,}/).map(function (s) { return s.trim(); }).filter(Boolean);
+  if (!chunks.length) chunks = [String(raw)];
+  var html = "";
+  for (var i = 0; i < chunks.length; i++) {
+    var sty;
+    if (chunks.length === 1) {
+      sty = "margin:0;line-height:1.6;font-size:.9rem;color:var(--text-muted)";
+    } else if (i === 0) {
+      sty = "font-weight:700;color:#fbbf24;margin:0 0 .65rem;font-size:.92rem";
+    } else {
+      sty = "margin:.45rem 0 0;line-height:1.55;font-size:.88rem;color:var(--text-muted)";
+    }
+    html += "<p style=\"" + sty + "\">" + coffeeEsc(chunks[i]) + "</p>";
   }
   return html;
 }
@@ -2760,7 +2788,8 @@ function coffeeRunFortune() {
   if (!CF) return;
   var nameEl = document.getElementById("coffee-name");
   var name = nameEl ? String(nameEl.value || "").trim() : "";
-  var p = CF.pickMoodAndLines(name + "|" + String(Date.now()));
+  var seedStr = name + "|" + String(Date.now()) + coffeePhotoSeed();
+  var p = CF.pickBlockIndex(seedStr);
   _coffeeLast = p;
   var inner = document.getElementById("coffee-out-inner"), out = document.getElementById("coffee-out");
   if (!inner || !out) return;
