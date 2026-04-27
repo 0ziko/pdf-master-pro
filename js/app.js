@@ -2,6 +2,8 @@
 (function () {
   const U     = window.PdfMasterUtils;
   const Excel = window.PdfMasterExcel;
+  const Word  = window.PdfMasterWord;
+  const Extract = window.PdfMasterPdfExtract;
   const Img   = window.PdfMasterImage;
   const Merge = window.PdfMasterMerge;
   const Split = window.PdfMasterSplit;
@@ -61,6 +63,8 @@
   /* Static fallbacks for topbar titles — translated text is read live at call time */
   const TAB_TITLE_KEYS = {
     excel:      { key: 'tab.excel',   fallback: 'Excel → PDF' },
+    word:       { key: 'tab.word',    fallback: 'Word → PDF' },
+    pdfexport:  { key: 'tab.pdfexport', fallback: 'PDF → Excel / Word' },
     image:      { key: 'tab.image',   fallback: 'Image → PDF' },
     merge:      { key: 'tab.merge',   fallback: 'Merge PDF' },
     split:      { key: 'tab.split',   fallback: 'Split PDF' },
@@ -81,7 +85,10 @@
     return entry.fallback;
   }
 
-  const VALID_TABS = new Set(['excel', 'image', 'merge', 'split', 'encrypt', 'share', 'screenshot', 'compress', 'ocr']);
+  const VALID_TABS = new Set([
+    'excel', 'word', 'pdfexport', 'image', 'merge', 'split', 'encrypt', 'share',
+    'screenshot', 'compress', 'ocr',
+  ]);
 
   function switchTab(id) {
     if (!VALID_TABS.has(id)) id = 'excel';
@@ -259,6 +266,85 @@
         U.downloadBlob(bytes, outName);
         const blob = new Blob([bytes], {type:'application/pdf'});
         window.uploadAndShare(blob, outName, 'sharePanelExcel', 'shareUrlExcel');
+      });
+    } catch (e) { console.error(e); alert(e.message || String(e)); }
+  });
+
+  /* ── Word ──────────────────────────────────────────── */
+  let wordFile = null;
+  const wordStatusEl   = document.getElementById("wordStatus");
+  const wordStatusText = document.getElementById("wordStatusText");
+  const wordBtn        = document.getElementById("wordRun");
+
+  wireDropzone("wordDrop", "wordInput", (files) => {
+    wordFile = files[0];
+    showStatus(wordStatusEl, wordStatusText, wordFile.name);
+  });
+
+  wordBtn?.addEventListener("click", async () => {
+    if (!wordFile) return alert(t("alert.no-word"));
+    const nameLower = wordFile.name.toLowerCase();
+    if (!nameLower.endsWith(".docx")) return alert(t("alert.word-format"));
+    const enc = readEncryptOptions();
+    if (enc.encrypt && !enc.password) return alert(t("alert.enc-pass"));
+    try {
+      await withSnake(wordBtn, async () => {
+        const bytes = await Word.wordFileToPdfBytes(wordFile, enc);
+        const outName = U.baseName(wordFile.name) + ".pdf";
+        U.downloadBlob(bytes, outName);
+        const blob = new Blob([bytes], { type: "application/pdf" });
+        window.uploadAndShare(blob, outName, "sharePanelWord", "shareUrlWord");
+      });
+    } catch (e) { console.error(e); alert(e.message || String(e)); }
+  });
+
+  /* ── PDF → CSV / RTF ───────────────────────────────── */
+  let pdfExportFile = null;
+  const pdfExportStatusEl   = document.getElementById("pdfExportStatus");
+  const pdfExportStatusText = document.getElementById("pdfExportStatusText");
+  const pdfExportCsvBtn     = document.getElementById("pdfExportCsv");
+  const pdfExportRtfBtn     = document.getElementById("pdfExportRtf");
+
+  function isPdfMime(file) {
+    if (!file) return false;
+    return (
+      file.type === "application/pdf"
+      || file.type === "application/x-pdf"
+      || /\.pdf$/i.test(file.name)
+    );
+  }
+
+  wireDropzone("pdfExportDrop", "pdfExportInput", (files) => {
+    const f = files[0];
+    if (!isPdfMime(f)) {
+      pdfExportFile = null;
+      return alert(t("alert.no-pdf-export"));
+    }
+    pdfExportFile = f;
+    showStatus(pdfExportStatusEl, pdfExportStatusText, pdfExportFile.name);
+  });
+
+  pdfExportCsvBtn?.addEventListener("click", async () => {
+    if (!pdfExportFile || !isPdfMime(pdfExportFile)) return alert(t("alert.no-pdf-export"));
+    try {
+      await withSnake(pdfExportCsvBtn, async () => {
+        const bytes = await Extract.pdfFileToCsvBytes(pdfExportFile);
+        const outName = U.baseName(pdfExportFile.name) + "-text.csv";
+        U.downloadBlob(new Blob([bytes], { type: "text/csv;charset=utf-8" }), outName);
+      });
+    } catch (e) { console.error(e); alert(e.message || String(e)); }
+  });
+
+  pdfExportRtfBtn?.addEventListener("click", async () => {
+    if (!pdfExportFile || !isPdfMime(pdfExportFile)) return alert(t("alert.no-pdf-export"));
+    try {
+      await withSnake(pdfExportRtfBtn, async () => {
+        const bytes = await Extract.pdfFileToRtfBytes(pdfExportFile);
+        const outName = U.baseName(pdfExportFile.name) + "-text.rtf";
+        U.downloadBlob(
+          new Blob([bytes], { type: "application/rtf" }),
+          outName
+        );
       });
     } catch (e) { console.error(e); alert(e.message || String(e)); }
   });

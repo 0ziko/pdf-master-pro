@@ -76,6 +76,8 @@ const JS_FILES = [
   "js/pdf-encrypt.js",
   "js/pdf-decrypt.js",
   "js/excel-to-pdf.js",
+  "js/word-to-pdf.js",
+  "js/pdf-text-export.js",
   "js/image-to-pdf.js",
   "js/pdf-merge.js",
   "js/pdf-split.js",

@@ -420,6 +420,20 @@
           <div class="pdf-nav-hint" data-i18n="tab.excel.hint">xlsx · xls · csv</div>
         </div>
       </button>
+      <button type="button" data-tab="word" class="pdf-nav-item">
+        <span class="pdf-nav-icon">📝</span>
+        <div>
+          <div class="pdf-nav-name" data-i18n="tab.word">Word → PDF</div>
+          <div class="pdf-nav-hint" data-i18n="tab.word.hint">docx · text</div>
+        </div>
+      </button>
+      <button type="button" data-tab="pdfexport" class="pdf-nav-item">
+        <span class="pdf-nav-icon">📤</span>
+        <div>
+          <div class="pdf-nav-name" data-i18n="tab.pdfexport">PDF → Excel / Word</div>
+          <div class="pdf-nav-hint" data-i18n="tab.pdfexport.hint">CSV · RTF</div>
+        </div>
+      </button>
       <button type="button" data-tab="image" class="pdf-nav-item">
         <span class="pdf-nav-icon">🖼️</span>
         <div>
@@ -566,6 +580,70 @@
             <div class="share-panel" id="sharePanelExcel" style="display:none;">
               <div class="share-url-row"><input class="input-field share-url-input" id="shareUrlExcel" readonly /><button class="btn-secondary btn-sm" onclick="copyShareUrl('shareUrlExcel')">📋 <span data-i18n="btn.copy">Copy</span></button></div>
               <p class="share-expire-note">🔗 <span data-i18n="share.expire">Link expires in 7 days</span></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Word → PDF -->
+        <div data-panel="word" class="panel pdf-tool-card" style="--gap:1rem;">
+          <div class="pdf-tool-card-hdr">
+            <div class="pdf-tool-card-ico">📝</div>
+            <div>
+              <div class="pdf-tool-card-title" data-i18n="tab.word">Word → PDF</div>
+              <div class="pdf-tool-card-desc" data-i18n="pdf.word.sub">docx — text to PDF (formatting not preserved)</div>
+            </div>
+          </div>
+          <div class="space-y">
+            <div id="wordDrop" class="dropzone">
+              <input type="file" id="wordInput" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" class="hidden" />
+              <div class="drop-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg></div>
+              <p class="drop-title" data-i18n="word.drop.title">Drag Word file (.docx)</p>
+              <p class="drop-sub" data-i18n="word.drop.sub">or click · plain text extraction</p>
+              <div id="wordStatus" class="drop-selected" style="display:none;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span id="wordStatusText"></span>
+              </div>
+            </div>
+            <button type="button" id="wordRun" class="btn-primary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span data-i18n="word.btn">Download PDF</span>
+            </button>
+            <div class="share-panel" id="sharePanelWord" style="display:none;">
+              <div class="share-url-row"><input class="input-field share-url-input" id="shareUrlWord" readonly /><button class="btn-secondary btn-sm" onclick="copyShareUrl('shareUrlWord')">📋 <span data-i18n="btn.copy">Copy</span></button></div>
+              <p class="share-expire-note">🔗 <span data-i18n="share.expire">Link expires in 7 days</span></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- PDF → CSV / RTF -->
+        <div data-panel="pdfexport" class="panel pdf-tool-card" style="--gap:1rem;">
+          <div class="pdf-tool-card-hdr">
+            <div class="pdf-tool-card-ico">📤</div>
+            <div>
+              <div class="pdf-tool-card-title" data-i18n="tab.pdfexport">PDF → Excel / Word</div>
+              <div class="pdf-tool-card-desc" data-i18n="pdf.pdfexport.sub">Extract text with PDF.js — CSV for Excel, RTF opens in Word</div>
+            </div>
+          </div>
+          <div class="space-y">
+            <div id="pdfExportDrop" class="dropzone">
+              <input type="file" id="pdfExportInput" accept=".pdf,application/pdf" class="hidden" />
+              <div class="drop-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+              <p class="drop-title" data-i18n="pdfexport.drop.title">Drag a PDF file</p>
+              <p class="drop-sub" data-i18n="pdfexport.drop.sub">Text layer only — layout and tables may not match the original</p>
+              <div id="pdfExportStatus" class="drop-selected" style="display:none;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                <span id="pdfExportStatusText"></span>
+              </div>
+            </div>
+            <div style="display:flex;gap:.6rem;flex-wrap:wrap;align-items:stretch">
+              <button type="button" id="pdfExportCsv" class="btn-primary" style="flex:1;min-width:140px">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span data-i18n="pdfexport.btn.csv">Download CSV</span>
+              </button>
+              <button type="button" id="pdfExportRtf" class="btn-primary" style="flex:1;min-width:140px">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                <span data-i18n="pdfexport.btn.rtf">Download RTF</span>
+              </button>
             </div>
           </div>
         </div>
@@ -1250,6 +1328,8 @@
   <script src="js/pdf-encrypt.js"></script>
   <script src="js/pdf-decrypt.js"></script>
   <script src="js/excel-to-pdf.js"></script>
+  <script src="js/word-to-pdf.js"></script>
+  <script src="js/pdf-text-export.js"></script>
   <script src="js/image-to-pdf.js"></script>
   <script src="js/pdf-merge.js"></script>
   <script src="js/pdf-split.js"></script>

@@ -999,7 +999,32 @@
             0 12px 40px rgba(0, 0, 0, 0.45);
         }
         .raffle-wheel-label { font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #a5b4fc; margin: 0 0 0.5rem; }
-        .raffle-wheel-gfx { position: relative; display: block; width: 100%; max-width: 320px; margin: 0 auto; padding-top: 0.5rem; }
+        .raffle-wheel-gfx {
+          position: relative;
+          display: block;
+          width: 100%;
+          max-width: 320px;
+          margin: 0 auto;
+          padding-top: 0.5rem;
+          overflow: visible;
+        }
+        /* Rotate HTML wrapper — SVG <g> + CSS rotate() uses wrong origin across browsers */
+        .raffle-wheel-spinner {
+          width: 100%;
+          max-width: 320px;
+          margin: 0 auto;
+          aspect-ratio: 1;
+          border-radius: 50%;
+          will-change: transform;
+          transform-origin: center center;
+          filter: drop-shadow(0 4px 0 rgba(0, 0, 0, 0.25));
+        }
+        .raffle-wheel-spinner.raffle-spin {
+          transition: transform 4.15s cubic-bezier(0.1, 0.7, 0.1, 1);
+        }
+        .raffle-wheel-spinner.raffle-instant {
+          transition: none;
+        }
         .raffle-wheel-pointer {
           position: absolute;
           top: 2px;
@@ -1008,6 +1033,7 @@
           width: 0;
           height: 0;
           z-index: 4;
+          pointer-events: none;
           border-left: 14px solid transparent;
           border-right: 14px solid transparent;
           border-bottom: 22px solid #e9d5ff;
@@ -1016,16 +1042,12 @@
         .raffle-wheel-svg {
           display: block;
           width: 100%;
-          max-width: 320px;
-          height: auto;
-          aspect-ratio: 1;
+          height: 100%;
           border-radius: 50%;
-          margin: 0 auto;
-          filter: drop-shadow(0 4px 0 rgba(0, 0, 0, 0.25));
         }
-        .raffle-wheel-rot { transform-origin: 0 0; will-change: transform; }
-        .raffle-wheel-rot.raffle-spin { transition: transform 4.15s cubic-bezier(0.1, 0.7, 0.1, 1); }
-        .raffle-wheel-rot.raffle-instant { transition: none; }
+        .raffle-wheel-rot {
+          transform-box: fill-box;
+        }
         .raffle-wheel-rim { pointer-events: none; }
         .raffle-wheel-hub { pointer-events: none; }
       </style>
@@ -1055,11 +1077,17 @@
             <input type="number" id="raffle-n-res" class="field" min="0" max="500" value="0" />
           </div>
         </div>
+        <div class="tool-btn-row">
+          <button type="button" class="btn-primary" style="flex:1" onclick="raffleDraw()">🎲 <span data-i18n="raffle.draw">Draw Winner</span></button>
+          <button type="button" class="btn-secondary" onclick="raffleReset()"><span data-i18n="raffle.reset">Reset</span></button>
+          <button type="button" class="btn-secondary" onclick="raffleClearHistory()">🗑 <span data-i18n="raffle.histbtn">Clear list</span></button>
+        </div>
         <div id="raffle-wheel-stage" class="raffle-wheel-stage" style="display:none" aria-hidden="true">
           <div class="raffle-wheel-shell">
             <div class="raffle-wheel-label" data-i18n="raffle.wheel.title">Spinning wheel</div>
             <div class="raffle-wheel-gfx">
               <div class="raffle-wheel-pointer" aria-hidden="true"></div>
+              <div id="raffle-wheel-spinner" class="raffle-wheel-spinner" aria-hidden="true">
               <svg class="raffle-wheel-svg" id="raffle-wheel-svg" viewBox="0 0 200 200" role="img" aria-label="Raffle wheel" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   <filter id="raffle-wheel-soft" x="-20%" y="-20%" width="140%" height="140%">
@@ -1070,6 +1098,7 @@
                 <g id="raffle-wheel-rot" class="raffle-wheel-rot" transform="translate(100,100)"></g>
                 <circle class="raffle-wheel-hub" cx="100" cy="100" r="18" fill="#0f172a" stroke="rgba(196, 181, 253, 0.4)" stroke-width="1.5" filter="url(#raffle-wheel-soft)" />
               </svg>
+              </div>
             </div>
           </div>
         </div>
@@ -1077,11 +1106,6 @@
           <div class="raffle-winner-name" id="raffle-winner-name">—</div>
           <div id="raffle-winner-alts" class="raffle-winner-alts" style="display:none" aria-live="polite"></div>
           <div class="raffle-winner-sub" id="raffle-winner-sub" data-i18n="raffle.sub">Draw a winner to start</div>
-        </div>
-        <div class="tool-btn-row">
-          <button type="button" class="btn-primary" style="flex:1" onclick="raffleDraw()">🎲 <span data-i18n="raffle.draw">Draw Winner</span></button>
-          <button type="button" class="btn-secondary" onclick="raffleReset()"><span data-i18n="raffle.reset">Reset</span></button>
-          <button type="button" class="btn-secondary" onclick="raffleClearHistory()">🗑 <span data-i18n="raffle.histbtn">Clear list</span></button>
         </div>
         <div id="raffle-history-wrap" style="display:none;margin-top:1rem">
           <div style="font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text-muted);margin-bottom:.4rem;" data-i18n="raffle.past">Past winners</div>
@@ -1132,7 +1156,13 @@
         });
         function raffleWheelBuild(names) {
           var g = document.getElementById('raffle-wheel-rot');
+          var spinner = document.getElementById('raffle-wheel-spinner');
           if (!g) return;
+          if (spinner) {
+            spinner.classList.remove('raffle-spin');
+            spinner.classList.add('raffle-instant');
+            spinner.style.transform = 'rotate(0deg)';
+          }
           var n = names.length, R = 88, html = '';
           var pal = [
             'rgba(124, 58, 237, 0.95)',
@@ -1161,9 +1191,6 @@
             html += '<text x="'+tx.toFixed(2)+'" y="'+ty.toFixed(2)+'" fill="#f8fafc" font-size="'+fs+'" font-weight="800" text-anchor="middle" dominant-baseline="middle" style="text-shadow:0 1px 2px rgba(0,0,0,0.55)" transform="rotate('+rot.toFixed(2)+' '+tx.toFixed(2)+' '+ty.toFixed(2)+')">'+esc(lab)+'</text>';
           }
           g.innerHTML = html;
-          g.classList.remove('raffle-spin');
-          g.classList.add('raffle-instant');
-          g.style.transform = 'rotate(0deg)';
         }
         function raffleApplyResult(list, nMain, nRes, primary, reserve) {
           var box = document.getElementById('raffle-winner-box');
@@ -1215,20 +1242,25 @@
             var winIdx = list.indexOf(primary[0]);
             if (winIdx < 0) winIdx = 0;
             var stage = document.getElementById('raffle-wheel-stage');
-            var g = document.getElementById('raffle-wheel-rot');
+            var spinner = document.getElementById('raffle-wheel-spinner');
             raffleWheelBuild(list);
-            if (stage) stage.style.display = 'block';
+            if (stage) {
+              stage.style.display = 'block';
+              stage.setAttribute('aria-hidden', 'false');
+              try { stage.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } catch (e) {}
+            }
+            if (spinner) spinner.setAttribute('aria-hidden', 'false');
             var slice = 360 / list.length;
-            var last = parseFloat(g && g.dataset.angle ? g.dataset.angle : '0', 10) || 0;
+            var last = parseFloat(spinner && spinner.dataset.angle ? spinner.dataset.angle : '0', 10) || 0;
             var base = Math.ceil(last / 360) * 360;
             var endDeg = base + 360 * 5 + (360 - winIdx * slice);
-            void (g && g.offsetWidth);
-            if (g) {
-              g.dataset.angle = String(endDeg);
-              g.classList.remove('raffle-instant');
-              g.classList.add('raffle-spin');
+            void (spinner && spinner.offsetWidth);
+            if (spinner) {
+              spinner.dataset.angle = String(endDeg);
+              spinner.classList.remove('raffle-instant');
+              spinner.classList.add('raffle-spin');
               requestAnimationFrame(function () {
-                g.style.transform = 'rotate(' + endDeg + 'deg)';
+                spinner.style.transform = 'rotate(' + endDeg + 'deg)';
               });
             }
             var _fired = false;
@@ -1236,18 +1268,23 @@
               if (ev && ev.propertyName && ev.propertyName !== 'transform') return;
               if (_fired) return;
               _fired = true;
-              if (g) g.removeEventListener('transitionend', done);
               raffleApplyResult(list, nMain, nRes, primary, reserve);
             };
-            if (g) {
-              g.addEventListener('transitionend', done);
-              setTimeout(function () { done(); }, 4500);
+            if (spinner) {
+              spinner.addEventListener('transitionend', done, { once: true });
+              setTimeout(function () { done(); }, 4600);
             } else {
               raffleApplyResult(list, nMain, nRes, primary, reserve);
             }
             return;
           }
-          if (document.getElementById('raffle-wheel-stage')) document.getElementById('raffle-wheel-stage').style.display = 'none';
+          var _stHide = document.getElementById('raffle-wheel-stage');
+          if (_stHide) {
+            _stHide.style.display = 'none';
+            _stHide.setAttribute('aria-hidden', 'true');
+          }
+          var _spHide = document.getElementById('raffle-wheel-spinner');
+          if (_spHide) _spHide.setAttribute('aria-hidden', 'true');
           var ticks = 0, maxTicks = 18 + Math.floor(Math.random()*14);
           var iv = setInterval(function(){
             nameEl.textContent = list[Math.floor(Math.random()*list.length)];
@@ -1264,7 +1301,18 @@
           var al = document.getElementById('raffle-winner-alts');
           if (al) { al.style.display = 'none'; al.innerHTML = ''; }
           var st = document.getElementById('raffle-wheel-stage');
-          if (st) st.style.display = 'none';
+          if (st) {
+            st.style.display = 'none';
+            st.setAttribute('aria-hidden', 'true');
+          }
+          var spin = document.getElementById('raffle-wheel-spinner');
+          if (spin) {
+            spin.classList.remove('raffle-spin');
+            spin.classList.add('raffle-instant');
+            spin.style.transform = '';
+            spin.setAttribute('aria-hidden', 'true');
+            delete spin.dataset.angle;
+          }
         };
         var _history = [];
         try {
