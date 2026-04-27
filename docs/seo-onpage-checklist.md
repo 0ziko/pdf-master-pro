@@ -81,7 +81,7 @@ Use **one** primary product word per page type; keep the site’s voice consiste
 - **JS:** load heavy script **defer** / non-blocking where possible; avoid blocking the first paint of main content.
 - **Ads / third-party (future):** reserve space so new banners do not push the tool (layout shift).
 
-**Measure:** after significant changes, spot-check in Lighthouse / PageSpeed (mobile) on **one hub, one micro spoke, one heavy LP** — especially pages that load `units.js`, `app.js`, or large PDF/Canvas.
+**Measure:** after significant changes, spot-check in Lighthouse / PageSpeed (mobile) on **one hub, one micro spoke, one heavy LP** — especially pages that load `units.js`, `app.js`, or large PDF/Canvas. Operasyonel adımlar: [seo-faz4-qa.md](seo-faz4-qa.md) §2.
 
 ---
 
@@ -122,6 +122,7 @@ For **competitive** LP (PDF tools), add: FAQ, how it works, and trust copy — s
 - In **Google Search Console**, find queries with **high impressions, low position** — improve that page’s content and internal links.
 - **Zero** clicks + **thin** duplicate: merge, `noindex`, or remove; avoid site-wide dilution.
 - If **programmatic variation** pages go live, review them in this pass for **canonical** and performance.
+- **Periyot ve adım listesi (uygulama rehberi):** [seo-faz5-iteration.md](seo-faz5-iteration.md).
 
 ---
 
@@ -132,5 +133,7 @@ For **competitive** LP (PDF tools), add: FAQ, how it works, and trust copy — s
 | **seo-onpage-checklist.md** (this) | Strategy + mandatory rules for SEO and URL intent. |
 | **url-slug-standard.md** | Slug patterns, hreflang, canonical per language, internal link norms. |
 | **quality-gate-checklist.md** | Ship checklist for a **single** new spoke (length, FAQ, build). |
+| **seo-faz4-qa.md** | Faz 4: duplicate title script, Lighthouse/PSI, GSC/Bing (operational checklist). |
+| **seo-faz5-iteration.md** | Faz 5: GSC yineleme + budama (periyot ve adımlar). |
 
 If rules conflict, fix **one** source of truth and link the others.

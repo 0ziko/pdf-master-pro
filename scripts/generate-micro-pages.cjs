@@ -141,7 +141,9 @@ function descUnitEN(row) {
 }
 
 function titleUnitTR(row) {
-  const p = prettyTitleFromSlug(row.slug);
+  const a = TR_LONG[row.from] || row.from;
+  const b = TR_LONG[row.to] || row.to;
+  const p = a + " → " + b;
   let t = p + " (Ücretsiz, hızlı) | SnakeConverter";
   if (t.length > 62) t = p + " | SnakeConverter";
   return t;
