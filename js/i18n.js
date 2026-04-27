@@ -211,6 +211,10 @@
       "lp.eeat.compress.p": "Each page is rendered with PDF.js to a canvas, exported as a JPEG at a quality tied to the preset (Low / Medium / High: different scale and JPEG quality). A new PDF is built with PDF-lib from those images. This is lossy by design; size reduction depends on original content. No server sees your file.",
       "lp.eeat.merge.h": "How merging works (technical)",
       "lp.eeat.merge.p": "We use pdf-lib to copy page objects from each file into one output PDF in your chosen order. We do not re-encode page content in normal operation — quality and fonts stay as in the sources, within browser memory limits.",
+      "lp.eeat.imagetopdf.h": "How images become PDFs (technical)",
+      "lp.eeat.imagetopdf.p": "We build a new PDF with pdf-lib. Each image is embedded as a page: JPG/PNG are embedded directly when possible; WebP and GIF are drawn to a canvas and exported as PNG first. You pick page size (A4, Letter, or original) and orientation. Nothing is uploaded — processing stays in your browser’s memory.",
+      "lp.eeat.loan.h": "How payments are calculated (technical)",
+      "lp.eeat.loan.p": "For standard fixed-rate loans we use the amortization formula M = P × r(1+r)^n / ((1+r)^n − 1) with P = principal, r = annual rate ÷ 12, n = number of months. Each row of the schedule applies part of the payment to interest and the rest to principal. This is a general illustration only, not financial advice; confirm terms with your lender or advisor.",
       "lp.page.updated": "Content last updated: 26 April 2026",
       "hub.link.fullunits": "Full unit hub",
       /* ── Directory tool names & descs ── */
@@ -766,6 +770,10 @@
       "lp.eeat.compress.p": "Her sayfa PDF.js ile tuval üzerinde çizilir, ön ayara bağlı JPEG kalitesiyle dışa aktarılır (Düşük / Orta / Yüksek: ölçek ve JPEG oranı farklı). Çıktı PDF’si PDF-lib ile bu görsellerden oluşturulur. Bu yöntem kayıplıdır; kazanç orijinal içeriğe bağlıdır. Dosya sunucuya gönderilmez.",
       "lp.eeat.merge.h": "Birleştirme nasıl çalışır (teknik)",
       "lp.eeat.merge.p": "pdf-lib ile her dosyadaki sayfa nesneleri seçtiğiniz sırayla tek çıktı PDF’e kopyalanır. Normal akışta sayfalar yeniden kodlanmaz — yazı tipi ve görseller kaynaklardaki gibi kalır (tarayıcı bellek sınırı içinde).",
+      "lp.eeat.imagetopdf.h": "Görsel → PDF (teknik)",
+      "lp.eeat.imagetopdf.p": "pdf-lib ile yeni PDF oluşturulur. Her görsel bir sayfaya gömülür: JPG/PNG mümkünse doğrudan; WebP ve GIF tuvalde çizilip önce PNG’ye dönüştürülür. Sayfa boyutu (A4, Letter, orijinal) ve yönelimi siz seçersiniz. Yükleme yok — işlem tarayıcı belleğinde kalır.",
+      "lp.eeat.loan.h": "Taksit nasıl hesaplanır (teknik)",
+      "lp.eeat.loan.p": "Sabit oranlı kredilerde klasik amortisman formülü kullanılır: M = P × r(1+r)^n / ((1+r)^n − 1); P anapara, r = yıllık oran ÷ 12, n = ay sayısı. Tabloda her satırda ödeme faiz ve anaparaya ayrılır. Bu yalnızca genel gösterimdir, finansal tavsiye değildir; koşulları bankanız veya danışmanınızla doğrulayın.",
       "lp.page.updated": "İçerik son güncelleme: 26 Nisan 2026",
       "hub.link.fullunits": "Tüm birim merkezi",
       /* ── Directory tool names & descs ── */
