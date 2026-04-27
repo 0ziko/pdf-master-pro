@@ -80,6 +80,56 @@ const USE_TR = {
   area: "Tipik kullanım: arsa, oda zemini, tarla alanı.",
 };
 
+/** Category-level methodology (EN) — unique copy per family to reduce thin-duplicate risk. */
+const METH_EN = {
+  length:
+    "This pair uses the same fixed factors as the main hub, including the international inch (1 in = 2.54 cm) and consistent SI / imperial length chain.",
+  weight:
+    "Mass conversion uses the same avoirdupois and metric definitions as the hub table (e.g. lb ↔ kg), so results match the all-in-one converter.",
+  temperature:
+    "Temperature conversions use the standard °C, °F, and K relationships; values are normalized in Kelvin, then written in the target unit.",
+  volume:
+    "US customary and metric volumes (gallon, liter, mL, fl oz) follow the same definitions and factors as the main volume section.",
+  speed:
+    "km/h, mph, m/s, and knot conversions use a single m/s base, matching road, aviation, and marine conventions in the hub.",
+  data:
+    "Data sizes use binary IEC-style factors (1024 per step) consistent with the main data table: 1 KB = 1024 B, 1 MB = 1024 KB, etc.",
+  area:
+    "Area factors for m², ft², acres, and hectares are taken from the same land- and floor-measurement table as the hub.",
+};
+
+const METH_TR = {
+  length:
+    "Bu çift, ana sayfadakiyle aynı sabit katsayıları kullanır; uluslararası inç (1 in = 2,54 cm) ve SI/emperyal uzunluk zinciri tutarlıdır.",
+  weight:
+    "Kütle dönüşümü, merkez tablodaki avoirdupois ve metrik tanımlarla aynıdır; sonuçlar genel dönüştürücüyle örtüşür.",
+  temperature:
+    "Sıcaklık, standart °C, °F ve K ilişkileriyle hesaplanır; önce Kelvin’e normalize edilip hedef birimde gösterilir.",
+  volume:
+    "ABD ve metrik hacim (galon, litre, mL, fl oz) tanımları, ana bölümdekiyle aynı katsayılardır.",
+  speed:
+    "km/h, mph, m/s ve knot, tek bir m/s tabanı üzerinden; yol, havacılık ve deniz pratikleriyle uyumludur.",
+  data:
+    "Veri boyutları, ana veri tablosuyla aynı ikili (1024) önekleri kullanır: 1 KB = 1024 B, 1 MB = 1024 KB, vb.",
+  area:
+    "m², ft², dönüm ve hektar, hub’daki aynı arazi/zemin faktör tablosundan alınır.",
+};
+
+function microFooterTrustP(lang) {
+  if (lang === "tr") {
+    return (
+      '<p class="lp-micro-trust" style="text-align:center;font-size:.65rem;opacity:.72;margin:1.1rem 0 0;max-width:40rem;margin-left:auto;margin-right:auto;line-height:1.5;color:var(--text-muted)">' +
+      "SnakeConverter, gizlilik odaklı, istemci tarafında çalışan araçlardan oluşur. Girdileriniz sunucularımıza yüklenmez veya saklanmaz." +
+      "</p>"
+    );
+  }
+  return (
+    '<p class="lp-micro-trust" style="text-align:center;font-size:.65rem;opacity:.72;margin:1.1rem 0 0;max-width:40rem;margin-left:auto;margin-right:auto;line-height:1.5;color:var(--text-muted)">' +
+    "SnakeConverter is a privacy-first, client-side tool collection. No inputs are uploaded or stored on our servers." +
+    "</p>"
+  );
+}
+
 const CALC_INTRO_EXAMPLE_EN = {
   pctOf: "For example, 25% of 200 is 50 — change the inputs to match your case.",
   discount: "For example, 20% off $100 gives you a $80 final price (before tax).",
@@ -197,8 +247,16 @@ function buildUnitExampleLineTR(row) {
 }
 
 function relatedUnitSlugs(row) {
-  const same = UNIT_PAIRS.filter((r) => r.category === row.category && r.slug !== row.slug);
-  const out = same.slice(0, 3);
+  const reverse = UNIT_PAIRS.find((r) => r.slug !== row.slug && r.from === row.to && r.to === row.from);
+  const sameCat = UNIT_PAIRS.filter(
+    (r) => r.category === row.category && r.slug !== row.slug && (!reverse || r.slug !== reverse.slug)
+  );
+  const out = [];
+  if (reverse) out.push(reverse);
+  for (const r of sameCat) {
+    if (out.length >= 3) break;
+    if (!out.find((o) => o.slug === r.slug)) out.push(r);
+  }
   let i = 0;
   while (out.length < 3 && i < UNIT_PAIRS.length) {
     if (UNIT_PAIRS[i].slug !== row.slug && !out.find((o) => o.slug === UNIT_PAIRS[i].slug)) out.push(UNIT_PAIRS[i]);
@@ -344,6 +402,36 @@ function metaOgBlock(opts) {
   ].join("\n");
 }
 
+function semanticQueriesEN(row) {
+  const a = EN_LONG[row.from] || row.from;
+  const b = EN_LONG[row.to] || row.to;
+  const sa = SYMS[row.from] || row.from;
+  const sb = SYMS[row.to] || row.to;
+  const line =
+    "Search intent often overlaps: “" +
+    esc(a.toLowerCase() + " in " + b.toLowerCase()) +
+    "”, “" +
+    esc(sa + " to " + sb) +
+    "”, or the reverse pair on this site — one consistent factor set for this conversion.";
+  return '<p class="lp-prose" style="line-height:1.55;font-size:.82rem;max-width:40rem;opacity:.88;margin-top:.4rem">' + line + "</p>";
+}
+
+function semanticQueriesTR(row) {
+  const a = TR_LONG[row.from] || row.from;
+  const b = TR_LONG[row.to] || row.to;
+  const sa = SYMS[row.from] || row.from;
+  const sb = SYMS[row.to] || row.to;
+  const line =
+    "Arama ifadeleri genelde benzer: “" +
+    esc(a + " cinsinden " + b) +
+    "”, “" +
+    esc(sa + " → " + sb) +
+    "” veya “" +
+    esc(b + " kaç " + a) +
+    "” — bu sayfada aynı çift için tek katsayı seti kullanılır.";
+  return '<p class="lp-prose" style="line-height:1.55;font-size:.82rem;max-width:40rem;opacity:.88;margin-top:.4rem">' + line + "</p>";
+}
+
 function buildUnitIntroEN(base, row) {
   const a = SYMS[row.from] || row.from;
   const b = SYMS[row.to] || row.to;
@@ -356,6 +444,7 @@ function buildUnitIntroEN(base, row) {
     " — with the same internal factors as our <a href=\"" +
     base +
     "units.html\">unit hub</a>, fully in your browser (no upload).</p>" +
+    semanticQueriesEN(row) +
     "<p><strong>Quick example:</strong> " +
     buildUnitExampleLineEN(row) +
     "</p>" +
@@ -380,6 +469,7 @@ function buildUnitIntroTR(base, row) {
     " aramaları için: katsayılar <a href=\"" +
     base +
     "units.html\">ana birim</a> ile aynı, tamamen tarayıcıda, yükleme yok.</p>" +
+    semanticQueriesTR(row) +
     "<p><strong>Örnek:</strong> " +
     buildUnitExampleLineTR(row) +
     "</p>" +
@@ -393,23 +483,29 @@ function buildUnitIntroTR(base, row) {
 }
 
 function howItWorks(row) {
-  if (row.category === "temperature") {
-    return '<section class="lp-section" style="margin-top:1rem"><h2 class="lp-section-title" style="font-size:1.05rem">Formula</h2><p class="lp-prose" style="line-height:1.65;font-size:.88rem;color:var(--text-muted)">Temperature conversions use the standard °C, °F, and K relationships. Values are first normalized, then written in your target unit.</p></section>';
-  }
-  if (row.category === "data") {
-    return '<section class="lp-section" style="margin-top:1rem"><h2 class="lp-section-title" style="font-size:1.05rem">How it works</h2><p class="lp-prose" style="line-height:1.65;font-size:.88rem;color:var(--text-muted)">Data sizes use binary prefixes: 1 KB = 1024 B, 1 MB = 1024 KB, consistent with the main data table on the units page.</p></section>';
-  }
-  return '<section class="lp-section" style="margin-top:1rem"><h2 class="lp-section-title" style="font-size:1.05rem">How it works</h2><p class="lp-prose" style="line-height:1.65;font-size:.88rem;color:var(--text-muted)">Your input is converted to an internal base unit, then to the target using fixed factors from the same table as the main converter.</p></section>';
+  const m = METH_EN[row.category];
+  const body =
+    m ||
+    "Your input is converted through the same base chain as the main hub, then written in the target unit.";
+  return (
+    '<section class="lp-section" style="margin-top:1rem"><h2 class="lp-section-title" style="font-size:1.05rem">' +
+    (row.category === "temperature" ? "Formula" : "Methodology &amp; trust") +
+    "</h2><p class=\"lp-prose\" style=\"line-height:1.65;font-size:.88rem;color:var(--text-muted)\">" +
+    esc(body) +
+    "</p></section>"
+  );
 }
 
 function howItWorksTR(row) {
-  if (row.category === "temperature") {
-    return '<section class="lp-section" style="margin-top:1rem"><h2 class="lp-section-title" style="font-size:1.05rem">Formül</h2><p class="lp-prose" style="line-height:1.65;font-size:.88rem;color:var(--text-muted)">Sıcaklık dönüşümleri standart °C, °F ve K ilişkilerini kullanır. Değerler önce normalize edilir, sonra hedef birimde gösterilir.</p></section>';
-  }
-  if (row.category === "data") {
-    return '<section class="lp-section" style="margin-top:1rem"><h2 class="lp-section-title" style="font-size:1.05rem">Nasıl çalışır?</h2><p class="lp-prose" style="line-height:1.65;font-size:.88rem;color:var(--text-muted)">Veri boyutları ikili önekler kullanır: 1 KB = 1024 B, 1 MB = 1024 KB; birimler sayfasındaki veri tablosuyla tutarlıdır.</p></section>';
-  }
-  return '<section class="lp-section" style="margin-top:1rem"><h2 class="lp-section-title" style="font-size:1.05rem">Nasıl çalışır?</h2><p class="lp-prose" style="line-height:1.65;font-size:.88rem;color:var(--text-muted)">Girdiniz önce iç taban birime, ardından ana dönüştürücüdeki aynı sabit katsayılarla hedef birime çevrilir.</p></section>';
+  const m = METH_TR[row.category] || null;
+  const body = m || "Girdiniz, ana sayfadakiyle aynı taban zincirinden geçirilerek hedef birimde gösterilir.";
+  return (
+    '<section class="lp-section" style="margin-top:1rem"><h2 class="lp-section-title" style="font-size:1.05rem">' +
+    (row.category === "temperature" ? "Formül" : "Yöntem &amp; güven") +
+    "</h2><p class=\"lp-prose\" style=\"line-height:1.65;font-size:.88rem;color:var(--text-muted)\">" +
+    esc(body) +
+    "</p></section>"
+  );
 }
 
 function faqEN(isUnit, rel) {
@@ -501,6 +597,7 @@ ${howItWorks(row)}
 ${faqEN(true, rel)}
 ${buildRelatedHtmlSpokesEN(rel, related, "convert/")}
 <p style="margin:1.2rem 0"><a href="${rel}unit-converter.html">Unit converter (all types)</a> · <a href="${rel}units.html">Units hub</a> · <a href="${rel}tr/convert/${row.slug}.html">Türkçe</a></p>
+${microFooterTrustP("en")}
 ${microContentUpdatedP("en")}
 </main>
 <footer style="text-align:center;padding:2rem;font-size:.7rem;opacity:.75"><a href="${rel}index.html">Home</a></footer>
@@ -548,6 +645,7 @@ ${howItWorksTR(row)}
 ${faqTR(rel)}
 ${buildRelatedHtmlSpokesTR(related)}
 <p style="margin:1.2rem 0"><a href="${rel}convert/${row.slug}.html">English (EN)</a> · <a href="${rel}unit-converter.html">Tüm dönüştürücü</a> · <a href="${rel}units.html">Birim merkezi</a></p>
+${microFooterTrustP("tr")}
 ${microContentUpdatedP("tr")}
 </main>
 <footer style="text-align:center;padding:2rem;font-size:.7rem;opacity:.75"><a href="${rel}index.html">Ana sayfa</a></footer>
@@ -723,6 +821,7 @@ ${howItWorksCalcEN(rel)}
 ${faqEN(false, rel)}
 ${buildRelatedHtmlCalcsEN(rel, related)}
 <p style="margin:1.2rem 0 0 0"><a href="${rel}calc.html">All calculators</a> · <a href="${rel}tr/calculators/${row.slug}.html">Türkçe</a></p>
+${microFooterTrustP("en")}
 ${microContentUpdatedP("en")}
 </main>
 <footer style="text-align:center;padding:2rem;font-size:.7rem;opacity:.75"><a href="${rel}index.html">Home</a></footer>
@@ -769,6 +868,7 @@ ${howItWorksCalcTR(rel)}
 ${faqTR(rel)}
 ${buildRelatedHtmlCalcsTR(related)}
 <p style="margin:1.2rem 0 0 0"><a href="${rel}calculators/${row.slug}.html">EN</a> · <a href="${rel}calc.html">Tüm hesaplar</a></p>
+${microFooterTrustP("tr")}
 ${microContentUpdatedP("tr")}
 </main>
 <footer style="text-align:center;padding:2rem;font-size:.7rem;opacity:.75"><a href="${rel}index.html">Ana sayfa</a></footer>
@@ -809,4 +909,7 @@ function main() {
   console.log("Wrote " + out.length + " pages + data/generated-urls.json");
 }
 
-main();
+if (require.main === module) {
+  main();
+}
+module.exports = { main };

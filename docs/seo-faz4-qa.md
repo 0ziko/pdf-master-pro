@@ -2,27 +2,57 @@
 
 Bu dosya depodaki on-page SEO planı **Faz 4** maddesinin uygulanabilir kontrol listesidir. Kurallar: [seo-onpage-checklist.md](seo-onpage-checklist.md).
 
-## 1) Otomatik: çift title / description
+## 1) Otomatik: çift title / description + konuşmacı bütünlüğü
 
 ```bash
-node scripts/seo-duplicate-titles.cjs
+npm run seo:qa
 ```
 
-Aynı `<title>` veya aynı `meta name="description"` birden çok sayfada varsa script çıkış kodu 1 verir; PR öncesi düzeltin.
+Tam regen + QA + production build için (önerilen):
+
+```bash
+npm run ship:qa
+```
+
+- **Duplicate:** aynı `<title>` veya aynı `meta name="description"` → çıkış kodu 1. Uzun `<title>` (~62+ karakter) için uyarı (SERP kırpması).
+- **Mikro bütünlük** (`convert/`, `tr/convert/`, `calculators/`, `tr/calculators/`): `rel=canonical` beklenen URL ile eşleşmeli, `hreflang` alternatifi olmalı, `units.html` veya `calc.html` hub linki olmalı; aksi çıkış kodu 1.
+
+Operasyonel çerçeve: [seo-operating-model.md](seo-operating-model.md).
 
 ## 2) Lighthouse / PageSpeed Insights (mobil)
 
-- **1 hub** — ör. `units.html` veya `index.html`
-- **1 mikro spoke** — ör. `convert/inches-to-cm.html`
-- **1 ağır LP** — ör. `compress-pdf.html` veya `pdf.html` (büyük JS)
+**Üçlü set (aynı oturumda, mobil cihaz emülasyonu veya “Mobile” sekmesi):**
 
-Hedef: LCP/CLS regresyonu yok; [seo-onpage-checklist](seo-onpage-checklist.md) CWV bölümü. Sonuçları (tarih + URL) not defterine veya issue’a yazın.
+| Rol | Örnek canlı URL | Neden |
+|-----|------------------|--------|
+| Hub | `https://snakeconverter.com/units.html` (veya `index.html`) | Ağır JS + çok kategori |
+| Mikro | `https://snakeconverter.com/convert/inches-to-cm.html` | Hafif spoke, CWV referans |
+| Ağır LP | `https://snakeconverter.com/compress-pdf.html` (veya `pdf.html`) | PDF / canvas, LCP-CLS riski |
+
+**Nereye?**
+
+- [PageSpeed Insights](https://pagespeed.web.dev/) — URL yapıştır, **Mobile** seç.
+- Chrome DevTools → **Lighthouse** → Device: mobile, Categories: Performance (isteğe bağlı: Accessibility, SEO).
+
+**Araç siteleri için metrik odağı (kılavuz hedef, mutlak söz değil):**
+
+- **LCP (Largest Contentful Paint):** ~&lt; 2,5s iyi; metin/hero hızlı boyansın, üçüncü taraf reklam düzeni kaydırmasın.
+- **INP (Interaction to Next Paint):** giriş alanları, butonlar — gecikme yok; büyük JS’i bloklama.
+- **CLS (Cumulative Layout Shift):** araç kutusu, min-height / boşluk; sayfa yüklenirken zıplama yok.
+
+Regresyon yok, kötüleşme yok diye yorumla. Sonuçları kısaca (tarih + URL + LCP/INP/CLS) not veya issue. Stratejik tavan: [seo-onpage-checklist](seo-onpage-checklist.md) CWV bölümü.
 
 ## 3) Arama motorları
 
-- **Google Search Console:** sitemap (`sitemap.xml`) gönderildi mi, hata/uyarı, Coverage.
-- **Bing Webmaster:** site eklendi mi, aynı sitemap.
-- Aşamalı URL inceleme — [checklist §8](seo-onpage-checklist.md#8-search-console-and-indexing-staged) (tek günde tüm URL’leri istemeyin).
+- **Google Search Console (✓ hazır):** `sitemap.xml` gönderildi, Coverage/uyarılar; [§8 aşamalı index](seo-onpage-checklist.md#8-search-console-and-indexing-staged) (tek günde tüm URL’leri inceleme isteğinde bulunma).
+- **Bing Webmaster Tools** (geçiş adımları):
+  1. [Bing Webmaster](https://www.bing.com/webmasters) → **Import** — mümkünse **Import from Google Search Console** (aynı site property’si; bir kerelik eşleştirme).
+  2. Import olmazsa: site ekle, DNS/ HTML dosya doğrulama (GSC’de zaten yaptığın yönteme benzer; mümkünse DNS/ TXT).
+  3. **Sitemaps** bölümüne ekle: `https://snakeconverter.com/sitemap.xml` (GSC’deki ile aynı).
+  4. “Submitted” ve “Last crawled” tarihlerine bak; 404 veya tarama hatası varsa düzelt.
+  5. (İleride) Bing’e özel indexleme gerekirse Webmaster arayüzünden URL gönder; günlük kota var — **GSC gibi aşamalı** kullan.
+
+- **Aşamalı URL inceleme** — tüm yeni `convert/` / `calculators/` URL’lerini aynı güne yığma; önce hub + örnek 5–10 spoke.
 
 ## 4) (İsteğe bağlı) SERP spot-check
 

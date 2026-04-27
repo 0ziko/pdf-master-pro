@@ -35,10 +35,6 @@
   <!-- Performance hints -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preconnect" href="https://pagead2.googlesyndication.com" />
-  <link rel="preconnect" href="https://www.googletagmanager.com" />
-  <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
-  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,600;0,14..32,700;0,14..32,900;1,14..32,300&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,600;0,14..32,700;0,14..32,900;1,14..32,300&display=swap" /></noscript>
 
@@ -74,7 +70,6 @@
   }
   </script>
 
-  <script src="https://cdn.tailwindcss.com"></script>
   <style>*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}body{background:#050508;color:#e2e8f0;font-family:Inter,system-ui,-apple-system,sans-serif}</style>
   <link rel="preload" as="style" href="css/app.css" onload="this.onload=null;this.rel='stylesheet'" />
   <noscript><link rel="stylesheet" href="css/app.css" /></noscript>
@@ -103,6 +98,10 @@
     .copied-flash.show { opacity: 1; }
     .unit-input-row { display: flex; gap: .5rem; }
     .unit-input-row .input-field { flex: 1; }
+    .unit-field-col { display: flex; flex-direction: column; gap: .2rem; min-width: 0; }
+    .unit-field-col .field-label { font-size: .68rem; font-weight: 700; color: #cbd5e1; }
+    .units-hub-lead { font-size: 0.88rem; line-height: 1.5; color: #cbd5e1; max-width: 40rem; margin: 0 0 0.9rem; }
+    h1.sc-topbar-title { margin: 0; }
   </style>
 </head>
 <body>
@@ -149,7 +148,7 @@
     <div class="sc-topbar">
       <div>
         <div class="sc-topbar-crumb"><a href="index.html">SnakeConverter</a> › <span data-i18n="hub.units.h1">Unit Converters</span></div>
-        <div class="sc-topbar-title" id="scTopbarTitle" data-i18n="hub.units.h1">Unit Converters</div>
+        <h1 class="sc-topbar-title" id="scTopbarTitle" data-i18n="hub.units.h1">Unit Converters</h1>
       </div>
       <div class="sc-topbar-badge">
         <svg width="6" height="6" viewBox="0 0 10 10" fill="#4ade80"><circle cx="5" cy="5" r="5"/></svg>
@@ -159,9 +158,11 @@
 
     <div class="sc-content">
 
+    <p class="units-hub-lead" data-i18n="units.hub.lead">Type a value and choose a source unit — every row below updates instantly. Nothing is sent to a server.</p>
+
     <div class="hub-seo-chips" style="margin-bottom:1.1rem;padding:0.9rem 1.05rem;background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2);border-radius:12px" data-nosnippet>
       <div style="font-size:.72rem;font-weight:800;color:#a5b4fc;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.45rem" data-i18n="hub.seo.cvt_h">Popular conversion pages</div>
-      <p style="font-size:.7rem;color:#6b7280;margin-bottom:.55rem;line-height:1.35" data-i18n="hub.seo.cvt_d">One intent per URL. Turkish: tr/convert/…</p>
+      <p style="font-size:.7rem;color:#9ca3af;margin-bottom:.55rem;line-height:1.35" data-i18n="hub.seo.cvt_d">One intent per URL. Turkish: tr/convert/…</p>
       <div style="display:flex;flex-wrap:wrap;gap:6px">
         <a href="convert/kg-to-lbs.html" style="font-size:.72rem;padding:4px 8px;border-radius:6px;background:rgba(255,255,255,.05);border:1px solid rgba(130,80,255,.2);color:#c4b5fd;text-decoration:none" data-i18n="hub.spoke.cvt.kg">kg ↔ lb</a>
         <a href="convert/cm-to-inches.html" style="font-size:.72rem;padding:4px 8px;border-radius:6px;background:rgba(255,255,255,.05);border:1px solid rgba(130,80,255,.2);color:#c4b5fd;text-decoration:none" data-i18n="hub.spoke.cvt.cm">cm ↔ in</a>
@@ -185,8 +186,13 @@
         <span class="tps-icon">🍳</span>
         <div><div class="tps-title" data-i18n="units.cooking.name">Cooking Measurements</div><div class="tps-desc" data-i18n="units.cooking.desc">Cups, tbsp, tsp, ml, liters, fl oz, pints, quarts, gallons</div></div>
       </div>
-      <div class="unit-input-row">
-        <input type="number" id="cook-val" class="input-field" value="1" data-i18n-ph="unit.val.ph" placeholder="Value…" oninput="cookingConvert()" />
+      <div class="unit-input-row" style="align-items:flex-end">
+        <div class="unit-field-col" style="flex:1;min-width:120px">
+          <label for="cook-val" class="field-label" data-i18n="units.lbl.value">Value</label>
+          <input type="number" id="cook-val" class="input-field" value="1" data-i18n-ph="unit.val.ph" placeholder="Value…" oninput="cookingConvert()" />
+        </div>
+        <div class="unit-field-col" style="flex:1;min-width:140px">
+          <label for="cook-from" class="field-label" data-i18n="units.lbl.from">From unit</label>
         <select id="cook-from" class="unit-card-select" onchange="cookingConvert()">
           <option value="cup" data-i18n="cook.cup">Cup</option>
           <option value="tbsp" data-i18n="cook.tbsp">Tablespoon</option>
@@ -198,6 +204,7 @@
           <option value="quart" data-i18n="cook.quart">Quart</option>
           <option value="gallon" data-i18n="cook.gallon">Gallon</option>
         </select>
+        </div>
       </div>
       <div id="cook-out" class="cooking-grid"></div>
     </section>
@@ -208,8 +215,13 @@
         <span class="tps-icon">👟</span>
         <div><div class="tps-title" data-i18n="units.shoe.name">Shoe Size Converter</div><div class="tps-desc" data-i18n="units.shoe.desc">EU, US Men, US Women, UK, CM — full equivalents table</div></div>
       </div>
-      <div class="unit-input-row">
-        <input type="number" id="shoe-val" class="input-field" value="42" step="0.5" placeholder="Size…" oninput="shoeSizeConvert()" />
+      <div class="unit-input-row" style="align-items:flex-end">
+        <div class="unit-field-col" style="flex:1;min-width:100px">
+          <label for="shoe-val" class="field-label" data-i18n="units.lbl.value">Value</label>
+          <input type="number" id="shoe-val" class="input-field" value="42" step="0.5" placeholder="Size…" oninput="shoeSizeConvert()" />
+        </div>
+        <div class="unit-field-col" style="flex:1;min-width:120px">
+          <label for="shoe-from" class="field-label" data-i18n="units.lbl.from">From unit</label>
         <select id="shoe-from" class="unit-card-select" onchange="shoeSizeConvert()">
           <option value="eu">EU</option>
           <option value="usm">US Men</option>
@@ -217,6 +229,7 @@
           <option value="uk">UK</option>
           <option value="cm">CM</option>
         </select>
+        </div>
       </div>
       <div id="shoe-out" style="overflow-x:auto;margin-top:.6rem;"></div>
     </section>
@@ -244,7 +257,7 @@
         .clothing-table th{background:rgba(130,80,255,.12);color:#a78bfa;font-weight:700;padding:.4rem .55rem;text-align:center;white-space:nowrap;}
         .clothing-table td{padding:.35rem .55rem;text-align:center;border-bottom:1px solid rgba(255,255,255,.05);color:#e8e4ff;}
         .clothing-table tr.selected td{background:rgba(130,80,255,.18);color:#c4b5fd;font-weight:700;}
-        .clothing-size-input-row{display:flex;gap:.5rem;align-items:center;margin-bottom:.6rem;flex-wrap:wrap;}
+        .clothing-size-input-row{display:flex;gap:.5rem;align-items:flex-end;margin-bottom:.6rem;flex-wrap:wrap;}
         .clothing-size-input-row select{flex:1;min-width:100px;}
       </style>
       <div class="clothing-gender">
@@ -259,6 +272,8 @@
         <button class="clothing-tab" onclick="clothingSetCat('dresses',this)">Dresses / Outerwear</button>
       </div>
       <div class="clothing-size-input-row">
+        <div class="unit-field-col" style="flex:1;min-width:120px">
+          <label for="clothing-from" class="field-label" data-i18n="units.lbl.from">From unit</label>
         <select id="clothing-from" class="unit-card-select" onchange="clothingRender()">
           <option value="eu">EU / INT</option>
           <option value="us">US</option>
@@ -266,8 +281,12 @@
           <option value="it">IT (Italy)</option>
           <option value="cm">Chest/Waist cm</option>
         </select>
-        <input type="number" id="clothing-val" class="input-field" placeholder="e.g. 40" style="max-width:110px;"
+        </div>
+        <div class="unit-field-col" style="max-width:110px">
+          <label for="clothing-val" class="field-label" data-i18n="units.lbl.value">Value</label>
+        <input type="number" id="clothing-val" class="input-field" placeholder="e.g. 40" style="max-width:110px"
           oninput="clothingRender()" />
+        </div>
       </div>
       <div style="overflow-x:auto;">
         <table class="clothing-table" id="clothing-table"></table>
@@ -394,8 +413,13 @@
         <span class="tps-icon">🔤</span>
         <div><div class="tps-title" data-i18n="units.typo.name">Typography Units</div><div class="tps-desc" data-i18n="units.typo.desc">Convert px ↔ rem ↔ em ↔ pt ↔ vw</div></div>
       </div>
-      <div class="unit-input-row" style="margin-bottom:.5rem;">
+      <div class="unit-input-row" style="margin-bottom:.5rem;align-items:flex-end">
+        <div class="unit-field-col" style="flex:1;min-width:100px">
+          <label for="typo-val" class="field-label" data-i18n="units.lbl.value">Value</label>
         <input type="number" id="typo-val" class="input-field" value="16" oninput="typoConvert()" />
+        </div>
+        <div class="unit-field-col" style="flex:1;min-width:100px">
+          <label for="typo-from" class="field-label" data-i18n="units.lbl.typoUnit">Unit</label>
         <select id="typo-from" class="unit-card-select" onchange="typoConvert()">
           <option value="px">px</option>
           <option value="rem">rem</option>
@@ -403,6 +427,7 @@
           <option value="pt">pt</option>
           <option value="vw">vw</option>
         </select>
+        </div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem;">
         <div><label class="field-label" style="font-size:.7rem;" data-i18n="typo.lbl.base">Base font (px)</label><input type="number" id="typo-base" class="input-field" value="16" oninput="typoConvert()" /></div>
@@ -490,6 +515,7 @@
 
       var valEl = sec.querySelector(".u-val");
       var fromEl = sec.querySelector(".u-from");
+      fromEl.setAttribute("aria-label", t("units.aria.from") + " (" + catTitle(catId) + ")");
       var resEl = sec.querySelector(".u-results");
 
       function render() {

@@ -70,21 +70,24 @@
   }
   </script>
 
-  <!-- Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1033284237916727" crossorigin="anonymous"></script>
-
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+  <link rel="preconnect" href="https://unpkg.com" crossorigin />
   <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,600;0,14..32,700;0,14..32,900&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,700;0,14..32,900&display=swap" /></noscript>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 
-  <!-- PDF Libraries -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-  <script>if(typeof pdfjsLib!=="undefined"){pdfjsLib.GlobalWorkerOptions.workerSrc="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";}</script>
-  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-
   <link rel="stylesheet" href="css/lp.css" />
+  <style>
+    /* Accessibility: higher contrast on dark LP (PageSpeed) */
+    .lp-hero .lp-hero-sub { color: #cbd5e1; }
+    .lp-trust { color: #a8b4c6; }
+    .drop-sub { color: #a8b4c6 !important; }
+    .lp-feature-text span, .lp-step-text span, .lp-faq-body, .lp-related-desc { color: #b8c2d0; }
+    .lp-footer .lp-wrap p, .lp-footer a { color: #a3aebf; }
+  </style>
+  <!-- PDF libs at end of body: avoid blocking first paint (see scripts before </body>) -->
   <!-- Analytics -->
   <script defer src="js/analytics.js"></script>
 </head>
@@ -100,7 +103,7 @@
     <nav class="lp-header-nav">
       <a href="index.html" data-i18n="lp.home">Home</a>
       <a href="pdf.html">PDF Tools</a>
-      <a href="index.html" data-i18n="lp.alltools">All Tools</a>
+      <a href="tools.html" data-i18n="lp.alltools">All Tools</a>
     </nav>
     <div class="lp-lang">
       <button type="button" data-lang-btn="en" class="lang-btn lang-active">EN</button>
@@ -140,20 +143,20 @@
       </div>
 
       <!-- Quality -->
-      <div>
-        <div class="field-label" style="margin-bottom:.5rem">Compression level</div>
-        <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+      <fieldset style="border:none;padding:0;margin:0;min-width:0">
+        <legend class="field-label" style="margin-bottom:.5rem">Compression level</legend>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap" role="group" aria-label="Compression level">
           <button type="button" onclick="cmpSetQ('low')"    id="cmpQLow"    class="btn-secondary" style="flex:1;min-width:90px;flex-direction:column;gap:.15rem;padding:.55rem">
-            <span>🔴 Low quality</span><span style="font-size:.62rem;opacity:.7">Smallest file</span>
+            <span>🔴 Low quality</span><span style="font-size:.62rem;opacity:.85;color:#b8c2d0">Smallest file</span>
           </button>
           <button type="button" onclick="cmpSetQ('medium')" id="cmpQMedium" class="btn-primary"   style="flex:1;min-width:90px;flex-direction:column;gap:.15rem;padding:.55rem">
-            <span>🟡 Medium</span><span style="font-size:.62rem;opacity:.8">Balanced</span>
+            <span>🟡 Medium</span><span style="font-size:.62rem;opacity:.9;color:#e2e8f0">Balanced</span>
           </button>
           <button type="button" onclick="cmpSetQ('high')"   id="cmpQHigh"   class="btn-secondary" style="flex:1;min-width:90px;flex-direction:column;gap:.15rem;padding:.55rem">
-            <span>🟢 High quality</span><span style="font-size:.62rem;opacity:.7">Larger file</span>
+            <span>🟢 High quality</span><span style="font-size:.62rem;opacity:.85;color:#b8c2d0">Larger file</span>
           </button>
         </div>
-      </div>
+      </fieldset>
 
       <!-- Stats -->
       <div id="cmpStats" style="display:none" class="stat-row">
@@ -351,6 +354,13 @@
   </div>
 </footer>
 
+<!-- AdSense after main content: less competition with first paint -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1033284237916727" crossorigin="anonymous"></script>
+
+<!-- PDF libs after visible content: improves FCP / LCP vs script-in-head -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>if (typeof pdfjsLib !== "undefined") { pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"; }</script>
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
 <script>
 /* ── PDF Compressor Logic ── */
 var _cmpFile = null;

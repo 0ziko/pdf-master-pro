@@ -11,28 +11,35 @@ const { getSitemapSpokeUrls } = require("./micro-routes.cjs");
 const smf = path.join(root, "sitemap.xml");
 const today = new Date().toISOString().slice(0, 10);
 
-const urls = getSitemapSpokeUrls();
+function main() {
+  const urls = getSitemapSpokeUrls();
 
-let block = "";
-urls.forEach((u) => {
-  block += `  <url>
+  let block = "";
+  urls.forEach((u) => {
+    block += `  <url>
     <loc>${u}</loc>
     <lastmod>${today}</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
 `;
-});
+  });
 
-let sm = fs.readFileSync(smf, "utf8");
-const re = /  <!-- AUTO:generated-spokes[\s\S]*?  <!-- END:generated-spokes -->/;
-const replacement = `  <!-- AUTO:generated-spokes — replaced by scripts/generate-sitemap.cjs -->
+  let sm = fs.readFileSync(smf, "utf8");
+  const re = /  <!-- AUTO:generated-spokes[\s\S]*?  <!-- END:generated-spokes -->/;
+  const replacement = `  <!-- AUTO:generated-spokes — replaced by scripts/generate-sitemap.cjs -->
 ${block}  <!-- END:generated-spokes -->`;
 
-if (re.test(sm)) {
-  sm = sm.replace(re, replacement);
-} else {
-  sm = sm.replace("</urlset>", replacement + "\n</urlset>");
+  if (re.test(sm)) {
+    sm = sm.replace(re, replacement);
+  } else {
+    sm = sm.replace("</urlset>", replacement + "\n</urlset>");
+  }
+  fs.writeFileSync(smf, sm, "utf8");
+  console.log("sitemap.xml updated with " + urls.length + " generated URLs");
 }
-fs.writeFileSync(smf, sm, "utf8");
-console.log("sitemap.xml updated with " + urls.length + " generated URLs");
+
+if (require.main === module) {
+  main();
+}
+module.exports = { main };

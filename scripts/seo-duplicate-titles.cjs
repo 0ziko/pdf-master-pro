@@ -43,6 +43,9 @@ for (const f of htmlFiles) {
     emptyTitle++;
     console.warn("MISSING or empty <title>:", rel);
   } else {
+    if (title.length > 62) {
+      console.warn("LONG <title> (" + title.length + " chars, SERP may truncate):", rel);
+    }
     if (!seenTitles.has(title)) seenTitles.set(title, []);
     seenTitles.get(title).push(rel);
   }

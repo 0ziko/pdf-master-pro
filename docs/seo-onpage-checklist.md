@@ -135,5 +135,6 @@ For **competitive** LP (PDF tools), add: FAQ, how it works, and trust copy — s
 | **quality-gate-checklist.md** | Ship checklist for a **single** new spoke (length, FAQ, build). |
 | **seo-faz4-qa.md** | Faz 4: duplicate title script, Lighthouse/PSI, GSC/Bing (operational checklist). |
 | **seo-faz5-iteration.md** | Faz 5: GSC yineleme + budama (periyot ve adımlar). |
+| **seo-operating-model.md** | Hub-and-spoke, ship sırası, `seo:qa` (duplicate + mikro bütünlük), staging. |
 
 If rules conflict, fix **one** source of truth and link the others.
