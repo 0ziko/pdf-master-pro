@@ -286,6 +286,7 @@
         <a href="calculators/compound-interest-calculator.html" style="font-size:.72rem;padding:4px 8px;border-radius:6px;background:rgba(255,255,255,.05);border:1px solid rgba(130,80,255,.2);color:#c4b5fd;text-decoration:none" data-i18n="hub.spoke.calc.comp">Compound interest</a>
         <a href="calculators/mbps-to-mbs.html" style="font-size:.72rem;padding:4px 8px;border-radius:6px;background:rgba(255,255,255,.05);border:1px solid rgba(130,80,255,.2);color:#c4b5fd;text-decoration:none" data-i18n="hub.spoke.calc.mbps">Mbps → MB/s</a>
         <a href="calculators/binary-to-decimal.html" style="font-size:.72rem;padding:4px 8px;border-radius:6px;background:rgba(255,255,255,.05);border:1px solid rgba(130,80,255,.2);color:#c4b5fd;text-decoration:none" data-i18n="hub.spoke.calc.bin">Binary</a>
+        <a href="#calculus" style="font-size:.72rem;padding:4px 8px;border-radius:6px;background:rgba(99,102,241,.2);border:1px solid rgba(99,102,241,.4);color:#a5b4fc;font-weight:700;text-decoration:none" data-i18n="hub.spoke.calc.calculus">Calculus (∫)</a>
         <a href="tr/calculators/mbps-to-mbs.html" style="font-size:.72rem;padding:4px 8px;border-radius:6px;background:rgba(255,255,255,.05);border:1px solid rgba(130,80,255,.2);color:#9ca3af;text-decoration:none" hreflang="tr" lang="tr">TR · Mbps</a>
       </div>
     </div>
@@ -1928,11 +1929,30 @@ function calSuggest() {
     });
   });
 
+  /* Hub chips / in-content #section links (sidebar is outside .sc-content) */
+  var mainContent = document.querySelector('.sc-content');
+  if (mainContent) {
+    mainContent.addEventListener('click', function (e) {
+      var a = e.target.closest('a[href^="#"]');
+      if (!a) return;
+      var id = (a.getAttribute('href') || '').replace('#', '');
+      if (!id || !document.getElementById(id)) return;
+      e.preventDefault();
+      showSection(id);
+    });
+  }
+
   /* Show correct section on load (hash or first) */
   var initialHash = location.hash.slice(1);
   var firstId = sections.length ? sections[0].id : '';
   var startId = (initialHash && document.getElementById(initialHash)) ? initialHash : firstId;
   if (startId) showSection(startId);
+
+  /* In-page links (e.g. hub chips → #calculus) also switch the visible tool */
+  window.addEventListener('hashchange', function () {
+    var hid = location.hash.slice(1);
+    if (hid && document.getElementById(hid)) showSection(hid);
+  });
 })();
 </script>
     </div><!-- /sc-content -->
