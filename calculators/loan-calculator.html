@@ -3,12 +3,19 @@
 <head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Loan payment calculator (EMI) | SnakeConverter</title>
-<meta name="description" content="Free loan calculator. Runs in your browser. No signup."/>
+<meta name="description" content="Use this free loan calculator in your browser — no signup, instant output. Same behavior as the main SnakeConverter calculator tools."/>
 <link rel="canonical" href="https://snakeconverter.com/calculators/loan-calculator"/>
 <link rel="alternate" hreflang="en" href="https://snakeconverter.com/calculators/loan-calculator"/>
 <link rel="alternate" hreflang="tr" href="https://snakeconverter.com/tr/calculators/loan-calculator"/>
 <link rel="alternate" hreflang="x-default" href="https://snakeconverter.com/calculators/loan-calculator"/>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I use this page?","acceptedAnswer":{"@type":"Answer","text":"Type a value. Results update live in your browser."}},{"@type":"Question","name":"Is it accurate?","acceptedAnswer":{"@type":"Answer","text":"Same engine as the main hub on snakeconverter.com."}},{"@type":"Question","name":"Is data sent to a server?","acceptedAnswer":{"@type":"Answer","text":"No. Calculations are local."}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","url":"https://snakeconverter.com/calculators/loan-calculator","name":"Loan payment calculator (EMI)","description":"Use this free loan calculator in your browser — no signup, instant output. Same behavior as the main SnakeConverter calculator tools.","inLanguage":"en"},{"@type":"SoftwareApplication","name":"Loan payment calculator (EMI)","url":"https://snakeconverter.com/calculators/loan-calculator","applicationCategory":"UtilitiesApplication","operatingSystem":"Web Browser","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Use this free loan calculator in your browser — no signup, instant output. Same behavior as the main SnakeConverter calculator tools."},{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Where is my data processed?","acceptedAnswer":{"@type":"Answer","text":"In your browser. No account required."}}]}]}</script>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://snakeconverter.com/calculators/loan-calculator"/>
+<meta property="og:title" content="Loan payment calculator (EMI) | SnakeConverter"/>
+<meta property="og:description" content="Use this free loan calculator in your browser — no signup, instant output. Same behavior as the main SnakeConverter calculator tools."/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Loan payment calculator (EMI) | SnakeConverter"/>
+<meta name="twitter:description" content="Use this free loan calculator in your browser — no signup, instant output. Same behavior as the main SnakeConverter calculator tools."/>
 <link rel="icon" href="../favicon.svg" type="image/svg+xml"/>
 <link rel="stylesheet" href="../css/lp.css"/>
 </head>
@@ -18,10 +25,13 @@
 <nav class="lp-header-nav"><a href="../index.html">Home</a><a href="../calc.html">Calculators</a></nav>
 </div></header>
 <main class="lp-wrap">
-<section class="lp-hero"><h1 class="lp-h1">Loan payment calculator (EMI)</h1><p class="lp-hero-sub" style="margin-top:.4rem">Free loan calculator. Runs in your browser. No signup.</p></section>
-<section class="lp-tool-box" style="max-width:600px;border:1px solid var(--border-subtle);border-radius:.9rem;padding:1rem;margin:1rem 0;display:grid;gap:.4rem"><label>Principal</label> <input class="lp-input" type="number" id="spoke-loan-p" value="200000" /> <label>APR %</label> <input class="lp-input" type="number" id="spoke-loan-r" value="6" /><label>Months</label> <input class="lp-input" type="number" id="spoke-loan-n" value="360" /><div id="spoke-out" style="margin-top:.5rem">—</div></section><script>window.__MICRO_SPOKE__={"type":"calc","calc":"loan"};</script><script src="../js/calc-tools.js"></script><script src="../js/micro-spoke.js"></script>
+<section class="lp-hero"><h1 class="lp-h1">Loan payment calculator (EMI)</h1><p class="lp-hero-sub" style="margin-top:.4rem;max-width:40rem;opacity:.9">Use this free loan calculator in your browser — no signup, instant output. Same behavior as the main SnakeConverter calculator tools.</p></section>
+<p class="lp-prose" style="line-height:1.6;font-size:.9rem;max-width:40rem">Enter principal, APR, and term in months; the payment uses the same amortization math as the main loan tool.</p>
+<section class="lp-tool-box" style="max-width:600px;min-height:6rem;border:1px solid var(--border-subtle);border-radius:.9rem;padding:1rem;margin:1rem 0;display:grid;gap:.4rem"><label>Principal</label> <input class="lp-input" type="number" id="spoke-loan-p" value="200000" /> <label>APR %</label> <input class="lp-input" type="number" id="spoke-loan-r" value="6" /><label>Months</label> <input class="lp-input" type="number" id="spoke-loan-n" value="360" /><div id="spoke-out" style="margin-top:.5rem">—</div></section><script>window.__MICRO_SPOKE__={"type":"calc","calc":"loan"};</script><script defer src="../js/calc-tools.js"></script><script defer src="../js/micro-spoke.js"></script>
+<section class="lp-section" style="margin-top:1rem"><h2 class="lp-section-title" style="font-size:1.05rem">How it works</h2><p class="lp-prose" style="line-height:1.65;font-size:.88rem;color:var(--text-muted)">Calculations run entirely in your browser; nothing is sent to a server. Logic matches the <a href="../calc.html">main calculator hub</a>.</p></section>
 <section class="lp-section" style="margin-top:1.2rem"><h2 class="lp-section-title" style="font-size:1.1rem">FAQ</h2><div class="lp-faq"><details open><summary>How do I use this page?</summary><div class="lp-faq-body">Type your values. Results update as you type. This URL is scoped to a single tool so you can find it from search or bookmarks.</div></details><details><summary>Is it accurate?</summary><div class="lp-faq-body">The same code paths as the main <a href="../calc.html">tool hub</a> are used, with standard definitions for SI, imperial, and US units.</div></details><details><summary>Is my input uploaded?</summary><div class="lp-faq-body">No. All calculations run in your browser; nothing is sent to SnakeConverter.</div></details></div></section>
-<p><a href="../calc.html">All calculators</a> · <a href="../tr/calculators/loan-calculator.html">Türkçe</a></p>
+<p class="lp-prose" style="font-size:.82rem;margin-top:1rem;color:var(--text-muted)"><strong>Related calculators:</strong> <a href="../calculators/compound-interest-calculator.html">Compound interest calculator</a> · <a href="../calculators/profit-margin-calculator.html">Profit margin calculator</a> · <a href="../calculators/percentage-calculator.html">Percentage calculator</a></p>
+<p style="margin:1.2rem 0 0 0"><a href="../calc.html">All calculators</a> · <a href="../tr/calculators/loan-calculator.html">Türkçe</a></p>
 </main>
 <footer style="text-align:center;padding:2rem;font-size:.7rem;opacity:.75"><a href="../index.html">Home</a></footer>
 </body></html>
