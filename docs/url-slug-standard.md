@@ -1,5 +1,7 @@
 # URL and slug standard — micro pages
 
+**SEO and intent (canonical, variations, keyword rules):** see [seo-onpage-checklist.md](seo-onpage-checklist.md) — read **before** scaling new URLs or programmatic variations to avoid **cannibalization** (multiple URLs for the same intent). Per-language **self-canonical** and EN/TR **hreflang** below stay the source of path-level truth.
+
 ## English (default)
 
 | Page type   | Path pattern | Example |
@@ -23,7 +25,11 @@
   `link rel="alternate" hreflang="tr" href="https://snakeconverter.com/tr/...`  
   `link rel="alternate" hreflang="x-default" href="…" ` (EN URL)
 
-- **Canonical:** always self-referential for that language version.
+- **Canonical (EN and TR each):** always **self-referential** for that language version. Do not point EN canonical to TR or vice versa.
+
+## Same language: overlapping URLs (variations, A/B, programmatic)
+
+- If two pages in the **same** language could rank for the **same** primary query (e.g. a narrow “10 inches to cm” page vs the main `inches-to-cm` spoke), define a **primary** URL and either **merge** content, set **`rel=canonical`** to the primary, or use **`noindex`** on the duplicate — see [seo-onpage-checklist.md §2](seo-onpage-checklist.md#2-canonical-hreflang-and-variation-hierarchy-mandatory).
 
 ## Internal links
 

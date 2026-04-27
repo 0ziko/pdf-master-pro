@@ -1,6 +1,6 @@
 # Quality gate — new spoke pages
 
-Ship only pages that pass this checklist. **Thin or duplicate** pages hurt more than they help.
+Ship only pages that pass this checklist. **Thin or duplicate** pages hurt more than they help. **Site-wide SEO strategy and URL/intent rules:** [seo-onpage-checklist.md](seo-onpage-checklist.md).
 
 ## Per page (EN and TR each)
 
