@@ -7,36 +7,15 @@
     var st = document.createElement('style');
     st.id  = '__snkCSS__';
     st.textContent = `
-      /* ── Idle float ── */
+      /* ── Static idle (no always-on keyframes; saves compositing / main-thread work) ── */
       #snakeMascotWrap {
         transform-origin: 95px 160px;
-        animation: snkFloat 3.4s ease-in-out infinite;
-      }
-      @keyframes snkFloat {
-        0%,100% { transform: translateY(0)    rotate(0deg);    }
-        35%     { transform: translateY(-8px)  rotate(-1.2deg); }
-        70%     { transform: translateY(-10px) rotate(1.2deg);  }
       }
 
-      /* ── Tongue flick ── */
       #snakeTongue {
         transform-origin: 40px 25px;
-        animation: snkTongue 4.2s ease-in-out infinite;
-      }
-      @keyframes snkTongue {
-        0%,50%,100% { opacity:0; transform:scaleY(0) scaleX(0); }
-        56%,90%     { opacity:1; transform:scaleY(1) scaleX(1); }
-      }
-
-      /* ── Pupil micro-look-around (idle life) ── */
-      #smPupilL, #smPupilR {
-        animation: snkPupilIdle 5.5s ease-in-out infinite;
-      }
-      #smPupilR { animation-delay: .3s; }
-      @keyframes snkPupilIdle {
-        0%,40%,100% { transform: translate(0,0);         }
-        50%,90%     { transform: translate(1.5px,-1px);  }
-        70%         { transform: translate(-1px,1.5px);  }
+        opacity: 0;
+        transform: scale(0);
       }
 
       /* ── Named animations ── */

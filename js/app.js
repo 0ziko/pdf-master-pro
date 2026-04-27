@@ -233,8 +233,8 @@
     if (!dotEl) return;
     dotEl.style.display = "inline-flex";
     if (textEl) textEl.textContent = name;
-    /* snackFile() will dispatch "snakestate" events that update the caption */
-    if (snake) snake.snackFile();
+    var sm = window.snakeMascot;
+    if (sm && typeof sm.snackFile === "function") sm.snackFile();
   }
 
   /* ── Excel ─────────────────────────────────────────── */
@@ -337,8 +337,8 @@
     const added = Array.from(files).filter((f) => /\.pdf$/i.test(f.name));
     mergeFiles = mergeFiles.concat(added);
     renderMergeList();
-    /* eat once per batch (sequential snacking would overlap) */
-    if (snake && added.length) snake.snackFile();
+    var sm = window.snakeMascot;
+    if (sm && typeof sm.snackFile === "function" && added.length) sm.snackFile();
   });
 
   document.getElementById("mergeClear")?.addEventListener("click", () => {

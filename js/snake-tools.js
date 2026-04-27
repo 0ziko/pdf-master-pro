@@ -1,4 +1,4 @@
-/* ── Snake mascot — fully autonomous, 10 real canvas animations ── */
+/* ── Snake mascot — static SVG + optional one-off playAnimation() from pages ── */
 (function () {
 
   /* ── Captions ────────────────────────────────────────────────── */
@@ -51,40 +51,6 @@
     el.textContent = map[key] || (isToolsPage() && map.idleTools ? map.idleTools : map.idle);
   }
 
-  /* ── The 10 real canvas animations (snake body changes shape) ─ */
-  var ANIM_NAMES = [
-    "dance",      /* 1. Wide sine wave across full canvas             */
-    "rainbow",    /* 2. Normal wave with rotating rainbow gradient    */
-    "party",      /* 3. Chaotic multi-freq wave + rainbow colors      */
-    "sleep",      /* 4. Coils into C-shape, floating Z letters        */
-    "stretch",    /* 5. Extends flat then snaps back                  */
-    "bounce",     /* 6. Gravity bounce along body                     */
-    "coil",       /* 7. Wraps into spinning circle then uncoils       */
-    "heartbeat",  /* 8. Whole body pulses in/out rhythmically         */
-    "flip",       /* 9. Flips upside-down, stays, flips back          */
-    "loop",       /* 10. Figure-8 / infinity path                     */
-  ];
-
-  /* ── Autonomous scheduler ────────────────────────────────────── */
-  var lastAnimIdx = -1;
-
-  function runNext(snake) {
-    /* Pick random animation, avoid repeating */
-    var available = ANIM_NAMES.map(function (_, i) { return i; })
-                              .filter(function (i) { return i !== lastAnimIdx; });
-    var idx = available[Math.floor(Math.random() * available.length)];
-    lastAnimIdx = idx;
-    var name = ANIM_NAMES[idx];
-
-    setCaption(name);
-    snake.playAnimation(name, function () {
-      setCaption("idle");
-      /* 3–6 second pause before next animation */
-      var pause = 3000 + Math.random() * 3000;
-      setTimeout(function () { runNext(snake); }, pause);
-    });
-  }
-
   /* ── Init ────────────────────────────────────────────────────── */
   function init() {
     if (!window.SnakeMascot) return;
@@ -93,9 +59,6 @@
     var snake = window.snakeMascot || new window.SnakeMascot("snakeCanvas");
     window.snakeMascot = snake;
     setCaption("idle");
-
-    /* Start autonomous loop after 2 seconds */
-    setTimeout(function () { runNext(snake); }, 2000);
 
     /* Re-apply caption on language switch */
     document.querySelectorAll("[data-lang-btn]").forEach(function (b) {
