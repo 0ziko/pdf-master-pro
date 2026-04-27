@@ -69,6 +69,10 @@ Stack: Vanilla JS · Tailwind CSS · HTML5 Canvas · jsPDF · pdf-lib-plus-encry
 - Commit format: `type(scope): summary`
 - Never push secrets or `node_modules/`.
 
+### Post-change PowerShell (mandatory for all agents)
+**Trigger:** Any reply where the agent **modified, created, or deleted** files in this repo (code, HTML, CSS, i18n, docs in-tree).
+**Action:** End the reply with a **single** fenced `powershell` code block the user can paste to run locally: `Set-Location` to the repo root → `node build.js` → `git status` → `git add -A` → `git commit -m "type(scope): short message"` → `git push origin main`. Adjust branch name if not `main`. Do not skip this block after substantive edits; the user uses it to trigger GitHub → Cloudflare Pages.
+
 ---
 
 ## Coordination Rules (All Agents)

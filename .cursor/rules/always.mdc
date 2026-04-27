@@ -16,8 +16,12 @@ Vanilla JS · Tailwind CSS CDN · HTML5 Canvas · No backend · No build step fo
 - Never `alert()` — show errors/results in the DOM.
 
 ## After every file edit in this repo (user policy)
-- End your reply with a **PowerShell** block. Order: (1) `Set-Location` → `C:\Users\ozanv\.cursor\projects\empty-window\pdf-master-pro` (2) `npm run build` (3) **Cloudflare:** state clearly that **local build alone does not update Cloudflare**; include `git add -A`, `git commit`, `git push origin main` (or the real production branch), or alternatively `npx wrangler pages deploy dist --project-name=...` for non-Git flows. Optional: `npm run seo` only if relevant without full build.
-- The same text is injected via `.cursor/hooks/audit-links.js` (`postToolUse`) after `Write` / `StrReplace`.
+- End your reply with a **single** fenced `powershell` block the user can copy-paste. Use this order:
+  1. `Set-Location "C:\Users\ozanv\.cursor\projects\empty-window\pdf-master-pro"`
+  2. `node build.js` (or `npm run build` — same thing)
+  3. `git status` → `git add -A` → `git commit -m "type(scope): kısa mesaj"` → `git push origin main` (dala göre uyarla)
+- One line of plain text: yalnızca `git push` production’u tetikler (Cloudflare Pages + Git). `node build.js` sadece `dist/` üretir.
+- Ek bağlam, agent **postToolUse** kancasından da gelir: `.cursor/hooks/deploy-reminder.js` (`Write` / `StrReplace` sonrası).
 
 ## Before finishing any task
 1. Confirm the feature works in the browser (don't just assume).
