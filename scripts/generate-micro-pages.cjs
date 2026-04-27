@@ -7,6 +7,8 @@
 const fs = require("fs");
 const path = require("path");
 const root = path.join(__dirname, "..");
+/** ISO date in JSON-LD + visible “last updated” on micro landings. Bump when regenerating at scale. */
+const SCHEMA_DATE_MODIFIED = "2026-04-26";
 const { HOST, UNIT_PAIRS, CALC_SPOKES } = require("./micro-routes.cjs");
 const { convertPairValue } = require("./micro-convert-helpers.cjs");
 
@@ -18,6 +20,13 @@ const SYMS = {
   megabyte: "MB", gigabyte: "GB", terabyte: "TB", kilobyte: "KB",
   square_meter: "m²", square_foot: "ft²", acre: "ac", hectare: "ha", square_kilometer: "km²",
 };
+
+function microContentUpdatedP(lang) {
+  if (lang === "tr") {
+    return '<p class="lp-micro-updated" style="text-align:center;font-size:.68rem;opacity:.72;margin:1rem 0 0 0">İçerik son güncelleme: 26 Nisan 2026</p>';
+  }
+  return '<p class="lp-micro-updated" style="text-align:center;font-size:.68rem;opacity:.72;margin:1rem 0 0 0">Content last updated: 26 April 2026</p>';
+}
 
 function esc(s) {
   return String(s)
@@ -235,6 +244,7 @@ function jsonLdGraphWebUnit(opts) {
         "name": opts.title,
         "description": opts.desc,
         "inLanguage": opts.lang,
+        "dateModified": SCHEMA_DATE_MODIFIED,
       },
       {
         "@type": "SoftwareApplication",
@@ -294,6 +304,7 @@ function jsonLdGraphCalc(opts) {
         "name": opts.h1,
         "description": opts.desc,
         "inLanguage": opts.lang,
+        "dateModified": SCHEMA_DATE_MODIFIED,
       },
       {
         "@type": "SoftwareApplication",
@@ -490,6 +501,7 @@ ${howItWorks(row)}
 ${faqEN(true, rel)}
 ${buildRelatedHtmlSpokesEN(rel, related, "convert/")}
 <p style="margin:1.2rem 0"><a href="${rel}unit-converter.html">Unit converter (all types)</a> · <a href="${rel}units.html">Units hub</a> · <a href="${rel}tr/convert/${row.slug}.html">Türkçe</a></p>
+${microContentUpdatedP("en")}
 </main>
 <footer style="text-align:center;padding:2rem;font-size:.7rem;opacity:.75"><a href="${rel}index.html">Home</a></footer>
 </body></html>`;
@@ -536,6 +548,7 @@ ${howItWorksTR(row)}
 ${faqTR(rel)}
 ${buildRelatedHtmlSpokesTR(related)}
 <p style="margin:1.2rem 0"><a href="${rel}convert/${row.slug}.html">English (EN)</a> · <a href="${rel}unit-converter.html">Tüm dönüştürücü</a> · <a href="${rel}units.html">Birim merkezi</a></p>
+${microContentUpdatedP("tr")}
 </main>
 <footer style="text-align:center;padding:2rem;font-size:.7rem;opacity:.75"><a href="${rel}index.html">Ana sayfa</a></footer>
 </body></html>`;
@@ -710,6 +723,7 @@ ${howItWorksCalcEN(rel)}
 ${faqEN(false, rel)}
 ${buildRelatedHtmlCalcsEN(rel, related)}
 <p style="margin:1.2rem 0 0 0"><a href="${rel}calc.html">All calculators</a> · <a href="${rel}tr/calculators/${row.slug}.html">Türkçe</a></p>
+${microContentUpdatedP("en")}
 </main>
 <footer style="text-align:center;padding:2rem;font-size:.7rem;opacity:.75"><a href="${rel}index.html">Home</a></footer>
 </body></html>`;
@@ -755,6 +769,7 @@ ${howItWorksCalcTR(rel)}
 ${faqTR(rel)}
 ${buildRelatedHtmlCalcsTR(related)}
 <p style="margin:1.2rem 0 0 0"><a href="${rel}calculators/${row.slug}.html">EN</a> · <a href="${rel}calc.html">Tüm hesaplar</a></p>
+${microContentUpdatedP("tr")}
 </main>
 <footer style="text-align:center;padding:2rem;font-size:.7rem;opacity:.75"><a href="${rel}index.html">Ana sayfa</a></footer>
 </body></html>`;

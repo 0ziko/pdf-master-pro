@@ -27,6 +27,7 @@
         "url": "https://snakeconverter.com/uuid-generator",
         "name": "UUID Generator Online",
         "description": "Free online UUID generator supporting v4 (random), v7 (time-ordered), and Nil UUIDs. Generate up to 1000 at once.",
+        "dateModified": "2026-04-26",
         "breadcrumb": {
           "@type": "BreadcrumbList",
           "itemListElement": [
@@ -155,6 +156,16 @@
       <p id="uuidMsg" style="font-size:.75rem;color:var(--text-muted);text-align:center;min-height:1em"></p>
     </div>
   </section>
+
+  <div class="lp-divider"></div>
+
+  <section class="lp-section">
+    <div class="lp-section-badge">Trust &amp; method</div>
+    <h2 class="lp-section-title" data-i18n="lp.eeat.uuid.h">How IDs are generated (technical)</h2>
+    <p class="lp-prose" style="line-height:1.65;font-size:.88rem;color:var(--text-muted);max-width:44rem" data-i18n="lp.eeat.uuid.p">We prefer crypto.randomUUID() when the browser supports it; otherwise we use random bytes from crypto.getRandomValues. IDs are created only in your session.</p>
+  </section>
+
+  <div class="lp-divider"></div>
 
   <section class="lp-section">
     <div class="lp-section-badge">Why use this tool</div>
@@ -315,6 +326,7 @@
       <a href="/tools">Utility Tools</a>
       <a href="/units">Unit Converters</a>
     </div>
+    <p data-i18n="lp.page.updated" style="font-size:.72rem;opacity:.85;margin-bottom:.35rem">Content last updated: 26 April 2026</p>
     <p>© 2026 SnakeConverter · Free, no signup, works in browser</p>
   </div>
 </footer>
