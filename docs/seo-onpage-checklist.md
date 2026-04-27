@@ -134,7 +134,7 @@ For **competitive** LP (PDF tools), add: FAQ, how it works, and trust copy — s
 | **url-slug-standard.md** | Slug patterns, hreflang, canonical per language, internal link norms. |
 | **quality-gate-checklist.md** | Ship checklist for a **single** new spoke (length, FAQ, build). |
 | **seo-faz4-qa.md** | Faz 4: duplicate title script, Lighthouse/PSI, GSC/Bing (operational checklist). |
-| **seo-faz5-iteration.md** | Faz 5: GSC yineleme + budama (periyot ve adımlar). |
+| **seo-faz5-iteration.md** | Faz 5: GSC yineleme + budama (periyot, `npm run seo:faz5:preflight`, kayıt şablonu). |
 | **seo-operating-model.md** | Hub-and-spoke, ship sırası, `seo:qa` (duplicate + mikro bütünlük), staging. |
 
 If rules conflict, fix **one** source of truth and link the others.

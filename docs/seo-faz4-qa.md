@@ -14,6 +14,8 @@ Tam regen + QA + production build için (önerilen):
 npm run ship:qa
 ```
 
+- GSC/Bing çeyreklik pası öncesi hızlı denetim (regen/build yok): `npm run seo:faz5:preflight` — bkz. [seo-faz5-iteration.md](seo-faz5-iteration.md) (Depo öncesi).
+
 - **Duplicate:** aynı `<title>` veya aynı `meta name="description"` → çıkış kodu 1. Uzun `<title>` (~62+ karakter) için uyarı (SERP kırpması).
 - **Mikro bütünlük** (`convert/`, `tr/convert/`, `calculators/`, `tr/calculators/`): `rel=canonical` beklenen URL ile eşleşmeli, `hreflang` alternatifi olmalı, `units.html` veya `calc.html` hub linki olmalı; aksi çıkış kodu 1.
 

@@ -9,6 +9,7 @@
     "sitemap": "node scripts/generate-sitemap.cjs",
     "seo": "node scripts/generate-micro-pages.cjs && node scripts/generate-sitemap.cjs",
     "seo:qa": "node scripts/seo-duplicate-titles.cjs && node scripts/seo-micro-integrity.cjs",
+    "seo:faz5:preflight": "node scripts/seo-faz5-preflight.cjs",
     "ship:qa": "node scripts/ship-check.cjs"
   },
   "devDependencies": {

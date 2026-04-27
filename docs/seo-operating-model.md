@@ -31,7 +31,7 @@ Kod: `scripts/generate-micro-pages.cjs` — regen: `npm run seo`.
 ## Thin content / programmatic risk
 
 - `dateModified` + benzersiz metodoloji + semantic intro + ters/yan spoke linkleri: **kopya şablon** sinyalini kırmak için.
-- Hâlâ zayıf kalan niyetler: Faz 5’te **birleştir / noindex / canonical** — [seo-faz5-iteration.md](seo-faz5-iteration.md).
+- Hâlâ zayıf kalan niyetler: Faz 5’te **birleştir / noindex / canonical** — [seo-faz5-iteration.md](seo-faz5-iteration.md) (önce: `npm run seo:faz5:preflight` veya tam `ship:qa`).
 
 ## Lighthouse (mobil) & Bing (GSC “sonra” adım)
 
