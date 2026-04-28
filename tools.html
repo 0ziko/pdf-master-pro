@@ -1025,19 +1025,50 @@
         .raffle-wheel-spinner.raffle-instant {
           transition: none;
         }
+        /* İbrenin sivri ucu çarka bakar (aşağı doğru üçgen) */
         .raffle-wheel-pointer {
           position: absolute;
-          top: 2px;
+          top: 6px;
           left: 50%;
           margin-left: -14px;
           width: 0;
           height: 0;
-          z-index: 4;
+          z-index: 6;
           pointer-events: none;
           border-left: 14px solid transparent;
           border-right: 14px solid transparent;
-          border-bottom: 22px solid #e9d5ff;
-          filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 8px rgba(196, 181, 253, 0.45));
+          border-top: 22px solid #e9d5ff;
+          border-bottom: 0;
+          filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.45)) drop-shadow(0 0 10px rgba(196, 181, 253, 0.35));
+        }
+        .raffle-wheel-result {
+          margin-top: 0.65rem;
+          padding: 0.65rem 0.85rem;
+          border-radius: 12px;
+          background: rgba(130, 80, 255, 0.22);
+          border: 1px solid rgba(196, 181, 253, 0.42);
+          text-align: center;
+          display: none;
+        }
+        .raffle-wheel-result.is-visible { display: block; animation: raffleResultPop 0.45s ease-out; }
+        @keyframes raffleResultPop {
+          from { opacity: 0; transform: translateY(6px) scale(0.98); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .raffle-wheel-result-label {
+          font-size: 0.62rem;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 0.12em;
+          color: var(--text-muted);
+          margin-bottom: 0.2rem;
+        }
+        .raffle-wheel-result-name {
+          font-size: 1.35rem;
+          font-weight: 900;
+          color: #ede9fe;
+          line-height: 1.25;
+          word-break: break-word;
         }
         .raffle-wheel-svg {
           display: block;
@@ -1100,6 +1131,7 @@
               </svg>
               </div>
             </div>
+            <div id="raffle-wheel-result" class="raffle-wheel-result" aria-live="polite"></div>
           </div>
         </div>
         <div class="raffle-winner-box" id="raffle-winner-box">
@@ -1197,6 +1229,8 @@
           var nameEl = document.getElementById('raffle-winner-name');
           var subEl = document.getElementById('raffle-winner-sub');
           var altEl = document.getElementById('raffle-winner-alts');
+          var stageEl = document.getElementById('raffle-wheel-stage');
+          var wheelStrip = document.getElementById('raffle-wheel-result');
           if (primary.length === 1) { nameEl.textContent = primary[0]; }
           else {
             nameEl.innerHTML = primary.map(function(p, i) {
@@ -1211,9 +1245,26 @@
                 reserve.map(function(p, i) { return '<div style="font-size:.9rem;font-weight:600;color:#a5b4fc">'+(i+1)+'. '+esc(p)+'</div>'; }).join('');
             } else { altEl.style.display = 'none'; altEl.innerHTML = ''; }
           }
+          if (wheelStrip && stageEl && stageEl.style.display !== 'none') {
+            wheelStrip.classList.add('is-visible');
+            wheelStrip.innerHTML =
+              '<div class="raffle-wheel-result-label">' + esc(rT('raffle.winnerShow')) + '</div>' +
+              '<div class="raffle-wheel-result-name">' + esc(primary.join(', ')) + '</div>' +
+              (reserve.length
+                ? '<div style="margin-top:.45rem;font-size:.72rem;font-weight:700;color:var(--text-muted)">' + esc(rT('raffle.altsLabel')) + '</div>' +
+                  reserve.map(function (p, i) { return '<div style="font-size:.85rem;font-weight:600;color:#a5b4fc">' + (i + 1) + '. ' + esc(p) + '</div>'; }).join('')
+                : '');
+          } else if (wheelStrip) {
+            wheelStrip.classList.remove('is-visible');
+            wheelStrip.innerHTML = '';
+          }
           box.classList.remove('rolling');
           _rolling = false;
           raffleAddHistory({ primary: primary, reserve: reserve });
+          try {
+            if (wheelStrip && wheelStrip.classList.contains('is-visible')) wheelStrip.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            else box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          } catch (e) {}
         }
         window.raffleDraw = function(){
           if(_rolling) return;
@@ -1244,6 +1295,11 @@
             var stage = document.getElementById('raffle-wheel-stage');
             var spinner = document.getElementById('raffle-wheel-spinner');
             raffleWheelBuild(list);
+            var wrClear = document.getElementById('raffle-wheel-result');
+            if (wrClear) {
+              wrClear.classList.remove('is-visible');
+              wrClear.innerHTML = '';
+            }
             if (stage) {
               stage.style.display = 'block';
               stage.setAttribute('aria-hidden', 'false');
@@ -1312,6 +1368,11 @@
             spin.style.transform = '';
             spin.setAttribute('aria-hidden', 'true');
             delete spin.dataset.angle;
+          }
+          var wr = document.getElementById('raffle-wheel-result');
+          if (wr) {
+            wr.classList.remove('is-visible');
+            wr.innerHTML = '';
           }
         };
         var _history = [];
